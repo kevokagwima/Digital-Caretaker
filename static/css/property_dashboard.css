@@ -1,0 +1,2629 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Varela+Round&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Martel:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Days+One&display=swap");
+
+:root {
+  --dark-blue: rgb(1, 1, 29);
+  --other-dark-blue: rgb(0, 20, 49);
+  --page-header-bgColor: #242e42;
+  --page-header-bgColor-hover: #1d2636;
+  --page-header-txtColor: #dde9f8;
+  --page-header-headingColor: #7889a4;
+  --page-header-width: 220px;
+  --page-content-bgColor: #04101f;
+  --page-content-txtColor: #171616;
+  --page-content-blockColor: #fff;
+  --white: #fff;
+  --black: #333;
+  --blue: #00b9eb;
+  --red: #ec1848;
+  --border-radius: 4px;
+  --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.075);
+  --switch-bgLightModeColor: #87cefa;
+  --switch-sunColor: gold;
+  --switch-moonColor: #f4f4f4;
+  --switch-bgDarkModeColor: #1f1f27;
+  --font: "Exo", sans-serif;
+  --font-1: "Days One", sans-serif;
+  --product-desc-font: "Martel", serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(214, 214, 214);
+  border-radius: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select,
+input {
+  outline: 2px solid grey;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  display: flex;
+  gap: 1rem;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav {
+  position: relative;
+  min-width: 14rem;
+  max-width: 14rem;
+  height: inherit;
+  padding: 20px 0;
+  overflow: auto;
+}
+
+.close {
+  position: absolute;
+  top: 2px;
+  left: -1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 5px 5px 0;
+  height: 20px;
+  aspect-ratio: 2/1;
+  background-color: var(--red);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
+  z-index: 5;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  justify-content: safe;
+  align-items: center;
+  max-height: 3rem;
+  cursor: pointer;
+  padding: 0 10px;
+  position: relative;
+}
+
+.profile img {
+  height: 3rem;
+}
+
+.profile-info {
+  padding: 0 10px;
+}
+
+.profile-info p {
+  color: var(--blue);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+}
+
+.account-type {
+  position: absolute;
+  bottom: -5px;
+  left: 4.2rem;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--red);
+}
+
+.main-navigation,
+.secondary-navigation,
+.logout {
+  margin: 4rem 0;
+  display: grid;
+  grid-template-columns: auto;
+  row-gap: 5px;
+  max-height: 42.5vh;
+  overflow-y: auto;
+}
+
+.main-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+#dashboard > button {
+  min-width: 14rem;
+}
+
+.main-navigation button,
+.logout button,
+.secondary-navigation button {
+  border: none;
+  padding: 15px 50px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  background-color: transparent;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  position: relative;
+}
+
+.dropdown-btn i {
+  position: absolute;
+  right: 2rem;
+  font-size: 20px;
+}
+
+.main-navigation button img,
+.logout button img,
+.secondary-navigation img {
+  height: 1.8rem;
+  position: absolute;
+  top: 8px;
+  left: 10px;
+}
+
+.main-navigation button:hover,
+.main-navigation button:focus,
+.secondary-navigation button:hover,
+.secondary-navigation button:focus {
+  color: var(--blue);
+}
+
+#nav-title {
+  color: grey;
+  font-family: "PT Sans", sans-serif;
+  margin: 0 10px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.comp {
+  position: relative;
+}
+
+.complaint-count {
+  position: absolute;
+  top: 0;
+  left: 2rem;
+  background-color: var(--red);
+  border-radius: 50%;
+  padding: 1.5px;
+  height: 1rem;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+}
+
+#total-complaints {
+  position: absolute;
+  top: 15px;
+  right: 1rem;
+  color: grey;
+}
+
+.logout {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+
+.logout a button {
+  color: var(--red);
+}
+
+#no {
+  color: var(--red);
+  font-size: 15px;
+  margin-left: 40px;
+}
+
+#other {
+  color: rgb(0, 255, 0);
+}
+
+.drop-down-container {
+  display: none;
+  padding-left: 10px;
+  transition: 0.5s;
+}
+
+.drop-down-container a {
+  text-decoration: none;
+  display: block;
+  color: var(--red);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
+  padding: 10px 5px;
+  margin-left: 30px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.content-area {
+  position: relative;
+  min-height: 100%;
+  max-height: 100%;
+  width: 100%;
+}
+
+.notification-area {
+  padding: 15px 0;
+  position: relative;
+  top: 0;
+  width: 100%;
+  margin-bottom: 1rem;
+  z-index: 1;
+}
+
+.notifications {
+  position: absolute;
+  inset: 2rem 15px auto auto;
+  height: max-content;
+  max-height: 47rem;
+  overflow: auto;
+  min-width: 25rem;
+  max-width: 25rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  display: none;
+}
+
+.notification-info {
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 5px;
+}
+
+.notifications hr {
+  background-color: grey;
+  border: 0.1px solid grey;
+}
+
+.notification-info p {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-weight: bold;
+}
+
+.notification-info span {
+  color: var(--red);
+}
+
+#info {
+  font-size: 14px;
+  font-family: "PT Sans", sans-serif;
+  font-weight: normal;
+}
+
+.not-actions {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+  margin-top: 10px;
+  display: none;
+}
+
+.show-not-actions {
+  display: grid;
+}
+
+.not-actions button {
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.not-actions button a {
+  text-decoration: none;
+  color: white;
+  font-family: system-ui;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn1 {
+  background-color: rgb(6, 187, 6);
+}
+
+.btn2 {
+  background-color: red;
+}
+
+.show-notifications {
+  display: flex;
+}
+
+#else-not {
+  text-align: center;
+  padding: 10px;
+}
+
+.burger {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  cursor: pointer;
+  display: none;
+}
+
+.burger > div {
+  height: 2.2px;
+  width: 25px;
+  margin: 5px 0;
+}
+
+.not {
+  position: absolute;
+  top: 5px;
+  right: 1rem;
+  cursor: pointer;
+}
+
+.notification-dot {
+  position: absolute;
+  inset: 0 1px auto auto;
+  height: 12px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background-color: rgb(9, 197, 9);
+  animation: dotpulse 1.2s infinite;
+}
+
+.not--img {
+  height: 1.5rem;
+}
+
+@keyframes dotpulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+#dash {
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.tabcontent {
+  margin-top: 1rem;
+}
+
+#prop_id {
+  color: rgb(0, 255, 0);
+  font-size: 1rem;
+}
+
+#dash button {
+  position: absolute;
+  top: 0;
+  right: 1.6rem;
+  padding: 6px 10px;
+  background-color: #00b9eb;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.shifting {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  display: none;
+}
+
+.shifting img {
+  max-height: 5rem;
+  animation: rotate 1s forwards infinite ease;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dash-information {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 20px;
+  row-gap: 20px;
+  overflow: hidden;
+  margin: 1rem 0 0.5rem;
+  min-width: 100%;
+  max-width: 100%;
+  max-height: 88vh;
+  overflow: auto;
+  padding-right: 8px;
+}
+
+.property-summary {
+  border-radius: 5px;
+  grid-column: 1/5;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 2rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+  min-height: 42vh;
+  max-height: 42vh;
+  overflow: auto;
+  position: relative;
+}
+
+.property-summary > p {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 2px;
+  font-size: 14px;
+  color: white;
+  background-color: var(--red);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.property-info {
+  max-width: 30vw;
+  min-width: 26vw;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  row-gap: 20px;
+  column-gap: 20px;
+}
+
+.property-info p {
+  font-size: 22px;
+  position: relative;
+  padding: 15px 1px;
+}
+
+.property-info span {
+  color: var(--blue);
+  min-width: max-content;
+  max-width: 8vw;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  position: absolute;
+  top: -10px;
+  left: -5px;
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+}
+
+.property-img img {
+  height: 20rem;
+  margin-left: -6rem;
+}
+
+.property-img #apartment {
+  height: 18rem;
+}
+
+#warehouse {
+  height: 14rem;
+  width: 16rem;
+}
+
+.property-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  row-gap: 10px;
+  padding: 10px;
+}
+
+.prop-tenants,
+.prop-units {
+  padding: 30px 10px 10px;
+  border-radius: 5px;
+  min-width: 18vw;
+  max-width: 40vw;
+  font-size: 20px;
+  position: relative;
+  text-align: center;
+}
+
+.prop-tenants p,
+.prop-units p {
+  margin: 10px 0 0;
+}
+
+.prop-tenants > p > span,
+.prop-units > p span {
+  color: var(--blue);
+  font-size: 50px;
+}
+
+.extra-info {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  font-size: 14px;
+  padding: 0 5px;
+  display: flex;
+  width: 100%;
+}
+
+.extra-info h4 {
+  padding-right: 10px;
+  font-weight: normal;
+}
+
+#extra-reserved {
+  cursor: pointer;
+}
+
+.extra-info span {
+  color: greenyellow;
+  font-size: 15px;
+}
+
+.tenants,
+.units {
+  border-radius: 5px;
+  overflow: hidden;
+  max-width: 100%;
+  min-width: 100%;
+  height: max-content;
+}
+
+.tenants {
+  grid-column: 1/3;
+}
+
+.tenants h4,
+.units h4 {
+  padding: 10px;
+  font-size: 1.2rem;
+}
+
+.tenant-list,
+.unit-list {
+  display: grid;
+  grid-template-columns: repeat(1, auto);
+  row-gap: 10px;
+  padding: 10px;
+  height: fit-content;
+  max-height: 30rem;
+  overflow: auto;
+}
+
+#unit-name,
+#tenant-name,
+.tenant-icon,
+.unit-icon {
+  position: relative;
+}
+
+#tenant-name {
+  min-width: max-content;
+  max-width: 12vw;
+  text-overflow: ellipsis;
+}
+
+#tenant-names a {
+  text-decoration: none;
+  color: white;
+}
+
+#new,
+#newz {
+  position: absolute;
+  top: -1.1rem;
+  left: -2.9rem;
+  margin-left: 10px;
+  background-color: orange;
+  border-radius: 2px;
+  padding: 3px 4px;
+  color: white;
+  font-size: 8px;
+  animation: pulse 1.2s infinite;
+}
+
+#newz {
+  left: -4rem;
+}
+
+#news {
+  position: absolute;
+  inset: 2px -2.5rem 0 auto;
+  margin: 6px 0;
+  padding: 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  background-color: orange;
+  border-radius: 2px;
+  animation: none;
+  color: white;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.card,
+.cards {
+  height: 3.5rem;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 0.8fr 3fr 1.5fr 2fr;
+  justify-content: left;
+  align-items: center;
+  column-gap: 2rem;
+  padding: 0 0 0 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px;
+  height: inherit;
+}
+
+.active {
+  background-color: #00b9eb;
+}
+
+.non-active {
+  background-color: grey;
+}
+
+.cards {
+  grid-template-columns: 0.8fr 1fr 0.8fr 1.5fr 1fr;
+}
+
+.card img,
+.cards img {
+  height: 2.8rem;
+}
+
+.card a {
+  color: var(--blue);
+  text-decoration: none;
+  font-family: "PT Sans", sans-serif;
+}
+
+#tenant-assigned,
+#tenant-unassigned {
+  padding: 5px 10px;
+  width: max-content;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+#tenant-assigned {
+  background-color: rgb(6, 187, 6);
+}
+
+#tenant-unassigned {
+  background-color: red;
+}
+
+.units {
+  grid-column: 3/5;
+}
+
+.units > h4 {
+  position: relative;
+}
+
+#btn {
+  position: absolute;
+  right: 1rem;
+  padding: 5px 10px;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  border: none;
+  color: rgb(6, 187, 6);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 14px;
+}
+
+.cards p:nth-child(2) {
+  color: grey;
+}
+
+.cards p:nth-child(3) {
+  color: #00b9eb;
+}
+
+.unit-status {
+  text-align: center;
+  width: max-content;
+  padding: 5px 15px;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.occupied {
+  background-color: rgb(6, 187, 6);
+}
+
+.vacant {
+  background-color: red;
+}
+
+.reserved {
+  background-color: rgb(215, 140, 0);
+}
+
+.else {
+  background-color: transparent;
+  color: var(--red);
+  font-size: 1.2rem;
+}
+
+.extras,
+.settings {
+  background-color: var(--dark-blue);
+  margin: 15px 0;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.extras h4 {
+  font-size: 25px;
+  margin-bottom: 2rem;
+}
+
+.tenant-search {
+  position: absolute;
+  top: 3.5rem;
+  right: 2rem;
+  width: 15rem;
+}
+
+.tenant-search input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  text-transform: capitalize;
+  width: inherit;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.tenant-search input::placeholder {
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+}
+
+.all-tenants,
+.all-units {
+  margin: 2rem 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 20px;
+  column-gap: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 10px 0 0;
+  overflow: hidden;
+  border-radius: 5px;
+  max-height: 82vh;
+  overflow: auto;
+}
+
+.tenant-card,
+.unit-card {
+  background-color: var(--red);
+  padding: 10px;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  align-items: center;
+  transition: transform 200ms ease-in;
+  position: relative;
+  overflow: hidden;
+}
+
+.tenant-card {
+  padding: 20px 15px;
+}
+
+.tenant-unit-assigned,
+.tenant-unit-unassigned {
+  position: absolute;
+  padding: 5px 20px;
+  top: 0;
+  left: 0;
+  font-size: 12px;
+}
+
+.tenant-unit-assigned {
+  background-color: rgb(6, 187, 6);
+  color: white;
+}
+
+.tenant-unit-unassigned {
+  background-color: var(--page-header-bgColor);
+}
+
+.tenant-unit-unassigned .else {
+  font-size: 12px;
+  color: red;
+}
+
+.unit-card {
+  grid-template-columns: 1fr 1fr;
+}
+
+.occupation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0;
+  padding: 5px 20px;
+  font-size: 14px;
+}
+
+.unit-occupied {
+  background-color: rgb(6, 187, 6);
+  color: white;
+}
+
+.unit-reserved {
+  background-color: orange;
+  color: white;
+}
+
+.unit-vacant {
+  background-color: var(--page-header-bgColor);
+  color: red;
+}
+
+.tenant-card img,
+.unit-card img {
+  height: 5rem;
+}
+
+.unit-card img {
+  margin-left: 15px;
+}
+
+.tenant-details,
+.unit-details {
+  padding: 10px;
+}
+
+.tenant-details p,
+.unit-details p {
+  margin-top: 5px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: white;
+  font-family: "PT Sans", sans-serif;
+}
+
+.tenant-details hr {
+  background-color: transparent;
+  border: none;
+  margin: 10px 0;
+  height: 0.2px;
+}
+
+.tenant-details a {
+  color: gold;
+  text-decoration: none;
+}
+
+.extra {
+  padding: 20px;
+  text-align: center;
+}
+
+.modal {
+  position: fixed;
+  display: none;
+  place-items: center;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.modal-content {
+  max-width: 90%;
+  width: 50%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.modal-header {
+  position: relative;
+  padding: 1.2rem 0;
+}
+
+.modal-body {
+  padding: 3rem 2rem;
+}
+
+.actions {
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions img {
+  height: 10rem;
+}
+
+.actions h4 {
+  font-size: 1.2rem;
+}
+
+.actions ul {
+  margin: 0.8rem 1rem 0;
+  color: grey;
+}
+
+.actions li {
+  margin-bottom: 8px;
+}
+
+.suggestions {
+  margin: 1rem 0 0;
+  display: flex;
+}
+
+.suggestions img {
+  height: 1rem;
+}
+
+.suggestions h4 {
+  color: gold;
+  margin-left: 10px;
+}
+
+.modal-body strong {
+  color: var(--red);
+  font-size: 1.2rem;
+}
+
+.modal-footer {
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+
+.modal-footer a {
+  text-decoration: none;
+}
+
+.modal-footer button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 35px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: green;
+  cursor: pointer;
+  color: white;
+  min-width: 15rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  margin-left: 1rem;
+}
+
+.closemodal {
+  position: absolute;
+  color: red;
+  font-size: 2rem;
+  right: 1rem;
+  top: -5px;
+  cursor: pointer;
+}
+
+.complaints {
+  margin: 1.5rem 0 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 20px 10px 20px 20px;
+  max-height: 100vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.complaints .else {
+  font-size: 1rem;
+  text-align: center;
+}
+
+#more-info {
+  margin-top: 8px;
+  color: grey;
+}
+
+.complaints #tenant {
+  margin-bottom: 8px;
+  color: var(--red);
+}
+
+.complaint-info {
+  line-height: 28px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.complaint-info > h4 {
+  position: relative;
+  width: max-content;
+}
+
+.complaint-info #tenant-names {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 15px;
+  text-align: center;
+  background-color: rgb(8, 184, 8);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 14px;
+}
+
+.complaint-info #date {
+  position: absolute;
+  right: 5px;
+}
+
+.complaint-info h4 {
+  font-size: 22px;
+  position: relative;
+}
+
+.complaint-info span {
+  color: var(--blue);
+  font-size: 14px;
+}
+
+.complaint-info p {
+  font-family: "PT Sans", sans-serif;
+  font-size: 17px;
+}
+
+.options {
+  margin: 1rem 0;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 10px;
+  column-gap: 10px;
+  max-height: 88vh;
+  overflow: auto;
+  padding: 2px 10px 0 0;
+}
+
+.disable-property,
+.property-availability,
+.revoke-access,
+.assign-unit {
+  height: max-content;
+  border-radius: 5px;
+  box-shadow: 0 0 10px -6px black;
+  overflow: hidden;
+}
+
+.disable-property h4,
+.property-availability h4,
+.revoke-access h4,
+.assign-unit h4 {
+  padding: 10px 15px;
+  color: var(--blue);
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.availability {
+  border-radius: 5px;
+  margin: 1rem 0 0;
+  padding: 0 15px;
+}
+
+.availability p {
+  padding: 10px;
+  max-width: max-content;
+  border-radius: 5px;
+  font-family: "PT Sans", sans-serif;
+}
+
+.availability > p span {
+  color: var(--blue);
+  font-size: 1.2rem;
+}
+
+.availability form {
+  margin: 1rem 0 0;
+}
+
+.availability form select {
+  padding: 12px 0;
+  text-indent: 10px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.availability form button {
+  background-color: rgb(3, 116, 3);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.revoke-access,
+.assign-unit {
+  grid-column: 1/3;
+}
+
+.revoke-access form,
+.assign-unit form {
+  margin: 1.5rem 0 0;
+  padding: 0 15px;
+}
+
+.revoke-access input,
+.assign-unit input {
+  padding: 15px 8px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 1rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 18px;
+  width: 48%;
+  transition: 0.5s ease-in-out;
+}
+
+.revoke-access ::placeholder,
+.assign-unit ::placeholder {
+  font-size: 16px;
+  font-family: "PT Sans", sans-serif;
+}
+
+#revoke-btn,
+#assign-btn {
+  margin: 1rem 0;
+  padding: 10px 15px;
+  border-radius: 3px;
+  background-color: rgb(3, 116, 3);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+#revoke-btn:disabled,
+#assign-btn:disabled {
+  background-color: grey;
+}
+
+.property-registration,
+.unit-registration {
+  padding: 20px;
+  margin: 1rem 0 0;
+  border-radius: 5px;
+}
+
+.unit-registration {
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.property-registration form,
+.unit-registration form {
+  padding: 10px 10px;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  column-gap: 40px;
+  row-gap: 20px;
+  max-height: 39.5rem;
+}
+
+.property-registration ::placeholder,
+.unit-registration ::placeholder {
+  font-family: "PT Sans", sans-serif;
+  color: var(--page-header-headingColor);
+  font-size: 16px;
+}
+
+.property-registration input,
+select,
+.unit-registration input,
+select {
+  border: none;
+  border-radius: 3px;
+  padding: 15px;
+  margin: 0.5rem 0 1rem;
+  width: 100%;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 18px;
+}
+
+.property-registration select,
+.unit-registration select {
+  cursor: pointer;
+}
+
+.btn {
+  grid-column: 1/3;
+}
+
+.property-registration .btn,
+.unit-registration .btn {
+  border: none;
+  background-color: rgb(3, 116, 3);
+  color: white;
+  padding: 10px;
+  border-radius: 3px;
+  font-family: system-ui;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.unit-registration .form5 {
+  grid-column: 1/3;
+}
+
+#unit-info {
+  margin-top: 8px;
+  color: grey;
+}
+
+#unit-infos {
+  margin-top: 8px;
+  color: grey;
+  display: inline-block;
+}
+
+.reservations {
+  margin-top: 1rem;
+  padding-right: 10px;
+  border-radius: 5px;
+  max-height: 40.7rem;
+  overflow: auto;
+}
+
+#reservation-date {
+  color: var(--red);
+}
+
+.reservation-info {
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.expired {
+  opacity: 0.5;
+}
+
+#divider {
+  margin: 1rem 0;
+  border: 0.1px solid var(--blue);
+}
+
+#reservation-status {
+  color: rgb(7, 226, 7);
+  font-size: 18px;
+}
+
+#status,
+#status-expired {
+  position: absolute;
+  right: 1.2rem;
+  top: 20px;
+  color: rgb(7, 226, 7);
+}
+
+#status-expired {
+  color: var(--red);
+}
+
+.reservation-info h4:first-child {
+  color: grey;
+}
+
+#reserve-id {
+  color: orange;
+}
+
+.reservation-info hr {
+  margin: 0.8rem 0;
+  border: 0.1px solid grey;
+}
+
+.reservation-info p {
+  margin: 5px 0;
+  color: yellow;
+}
+
+.expired p::selection,
+.expired h4::selection,
+.expired li::selection,
+.expired span::selection {
+  background-color: transparent;
+}
+
+#user-info,
+#unit-info {
+  list-style-type: none;
+}
+
+#user-info li,
+#unit-info li {
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.reservation-info span {
+  color: var(--blue);
+}
+
+#expire {
+  color: var(--red);
+}
+
+.reservations > .else {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.no {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.my-profile {
+  margin: 2rem 0 0;
+  border-radius: 5px;
+  max-height: 41.4rem;
+  overflow: auto;
+}
+
+.landlord-info {
+  padding: 20px;
+  height: max-content;
+  display: grid;
+  grid-template-columns: auto;
+  row-gap: 20px;
+}
+
+.profile-img {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  max-width: 17vw;
+}
+
+.profile-info span {
+  color: var(--red);
+}
+
+.profile-img img {
+  max-height: 5rem;
+}
+
+.personal-info-details {
+  margin-top: 15px;
+  border-radius: 5px;
+  padding: 20px 10px;
+}
+
+.personal-info-details table {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.personal-info-details table th,
+td {
+  padding: 10px;
+}
+
+.personal-info-details table th {
+  color: grey;
+  text-align: left;
+  width: 35rem;
+}
+
+.properties-owned {
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.properties-owned span {
+  color: var(--red);
+}
+
+.properties-owned-info {
+  margin: 1rem 0 0;
+  padding: 10px 20px;
+  display: flex;
+}
+
+.prop-owned-info img {
+  height: 2rem;
+}
+
+.prop-owned-info {
+  width: max-content;
+  padding: 20px;
+  border-radius: 5px;
+  line-height: 25px;
+  margin-right: 1rem;
+}
+
+.prop-owned-info #prop_id {
+  color: green;
+}
+
+.prop-owned-info > a {
+  text-decoration: none;
+  color: blue;
+}
+
+.tops {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  max-height: max-content;
+  margin-bottom: 0;
+  animation: fade-away 1s 4s forwards;
+}
+
+@keyframes fade-away {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .content-area,
+  body,
+  .main-navigation button:hover,
+  .main-navigation button:focus,
+  .secondary-navigation button:hover,
+  .secondary-navigation button:focus,
+  .prop-tenants,
+  .prop-units,
+  .card,
+  .cards,
+  .actions,
+  .complaint-info,
+  .property-registration input,
+  select,
+  .unit-registration input,
+  select,
+  .revoke-access input,
+  .assign-unit input,
+  .prop-owned-info,
+  .modal-header,
+  .modal-footer,
+  .shifting,
+  .notification-area {
+    background-color: var(--other-dark-blue);
+  }
+
+  .side-nav,
+  .notifications,
+  .property-summary,
+  .tenants,
+  .units,
+  .modal-content,
+  .complaints,
+  .disable-property,
+  .property-availability,
+  .revoke-access,
+  .assign-unit,
+  .property-registration,
+  .unit-registration,
+  .reservation-info,
+  .personal-info-details,
+  .properties-owned {
+    background-color: var(--dark-blue);
+  }
+
+  .tenants > h4,
+  .units > h4,
+  .notification-info,
+  .disable-property h4,
+  .property-availability h4,
+  .revoke-access h4,
+  .assign-unit h4 {
+    background-color: var(--page-header-bgColor);
+  }
+
+  .show-side-nav {
+    box-shadow: 0 0 30px -5px black;
+  }
+
+  .tenant-search input {
+    outline: 2px solid whitesmoke;
+    background-color: var(--page-header-bgColor);
+  }
+
+  .notifications {
+    background-color: var(--page-header-bgColor-hover);
+  }
+
+  .availability > p {
+    background-color: var(--blue);
+  }
+
+  .availability > p span {
+    color: rgb(0, 255, 0);
+  }
+
+  .burger > div,
+  .side {
+    background-color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .content-area,
+  body,
+  .main-navigation button:hover,
+  .main-navigation button:focus,
+  .secondary-navigation button:hover,
+  .secondary-navigation button:focus,
+  .prop-tenants,
+  .prop-units,
+  .card,
+  .cards,
+  .actions,
+  .complaint-info,
+  .property-registration input,
+  select,
+  .unit-registration input,
+  select,
+  .revoke-access input,
+  .assign-unit input,
+  .prop-owned-info,
+  .shifting,
+  .notification-area {
+    background-color: whitesmoke;
+  }
+
+  .side-nav,
+  .notifications,
+  .property-summary,
+  .tenants,
+  .units,
+  .modal-content,
+  .complaints,
+  .disable-property,
+  .property-availability,
+  .revoke-access,
+  .assign-unit,
+  .property-registration,
+  .unit-registration,
+  .reservation-info,
+  .personal-info-details,
+  .properties-owned,
+  .notification-info {
+    background-color: white;
+  }
+
+  .extra-info span {
+    color: rgb(2, 201, 2);
+  }
+
+  .show-side-nav {
+    box-shadow: 0 0 30px -5px black;
+  }
+
+  .tenants > h4,
+  .units > h4,
+  .modal-header,
+  .modal-footer {
+    background-color: rgb(209, 209, 209);
+  }
+
+  #tenant-assigned,
+  #tenant-unassigned,
+  .unit-status {
+    color: white;
+  }
+
+  .tenant-search input {
+    outline: 2px solid black;
+  }
+
+  .suggestions h4,
+  .disable-property h4,
+  .property-availability h4,
+  .revoke-access h4,
+  .assign-unit h4 {
+    color: rgb(2, 201, 2);
+  }
+
+  .reservation-info p {
+    color: rgb(2, 201, 2);
+  }
+
+  .notifications,
+  .availability > p {
+    background-color: bisque;
+  }
+
+  .burger > div,
+  .side {
+    background-color: black;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  .side-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    position: fixed;
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .show-close {
+    animation-delay: 1s;
+    visibility: visible;
+    left: 14rem;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width: 400px) {
+  .property-img {
+    display: none;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .notifications {
+    min-width: 16rem;
+    max-width: 18rem;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-info {
+    min-width: 100%;
+    padding: 0 10px;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  .property-summary {
+    padding: 0 10px;
+    height: max-content;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .property-info p {
+    font-size: 0.8rem;
+  }
+
+  .property-info span {
+    font-size: 0.6rem;
+  }
+
+  .extra-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info h4 {
+    font-size: 0.7rem;
+  }
+
+  .property-stats p {
+    font-size: 0.6rem;
+  }
+
+  .prop-tenants > p,
+  .prop-units > p {
+    font-size: 1rem;
+  }
+
+  .prop-tenants > p > span,
+  .prop-units > p > span {
+    font-size: 1.5rem;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  .card,
+  .cards {
+    overflow: auto;
+  }
+
+  .tenant-details p,
+  .unit-details p {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    min-width: 70vw;
+    max-width: 70vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+  .actions img {
+    display: none;
+  }
+
+  .tenant-search,
+  #dash button,
+  .complaint-info #tenant-names {
+    position: unset;
+    margin-top: 10px;
+  }
+
+  .card,
+  .cards {
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+  }
+
+  .card {
+    grid-template-columns: repeat(2, auto);
+    padding-right: 1.5rem;
+  }
+
+  #tenant-name,
+  #unit-name,
+  #unit-type,
+  #tenant-assigned,
+  #tenant-unassigned {
+    display: none;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+
+  .property-registration > form,
+  .unit-registration > form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .unit-registration .form5 {
+    grid-column: 1/2;
+  }
+}
+
+@media screen and (min-width: 400px) and (max-width: 500px) {
+  .property-img {
+    display: none;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-info {
+    min-width: 100%;
+    padding: 0 10px;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  .property-summary {
+    padding: 0 10px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .property-info p {
+    font-size: 1rem;
+  }
+
+  .property-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info h4 {
+    font-size: 0.7rem;
+  }
+
+  .property-stats p {
+    font-size: 0.6rem;
+  }
+
+  .prop-tenants > p,
+  .prop-units > p {
+    font-size: 1rem;
+  }
+
+  .prop-tenants > p > span,
+  .prop-units > p > span {
+    font-size: 1.5rem;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  .card,
+  .cards {
+    overflow: auto;
+  }
+
+  .tenant-details p,
+  .unit-details p {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    min-width: 70vw;
+    max-width: 70vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+  .actions img {
+    display: none;
+  }
+
+  .tenant-search,
+  #dash button,
+  .complaint-info #tenant-names {
+    position: unset;
+    margin-top: 10px;
+  }
+
+  .card,
+  .cards {
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+  }
+
+  #tenant-name,
+  #unit-name,
+  #unit-type {
+    display: none;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+
+  .property-registration > form,
+  .unit-registration > form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .unit-registration .form5 {
+    grid-column: 1/2;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 650px) {
+  .property-img {
+    display: none;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-info {
+    width: 30vw;
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+
+  .property-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .property-info p {
+    font-size: 1rem;
+  }
+
+  .property-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info h4 {
+    font-size: 0.7rem;
+  }
+
+  .property-stats p {
+    font-size: 0.6rem;
+  }
+
+  .prop-tenants > p,
+  .prop-units > p {
+    font-size: 1rem;
+  }
+
+  .prop-tenants > p > span,
+  .prop-units > p > span {
+    font-size: 1.5rem;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  .card,
+  .cards {
+    overflow: auto;
+  }
+
+  .tenant-details p,
+  .unit-details p {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    width: 35vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+  .actions img {
+    display: none;
+  }
+
+  .tenant-search {
+    position: unset;
+    margin-top: 10px;
+  }
+
+  .card,
+  .cards {
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
+  }
+
+  .cards {
+    grid-template-columns: repeat(4, auto);
+  }
+
+  #tenant-name,
+  #unit-name {
+    display: none;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+
+  .property-registration > form,
+  .unit-registration > form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn,
+  .unit-registration .form5 {
+    grid-column: 1/2;
+  }
+}
+
+@media screen and (min-width: 650px) and (max-width: 800px) {
+  .property-img {
+    display: none;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .property-img #apartment {
+    height: 16rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-info {
+    width: 30vw;
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+
+  .property-info p {
+    font-size: 1rem;
+  }
+
+  .property-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info span {
+    font-size: 0.8rem;
+  }
+
+  .extra-info h4 {
+    font-size: 0.7rem;
+  }
+
+  .property-stats p {
+    font-size: 0.6rem;
+  }
+
+  .prop-tenants > p,
+  .prop-units > p {
+    font-size: 1rem;
+  }
+
+  .prop-tenants > p > span,
+  .prop-units > p > span {
+    font-size: 1.5rem;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  #tenant-name {
+    max-width: 10vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tenant-details p,
+  .unit-details p {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    width: 35vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+  .tenant-search {
+    width: 12rem;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 900px) {
+  .property-img {
+    display: none;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .property-img #apartment {
+    height: 16rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-info {
+    width: 30vw;
+  }
+
+  .prop-tenants > p > span,
+  .prop-units > p > span {
+    font-size: 2rem;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  #tenant-name {
+    min-width: max-content;
+    max-width: 20vw;
+    text-overflow: ellipsis;
+  }
+
+  .tenant-details p,
+  .unit-details p {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    width: 30vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1000px) {
+  .property-img img {
+    height: 16rem;
+    margin-left: -3rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .property-img #apartment {
+    height: 16rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-info {
+    grid-template-columns: 1fr;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  #tenant-name {
+    min-width: max-content;
+    max-width: 20vw;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    width: 23vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1100px) {
+  .property-img img {
+    height: 16rem;
+    margin-left: -3rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .property-img #apartment {
+    height: 16rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  #tenant-name {
+    min-width: max-content;
+    max-width: 20vw;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    width: 23vw;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .disable-property,
+  .property-availability {
+    grid-column: 1/3;
+  }
+
+  .revoke-access input,
+  .assign-unit input,
+  #revoke-btn,
+  #assign-btn {
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1100px) and (max-width: 1200px) {
+  .property-img img {
+    height: 16rem;
+    margin-left: -3rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .property-img #apartment {
+    height: 16rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .property-summary,
+  .tenants,
+  .units {
+    grid-column: 1/3;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  #tenant-name {
+    min-width: max-content;
+    max-width: 20vw;
+    text-overflow: ellipsis;
+  }
+
+  .prop-tenants,
+  .prop-units {
+    width: 23vw;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1250px) {
+  .property-img img {
+    height: 20rem;
+    margin-left: -3rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+}
+
+@media screen and (min-width: 1250px) and (max-width: 1400px) {
+  .property-img img {
+    height: 20rem;
+    margin-left: -3rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+}

@@ -1,0 +1,604 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Varela+Round&display=swap");
+
+:root {
+  --dark-blue: #111111;
+  --other-dark-blue: #212121;
+  --page-header-bgColor: #242e42;
+  --page-header-bgColor-hover: #1d2636;
+  --page-header-txtColor: #dde9f8;
+  --page-header-headingColor: #7889a4;
+  --page-header-width: 220px;
+  --page-content-bgColor: #04101f;
+  --page-content-txtColor: #171616;
+  --page-content-blockColor: #fff;
+  --white: #fff;
+  --black: #333;
+  --blue: #00b9eb;
+  --red: #ec1848;
+  --border-radius: 4px;
+  --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.075);
+  --switch-bgLightModeColor: #87cefa;
+  --switch-sunColor: gold;
+  --switch-moonColor: #f4f4f4;
+  --switch-bgDarkModeColor: #1f1f27;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(214, 214, 214);
+  border-radius: 10px;
+}
+
+body {
+  background-color: var(--other-dark-blue);
+  filter: brightness(5rem);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 14rem;
+  height: 100%;
+  background-color: var(--dark-blue);
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.profile {
+  display: flex;
+  justify-content: safe;
+  align-items: center;
+  max-height: 3rem;
+  cursor: pointer;
+  padding: 0 10px;
+  position: relative;
+}
+
+.profile img {
+  height: 3rem;
+}
+
+.profile-info {
+  padding: 0 10px;
+}
+
+.profile-info p {
+  color: var(--blue);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+}
+
+.account-type {
+  position: absolute;
+  bottom: -5px;
+  left: 4.2rem;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--red);
+}
+
+.main-navigation,
+.logout {
+  margin: 4rem 0;
+  display: grid;
+  grid-template-columns: auto;
+  row-gap: 5px;
+  overflow-y: auto;
+}
+
+.main-navigation button,
+.logout button {
+  border: none;
+  padding: 12px 50px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  color: white;
+  background-color: transparent;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  position: relative;
+  letter-spacing: normal;
+}
+
+.main-navigation button img,
+.logout button img {
+  height: 1.8rem;
+  position: absolute;
+  top: 8px;
+  left: 10px;
+}
+
+.main-navigation button:hover,
+.main-navigation button:focus {
+  color: var(--blue);
+  background-color: var(--other-dark-blue);
+}
+
+#nav-title {
+  color: grey;
+  font-family: "PT Sans", sans-serif;
+  margin: 0 10px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.logout {
+  position: absolute;
+  bottom: -2.8rem;
+  left: 0;
+  width: 100%;
+}
+
+.logout:hover {
+  background-color: var(--other-dark-blue);
+}
+
+.logout button {
+  color: var(--red);
+}
+
+.content-area {
+  margin-left: 14rem;
+  color: var(--dark-blue);
+  padding: 60px 20px 10px;
+  background-color: var(--other-dark-blue);
+  min-height: 100vh;
+}
+
+.notification-area {
+  padding: 10px 0;
+  position: relative;
+  grid-column: 1/3;
+  position: fixed;
+  top: 0;
+  width: 82.8vw;
+  background-color: transparent;
+  z-index: 1;
+}
+
+.tabcontent > h4 {
+  font-size: 1.4rem;
+  color: white;
+}
+
+#more-info {
+  color: grey;
+  margin-top: 0.5rem;
+}
+
+.tenants,
+.landlords,
+.properties,
+.units {
+  background-color: var(--dark-blue);
+  border-radius: 5px;
+  margin-top: 1.4rem;
+  max-height: 41rem;
+  overflow: auto;
+}
+
+#search-tenant,
+#unit-search {
+  position: absolute;
+  top: 5rem;
+  right: 0;
+  width: 17rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#search-tenant input,
+#unit-search input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--page-header-bgColor);
+  color: white;
+  text-transform: capitalize;
+  width: 15rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+#search-tenant input::placeholder,
+#unit-search input::placeholder {
+  color: var(--page-header-headingColor);
+  font-family: "PT Sans", sans-serif;
+}
+
+table {
+  width: 100%;
+  padding: 0 15px;
+  position: relative;
+  border-collapse: collapse;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  text-align: left;
+  background-color: var(--red);
+  color: white;
+  z-index: 2;
+}
+
+td {
+  color: grey;
+  padding: 10px;
+  text-align: left;
+  max-width: 15vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#td {
+  text-align: center;
+}
+
+#active {
+  color: rgb(5, 189, 5);
+}
+
+#assigned {
+  color: #00b9eb;
+}
+
+#reserved {
+  color: orange;
+}
+
+#not-active {
+  color: var(--red);
+  font-size: 14px;
+}
+
+.accordion,
+.accordions {
+  background-color: var(--dark-blue);
+  width: 100%;
+  color: grey;
+  cursor: pointer;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.accordions {
+  background-color: var(--page-header-bgColor);
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+  color: whitesmoke;
+  box-shadow: 1px 1px 10px -8px black;
+}
+
+.panel {
+  background-color: var(--page-content-bgColor);
+  border-radius: 0 0 5px 5px;
+  max-height: 0;
+  padding: 0 10px;
+  max-width: 100%;
+  overflow: hidden;
+  margin-bottom: 10px;
+  transition: max-height 0.2s ease-out;
+  box-shadow: 1px 1px 10px -8px black;
+}
+
+.accordion-active {
+  background-color: var(--page-header-bgColor);
+}
+
+.show-info {
+  background-color: var(--page-header-bgColor-hover);
+  border-radius: 5px;
+  display: none;
+  transition: 0.2s ease-out;
+}
+
+.close-panel {
+  display: table-row;
+}
+
+.actions {
+  padding: 5px 10px;
+}
+
+.actions > h4 {
+  color: rgb(5, 189, 5);
+}
+
+.actions > span {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.actions hr {
+  margin: 10px 0;
+  border: 0.1px solid grey;
+}
+
+.tenant-controls {
+  display: grid;
+  grid-template-columns: auto;
+  align-items: center;
+}
+
+.tenant-controls a {
+  color: red;
+  text-decoration: none;
+}
+
+.panel p {
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.panel p:last-child {
+  padding-bottom: 10px;
+}
+
+.panel .elses {
+  color: grey;
+  font-weight: lighter;
+  padding-bottom: 5px;
+}
+
+.panel span {
+  color: grey;
+  font-weight: lighter;
+}
+
+.form h4 {
+  color: whitesmoke;
+  margin-top: 10px;
+}
+
+.form p {
+  font-size: 16px;
+}
+
+select {
+  margin: 0.8rem 0;
+  padding: 15px 5px;
+  border-radius: 3px;
+  width: 100%;
+  border: none;
+  background-color: var(--page-header-bgColor);
+  color: white;
+  font-size: 16px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  border-radius: 3px;
+  padding: 10px 3em;
+  margin-bottom: 10px;
+  background-color: green;
+  color: white;
+  width: 100%;
+  font-size: 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.revoke-access h4 {
+  color: red;
+}
+
+.else {
+  margin-top: 10px;
+  color: var(--red);
+  padding-bottom: 5px;
+}
+
+.complaint {
+  padding: 8px 10px;
+  margin: 10px 0 10px;
+  background-color: var(--other-dark-blue);
+  border-radius: 5px;
+  position: relative;
+}
+
+.comp {
+  max-height: 20rem;
+  overflow: auto;
+  padding-right: 10px;
+}
+
+#new,
+#news {
+  position: absolute;
+  top: 5px;
+  border-radius: 50%;
+  padding: 4px 5px;
+  background-color: green;
+  color: white;
+  font-size: 8px;
+}
+
+.complaint #date {
+  position: absolute;
+  right: 5px;
+  color: var(--red);
+}
+
+.complaint h6 {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 20px;
+  color: whitesmoke;
+  margin-bottom: 5px;
+}
+
+.complaint span {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 14px;
+  color: rgb(5, 189, 5);
+}
+
+.complaint p {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: white;
+  font-weight: normal;
+}
+
+.extra-modal {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  display: none;
+}
+
+#extra > h4 {
+  position: relative;
+}
+
+#extras {
+  position: absolute;
+  right: 0;
+  max-width: max-content;
+  padding: 8px 15px;
+  font-size: 0.8rem;
+}
+
+.extras {
+  background-color: var(--dark-blue);
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 1rem;
+  color: white;
+  max-height: 40.5rem;
+  overflow: hidden;
+}
+
+.extras .else {
+  text-align: center;
+}
+
+.modal-content {
+  background-color: var(--other-dark-blue);
+  min-width: 50rem;
+  border-radius: 10px;
+}
+
+.modal-header {
+  padding: 5px 12px;
+  text-align: right;
+  background-color: var(--black);
+}
+
+.modal-header #closes {
+  color: var(--red);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 2rem 3rem;
+}
+
+.modal-body form {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 2rem;
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input label {
+  color: whitesmoke;
+}
+
+.input input {
+  background-color: var(--dark-blue);
+  border: none;
+  padding: 15px;
+  border-radius: 3px;
+  font-size: 16px;
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.input input:focus {
+  outline: 0;
+  background-color: var(--black);
+}
+
+.input input::placeholder {
+  color: grey;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.modal-body form button,
+.inputs {
+  grid-column: 1/3;
+}
+
+.tops {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  max-height: max-content;
+  margin-bottom: 0;
+  animation: fade-away 1s 4s forwards;
+}
+
+@keyframes fade-away {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.side {
+  background-color: white;
+}

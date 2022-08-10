@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block title %}
+PMS | SignUp
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="form">
+  <h4>Register Below</h4>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="input">
+      {{ form.first_name.label }}
+      {{ form.first_name(placeholder="Enter First Name") }}
+    </div>
+    <div class="input">
+      {{ form.second_name.label }}
+      {{ form.second_name(placeholder="Enter Second Name") }}
+    </div>
+    <div class="input">
+      {{ form.last_name.label }}
+      {{ form.last_name(placeholder="Enter Last Name") }}
+    </div>
+    <div class="input">
+      {{ form.email_address.label }}
+      {{ form.email_address(placeholder="Enter Email Address") }}
+    </div>
+    <div class="input">
+      {{ form.phone_number.label }}
+      {{ form.phone_number(placeholder="Enter Phone Number")}}
+    </div>
+    <div class="input">
+      {{ form.username.label }}
+      {{ form.username(placeholder="Enter Username")}}
+    </div>
+    <div class="input">
+      {{ form.password.label }}
+      {{ form.password(placeholder="Enter Password")}}
+    </div>
+    <div class="input">
+      {{ form.password1.label }}
+      {{ form.password1(placeholder="Confirm Password") }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">SIGN UP</span>
+    </button>
+  </form>
+  <div class="box">
+    <p>Already have an account?</p>
+    <a href="{{ url_for('main.signin') }}">Login</a>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+{% endblock %}

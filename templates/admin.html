@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/css/bootstrap.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Admin Dashboard</title>
+  </head>
+
+  <body>
+    <div class="side-nav">
+      <div class="profile" onclick="openView(event, 'profile')">
+        <img src="{{ url_for('static', filename='css/Images/profile.png') }}" alt="profile image">
+        <div class="profile-info">
+          <p>Admin</p>
+        </div>
+        <div class="account-type">
+          Admin
+        </div>
+      </div>
+      <div class="main-navigation">
+        <h4 id="nav-title">Main</h4>
+        <button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
+          <img src="{{ url_for('static', filename='css/Images/dashboard.png') }}" alt="dashboard">
+          Dashboard
+        </button>
+        <button class="tablinks" onclick="openView(event, 'landlords')">
+          <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="tenants">
+          Landlords
+        </button>
+        <button class="tablinks" onclick="openView(event, 'properties')">
+          <img src="{{ url_for('static', filename='css/Images/building.png') }}" alt="property">
+          Properties
+        </button>
+        <button class="tablinks" onclick="openView(event, 'tenants')">
+          <img src="{{ url_for('static', filename='css/Images/group.png') }}" alt="tenants">
+          Tenants
+        </button>
+        <button class="tablinks" onclick="openView(event, 'units')">
+          <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="units">
+          Units
+        </button>
+        <button class="tablinks" onclick="openView(event, 'complaints')">
+          <img src="{{ url_for('static', filename='css/Images/feedback.png') }}" alt="rent">
+          Complaints
+        </button>
+        <button class="tablinks" onclick="openView(event, 'reservations')">
+          <img src="{{ url_for('static', filename='css/Images/group.png') }}" alt="tenants">
+          Reservations
+        </button>
+        <button class="tablinks" onclick="openView(event, 'extra')">
+          <img src="{{ url_for('static', filename='css/Images/extra.png') }}" alt="extra">
+          Extras
+        </button>
+      </div>
+      <div class="logout">
+        <a href="{{ url_for('landlord.landlord_logout') }}">
+          <button>
+            <img src="{{ url_for('static', filename='css/Images/logout.png') }}" alt="logout">
+            Logout
+          </button>
+        </a>
+      </div>
+    </div>
+    <div class="content-area">
+      <div class="notification-area">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="tops">
+          {% for category, message in messages %}
+          <div class="alert alert-{{category}}">
+            <div class="side"></div>
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+      </div>
+      <div id="dashboard" class="tabcontent">
+        <h4>Dashboard</h4>
+      </div>
+      <div id="landlords" class="tabcontent">
+        <h4>Landlords ({{ landlords|count }})</h4>
+        <p id="more-info">This shows all landlords in alphabetical order</p>
+        <form id="search-tenant" action="#">
+          <input type="text" name="search-tenant" spellcheck="false" id="landlord-search"
+            placeholder="Search for any Landlord">
+        </form>
+        <div class="landlords">
+          <table id="table">
+            <tr id="tr">
+              <th>Full Names</th>
+              <th>Landlord ID</th>
+              <th>Username</th>
+              <th>Email Address</th>
+              <th>Phone Number</th>
+              <th>Date Registered</th>
+              <th>Property Owned</th>
+              <th>Tenants Assigned</th>
+            </tr>
+            {% set tenant_count = [] %}
+            {% set property_count = [] %}
+            {% for landlord in landlords|sort(attribute="first_name") %}
+            <tr id="landlords" class="accordion">
+              <td>{{ landlord.first_name }} {{ landlord.second_name }} {{ landlord.last_name }}</td>
+              <td>{{ landlord.landlord_id }}</td>
+              <td>{{ landlord.username }}</td>
+              <td>{{ landlord.email }}</td>
+              <td>0{{ landlord.phone }}</td>
+              <td>{{ landlord.date.strftime("%d/%m/%Y") }}</td>
+              <td id="td">{{ landlord.Property|count}}</td>
+              <td id="td">{{ landlord.tenant|count }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div id="properties" class="tabcontent">
+        <h4>Properties ({{ properties|count }})</h4>
+        <p id="more-info">This shows all properties from latest to earliest</p>
+        <form id="search-tenant">
+          <input type="text" spellcheck="false" name="search-tenant" id="property-search"
+            placeholder="Search for any Property">
+        </form>
+        <div class="properties">
+          <table id="table">
+            <tr>
+              <th>Property ID</th>
+              <th>Property Name</th>
+              <th>Property Address</th>
+              <th>Property Owner</th>
+              <th>Property Floors</th>
+              <th>Property Type</th>
+              <th>Date Registered</th>
+              <th>Tenants</th>
+              <th>Units</th>
+            </tr>
+            {% set tenants_count = [] %}
+            {% set unit_count = [] %}
+            {% for property in properties|sort(attribute="date", reverse=true) %}
+            <tr class="accordion">
+              <td>{{ property.property_id }}</td>
+              <td>{{ property.name }}</td>
+              <td>{{ property.address }}, {{ property.address2 }}</td>
+              <td>
+                {% for owner in landlords if owner.id == property.owner %}
+                {{ owner.first_name }} {{ owner.second_name }}
+                {% endfor %}
+              </td>
+              <td>{{ property.floors }}</td>
+              <td>{{ property.Type }}</td>
+              <td>{{ property.date.strftime("%d/%m/%Y") }}</td>
+              <td>{{ property.tenants|count }}</td>
+              <td>{{ property.unit|count }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div id="tenants" class="tabcontent">
+        <h4>Tenants ({{ tenants|count }})</h4>
+        <p id="more-info">This shows all tenants in alphabetical order</p>
+        <form id="search-tenant" action="#">
+          <input type="text" spellcheck="false" name="search-tenant" id="tenant-search"
+            placeholder="Search for any tenant">
+        </form>
+        <div class="tenants">
+          <table id="table">
+            <tr>
+              <th>Full Names</th>
+              <th>Tenant ID</th>
+              <th>Email Address</th>
+              <th>Phone Number</th>
+              <th>Landlord Assigned</th>
+              <th>Property Assigned</th>
+              <th>Status</th>
+              <th>Unit Status</th>
+            </tr>
+            {% for tenant in tenants|sort(attribute="first_name") %}
+            <tr id="tenants" class="accordion">
+              <td>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</td>
+              <td>{{ tenant.tenant_id }}</td>
+              <td>{{ tenant.email }}</td>
+              <td>0{{ tenant.phone }}</td>
+              <td>
+                {% if tenant.landlord %}
+                {% for landlord in landlords if landlord.id == tenant.landlord %}
+                {{ landlord.first_name }} {{ landlord.second_name }}
+                {% endfor %}
+                {% else %}
+                <span id="not-active">No Landlord Assigned</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if tenant.properties %}
+                {% for property in properties if property.id == tenant.properties %}
+                {{ property.name }}
+                {% endfor %}
+                {% else %}
+                <span id="not-active">No Property Assigned</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if tenant.active == "True" %}
+                <span id="active">Active</span>
+                {% else %}
+                <span id="not-active">Not Active</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if tenant.unit %}
+                <span id="assigned">Assigned</span>
+                {% else %}
+                <span id="not-active">Not Assigned</span>
+                {% endif %}
+              </td>
+            </tr>
+            <tr class="show-info">
+              <td colspan="8">
+                <div class="actions">
+                  <h4>Tenant Control Center</h4>
+                  <span id="tenant-control">{{ tenant.first_name }} {{ tenant.second_name }} |
+                    {{ tenant.date.strftime("%d/%m/%Y") }}</span>
+                  <hr>
+                  <div class="tenant-controls">
+                    <div class="accordions">
+                      <h4>Personal Information</h4>
+                    </div>
+                    <div class="panel">
+                      <p>Name - <span>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</span></p>
+                      <p>Email - <span>{{ tenant.email }}</span></p>
+                      <p>Phone Number - <span>0{{ tenant.phone }}</span></p>
+                      <p>Username - <span>{{ tenant.username }}</span></p>
+                    </div>
+                    <div class="accordions">
+                      <h4>Landlord Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.landlord %}
+                      {% for landlord in landlords if landlord.id == tenant.landlord %}
+                      <p>Name -
+                        <span>{{ landlord.first_name }} {{ landlord.second_name }}</span>
+                      </p>
+                      <p>Email -
+                        <span>{{ landlord.email }}</span>
+                      </p>
+                      {% endfor %}
+                      {% else %}
+                      <h4 class="else">No landlord Assigned</h4>
+                      <div class="form">
+                        <h4>Select a landlord to assign</h4>
+                        <form action="{{ url_for('admin.admin_assign_landlord', tenant_id=tenant.tenant_id) }}"
+                          method="POST">
+                          <select name="landlord-assign" id="">
+                            {% for landlord in landlords %}
+                            <option value="{{ landlord.landlord_id }}">{{ landlord.first_name }}
+                              {{ landlord.second_name }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit">UPDATE</button>
+                        </form>
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Property Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.properties %}
+                      {% for property in properties if property.id == tenant.properties %}
+                      <p>Name -
+                        <span>{{ property.name }}</span>
+                      </p>
+                      <p> Address -
+                        <span>{{ property.address }}</span>
+                      </p>
+                      <p> Type -
+                        <span>{{ property.Type }}</span>
+                      </p>
+                      <p>Floors -
+                        <span>{{ property.floors }} Floors</span>
+                      </p>
+                      {% endfor %}
+                      </h4>
+                      {% else %}
+                      <h4 class="else">No Property Assigned</h4>
+                      <div class="form">
+                        <h4>Select a Property to assign</h4>
+                        {% set property_available = [] %}
+                        {% for property in properties if property.owner == tenant.landlord %}
+                        {{ property_available.append(property) or "" }}
+                        {% endfor %}
+                        {% if property_available|count == 0 %}
+                        <p class="elses">No available property to choose from</p>
+                        {% elif tenant.landlord != None %}
+                        <form action="{{ url_for('admin.admin_assign_property', tenant_id=tenant.tenant_id) }}"
+                          method="POST">
+                          <select name="assign-property" id="">
+                            {% for property in properties if property.owner == tenant.landlord %}
+                            <option value="{{ property.property_id }}">{{ property.name }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit">UPDATE</button>
+                        </form>
+                        {% else %}
+                        <p class="elses">No available properties to choose from</p>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Unit Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.unit %}
+                      {% for unit in units if unit.tenant == tenant.id %}
+                      <p>Name - <span>{{ unit.name }}</span></p>
+                      <p>Type - <span>{{ unit.Type }}</span></p>
+                      <p>Floor - <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+                          Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup>
+                          Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup>
+                          Floor{% else %}<sup>th</sup> Floor {%endif%}</span></p>
+                      <p>Rent - <span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span></p>
+                      {% endfor %}
+                      </h4>
+                      {% else %}
+                      <h4 class="else">No Unit Assigned</h4>
+                      <div class="form">
+                        <h4>Select a unit to assign</h4>
+                        {% set units_available = [] %}
+                        {% for unit in units if unit.tenant == None and unit.reserved == "False" and unit.Property == tenant.properties %}
+                        {{ units_available.append(unit) or "" }}
+                        {% endfor %}
+                        {% if units_available|count == 0 %}
+                        <p class="elses">No vacant units to choose from</p>
+                        {% elif tenant.landlord != None and tenant.properties != None %}
+                        <form action="{{ url_for('admin.admin_assign_unit', tenant_id=tenant.tenant_id) }}"
+                          method="POST">
+                          <select name="assign-unit" id="">
+                            {% for unit in units if unit.tenant == None and unit.reserved == "False" and unit.Property == tenant.properties %}
+                            <option value="{{ unit.unit_id }}">{{ unit.name }} - {{ unit.Type }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit">UPDATE</button>
+                        </form>
+                        {% else %}
+                        <p class="elses">No available units to choose from</p>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Complaints</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.complaint %}
+                      <div class="comp">
+                        {% for complaint in complaints|sort(attribute="date", reverse=true) if complaint.tenant == tenant.id %}
+                        <div class="complaint">
+                          <h6>{{ complaint.title }}
+                            {% if complaint.date.strftime('%d/%m/%Y') == today_time %}
+                            <span id="new">New</span>
+                            {% endif %}
+                            <span id="date">{{ complaint.date.strftime('%d/%m/%Y') }}</span>
+                          </h6>
+                          <span>Category - {{ complaint.category }}</span>
+                          <p>{{ complaint.body }}</p>
+                        </div>
+                        {% endfor %}
+                      </div>
+                      {% else %}
+                      <h4 class="else">No Complaints Made</h4>
+                      {% endif %}
+                    </div>
+                    <hr>
+                    <div class="revoke-access">
+                      <a href="{{ url_for('admin.admin_revoke_tenant', tenant_id=tenant.tenant_id) }}">Revoke Access</a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div id="units" class="tabcontent">
+        <h4>Units ({{ units|count }})</h4>
+        <p id="more-info">This shows all units from latest to earliest</p>
+        <form id="unit-search">
+          <input type="text" spellcheck="false" name="search-unit" id="search-unit" placeholder="Search for any unit">
+        </form>
+        <div class="units">
+          <table id="table">
+            <tr>
+              <th>Unit No</th>
+              <th>Unit ID</th>
+              <th>Unit Name</th>
+              <th>Unit Type</th>
+              <th>Property Assigned</th>
+              <th>Unit Address</th>
+              <th>Unit Floor</th>
+              <th>Unit Status</th>
+              <th>Unit Rent</th>
+            </tr>
+            {% for unit in units|sort(attribute="name") %}
+            <tr id="units" class="accordion">
+              <td>0{{ unit.id }}</td>
+              <td>{{ unit.unit_id }}</td>
+              <td>{{ unit.name }}</td>
+              <td>{{ unit.Type }}</td>
+              <td>
+                {% for property in properties if property.id == unit.Property %}
+                {{ property.name }}
+                {% endfor %}
+              </td>
+              <td>
+                {% for property in properties if property.id == unit.Property %}
+                {{ property.address }}
+                {% endfor %}
+              </td>
+              <td>
+                {{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+                Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup>
+                Floor{% else %}<sup>th</sup> Floor {%endif%}
+              </td>
+              <td>
+                {% if unit.tenant %}
+                <span id="active">Occupied</span>
+                {% elif unit.reserved == "True" %}
+                <span id="reserved">Reserved</span>
+                {% else %}
+                <span id="not-active">Vacant</span>
+                {% endif %}
+              </td>
+              <td>{{ "Ksh {:,}".format(unit.rent_amount) }}</td>
+            </tr>
+            <tr class="show-info">
+              <td colspan="9">
+                <div class="actions">
+                  <h4>Unit Control Center</h4>
+                  <span>{{ unit.name }} - {{ unit.Type }} | {{ unit.date.strftime("%d/%m/%Y") }}</span>
+                  <hr>
+                  <div class="unit-controls">
+                    <div class="accordions">
+                      <h4>More Unit Information</h4>
+                    </div>
+                    <div class="panel">
+                      <p>Living Area - <span>{{ unit.living_space }} SQM</span></p>
+                      <p>Balcony / Veranda - <span>{{ unit.balcony_space }} SQM</span></p>
+                      {% for property in properties if property.id == unit.Property %}
+                      {% if property.Type == "Apartment" %}
+                      <p>Bedrooms -
+                        <span>
+                          {% if unit.Type != "Bedsitter" %}
+                          {{ unit.bedrooms}}
+                          {% else %}
+                          1 Room
+                          {% endif %}
+                        </span>
+                      </p>
+                      <p>Bathrooms - <span>{{ unit.bathrooms }}</span></p>
+                      {% elif property.Type == "Office" %}
+                      <p>Furniture - <span>{{ unit.amenities }}</span></p>
+                      {% endif %}
+                      {% endfor %}
+                      <p>Air-conditioining - <span>{{ unit.air_conditioning }}</span></p>
+                      <p>Amenities - <span>{{ unit.amenities }}</span></p>
+                    </div>
+                    <div class="accordions">
+                      <h4>Tenant Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if unit.tenant %}
+                      {% for tenant in tenants if tenant.id == unit.tenant %}
+                      <p>Name - <span>{{ tenant.first_name}} {{ tenant.second_name }}</span></p>
+                      <p>Email - <span>{{ tenant.email }}</span></p>
+                      {% endfor %}
+                      {% else %}
+                      <h4 class="else">No Tenant Assigned</h4>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Property Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if unit.Property %}
+                      {% for property in properties if property.id == unit.Property %}
+                      <p>Name - <span>{{ property.name }}</span></p>
+                      <p>Address - <span>{{ property.address }}</span></p>
+                      <p>Type - <span>{{ property.Type }}</span></p>
+                      <p>Floors - <span>{{ property.floors }} Floors</span></p>
+                      {% endfor %}
+                      {% else %}
+                      <h4 class="else">No Property Assigned</h4>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Latest Rent Payment</h4>
+                    </div>
+                    <div class="panel">
+                      {% if unit.transact %}
+                      <p>
+                        {{ unit.transact[-1].next_date.strftime("%d/%m/%Y") }}
+                      </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div id="complaints" class="tabcontent">
+        <h4>Complaints</h4>
+      </div>
+      <div id="reservations" class="tabcontent">
+        <h4>Reservations</h4>
+      </div>
+      <div id="extra" class="tabcontent">
+        <div class="extra-modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <span id="closes">&times;</span>
+            </div>
+            <div class="modal-body">
+              <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="input">
+                  {{ form.first_name.label }}
+                  {{ form.first_name(placeholder="First Name") }}
+                </div>
+                <div class="input">
+                  {{ form.last_name.label }}
+                  {{ form.last_name(placeholder="Last Name") }}
+                </div>
+                <div class="input">
+                  {{ form.age.label }}
+                  {{ form.age(placeholder="Age") }}
+                </div>
+                <div class="input">
+                  {{ form.phone_number.label }}
+                  {{ form.phone_number(placeholder="Phone Number") }}
+                </div>
+                <div class="input inputs">
+                  {{ form.email_address.label }}
+                  {{ form.email_address(placeholder="Email Address") }}
+                </div>
+                <div class="input">
+                  {{ form.title.label }}
+                  {{ form.title(placeholder="Title / Position") }}
+                </div>
+                <div class="input">
+                  {{ form.cost.label }}
+                  {{ form.cost(placeholder="Cost / hr") }}
+                </div>
+                <button type="submit">ADD</button>
+              </form>
+            </div>
+            <div class="modal-footer"></div>
+          </div>
+        </div>
+        <h4>
+          Extras ({{ extras|count }})
+          <button id="extras">Add New Extra</button>
+        </h4>
+        <p id="more-info">Manage all extra personell</p>
+        <div class="extras">
+          {% if extras %}
+          <div class="extras-details">
+            <p>{{ extras }}</p>
+          </div>
+          {% else %}
+          <h4 class="else">No Extras</h4>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>

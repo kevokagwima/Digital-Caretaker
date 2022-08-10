@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/property_details.css') }}">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="container-1"></div>
+<div class="all-info">
+  <div class="details">
+    <h4>For {{ property.status }}</h4>
+    <h2>
+      {% if property.Type == "Office" %}
+      {{ unit.Type }}
+      {% else %}
+      {{ unit.Type }}
+      {{ property.Type }}
+      {% endif %}
+      {{ unit.name }}
+    </h2>
+    <p>Modern {{ unit.Type }} {{ property.Type }} with Basic Furniture in {{ property.address }},
+      {{ property.address2 }}
+    </p>
+    <div class="more-info">
+      <p>This spacious {{ unit.Type }} {{ property.Type }} from {{ property.name }} comes fully furnished with
+        {{ unit.Type }}s, 1 shared bathroom,
+        a
+        kitchen with
+        storage and a balcony. Water, electricity and Wi-fi is included.
+      </p>
+      <p id="rent"><span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span>
+        {% if property.status == "Rent" %}
+        / Month
+        {% endif %}
+      </p>
+    </div>
+    {% if unit.reserved == "True" %}
+    <button class="reserve-btn" disabled="disabled">Unit Is Reserved</button>
+    {% else %}
+    <a href="{{ url_for('main.book', unit_id=unit.id) }}">
+      <button class="reserve-btn">Reserve Unit</button>
+    </a>
+    {% endif %}
+    {% if unit.date.strftime("%d/%m/%Y") == today_time %}
+    <span id="new">New to market</span>
+    {% endif %}
+  </div>
+  <div class="unit-image">
+    {% if property.Type == "Apartment" %}
+    <img loading="lazy" src="{{ url_for('static', filename='css/Images/inside_apartment.jpg') }}" alt="apartment">
+    {% else %}
+    <img loading="lazy" src="{{ url_for('static', filename='css/Images/inside_office.jpg') }}" alt="office">
+    {% endif %}
+  </div>
+  <div class="property-details">
+    <h4 id="prop-details">Property Details</h4>
+    <table>
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/condominium.png') }}"
+            alt="apartment building">
+        </td>
+        <td>
+          Property Type
+          <span>
+            {% if property.Type == "Apartment" %}
+            {{ property.Type }}
+            {% else %}
+            {{ unit.Type }}
+            {% endif %}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/area.png') }}" alt="square meters">
+        </td>
+        <td>
+          {% if property.Type == "Apartment" %}
+          Living Area
+          {% elif property.Type == "Office" %}
+          Floor Area
+          {% endif %}
+          <span>{{ unit.living_space }} SQM</span>
+        </td>
+      </tr>
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/balcony.png') }}" alt="balcony">
+        </td>
+        <td>
+          Veranda / Balcony Area
+          <span>{{ unit.balcony_space }} SQM</span>
+        </td>
+      </tr>
+      {% if property.Type == "Apartment" %}
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/beds.png') }}" alt="bedrooms">
+        </td>
+        <td>
+          No of Bedrooms
+          <span>
+            {% if unit.Type != "Bedsitter" %}
+            {{ unit.bedrooms }}
+            {% else %}
+            1 Room
+            {% endif %}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/bathtub.png') }}" alt="bathrooms">
+        </td>
+        <td>
+          No of Bathrooms
+          <span>{{ unit.bathrooms }}</span>
+        </td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/air-conditioner.png') }}"
+            alt="air conditioning">
+        </td>
+        <td>
+          Air Conditioning
+          <span>{{ unit.air_conditioning }}</span>
+        </td>
+      </tr>
+      {% if property.Type == "Office" %}
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/sofa.png') }}" alt="furniture">
+        </td>
+        <td>
+          Furniture
+          <span>{{ unit.amenities }}</span>
+        </td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/sunbed.png') }}" alt="amenities">
+        </td>
+        <td>
+          Amenities
+          <span>{{ unit.amenities }}</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="landlord-info">
+    <h4 id="prop-details">Unit Enquiry</h4>
+    <div class="landlord-information">
+      <form class="form" action="">
+        <div class="input-1">
+          <input type="text" required name="" id="" placeholder="Enter First Name">
+        </div>
+        <div class="input-2">
+          <input type="text" required name="" id="" placeholder="Enter Last Name">
+        </div>
+        <div class="input-3">
+          <input type="text" required name="" id="" placeholder="Enter Email Address">
+        </div>
+        <div class="input-4">
+          <input type="number" required name="" id="" placeholder="Enter Phone Number">
+        </div>
+        <div class="input-5">
+          <textarea name="" required id="" cols="30" rows="5" placeholder="Message"></textarea>
+        </div>
+        <button>Send</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

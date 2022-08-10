@@ -1,0 +1,2473 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Varela+Round&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Martel:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Days+One&display=swap");
+
+:root {
+  --dark-blue: rgb(1, 1, 29);
+  --other-dark-blue: rgb(0, 20, 49);
+  --page-header-bgColor: #242e42;
+  --page-header-bgColor-hover: #1d2636;
+  --page-header-txtColor: #dde9f8;
+  --page-header-headingColor: #7889a4;
+  --page-header-width: 220px;
+  --page-content-bgColor: #04101f;
+  --page-content-txtColor: #171616;
+  --page-content-blockColor: #fff;
+  --white: #fff;
+  --black: #333;
+  --blue: #00b9eb;
+  --red: #ec1848;
+  --border-radius: 4px;
+  --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.075);
+  --switch-bgLightModeColor: #87cefa;
+  --switch-sunColor: gold;
+  --switch-moonColor: #f4f4f4;
+  --switch-bgDarkModeColor: #1f1f27;
+  --font: "Exo", sans-serif;
+  --font-1: "Days One", sans-serif;
+  --product-desc-font: "Martel", serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(214, 214, 214);
+  border-radius: 10px;
+}
+
+body {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  min-height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  gap: 1rem;
+  background-color: var(--other-dark-blue);
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.side-nav {
+  position: relative;
+  min-width: 14rem;
+  max-width: 14rem;
+  height: inherit;
+  max-height: 100vh;
+  background-color: var(--dark-blue);
+  padding: 20px 0;
+  overflow-y: auto;
+}
+
+.profile {
+  display: flex;
+  justify-content: safe;
+  align-items: center;
+  max-height: 3rem;
+  cursor: pointer;
+  padding: 0 10px;
+  position: relative;
+}
+
+.profile img {
+  height: 3rem;
+}
+
+.profile-info {
+  padding: 0 10px;
+}
+
+.profile-info p {
+  color: var(--blue);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+}
+
+.account-type {
+  position: absolute;
+  bottom: -5px;
+  left: 4.2rem;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--red);
+}
+
+.main-navigation,
+.secondary-navigation,
+.logout {
+  margin: 4rem 0;
+  display: grid;
+  grid-template-columns: auto;
+  row-gap: 5px;
+  max-height: 42.5vh;
+  overflow-y: auto;
+}
+
+.main-navigation button,
+.logout button,
+.secondary-navigation button {
+  border: none;
+  padding: 15px 50px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  background-color: transparent;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+  position: relative;
+}
+
+.dropdown-btn i {
+  position: absolute;
+  right: 2rem;
+  font-size: 20px;
+}
+
+.main-navigation button img,
+.logout button img,
+.secondary-navigation img {
+  height: 1.8rem;
+  position: absolute;
+  top: 8px;
+  left: 10px;
+}
+
+.main-navigation button:hover,
+.main-navigation button:focus,
+.secondary-navigation button:hover,
+.secondary-navigation button:focus {
+  color: var(--blue);
+}
+
+#nav-title {
+  color: grey;
+  font-family: "PT Sans", sans-serif;
+  margin: 0 10px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.logout {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+
+.logout button {
+  color: var(--red);
+}
+
+#no {
+  color: var(--red);
+  font-size: 15px;
+  margin-left: 40px;
+}
+
+.drop-down-container {
+  display: none;
+  padding-left: 10px;
+  transition: 0.5s;
+}
+
+.drop-down-container a {
+  text-decoration: none;
+  display: block;
+  color: var(--red);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
+  padding: 10px 5px;
+  margin-left: 30px;
+}
+
+.content-area {
+  background-color: var(--other-dark-blue);
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: auto;
+  width: 100%;
+  padding-right: 1rem;
+}
+
+.notification-area {
+  position: relative;
+  top: 0;
+  padding: 20px 0;
+  width: 100%;
+  margin-left: -1rem;
+  z-index: 1;
+  margin-bottom: 1rem;
+  background-color: var(--other-dark-blue);
+}
+
+.notifications {
+  position: absolute;
+  inset: 2rem 15px auto auto;
+  height: max-content;
+  max-height: 47rem;
+  overflow: auto;
+  min-width: 22rem;
+  max-width: 25rem;
+  border-radius: 3px;
+  background-color: var(--page-header-bgColor-hover);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  display: none;
+}
+
+.notification-info {
+  padding: 10px 15px;
+  background-color: var(--page-header-bgColor);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border-radius: 5px;
+}
+
+.notifications hr {
+  background-color: grey;
+  border: 0.1px solid grey;
+}
+
+.notification-info p {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-weight: bold;
+}
+
+.notification-info span {
+  color: var(--red);
+}
+
+#info {
+  font-size: 14px;
+  font-family: "PT Sans", sans-serif;
+  font-weight: 400;
+}
+
+.not-actions {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+  margin-top: 10px;
+  display: none;
+}
+
+.show-not-actions {
+  display: grid;
+}
+
+.not-actions button {
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.not-actions button a {
+  text-decoration: none;
+  color: white;
+  font-family: system-ui;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn1 {
+  background-color: rgb(6, 187, 6);
+}
+
+.btn2 {
+  background-color: red;
+}
+
+.show-notifications {
+  display: flex;
+}
+
+#else-not {
+  text-align: center;
+  padding: 10px;
+}
+
+.not {
+  position: absolute;
+  top: 5px;
+  right: 0.5rem;
+  cursor: pointer;
+}
+
+.burger {
+  position: absolute;
+  left: 0.2rem;
+  top: 5px;
+  cursor: pointer;
+  display: none;
+}
+
+.burger > div {
+  height: 2.2px;
+  width: 25px;
+  margin: 5px 0;
+  background-color: white;
+}
+
+.notification-dot {
+  position: absolute;
+  inset: 0 1px auto auto;
+  height: 12px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background-color: rgb(9, 197, 9);
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.not--img {
+  height: 1.5rem;
+}
+
+#dash {
+  font-size: 1.4rem;
+  position: relative;
+}
+
+.tabcontent {
+  margin-top: 1rem;
+}
+
+#more-info {
+  color: grey;
+  margin-top: 10px;
+}
+
+#dash button {
+  position: absolute;
+  top: 0;
+  right: 27rem;
+  padding: 6px 10px;
+  background-color: #00b9eb;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dash-information {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+  row-gap: 20px;
+  overflow: hidden;
+  margin: 1rem 0 0;
+  padding: 0 10px 0 0;
+  max-width: 100%;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.revenue {
+  grid-column: 1/3;
+  background-color: var(--dark-blue);
+  border-radius: 5px;
+  height: 100%;
+  max-height: 20rem;
+  max-width: 100%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.revenue-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-evenly;
+  column-gap: 10px;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 3rem;
+  width: 100%;
+  padding-right: 4.5rem;
+}
+
+.income,
+.expenses,
+.profit {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: rgba(1, 1, 29, 0.5);
+}
+
+.income h4,
+.expenses h4,
+.profit h4 {
+  font-size: 1.1rem;
+}
+
+.income span,
+.expenses span,
+.profit span {
+  font-size: 2.2rem;
+}
+
+.income span {
+  color: var(--blue);
+}
+
+.expenses span {
+  color: red;
+}
+
+.profit span {
+  color: rgb(9, 197, 9);
+}
+
+#myChart {
+  max-height: 100%;
+  cursor: pointer;
+}
+
+.prop-summary {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  row-gap: 10px;
+  column-gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.prop {
+  padding: 15px;
+  background-color: var(--dark-blue);
+  position: relative;
+  border-radius: 50% 20%;
+  height: 10rem;
+  width: 12rem;
+  max-width: 12rem;
+  display: grid;
+  place-items: center;
+}
+
+.no-prop {
+  background-color: var(--dark-blue);
+  height: 20rem;
+  width: 25rem;
+  display: grid;
+  place-items: center;
+}
+
+.no-prop img {
+  max-height: 8rem;
+}
+
+.no-prop h4 {
+  color: var(--red);
+}
+
+.prop img {
+  position: absolute;
+  height: 4rem;
+  right: 0;
+  bottom: 5px;
+}
+
+.prop span {
+  color: var(--red);
+  font-size: 5rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.prop p {
+  position: absolute;
+  bottom: 10px;
+  left: 2rem;
+  font-size: 1.1rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.recent-activity,
+.property-insights,
+.rent-status {
+  padding: 20px 20px 0;
+  background-color: var(--dark-blue);
+  border-radius: 5px;
+  height: max-content;
+  height: max-content;
+  position: relative;
+}
+
+.recent-activity span,
+.rent-status h4 > span {
+  position: absolute;
+  right: 10px;
+  color: var(--red);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.recent-activity h4,
+.property-insights h4,
+.rent-status h4 {
+  font-size: 1.1rem;
+}
+
+.activity,
+.insights,
+.rent {
+  margin: 1rem 0 0;
+  padding: 5px 0 0;
+  max-height: 17.2rem;
+  height: max-content;
+  overflow: auto;
+}
+
+.activity p {
+  font-size: 15px;
+  margin: 0 0 20px;
+  padding: 0 8px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.insights .card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 2px;
+  padding: 4px 2px;
+  margin: 0 0 8px;
+}
+
+.insights img {
+  height: 3rem;
+}
+
+.insights .card p {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 0.5px;
+  font-size: 15px;
+}
+
+.rent {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 10px;
+  margin: 20px 0;
+  min-height: 15.8rem;
+  max-height: 15.8rem;
+  overflow: auto;
+}
+
+.rent-details {
+  padding: 0.5rem;
+  border-radius: 5px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+}
+
+.rent-details:first-child {
+  background-color: var(--blue);
+}
+
+.rent-details:nth-child(2) {
+  background-color: rgb(6, 187, 6);
+}
+
+.rent-details:last-child {
+  background-color: var(--red);
+}
+
+.rent-details p {
+  font-size: 15px;
+}
+
+.rent-details span {
+  font-size: 26px;
+}
+
+.tenant-search {
+  position: absolute;
+  top: 3.5rem;
+  right: 0;
+  width: 17rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tenant-search input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--page-header-bgColor);
+  text-transform: capitalize;
+  width: 15rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  outline: 2px solid white;
+}
+
+.tenant-search input::placeholder {
+  color: var(--page-header-txtColor);
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+}
+
+.all-tenants,
+.all-units {
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 20px;
+  column-gap: 20px;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 10px 5px 0;
+  overflow: hidden;
+  border-radius: 5px;
+  max-height: 82vh;
+  overflow: auto;
+}
+
+#just-info {
+  margin-top: 10px;
+  color: grey;
+  font-family: "PT Sans", sans-serif;
+}
+
+.tenant-card,
+.unit-card {
+  background-color: var(--red);
+  padding: 10px;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  align-items: center;
+  transition: transform 200ms ease-in;
+  position: relative;
+  overflow: hidden;
+  visibility: visible;
+}
+
+.showsz {
+  visibility: visible;
+}
+
+.tenant-card {
+  padding: 20px 15px;
+}
+
+.unit-card {
+  grid-template-columns: auto auto;
+}
+
+.tenant-unit-assigned {
+  position: absolute;
+  padding: 5px 10px;
+  top: 0;
+  left: 0;
+  font-size: 12px;
+  background-color: rgb(6, 187, 6);
+}
+
+.tenant-unit-assigned h4 {
+  color: white;
+}
+
+.unit-property-assigned {
+  position: absolute;
+  padding: 5px;
+  bottom: 0;
+  left: 0;
+  font-size: 12px;
+}
+
+.unit-property-assigned h4 {
+  color: gold;
+}
+
+.tenant-unit-assigned a,
+.unit-property-assigned a {
+  text-decoration: none;
+  color: white;
+}
+
+.occupation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 15px;
+  font-size: 12px;
+}
+
+.unit-occupied {
+  background-color: rgb(6, 187, 6);
+  color: white;
+}
+
+.unit-reserved {
+  background-color: orange;
+  color: white;
+}
+
+.unit-vacant {
+  background-color: var(--page-header-bgColor);
+  color: var(--red);
+}
+
+.tenant-card img,
+.unit-card img {
+  height: 5rem;
+}
+
+.unit-card img {
+  margin-left: 15px;
+}
+
+.tenant-details,
+.unit-details {
+  padding: 10px;
+}
+
+.tenant-details p,
+.unit-details p {
+  margin-top: 5px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-family: "PT Sans", sans-serif;
+  max-width: 15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tenant-details hr {
+  background-color: transparent;
+  border: none;
+  margin: 10px 0;
+  height: 0.2px;
+}
+
+.tenant-details a {
+  color: gold;
+  text-decoration: none;
+}
+
+.rents {
+  border-radius: 5px;
+  margin: 1rem 0 0;
+  max-height: 41rem;
+}
+
+#rent > #dash {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.verify {
+  background-color: orange;
+  padding: 5px 8px;
+  border-radius: 1rem;
+  color: white;
+}
+
+.verify p {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.rents-info {
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+}
+
+.rents-info div {
+  padding: 10px;
+  border-radius: 5px;
+  min-height: 8rem;
+  max-height: 10rem;
+}
+
+.rents-info div h4 {
+  color: white;
+}
+
+.rents-info div p {
+  margin: 1.5rem 0 0;
+  color: whitesmoke;
+  text-align: center;
+}
+
+.rents-info div span {
+  font-size: 40px;
+}
+
+.rents-info div:first-child {
+  background-color: var(--blue);
+}
+
+.rents-info div:nth-child(2) {
+  background-color: rgb(6, 187, 6);
+}
+
+.rents-info div:last-child {
+  background-color: var(--red);
+}
+
+.rent-received,
+.expected-rent {
+  position: relative;
+}
+
+#tenants_paid,
+#unit_rent {
+  position: absolute;
+  right: 1rem;
+  top: -1.2rem;
+  color: var(--dark-blue);
+  font-size: 14px;
+}
+
+.rent-transactions {
+  padding: 20px 0;
+}
+
+.transactions-details {
+  padding-right: 15px;
+  border-radius: 5px;
+  margin: 0.5rem 0 0;
+  max-height: 55vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.transaction-info {
+  padding: 10px;
+  background-color: var(--page-header-bgColor);
+  border-radius: 5px;
+  position: relative;
+}
+
+.transaction-info h4 {
+  font-weight: normal;
+  position: relative;
+  width: 100%;
+}
+
+.transaction-info span {
+  color: var(--red);
+  font-weight: bold;
+}
+
+.transaction-info #new {
+  position: absolute;
+  inset: 1px auto auto 12rem;
+  color: white;
+  font-size: 10px;
+  background-color: orange;
+  border-radius: 2px;
+  padding: 2px 5px;
+}
+
+.transaction-info p > span {
+  font-weight: bold;
+  color: rgb(6, 187, 6);
+}
+
+.transaction-info #date {
+  position: absolute;
+  right: 0;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  color: rgb(9, 197, 9);
+  font-size: 14px;
+}
+
+.transaction-info hr {
+  border: 0.1px solid grey;
+  background-color: grey;
+  margin: 0.5rem 0;
+}
+
+.watermark {
+  color: grey;
+  margin-top: 1rem;
+}
+
+.else {
+  color: var(--red);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#extra > #dash {
+  position: relative;
+}
+
+#extra > #dash > button {
+  position: absolute;
+  left: 5rem;
+  max-width: max-content;
+}
+
+.extras {
+  margin: 1rem 0 0;
+  border-radius: 5px;
+  max-height: 100vh;
+  overflow: auto;
+  padding-right: 5px;
+}
+
+.extras > p {
+  font-size: 16px;
+  color: grey;
+}
+
+.extras h4 {
+  font-size: 18px;
+  margin: 1.5rem 0;
+}
+
+.extra-services {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 20px 25px;
+  align-items: center;
+  padding: 0 0 15px;
+}
+
+.extra-services a {
+  text-decoration: none;
+  color: whitesmoke;
+}
+
+.extra-services-items {
+  background-color: var(--red);
+  padding: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.extra-services-items h4 {
+  font-size: 1.2rem;
+}
+
+.extra-services-items span {
+  color: white;
+}
+
+.extra-services-items img {
+  height: 4rem;
+}
+
+.active-extra {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 1rem;
+  max-height: 39rem;
+  overflow: auto;
+}
+
+.active-extra-details {
+  background-color: var(--dark-blue);
+  padding: 1.2rem 1rem;
+  border-radius: 10px;
+  min-width: 25.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#unit-deployed {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 3px 5px;
+  background-color: #00b9eb;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 0.7rem;
+}
+
+.active-extra-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 1.2rem;
+}
+
+.timeline {
+  min-height: 3.5rem;
+  max-width: 5px;
+  border-radius: 10rem;
+  background-image: linear-gradient(5deg, greenyellow, aqua);
+  position: relative;
+}
+
+.timeline p {
+  position: absolute;
+  min-width: max-content;
+  left: 0.9rem;
+  font-size: 0.9rem;
+  color: grey;
+}
+
+.timeline p:last-child {
+  bottom: 0;
+}
+
+.timeline-info {
+  margin-top: 1rem;
+  color: whitesmoke;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.accordion {
+  border: none;
+  min-width: 100%;
+  padding: 8px;
+  text-align: left;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  background-color: var(--page-header-bgColor-hover);
+}
+
+.panel {
+  background-color: var(--other-dark-blue);
+  border-radius: 0 0 5px 5px;
+  padding: 0;
+  max-height: 0;
+  max-width: 62vw;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.panel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-family: "PT Sans", sans-serif;
+  padding: 8px;
+}
+
+.complete {
+  border: none;
+  margin-top: 1rem;
+  padding: 8px;
+  border-radius: 3px;
+  background-color: rgb(6, 187, 6);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  cursor: pointer;
+}
+
+.my-profile {
+  margin: 1rem 0 0;
+  border-radius: 5px;
+  max-height: 41.4rem;
+  overflow: auto;
+}
+
+.landlord-info {
+  padding: 20px;
+  height: max-content;
+  display: grid;
+  grid-template-columns: auto;
+  row-gap: 20px;
+}
+
+.profile-img {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  max-width: 17vw;
+}
+
+.profile-info span {
+  color: var(--red);
+}
+
+.profile-img img {
+  max-height: 5rem;
+}
+
+.personal-info-details {
+  margin-top: 15px;
+  background-color: var(--dark-blue);
+  border-radius: 5px;
+  padding: 20px 10px;
+}
+
+.personal-info-details table {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.personal-info-details table th,
+td {
+  padding: 10px;
+}
+
+.personal-info-details table th {
+  color: grey;
+  text-align: left;
+  width: 35rem;
+}
+
+.properties-owned {
+  padding: 20px;
+  background-color: var(--dark-blue);
+  border-radius: 5px;
+}
+
+.properties-owned span {
+  color: var(--red);
+}
+
+.properties-owned-info {
+  margin: 1rem 0 0;
+  padding: 10px 20px;
+  display: flex;
+}
+
+.prop-owned-info img {
+  height: 2rem;
+}
+
+.prop-owned-info {
+  background-color: var(--other-dark-blue);
+  width: max-content;
+  padding: 20px;
+  border-radius: 5px;
+  line-height: 25px;
+  margin-right: 1rem;
+}
+
+.prop-owned-info #prop_id {
+  color: green;
+}
+
+.prop-owned-info > a {
+  text-decoration: none;
+  color: blue;
+}
+
+.extra {
+  margin-top: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.main a {
+  text-decoration: none;
+  color: var(--red);
+}
+
+.property-registration {
+  background-color: var(--dark-blue);
+  padding: 20px;
+  margin: 1rem 0;
+  border-radius: 5px;
+}
+
+.property-registration form {
+  max-height: 100vh;
+  overflow: auto;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  column-gap: 40px;
+  row-gap: 20px;
+}
+
+.property-registration form::-webkit-scrollbar {
+  display: none;
+}
+
+.property-registration ::placeholder {
+  font-family: "PT Sans", sans-serif;
+  color: var(--page-header-headingColor);
+  font-size: 16px;
+}
+
+.property-registration input,
+select {
+  border: none;
+  border-radius: 3px;
+  padding: 15px;
+  margin: 0.5rem 0 1rem;
+  width: 100%;
+  background-color: var(--page-header-bgColor);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 18px;
+}
+
+.property-registration select {
+  cursor: pointer;
+}
+
+.property-registration .btn {
+  border: none;
+  background-color: rgb(3, 116, 3);
+  color: white;
+  padding: 10px;
+  border-radius: 3px;
+  font-family: system-ui;
+  font-size: 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  grid-column: 1/3;
+}
+
+.tops {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  max-height: max-content;
+  margin-bottom: 0;
+  animation: fade-away 1s 4s forwards;
+}
+
+@keyframes fade-away {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.side {
+  background-color: white;
+}
+
+@media (prefers-color-scheme: light) {
+  .content-area,
+  body,
+  .main-navigation button:hover,
+  .main-navigation button:focus,
+  .secondary-navigation button:hover,
+  .secondary-navigation button:focus,
+  .prop-owned-info,
+  .property-registration input,
+  select,
+  .notification-area {
+    background-color: whitesmoke;
+  }
+
+  .side-nav,
+  .revenue,
+  .prop,
+  .no-prop,
+  .recent-activity,
+  .property-insights,
+  .rent-status,
+  .tenant-search input,
+  .transaction-info,
+  .properties-owned,
+  .personal-info-details,
+  .property-registration,
+  .notification-info,
+  .active-extra {
+    background-color: white;
+  }
+
+  .burger > div {
+    background-color: black;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    background-color: rgba(241, 241, 241, 0.9);
+  }
+
+  .tenant-search input {
+    outline: 2px solid black;
+  }
+
+  .tenant-details a,
+  .unit-property-assigned h4 {
+    color: var(--blue);
+  }
+
+  .tenant-search input::placeholder,
+  .property-registration input::placeholder {
+    color: grey;
+  }
+
+  .transaction-info,
+  .rents-info div {
+    box-shadow: 0 0 10px -8px black;
+  }
+
+  .notifications,
+  .tenant-card,
+  .unit-card {
+    background-color: bisque;
+  }
+
+  .side {
+    background-color: black;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width: 400px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    position: fixed;
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notifications {
+    min-width: 16rem;
+    max-width: 18rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 95%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .prop-summary {
+    grid-template-columns: repeat(2, auto);
+    gap: 20px 1rem;
+  }
+
+  .property-registration > form {
+    grid-template-columns: 1fr;
+  }
+
+  .property-registration .btn {
+    grid-column: 1/2;
+  }
+
+  .prop-summary,
+  .property-insights,
+  .rent-status,
+  .recent-activity {
+    grid-column: 1/2;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    width: max-content;
+    padding: 5px;
+  }
+
+  .income h4,
+  .expenses h4,
+  .profit h4 {
+    font-size: 0.5rem;
+  }
+
+  .income p,
+  .expenses p,
+  .profit p {
+    font-size: 0.5rem;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 1rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  #date {
+    max-width: 5rem;
+    max-height: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop {
+    width: 6rem;
+    height: 6rem;
+    padding: 0.5rem;
+  }
+
+  .prop span {
+    font-size: 2rem;
+  }
+
+  .prop p {
+    font-size: 0.8rem;
+    left: 1rem;
+  }
+
+  .tenant-search {
+    width: 8rem;
+    right: 2rem;
+  }
+
+  .tenant-search input {
+    width: inherit;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .rents-info {
+    grid-template-columns: auto;
+    row-gap: 10px;
+  }
+
+  .rents-info div span {
+    font-size: 40px;
+  }
+
+  .extra-services {
+    grid-template-columns: auto;
+  }
+
+  #tenants_paid,
+  #unit_rent {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 400px) and (max-width: 450px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 95%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .prop-summary {
+    grid-template-columns: repeat(2, auto);
+    gap: 20px 1rem;
+  }
+
+  .property-registration > form {
+    grid-template-columns: 1fr;
+  }
+
+  .property-registration .btn {
+    grid-column: 1/2;
+  }
+
+  .prop-summary,
+  .property-insights,
+  .rent-status,
+  .recent-activity {
+    grid-column: 1/2;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    width: max-content;
+  }
+
+  .income h4,
+  .expenses h4,
+  .profit h4 {
+    font-size: 0.5rem;
+  }
+
+  .income p,
+  .expenses p,
+  .profit p {
+    font-size: 0.5rem;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 0.6rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  #date {
+    max-width: 5rem;
+    max-height: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prop {
+    width: 8rem;
+    height: 6rem;
+    padding: 0.5rem;
+  }
+
+  .prop span {
+    font-size: 2rem;
+  }
+
+  .prop p {
+    font-size: 1rem;
+    left: 1.1rem;
+  }
+
+  .tenant-search {
+    width: 8rem;
+    right: 2rem;
+  }
+
+  .tenant-search input {
+    width: inherit;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .rents-info {
+    grid-template-columns: auto;
+    row-gap: 10px;
+  }
+
+  .rents-info div span {
+    font-size: 40px;
+  }
+
+  .extra-services {
+    grid-template-columns: auto;
+  }
+
+  #tenants_paid,
+  #unit_rent {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 450px) and (max-width: 500px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .property-registration > form {
+    grid-template-columns: 1fr;
+  }
+
+  .property-registration .btn {
+    grid-column: 1/2;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .prop-summary {
+    grid-template-columns: repeat(2, auto);
+    gap: 20px 3rem;
+  }
+
+  .prop-summary,
+  .property-insights,
+  .rent-status,
+  .recent-activity {
+    grid-column: 1/2;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    width: max-content;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 0.9rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 3rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .tenant-search {
+    width: 8rem;
+    right: 2rem;
+  }
+
+  .tenant-search input {
+    width: inherit;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .rents-info {
+    grid-template-columns: auto;
+    row-gap: 10px;
+  }
+
+  .rents-info div span {
+    font-size: 40px;
+  }
+
+  .extra-services {
+    grid-template-columns: auto;
+  }
+
+  #tenants_paid,
+  #unit_rent {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 570px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .property-registration form {
+    grid-template-columns: 1fr;
+  }
+
+  .property-registration .btn {
+    grid-column: 1/2;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .prop-summary {
+    grid-template-columns: repeat(2, auto);
+    gap: 20px 5rem;
+  }
+
+  .prop-summary,
+  .property-insights,
+  .rent-status,
+  .recent-activity {
+    grid-column: 1/2;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    width: max-content;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 0.9rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 3rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .tenant-search {
+    width: 8rem;
+    right: 2rem;
+  }
+
+  .tenant-search input {
+    width: inherit;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .rents-info {
+    grid-template-columns: auto;
+    row-gap: 10px;
+  }
+
+  .rents-info div span {
+    font-size: 40px;
+  }
+
+  .extra-services {
+    grid-template-columns: auto;
+  }
+
+  #tenants_paid,
+  #unit_rent {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 570px) and (max-width: 650px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .prop-summary {
+    grid-template-columns: repeat(2, auto);
+    gap: 20px 5rem;
+  }
+
+  .prop-summary,
+  .property-insights,
+  .rent-status,
+  .recent-activity {
+    grid-column: 1/2;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    width: 100%;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 1.2rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 3rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .tenant-search {
+    width: 8rem;
+    right: 2rem;
+  }
+
+  .tenant-search input {
+    width: inherit;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .rents-info {
+    grid-template-columns: auto;
+    row-gap: 10px;
+  }
+
+  .rents-info div span {
+    font-size: 40px;
+  }
+
+  .extra-services {
+    grid-template-columns: auto;
+  }
+
+  #tenants_paid,
+  #unit_rent {
+    font-size: 16px;
+  }
+
+  .property-registration form {
+    grid-template-columns: 1fr;
+  }
+
+  .property-registration .btn {
+    grid-column: 1/2;
+  }
+}
+
+@media screen and (min-width: 650px) and (max-width: 800px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+  }
+
+  .revenue {
+    width: 100%;
+  }
+
+  .prop-summary {
+    grid-template-columns: repeat(3, auto);
+    gap: 20px 2rem;
+  }
+
+  .prop-summary,
+  .property-insights,
+  .rent-status,
+  .recent-activity {
+    grid-column: 1/2;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    width: max-content;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 1.5rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 4rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .rents-info div span {
+    font-size: 20px;
+  }
+
+  .extra-services {
+    grid-template-columns: auto;
+  }
+
+  #tenants_paid,
+  #unit_rent {
+    top: 0;
+    left: -3rem;
+    font-size: 14px;
+  }
+
+  #unit_rent {
+    left: -3.5rem;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 900px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 1.5rem;
+  }
+
+  .revenue {
+    grid-column: 1/5;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 2.2rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 3rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .prop-summary,
+  .property-insights {
+    grid-column: 1/3;
+  }
+
+  .recent-activity,
+  .rent-status {
+    grid-column: 3/5;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rents-info div span {
+    font-size: 25px;
+  }
+
+  .extra-services {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1076px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .dash-information {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 1.5rem;
+  }
+
+  .revenue {
+    grid-column: 1/5;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 2.2rem;
+  }
+
+  #dash button {
+    right: 0;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 3rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .prop-summary,
+  .property-insights {
+    grid-column: 1/3;
+  }
+
+  .recent-activity,
+  .rent-status {
+    grid-column: 3/5;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rents-info div span {
+    font-size: 30px;
+  }
+
+  .extra-services {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media screen and (min-width: 1076px) and (max-width: 1180px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .dash-information {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 1.5rem;
+  }
+
+  .revenue {
+    grid-column: 1/4;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 1.8rem;
+  }
+
+  .prop {
+    width: 10rem;
+  }
+
+  .prop span {
+    font-size: 3rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+
+  .recent-activity {
+    grid-column: 1/3;
+  }
+
+  .property-insights {
+    grid-column: 3/5;
+  }
+
+  .rent-status {
+    grid-column: 1/5;
+  }
+
+  .all-tenants,
+  .all-units {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1180px) and (max-width: 1250px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .income span,
+  .expenses span,
+  .profit span {
+    font-size: 2rem;
+  }
+
+  .prop span {
+    font-size: 4rem;
+  }
+
+  .prop p {
+    left: 1.3rem;
+  }
+}
+
+@media screen and (min-width: 1250px) and (max-width: 1350px) {
+  .side-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-14rem);
+    transition: 0.2s ease;
+  }
+
+  .show-side-nav {
+    z-index: 2;
+    transform: translateX(0);
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .content-area {
+    padding: 0 2rem;
+  }
+
+  .notification-area {
+    position: fixed;
+    width: 97%;
+  }
+
+  .tabcontent {
+    margin-top: 4rem;
+  }
+
+  .prop span {
+    font-size: 4.5rem;
+  }
+
+  .prop p {
+    left: 1.5rem;
+  }
+}

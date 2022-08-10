@@ -1,0 +1,178 @@
+.burger,
+.user,
+.footer,
+.profile,
+#logo {
+  display: none;
+}
+
+.login p {
+  color: black;
+}
+
+.nav {
+  justify-content: space-between;
+  padding: 0 30px;
+  background-color: white;
+  box-shadow: 0px 2px 10px -8px black;
+}
+
+.form {
+  position: relative;
+  margin: 50px 0 0;
+  height: 100vh;
+  background-image: url(Images/login.jfif);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+#back {
+  position: fixed;
+  top: 6rem;
+  font-size: 20px;
+  left: 6rem;
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-weight: bold;
+}
+
+i {
+  transition: transform 250ms ease-in;
+}
+
+#back:hover i {
+  transform: translateX(-5px);
+}
+
+form {
+  text-align: center;
+  padding: 80px 0;
+  background-image: linear-gradient(
+    to left,
+    rgb(0, 0, 253, 0.5),
+    rgb(255, 4, 4, 0.5)
+  );
+  height: inherit;
+}
+
+form > h4 {
+  color: white;
+  margin: 0 0 3rem;
+  font-size: 40px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+input {
+  padding: 15px;
+  margin: 5px;
+  width: 40vw;
+  text-transform: capitalize;
+  border-radius: 5px;
+  background-color: rgb(235, 235, 235);
+  border: 2px solid rgb(235, 235, 235);
+  color: black;
+  font-size: 17px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+input:focus,
+select:focus {
+  background-color: thistle;
+}
+
+select {
+  padding: 15px;
+  width: 40vw;
+  background-color: rgb(196, 196, 196);
+  border: 2px solid rgb(196, 196, 196);
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+  font-weight: bold;
+  font-size: 17px;
+  color: black;
+  border-radius: 5px;
+  margin: 5px 5px 0;
+}
+
+::placeholder {
+  font-size: 17px;
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: #212121;
+}
+
+form > .btn {
+  margin-top: 20px;
+  position: relative;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  padding: 10px;
+  width: 40vw;
+  border-radius: 5px;
+  font-size: 20px;
+  background-color: green;
+  border: 1px solid green;
+  color: white;
+  cursor: pointer;
+}
+
+.button--text {
+  font-family: monospace;
+  font-size: 18px;
+  transition: all 0.2s;
+}
+
+.btn--loading .button--text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.btn--loading::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 20px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px solid transparent;
+  border-top-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.box {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.box p {
+  font-size: 20px;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: bisque;
+  margin-bottom: 10px;
+}
+
+.box > a {
+  font-size: 20px;
+  color: rgb(0, 119, 255);
+  font-family: monospace;
+}

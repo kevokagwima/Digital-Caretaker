@@ -1,0 +1,21 @@
+{
+  "git.ignoreLimitWarning": true,
+  "python.pythonPath": "C:\\Users\\Kevin\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+  "editor.autoClosingBrackets": "always",
+  "html.format.indentInnerHtml": true,
+  "html.format.endWithNewline": true,
+  "html.format.templating": true,
+  "html.format.indentHandlebars": true,
+  "editor.autoClosingQuotes": "always",
+  "editor.tabSize": 2,
+  "editor.foldingStrategy": "indentation",
+  "files.autoSave": "onFocusChange",
+  "python.formatting.provider": "none",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "reactSnippets.settings.tabWidth": 2,
+  "reactSnippets.settings.prettierEnabled": true,
+  "javascript.format.semicolons": "remove",
+  "prettier.enable": true
+}

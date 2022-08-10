@@ -1,0 +1,304 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300&display=swap");
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: transparent;
+}
+
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+.nav {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+#logo {
+  display: none;
+}
+
+.logos {
+  max-height: 6rem;
+  margin-top: 3rem;
+}
+
+.login p,
+#links {
+  color: white;
+}
+
+.nav-actives {
+  box-shadow: 0px 1px 10px -5px black;
+}
+
+.container {
+  min-height: 65vh;
+  background-color: teal;
+  background-image: url(Images/house2.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.container-3 {
+  padding: 10px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0, 0, 0, 0.6);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay > h4 {
+  font-size: 3rem;
+  font-family: "Lexend Exa", sans-serif;
+  color: white;
+  text-align: center;
+}
+
+.box {
+  padding: 4rem 1rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.box h4 {
+  text-align: center;
+  font-size: 45px;
+  font-family: "Lexend Exa", sans-serif;
+  text-transform: capitalize;
+}
+
+#hr {
+  min-width: 20vw;
+  margin-inline: auto;
+  border: 0.1px solid var(--red);
+}
+
+.box .form {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-inline: auto;
+  max-width: max-content;
+  position: relative;
+}
+
+#live,
+#lives {
+  position: absolute;
+  color: var(--blue);
+  font-size: 15px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  right: -8rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#lives {
+  position: absolute;
+  right: -10rem;
+  display: none;
+}
+
+#live:hover {
+  transform: scale(1.1);
+}
+
+.box form input {
+  padding: 15px 10px;
+  min-width: 28vw;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  text-transform: capitalize;
+  border: none;
+  outline: 2px solid black;
+  letter-spacing: 1px;
+}
+
+#form2 {
+  display: none;
+}
+
+#property-search {
+  min-width: 30vw;
+}
+
+.box .form form input:focus {
+  outline: 2px solid greenyellow;
+  background-color: var(--other-dark-blue);
+  color: white;
+}
+
+.box .form form input::placeholder {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
+}
+
+.box .form form button {
+  padding: 0.8em 2em;
+  margin-left: 20px;
+  border: none;
+  background-color: var(--red);
+  color: white;
+  font-family: system-ui;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 30rem;
+  letter-spacing: 1px;
+  transition: 0.2s ease;
+}
+
+.box form button:hover {
+  background-color: whitesmoke;
+  outline: 2px solid var(--red);
+  color: black;
+}
+
+.no-units {
+  min-height: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: whitesmoke;
+  border-radius: 5px;
+}
+
+.no-units h4 {
+  color: var(--red);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 20px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.all-units {
+  padding: 50px 50px 40px;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+
+.units {
+  background-color: white;
+  box-shadow: 0px 1px 10px -5px black;
+  max-width: 25rem;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+#new {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 5px 8px;
+  background-color: var(--red);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 12px;
+  z-index: 2;
+  text-transform: capitalize;
+}
+
+.units img {
+  width: 100%;
+  max-height: 13rem;
+  transition: 0.5s ease-in-out;
+}
+
+.units button {
+  width: 100%;
+  border: none;
+  padding: 10px 0;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: white;
+  background-color: black;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.units:hover button {
+  background-color: var(--red);
+}
+
+.units:hover img {
+  transform: scale(1.05);
+}
+
+.unit-info {
+  padding: 20px;
+}
+
+.unit-info h4 {
+  font-family: "Quicksand", sans-serif;
+  font-weight: bolder;
+  font-size: 20px;
+}
+
+.unit-info span {
+  font-family: "PT Sans", sans-serif;
+  color: grey;
+  margin-top: 10px;
+}
+
+.unit-info table {
+  margin-top: 28px;
+}
+
+tr img {
+  height: 1.2rem;
+}
+
+td {
+  font-family: "PT Sans", sans-serif;
+  font-size: 14px;
+  align-items: center;
+  padding-left: 5px;
+  padding-bottom: 5px;
+}
+
+.unit-info hr {
+  margin: 20px 0;
+}
+
+.rent span {
+  color: var(--red);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.rent p {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 14px;
+}

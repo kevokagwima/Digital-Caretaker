@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/extra_service.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block title %}
+PMS | Extra Service
+{% endblock %}
+
+{% block logo %}
+<a href="{{ url_for('landlord.landlord_dashboard') }}">
+  <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+</a>
+{% endblock %}
+
+{% block body %}
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-head">
+      <span id="close-modal">&times</span>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <h4>Select a property and a unit to assign the Extra</h4>
+        <select id="properties" name="property" required>
+          <option selected disabled value="">- - - -</option>
+          {% for property in properties %}
+          <option value="{{ property.id }}">{{ property.name }}</option>
+          {% endfor %}
+        </select>
+        <select id="units" name="unit" required>
+          <option selected disabled value="">- - - -</option>
+          {% for unit in units %}
+          <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.Type }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button onclick="selectProperty()">Select</button>
+    </div>
+  </div>
+</div>
+<div class="container-1">
+  <h1>Welcome to <b>Extra Service</b></h1>
+  <p>This is all about making work easier by eliminating unecessary tasks that can be simplified. We
+    offer various services to support property owners in managing their properties.</p>
+</div>
+<div class="container-2">
+  {% set available_extra = [] %}
+  {% for extra in extras %}
+  {{ available_extra.append(extra) or "" }}
+  {% endfor %}
+  {% if available_extra %}
+  <h4>Select any {{ extra_type }} ({{ available_extra|count }})</h4>
+  <div class="all-cards">
+    {% for extra in available_extra %}
+    {% if current_user.Property|count > 1 %}
+    <div data-extra="{{ extra.id }}" class="card">
+      <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="">
+      <div class="card-info">
+        <p>{{ extra.first_name }} {{ extra.last_name }}</p>
+        <p>{{ extra.phone }}</p>
+        <p>{{ extra.email }}</p>
+        <p>{{ "Ksh {:,}".format(extra.cost) }}<span>/ hr</span></p>
+        <p>{{ extra.rating }} <span>/ 5</span></p>
+      </div>
+    </div>
+    {% else %}
+    <a href="{{ url_for('landlord.select_extra_service', extra_id=extra.id) }}">
+      <div class="card">
+        <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="">
+        <div class="card-info">
+          <p>{{ extra.first_name }} {{ extra.last_name }}</p>
+          <p>{{ extra.phone }}</p>
+          <p>{{ extra.email }}</p>
+          <p>{{ "Ksh {:,}".format(extra.cost) }}<span>/ hr</span></p>
+          <p>{{ extra.rating }} <span>/ 5</span></p>
+        </div>
+      </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="else">No available Extras</p>
+  {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/extra_service.js') }}"></script>
+<script>
+  let property = document.getElementById("properties")
+  let unit = document.getElementById("units")
+
+  property.onchange = () => {
+    prop = property.value
+    fetch("/extra-services/" + prop)
+      .then(response => {
+        response.json()
+          .then(data => {
+            let optionHTML = ''
+            for (let unit of data.units) {
+              optionHTML += '<option value="' + unit.id + '">' + unit.name + ' - ' + unit.type + '</option>'
+            }
+            unit.innerHTML = optionHTML
+          })
+      })
+  }
+</script>
+<script>
+  const extra = document.querySelectorAll(".card")
+  extra.forEach(p => {
+    p.addEventListener("click", () => {
+      localStorage.setItem('extra', p.dataset.extra)
+    })
+  })
+  function selectProperty() {
+    const property = document.querySelector("#properties").value
+    const unit = document.querySelector("#units").value
+    if (property == "" || unit == "") {
+      alert("No empty fields allowed")
+    }
+    else {
+      $.ajax({
+        url: "/extra-service/" + `${localStorage.getItem('extra')}`,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          "property": property,
+          "unit": unit,
+          "extra": localStorage.getItem('extra')
+        })
+      })
+      checkExtra()
+    }
+  }
+  function checkExtra() {
+    fetch("/extra-occupancy/" + localStorage.getItem("extra"))
+      .then(response => {
+        response.json()
+          .then(data => {
+            if (data.messages) {
+              alert(`Extra ${data.messages.fname} ${data.messages.lname} has been deployed successfully`)
+              window.location.replace("/Landlord_dashboard")
+            }
+            else if (data.message) {
+              alert(`Extra ${data.message.fname} ${data.message.lname} is already on site undertaking maintenance. Select another extra`)
+              window.location.replace("/extra-service/electrician")
+            }
+          })
+      })
+  }
+</script>
+{% endblock %}

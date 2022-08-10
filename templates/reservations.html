@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reservations.css') }}">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+PMS | Reservations
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="container-1">
+  {% set booking = current_user.bookings %}
+  {% set active_reservations = [] %}
+  {% for book in booking|sort(attribute="date", reverse=True) if book.status == "Active" %}
+  {{ active_reservations.append(book) or "" }}
+  {% endfor %}
+  {% if active_reservations %}
+  <h4>My Reservations</h4>
+  <p id="more-info">You have reserved
+    {{ active_reservations|count }}
+    {% if active_reservations|count == 1 %}
+    unit
+    {% else %}
+    units
+    {% endif %}
+  </p>
+  <div class="box-1">
+    {% for book in booking|sort(attribute="date", reverse=True) if book.status == "Active" %}
+    <div class="booking">
+      <p id="ID">Reservation ID {{ book.booking_id }}</p>
+      <p id="dat">{{ book.expiry_date.strftime("Expires on %d/%m/%Y at %I:%M %p") }}</p>
+      <div class="div2">
+        <p>
+          Reservation Details
+        <div class="three-dots">
+          <div class="dot1"></div>
+          <div class="dot1"></div>
+          <div class="dot1"></div>
+        </div>
+        <div class="delete">
+          <a href="{{ url_for('main.delete_reservation', reservation_id = book.booking_id) }}">Delete Reservation</a>
+        </div>
+        </p>
+        <hr>
+        <div class="div3">
+          {% for unit in units if book.unit == unit.id %}
+          <p>Property Name : <a href="{{ url_for('main.unit_details', unit_id=unit.id) }}">
+              {% for property in properties if book.property == property.id %}
+              {{ property.name }}
+              {% endfor %}
+            </a>
+          </p>
+          <p>Unit Name : {{ unit.name }}</p>
+          <p>Unit Type : {{ unit.Type }}</p>
+          <p>Unit Floor: {{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+            Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
+            Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {% endif %}</p>
+          {% endfor %}
+        </div>
+      </div>
+      {% if book.property == 7 %}
+      <iframe loading="lazy"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.9965045098675!2d36.92644401483958!3d-1.1629358991517333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3f766c8d0513%3A0x2a05d75fcdaaff43!2s!5e0!3m2!1sen!2ske!4v1624630934302!5m2!1sen!2ske"
+        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      {% elif book.property == 11 %}
+      <iframe loading="lazy"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.914039724496!2d36.887024314754015!3d-1.2198905991102151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3fc955678a67%3A0x2c30e07746ac972a!2sTRM%20-%20Thika%20Road%20Mall!5e0!3m2!1sen!2ske!4v1624694270193!5m2!1sen!2ske"
+        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      {% elif book.property == 41 %}
+      <iframe loading="lazy"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.914039724496!2d36.887024314754015!3d-1.2198905991102151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3fc955678a67%3A0x2c30e07746ac972a!2sTRM%20-%20Thika%20Road%20Mall!5e0!3m2!1sen!2ske!4v1624694270193!5m2!1sen!2ske"
+        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      {% else %}
+      <iframe loading="lazy"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.914039724496!2d36.887024314754015!3d-1.2198905991102151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3fc955678a67%3A0x2c30e07746ac972a!2sTRM%20-%20Thika%20Road%20Mall!5e0!3m2!1sen!2ske!4v1624694270193!5m2!1sen!2ske"
+        style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div class="side-panel">
+      <p>All of your reservations will be displayed in this page. They are ordered based on the time created meaning the
+        latest will always be at the top left.</p>
+      <p>Your reservations only lasts for 1 day so once you reserve a unit reach out to the landlord and arrange a
+        viewing.</p>
+      <p>After the specified period is up the reservations will be cancelled and the unit is put back in the market.</p>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="no-reservations">
+  <h4>No active reservations</h4>
+  <p>Visit the <a href="{{ url_for('main.properties') }}">properties page</a> to reserve your unit today.</p>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/reservation.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,232 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300&display=swap");
+
+body,
+html {
+  margin: 0;
+}
+
+.nav {
+  box-shadow: 0 0 10px -6px black;
+}
+
+.logo {
+  max-height: 3.5rem;
+  margin-top: 0;
+}
+
+.container-1 {
+  height: 16rem;
+  background-color: #efefef;
+  margin-top: 3rem;
+}
+
+.all-info {
+  margin-top: -16rem;
+  padding: 130px 160px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  row-gap: 105px;
+  background-color: transparent;
+}
+
+.details {
+  background-color: transparent;
+  width: max-content;
+}
+
+.details > h4 {
+  text-transform: uppercase;
+  font-family: "Quicksand", sans-serif;
+  color: var(--red);
+  letter-spacing: 1px;
+  font-size: 22px;
+}
+
+.details h2 {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  margin-top: 15px;
+  font-size: 45px;
+}
+
+.details p {
+  font-family: "PT Sans", sans-serif;
+  font-size: 16px;
+}
+
+.more-info {
+  margin-top: 30px;
+}
+
+.more-info p {
+  line-height: 28px;
+  max-width: 32rem;
+}
+
+#rent {
+  margin-top: 40px;
+  font-size: 14px;
+}
+
+#rent span {
+  color: var(--red);
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.reserve-btn {
+  margin-top: 20px;
+  border: none;
+  outline: 2px solid var(--red);
+  padding: 15px 20px;
+  background-color: var(--red);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  border-radius: 10rem;
+  font-size: 16px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: 0.3s ease-in-out;
+}
+
+.reserve-btn:hover {
+  background-color: transparent;
+  color: black;
+  transform: scale(1.05);
+  outline: 2px solid var(--red);
+}
+
+.reserve-btn:disabled {
+  background-color: rgb(205, 205, 205);
+  color: black;
+  cursor: default;
+}
+
+#new {
+  color: green;
+  margin-left: 1rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.unit-image {
+  max-width: 35rem;
+  overflow: hidden;
+  border-radius: 10px;
+  max-height: 25rem;
+  box-shadow: 0px 1px 10px -5px black;
+}
+
+.unit-image img {
+  width: 100%;
+  height: 25rem;
+}
+
+.property-details h4,
+.landlord-info h4 {
+  font-family: "PT Sans", sans-serif;
+  letter-spacing: 1px;
+  font-size: 18px;
+  font-weight: normal;
+  text-transform: uppercase;
+  position: relative;
+  font-weight: bold;
+}
+
+#prop-details::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 60%;
+  height: 5%;
+  background-color: #212121;
+}
+
+table {
+  margin-top: 2rem;
+}
+
+tr img {
+  max-height: 1.5rem;
+}
+
+table th,
+td {
+  text-align: left;
+}
+
+table td {
+  padding: 8px 5px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+}
+
+table td span {
+  padding: 11px 5px 0;
+  color: var(--red);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.landlord-information {
+  margin-top: 2rem;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 25px;
+  row-gap: 25px;
+}
+
+.form input {
+  padding: 10px 10px;
+  border-radius: 3px;
+  width: 100%;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 18px;
+  border: 1px solid black;
+}
+
+input::placeholder,
+textarea::placeholder {
+  font-family: "PT Sans", sans-serif;
+  color: grey;
+  font-size: 15px;
+}
+
+.form textarea {
+  padding: 10px 5px;
+  border-radius: 3px;
+  width: 100%;
+  min-width: 17rem;
+  max-width: 36rem;
+  max-height: 10rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  border: 1px solid black;
+}
+
+.input-5 {
+  grid-column: 1/3;
+}
+
+.form button {
+  grid-column: 1/3;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--red);
+  color: white;
+  font-family: "PT Sans", sans-serif;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 1px;
+  cursor: pointer;
+}

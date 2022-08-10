@@ -1,0 +1,17 @@
+.footer {
+  display: none;
+}
+
+#links:last-child {
+  display: none;
+}
+
+body > h4 {
+  color: black;
+  font-size: 80px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+  text-align: center;
+  line-height: 50rem;
+}

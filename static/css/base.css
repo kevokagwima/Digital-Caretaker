@@ -1,0 +1,467 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Varela+Round&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&family=Source+Sans+Pro:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Martel:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Days+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300&family=Saira+Stencil+One&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --main-light: rgb(227, 227, 255);
+  --dark-blue: rgb(1, 1, 29);
+  --other-dark-blue: rgb(0, 20, 49);
+  --page-header-bgColor: #242e42;
+  --page-header-bgColor-hover: #1d2636;
+  --page-header-txtColor: #dde9f8;
+  --page-header-headingColor: #7889a4;
+  --page-header-width: 220px;
+  --page-content-bgColor: #04101f;
+  --page-content-txtColor: #171616;
+  --page-content-blockColor: #fff;
+  --white: #fff;
+  --black: #333;
+  --blue: #00b9eb;
+  --red: #ec1848;
+  --border-radius: 4px;
+  --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.075);
+  --switch-bgLightModeColor: #87cefa;
+  --switch-sunColor: gold;
+  --switch-moonColor: #f4f4f4;
+  --switch-bgDarkModeColor: #1f1f27;
+  --nav-links-font: "Maven Pro", sans-serif;
+  --font: "Exo", sans-serif;
+  --font-1: "Days One", sans-serif;
+  --product-desc-font: "Martel", serif;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+  border-radius: 50rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.nav {
+  position: fixed;
+  top: 0;
+  min-width: 100vw;
+  max-height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 2rem 0.5rem 4rem;
+  align-items: center;
+  z-index: 10;
+  background-color: white;
+  transition: top 0.3s;
+}
+
+.nav-active {
+  box-shadow: 0px 1px 10px -6px black;
+}
+
+.logo {
+  max-height: 6rem;
+  margin-top: 3rem;
+  transition: 0.3s ease;
+}
+
+#logo {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}
+
+#account {
+  top: 2.5rem;
+  right: -4rem;
+  font-size: 1rem;
+  font-family: "Lexend Exa", sans-serif;
+  font-family: "Saira Stencil One", cursive;
+  color: rgb(1, 169, 1);
+}
+
+.logo-fixed {
+  max-height: 3.5rem;
+  margin-top: 0;
+}
+
+.links {
+  min-width: 40vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+#links {
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #212121;
+  font-family: var(--nav-links-font);
+  transition: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+
+#links:hover {
+  color: var(--red);
+  font-weight: bold;
+}
+
+.dropdown {
+  margin-top: 2px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  padding: 14px 16px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 3rem;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 10px 0 10px;
+  border-radius: 10px;
+}
+
+.dropdown-content a {
+  float: none;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: black;
+  padding: 6px 15px;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  font-family: "Noto Sans", sans-serif;
+}
+
+.dropdown-content a:hover {
+  color: var(--red);
+  font-weight: bold;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.user {
+  width: 13vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user > a > button {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  padding: 8px 0;
+  color: white;
+  width: 5.8vw;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+.user > a > button:hover {
+  transform: scale(1.05, 1.05);
+}
+
+#sign-up {
+  background: linear-gradient(to left, orange, red);
+  border: none;
+}
+
+#sign-in {
+  background: linear-gradient(to left, green, blue);
+  border: none;
+}
+
+.login {
+  display: flex;
+  flex-grow: 0.1;
+  justify-content: center;
+  align-items: center;
+  height: max-content;
+  background-color: transparent;
+  max-width: 12vw;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.login p::selection,
+.login p > b::selection {
+  background-color: transparent;
+}
+
+.login img {
+  height: 5vh;
+  width: 4vw;
+}
+
+.login p {
+  color: black;
+  font-size: 16px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+  text-overflow: ellipsis;
+}
+
+.login p > b {
+  color: var(--red);
+}
+
+.burger {
+  display: none;
+  cursor: pointer;
+}
+
+.burger div {
+  height: 2.3px;
+  width: 1.8rem;
+  margin: 4px 0 0;
+  background-color: var(--red);
+}
+
+.profile {
+  position: absolute;
+  background-color: white;
+  top: 4.2rem;
+  right: 2.5rem;
+  width: 15vw;
+  max-width: 15vw;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+  visibility: hidden;
+  box-shadow: 1px 1px 10px -5px black;
+}
+
+.profile h4 {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #212121;
+  letter-spacing: 1px;
+  padding: 10px 15px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+.profile h4:hover {
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+
+#reservations:hover {
+  color: green;
+  background-color: whitesmoke;
+}
+
+#reservations {
+  color: #212121;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  padding: 10px 15px;
+  letter-spacing: 1px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  position: relative;
+}
+
+.reserve-badge {
+  position: absolute;
+  top: 2px;
+  right: 5.7rem;
+  background-color: var(--red);
+  border-radius: 50%;
+  padding: 1.5px;
+  height: 1rem;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reserve-badge span {
+  color: white;
+  font-size: 12px;
+  font-family: "PT Sans", sans-serif;
+}
+
+#logout {
+  font-size: 1rem;
+  color: #212121;
+  padding: 10px 15px;
+  letter-spacing: 1px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+}
+
+#logout:hover {
+  color: white;
+  background-color: var(--red);
+}
+
+.show-profile {
+  visibility: visible;
+}
+
+.footer {
+  background-color: var(--dark-blue);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  min-width: 100vw;
+}
+
+.footer > p {
+  color: white;
+  font-size: 15px;
+  letter-spacing: 2px;
+  font-family: system-ui;
+}
+
+.tops {
+  position: fixed;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 2px 0 0;
+  animation: fade-away 1s 5s forwards;
+}
+
+@keyframes fade-away {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #logo {
+    font-size: 25px;
+  }
+
+  .user {
+    display: none;
+  }
+
+  .login {
+    display: none;
+  }
+
+  .links {
+    display: none;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .footer p {
+    text-align: center;
+    font-size: 8px;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 1000px) {
+  .links {
+    width: 50vw;
+    display: flex;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .burger div {
+    height: 3px;
+    width: 1.3rem;
+  }
+
+  .user {
+    display: none;
+  }
+
+  .login {
+    display: none;
+  }
+
+  #links {
+    font-size: 18px;
+  }
+
+  #logo {
+    font-size: 22px;
+  }
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1300px) {
+  .user {
+    display: none;
+  }
+
+  .login {
+    display: none;
+  }
+
+  .burger {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1301px) {
+  .user {
+    background-color: red;
+    width: 13rem;
+    height: 0;
+  }
+
+  .user > a > button {
+    width: 6rem;
+  }
+}

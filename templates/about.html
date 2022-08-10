@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Cabin&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+PMS | About Us
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<h4>Coming Soon</h4>
+
+<script src="{{ url_for('static', filename='js/about.js') }}"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
+{% endblock %}

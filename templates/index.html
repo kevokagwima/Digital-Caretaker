@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+{% endblock %}
+
+{% block title %}
+PMS | Home
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="container-1">
+  <div class="info-container">
+    <h4>digitizing the property industry</h4>
+  </div>
+  <div class="image-container"></div>
+</div>
+<div class="container-2">
+  <h4>Intergrating modern systems into property management</h4>
+  <div class="landlord-system">
+    <div class="landlord-system-img">
+      <img loading="lazy" src="{{ url_for('static', filename='css/Images/landlord-dashboard.png') }}"
+        alt="landlord dashboard">
+    </div>
+    <div class="landlord-system-info">
+      <h4>Landlord Dashboard</h4>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis minima saepe, aut praesentium consectetur sunt
+        sapiente excepturi fuga fugit harum pariatur adipisci earum, assumenda aperiam quo eum ea deleniti itaque.</p>
+      {% if current_user.is_authenticated and current_user.account_type == "Landlord" %}
+      <a href="{{ url_for('landlord.landlord_dashboard') }}">
+        <button>Proceed To Portal</button>
+      </a>
+      {% else %}
+      <a href="{{ url_for('landlord.Landlord_login') }}">
+        <button>Proceed To Portal</button>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="tenant-system">
+    <div class="tenant-system-img">
+      <img loading="lazy" src="{{ url_for('static', filename='css/Images/tenant-dashboard.png') }}"
+        alt="tenant dashboard">
+    </div>
+    <div class="tenant-system-info">
+      <h4>Tenant Dashboard</h4>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis minima saepe, aut praesentium consectetur sunt
+        sapiente excepturi fuga fugit harum pariatur adipisci earum, assumenda aperiam quo eum ea deleniti itaque.</p>
+      {% if current_user.is_authenticated and current_user.account_type == "Tenant" %}
+      <a href="{{ url_for('tenant.tenant_dashboard') }}">
+        <button>Proceed To Portal</button>
+      </a>
+      {% else %}
+      <a href="{{ url_for('tenant.tenant_login') }}">
+        <button>Proceed To Portal</button>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<div class="container-3">
+  <h4>How to get started</h4>
+  <div class="started">
+    <button class="tablinks" onclick="openView(event, 'landlord')" id="defaultOpen">Landlord</button>
+    <button class="tablinks" onclick="openView(event, 'tenant')">Tenant</button>
+  </div>
+  <div id="landlord" class="tabcontent">
+    <h4>Getting started as a landlord</h4>
+    <div class="timeline">
+      <div class="line">
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content one">
+            <p>Register for a landlord account</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content two">
+            <p>Login to your landlord account</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content one">
+            <p>Add your properties</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content two">
+            <p>Add units to your property</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content one">
+            <p>Manage your property</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tenant" class="tabcontent">
+    <h4>Getting started as a tenant</h4>
+    <div class="timeline">
+      <div class="line">
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content one">
+            <p>Register for a tenant account</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content two">
+            <p>Login to your tenant account</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content one">
+            <p>View your landlord</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content two">
+            <p>Make rent payments quickly</p>
+          </div>
+        </div>
+        <div class="first">
+          <div class="dot"></div>
+          <div class="line-content one">
+            <p>Manage your assigned unit</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-4">
+    <div class="div div-1">
+      <p>
+        <span>{{ properties|count }}</span>
+        {% if properties|count == 1 %}
+        Property
+        {% else %}
+        Properties
+        {% endif %}
+      </p>
+    </div>
+    <div class="div div-1">
+      <p>
+        <span>{{ units|count }}</span>
+        {% if units|count == 1 %}
+        Unit
+        {% else %}
+        Units
+        {% endif %}
+      </p>
+    </div>
+    <div class="div div-1">
+      <p>
+        <span>{{ tenants|count }}</span>
+        {% if tenants|count == 1 %}
+        Tenant
+        {% else %}
+        Tenants
+        {% endif %}
+      </p>
+    </div>
+    <div class="div div-1">
+      <p>
+        <span>{{ landlords|count }}</span>
+        {% if landlords|count == 1 %}
+        Landlord
+        {% else %}
+        Landlords
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>
+{% if property_choice %}
+<div class="properties">
+  <h4>Best Selling Property</h4>
+  <div class="property-info">
+    <div class="property-img">
+      <img loading="lazy" src="{{ url_for('static', filename='css/Images/apartments.jpg') }}"
+        alt="Best Selling Property">
+    </div>
+    <div class="property-details">
+      <h4>{{ property_choice.name }}</h4>
+      <span>
+        {{ property_choice.address }}, {{ property_choice.address2 }}
+      </span>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit ut saepe, officiis repellendus ratione rerum
+        sint rem sit eveniet autem totam voluptate architecto quam unde voluptatibus vero provident qui at, deleniti
+        odio? Qui similique, rem a repellendus unde quibusdam. Cumque porro tempora odit? Dolores illo delectus, fugiat
+        veritatis reprehenderit debitis vel, perferendis, laborum id temporibus officia reiciendis? Quod, dolore enim.
+      </p>
+      <a href="{{ url_for('main.properties') }}#all-units">
+        <button>View Vacant Units</button>
+      </a>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div class="testimonials">
+  <h4>Our testimonials</h4>
+  <div class="testimonials-details">
+    <div class="test testimonial-1">
+      <div class="test-profile">
+        <div class="test-img">
+          <img src="{{ url_for('static', filename='css/Images/testimonial1.jpg') }}" alt="Profile">
+        </div>
+        <div class="test-info">
+          <h4>Cynthia Wairimu</h4>
+          <p>Landlord</p>
+        </div>
+      </div>
+      <div class="testimony">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis dolore laborum commodi, minus rem
+          dignissimos tempore deleniti libero obcaecati nulla velit praesentium similique modi incidunt atque facere
+          quos aliquid eaque qui deserunt molestiae officiis. At soluta repellat aliquid deleniti sed rem distinctio
+          quaerat, maxime earum tempora modi temporibus molestiae cum accusantium illum, quo quis, necessitatibus veniam
+          amet? Unde, quia itaque qui tempore labore quisquam ipsum non accusamus voluptatem? Blanditiis, accusamus!
+          Suscipit expedita laudantium laborum asperiores quasi eveniet, sint veniam. Expedita ad iure omnis iste ipsa,
+          laborum non perferendis delectus, aperiam quos sit reprehenderit minus in iusto rerum quae nesciunt rem!</p>
+      </div>
+    </div>
+    <div class="test testimonial-2">
+      <div class="test-profile">
+        <div class="test-img">
+          <img src="{{ url_for('static', filename='css/Images/testimonial2.jpg') }}" alt="Profile">
+        </div>
+        <div class="test-info">
+          <h4>Paul Kimani</h4>
+          <p>Tenant</p>
+        </div>
+      </div>
+      <div class="testimony">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora in, sed quo fugit, at aliquam architecto
+          dolores molestiae explicabo cumque accusamus odit exercitationem optio aperiam aut hic atque omnis dignissimos
+          enim ullam cupiditate autem alias unde officiis. Hic quidem nam inventore voluptatum repudiandae rem
+          voluptatibus, laborum quasi animi ullam. Exercitationem.</p>
+      </div>
+    </div>
+    <div class="test testimonial-3">
+      <div class="test-profile">
+        <div class="test-img">
+          <img src="{{ url_for('static', filename='css/Images/testimonial3.jpg') }}" alt="Profile">
+        </div>
+        <div class="test-info">
+          <h4>Antony Juma</h4>
+          <p>Landlord</p>
+        </div>
+      </div>
+      <div class="testimony">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit iusto vero provident culpa! Ratione reiciendis
+          sed iste saepe minus, ipsa asperiores tenetur assumenda magnam illum unde qui voluptatum corrupti natus
+          inventore similique et. Expedita molestiae asperiores harum aut. Earum a mollitia aliquam quibusdam totam
+          accusantium iste sint nisi! Quos facilis tenetur quas molestias autem nostrum eos placeat iure veritatis.
+          Architecto ratione error veritatis, repellat cum, vitae sequi tempora ab assumenda, earum voluptatibus.
+          Reiciendis doloribus necessitatibus quasi illo recusandae voluptatum laborum, molestias dolores commodi quos
+          rem similique quo esse in rerum ratione. Labore ab temporibus eos tempora ipsam molestias necessitatibus!
+          Expedita distinctio consequuntur minus nam corporis accusamus quia numquam eligendi corrupti aperiam totam
+          laborum unde, quae adipisci ullam repellat, deserunt inventore.</p>
+      </div>
+    </div>
+    <div class="test testimonial-4">
+      <div class="test-profile">
+        <div class="test-img">
+          <img src="{{ url_for('static', filename='css/Images/testimonial4.jpg') }}" alt="Profile">
+        </div>
+        <div class="test-info">
+          <h4>Kimberly Njeri</h4>
+          <p>Tenant</p>
+        </div>
+      </div>
+      <div class="testimony">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, vero voluptate enim recusandae reiciendis
+          neque deleniti ipsam. Voluptate, in maiores. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi,
+          eos.</p>
+      </div>
+    </div>
+    <div class="test testimonial-5">
+      <div class="test-profile">
+        <div class="test-img">
+          <img src="{{ url_for('static', filename='css/Images/testimonial5.jpg') }}" alt="Profile">
+        </div>
+        <div class="test-info">
+          <h4>Simon Njenga</h4>
+          <p>Landlord</p>
+        </div>
+      </div>
+      <div class="testimony">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. In possimus repellendus laudantium dicta alias sit
+          recusandae saepe voluptas. Quo consequatur possimus quibusdam laboriosam adipisci, culpa dignissimos error
+          aliquid autem exercitationem laborum necessitatibus fuga odio, consectetur voluptatem voluptate illum. Nam,
+          sint quae consequuntur itaque in veritatis laudantium dicta maxime sequi iure!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/index.js')}}"></script>
+{% endblock %}

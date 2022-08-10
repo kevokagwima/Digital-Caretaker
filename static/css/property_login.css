@@ -1,0 +1,90 @@
+body {
+  background-color: #212121;
+}
+
+.overlays {
+  background-color: white;
+}
+
+.burger {
+  display: none;
+}
+
+.user {
+  display: none;
+}
+
+.login {
+  display: none;
+}
+
+.nav {
+  justify-content: space-between;
+  padding: 20px;
+  box-shadow: 0px 2px 10px -8px black;
+}
+
+form {
+  background: #212121;
+  padding-top: 150px;
+  text-align: center;
+  padding-bottom: 92px;
+}
+
+form > h4 {
+  color: bisque;
+  font-size: 30px;
+  margin-bottom: 30px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-transform: uppercase;
+}
+
+input {
+  padding: 15px;
+  margin: 5px;
+  width: 60vw;
+  border-radius: 8px;
+  background-color: rgb(0, 0, 0);
+  border: 2px solid bisque;
+  color: rgb(255, 255, 255);
+  font-size: 17px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+::placeholder {
+  font-size: 17px;
+  font-family: monospace;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+}
+
+form > button {
+  margin-top: 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  padding: 10px;
+  width: 60vw;
+  border-radius: 8px;
+  font-size: 20px;
+  background-color: rgb(0, 255, 13);
+  border: 1px solid rgb(30, 255, 0);
+  color: black;
+  cursor: pointer;
+}
+
+.box {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.box p {
+  font-size: 20px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: bisque;
+  margin-bottom: 10px;
+}
+
+.box > a {
+  font-size: 20px;
+  color: rgb(0, 119, 255);
+  font-family: monospace;
+}
