@@ -41,8 +41,14 @@
 
 .links,
 .footer,
-.nav > a:first-child {
+#logo {
   display: none;
+}
+
+#logos {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
 }
 
 .logo {

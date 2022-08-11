@@ -17,5 +17,6 @@
   "reactSnippets.settings.tabWidth": 2,
   "reactSnippets.settings.prettierEnabled": true,
   "javascript.format.semicolons": "remove",
-  "prettier.enable": true
+  "prettier.enable": true,
+  "editor.experimental.stickyScroll.enabled": true
 }

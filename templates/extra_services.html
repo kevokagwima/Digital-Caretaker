@@ -11,8 +11,11 @@ PMS | Extra Service
 {% endblock %}
 
 {% block logo %}
-<a href="{{ url_for('landlord.landlord_dashboard') }}">
+<a id="logos" href="{{ url_for('landlord.landlord_dashboard') }}">
   <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+  {% if current_user.is_authenticated %}
+  <span id="account">{{ current_user.account_type }}</span>
+  {% endif %}
 </a>
 {% endblock %}
 

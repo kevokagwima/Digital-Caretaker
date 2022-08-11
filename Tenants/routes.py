@@ -109,7 +109,10 @@ def rent_payment():
   if current_user.account_type != "Tenant":
     abort(403)
   invoice = Invoice.query.filter_by(tenant=current_user.id, status="Active").first()
-  if invoice:
+  unit = Unit.query.filter_by(tenant=current_user.id).first()
+  if unit.rent_amount > 999999:
+    flash(f"Amount is to large to be processed by the system via bank", category="danger")
+  elif invoice:
     checkout_session = stripe.checkout.Session.create(
       line_items = [
         {
@@ -132,6 +135,8 @@ def rent_payment():
   else:
     flash(f"Could not find an invoice for your payment", category="danger")
     return redirect(url_for('tenant.tenant_dashboard'))
+  
+  return redirect(url_for('tenant.tenant_dashboard'))
 
 @tenants.route("/payment-complete")
 @fresh_login_required

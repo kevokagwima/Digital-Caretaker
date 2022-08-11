@@ -289,7 +289,9 @@ def tenant_details(tenant_id):
       this_property = session["property"]
       return redirect(url_for("landlord.property_information", property_id=this_property.id))
     complaints = Complaints.query.filter_by(tenant=tenant.id).all()
-    unit = Unit.query.filter_by(tenant=tenant.id).first()
+    units = Unit.query.all()
+    tenant_property = Properties.query.filter_by(id=tenant.properties).first()
+    tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
     unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
     if unitz:
       for unit in unitz:
@@ -334,7 +336,7 @@ def tenant_details(tenant_id):
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-  return render_template("tenant_details.html",tenant=tenant,complaints=complaints,unit=unit, today_time=today_time)
+  return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices)
 
 @landlords.route("/Assign_unit", methods=["POST", "GET"])
 @fresh_login_required

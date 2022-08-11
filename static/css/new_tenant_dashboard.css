@@ -640,7 +640,7 @@ table th {
   border-radius: 5px;
   display: grid;
   grid-template-columns: auto;
-  row-gap: 20px;
+  row-gap: 10px;
   max-height: 42rem;
   overflow: auto;
   padding-right: 8px;
@@ -870,8 +870,8 @@ table th {
   transition: transform 0.2s ease-in;
   position: relative;
   overflow: hidden;
-  background-color: var(--red);
-  color: white;
+  background-color: var(--main-light);
+  color: black;
 }
 
 .premium {
