@@ -64,7 +64,7 @@
           <img src="{{ url_for('static', filename='css/Images/feedback.png') }}" alt="complaints">
           Complaints
           {% set comp_count = [] %}
-          {% for complaint in session.property.complaint if complaint.date.strftime('%d/%m/%Y') == today_time %}
+          {% for complaint in tenant_property.complaint if complaint.date.strftime('%d/%m/%Y') == today_time %}
           {{ comp_count.append(complaint) or "" }}
           {% if comp_count|count != 0 %}
           <div class="complaint-count">
@@ -161,7 +161,7 @@
                 <h4>Your actions will result in the following</h4>
                 <ul>
                   <li>Permanent removal of {{ tenant.first_name }} {{ tenant.second_name }} from
-                    {{ session.property.name }}.
+                    {{ tenant_property.name }}.
                   </li>
                   <li>If there's a unit assigned to {{ tenant.first_name }} {{ tenant.second_name }}, it will become
                     vacant.</li>
@@ -251,7 +251,7 @@
                 <p class="else">No unit assigned to this tenant</p>
                 <hr>
                 <div class="unit-assign">
-                  {% set property = session.property %}
+                  {% set property = tenant_property %}
                   {% set unit_count = [] %}
                   {% for unit in property.unit if unit.tenant == None %}
                   {{ unit_count.append(unit) or "" }}
@@ -301,30 +301,45 @@
                 Rent Information
                 {% if tenant_invoices %}
                 {% if tenant_invoices and tenant_invoices[-1].status == "Active" %}
-                <span id="rent-info">Not paid</span>
-                {% else %}
-                <span id="paid-rent">Paid &check;</span>
+                <span id="rent-info">This month not paid</span>
+                {% elif tenant_invoices and tenant_invoices[-1].status == "Cleared" %}
+                <span id="paid-rent">This month paid &check;</span>
                 {% endif %}
                 {% endif %}
               </button>
               <div class="panel">
                 {% if tenant_invoices %}
                 <div class="rent-info">
-                  {% for invoice in tenant_invoices %}
+                  {% for invoice in tenant_invoices|sort(attribute="date_created", reverse=true) if invoice.status != 'invalid' %}
                   <div class="invoice-details">
                     <h4>Invoice - #{{ invoice.invoice_id }}</h4>
                     <p>{{ "Ksh {:,}".format(invoice.amount) }}</p>
-                    <p>{{ invoice.date_created.strftime("Created on %d/%m/%Y") }}</p>
+                    <p>{{ invoice.date_created.strftime("Created on %d %B  %y") }}</p>
                     {% if invoice.date_closed %}
-                    <p>{{ invoice.date_closed.strftime("Cleared on %d/%m/%Y") }}</p>
+                    <p>{{ invoice.date_closed.strftime("Cleared on %d %B %y") }}</p>
                     {% endif %}
                     {% if invoice.status == "Active" %}
                     <p class="invoice-status active-invc">
                       pending
                     </p>
-                    {% else %}
+                    {% elif invoice.status == "Cleared" %}
                     <p class="invoice-status cleared">
                       {{ invoice.status }} &check;
+                    </p>
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                  {% for invoice in tenant_invoices|sort(attribute="date_created", reverse=true) if invoice.status == 'invalid' %}
+                  <div class="invoice-details invalids">
+                    <h4>Invoice - #{{ invoice.invoice_id }}</h4>
+                    <p>{{ "Ksh {:,}".format(invoice.amount) }}</p>
+                    <p>{{ invoice.date_created.strftime("Created on %d %B  %y") }}</p>
+                    {% if invoice.date_closed %}
+                    <p>{{ invoice.date_closed.strftime("Cleared on %d %B %y") }}</p>
+                    {% endif %}
+                    {% if invoice.status == "invalid" %}
+                    <p class="invoice-status invalid">
+                      {{ invoice.status }}
                     </p>
                     {% endif %}
                   </div>
@@ -338,8 +353,8 @@
             <div class="tenant-extra">
               <button class="accordion">Extras</button>
               <div class="panel">
-                <div class="revoke">
-                  <a id="revoke" href="#">Revoke Access</a>
+                <div class="extra">
+                  <a id="revoke" href="#">Revoke Access</a><a id="chat" href="#">Send Message</a>
                 </div>
               </div>
             </div>

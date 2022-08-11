@@ -281,16 +281,16 @@ def tenant_details(tenant_id):
   today_time = today.strftime("%d/%m/%Y")
   try:
     tenant = Tenant.query.get(tenant_id)
+    tenant_property = Properties.query.filter_by(id=tenant.properties).first()
     if tenant.landlord != current_user.id:
       flash(f"Unknown Tenant ID", category="info")
       return redirect(url_for("landlord.landlord_dashboard"))
     elif tenant.active == "False":
       flash(f"Cannot view tenant details. Tenant is not active", category="danger")
-      this_property = session["property"]
-      return redirect(url_for("landlord.property_information", property_id=this_property.id))
+      return redirect(url_for("landlord.property_information", property_id=tenant_property.id))
     complaints = Complaints.query.filter_by(tenant=tenant.id).all()
+    transactions = Transaction.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
-    tenant_property = Properties.query.filter_by(id=tenant.properties).first()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
     unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
     if unitz:
@@ -336,7 +336,7 @@ def tenant_details(tenant_id):
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-  return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices)
+  return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions)
 
 @landlords.route("/Assign_unit", methods=["POST", "GET"])
 @fresh_login_required
