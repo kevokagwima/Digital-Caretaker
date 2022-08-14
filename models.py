@@ -230,3 +230,11 @@ class Extra_service(db.Model):
   date_opened = db.Column(db.DateTime(), nullable=False)
   date_closed = db.Column(db.DateTime())
   status = db.Column(db.String(length=10), nullable=False)
+
+class Messages(db.Model):
+  __tablename__ = 'messages'
+  id = db.Column(db.Integer(), primary_key=True)
+  landlord = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
+  tenant = db.Column(db.Integer(), db.ForeignKey("Tenant.id"))
+  info = db.Column(db.String(), nullable=False)
+  status = db.Column(db.String(10), nullable=False)

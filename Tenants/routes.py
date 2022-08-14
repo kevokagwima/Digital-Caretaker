@@ -93,6 +93,52 @@ def tenant_dashboard():
   unit = db.session.query(Unit).filter(Unit.tenant == current_user.id).first()
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   today_time = date.today()
+  unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
+  if unit_transactions:
+    if unit_transactions[-1].next_date == date.today():
+      invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
+      if invoice:
+        pass
+      else:
+        new_invoice = Invoice(
+          invoice_id = random.randint(100000,999999),
+          tenant = unit.tenant,
+          unit = unit.id,
+          amount = unit.rent_amount,
+          date_created = datetime.now(),
+          status = "Active"
+        )
+        db.session.add(new_invoice)
+        db.session.commit()
+  else:
+    invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
+    if invoices:
+      diff = datetime.now() - invoices[-1].date_created
+      print(diff.days)
+      if diff.days == 30:
+        new_invoice = Invoice(
+          invoice_id = random.randint(100000,999999),
+          tenant = unit.tenant,
+          unit = unit.id,
+          amount = unit.rent_amount,
+          date_created = datetime.now(),
+          status = "Active"
+        )
+        db.session.add(new_invoice)
+        db.session.commit()
+      else:
+        pass
+    else:
+      new_invoice = Invoice(
+        invoice_id = random.randint(100000,999999),
+        tenant = unit.tenant,
+        unit = unit.id,
+        amount = unit.rent_amount,
+        date_created = datetime.now(),
+        status = "Active"
+      )
+      db.session.add(new_invoice)
+      db.session.commit()
   invoices = Invoice.query.filter_by(tenant=current_user.id, status="Active").all()
   if invoices:
     if len(invoices) == 1:
@@ -148,9 +194,37 @@ def payment_complete():
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
   if transactions:
-    if transactions[-1].next_date > datetime.now() and invoice:
+    if not invoice:
       flash(f"You've already paid this month's rent, wait until next charge", category="danger")
       return redirect(url_for('tenant.tenant_dashboard'))
+    else:
+      try:
+        new_transaction = Transaction(
+          tenant = current_user.id,
+          landlord = current_user.landlord,
+          Property = current_user.properties,
+          Unit = unit.id,
+          date = datetime.now(),
+          time = datetime.now(),
+          next_date = datetime.now() + timedelta(days=30),
+          transaction_id = random.randint(100000, 999999),
+          invoice=invoice.id,
+          origin = "Bank"
+        )
+        db.session.add(new_transaction)
+        invoice.date_closed = datetime.now()
+        invoice.status = "Cleared"
+        db.session.commit()
+        flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
+        # clients.messages.create(
+        # to = '+254796897011',
+        # from_ = '+16203191736',
+        # body = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
+        # )
+        return redirect(url_for('tenant.tenant_dashboard'))
+      except:
+        flash(f'Payment could not be processed', category="danger")
+        return redirect(url_for('tenant.tenant_dashboard'))
   else:
     try:
       new_transaction = Transaction(

@@ -89,30 +89,38 @@ def landlord_dashboard():
     for unit in units:
       unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
       if unit_transactions:
-        for transaction in unit_transactions:
-          if transaction.next_date < date.today():
-            invoice = Invoice.query.filter_by(id=transaction.invoice).first()
-            if invoice:
-              pass
-            else:
-              new_invoice = Invoice(
-                invoice_id = random.randint(100000,999999),
-                tenant = unit.tenant,
-                unit = unit.id,
-                amount = unit.rent_amount,
-                date_created = datetime.now(),
-                status = "Active"
-              )
-              db.session.add(new_invoice)
-              db.session.commit()
+        if unit_transactions[-1].next_date == date.today():
+          invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
+          if invoice:
+            pass
+          else:
+            new_invoice = Invoice(
+              invoice_id = random.randint(100000,999999),
+              tenant = unit.tenant,
+              unit = unit.id,
+              amount = unit.rent_amount,
+              date_created = datetime.now(),
+              status = "Active"
+            )
+            db.session.add(new_invoice)
+            db.session.commit()
       else:
-        invoices = Invoice.query.filter_by(unit=unit.id).all()
+        invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
         if invoices:
-          for invoice in invoices:
-            invoice_month = invoice.date_created.strftime("%m")
-            this_month = datetime.now().strftime("%m")
-            if invoice_month == this_month:
-              pass
+          diff = datetime.now() - invoices[-1].date_created
+          if diff.days == 30:
+            new_invoice = Invoice(
+              invoice_id = random.randint(100000,999999),
+              tenant = unit.tenant,
+              unit = unit.id,
+              amount = unit.rent_amount,
+              date_created = datetime.now(),
+              status = "Active"
+            )
+            db.session.add(new_invoice)
+            db.session.commit()
+          else:
+            pass
         else:
           new_invoice = Invoice(
             invoice_id = random.randint(100000,999999),
@@ -152,7 +160,7 @@ def approve_verification(verification_id):
       invoice = invoice.id,
       origin = "Mpesa"
     )
-    if transactions and transactions[-1].next_date > datetime.now():
+    if not invoice:
       flash(f"The tenant has already paid this month's rent", category="danger")
       verification.status = "denied"
       db.session.commit()
@@ -231,30 +239,38 @@ def property_information(property_id):
       for unit in unitz:
         unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
         if unit_transactions:
-          for transaction in unit_transactions:
-            if transaction.next_date < date.today():
-              invoice = Invoice.query.filter_by(id=transaction.invoice).first()
-              if invoice:
-                pass
-              else:
-                new_invoice = Invoice(
-                  invoice_id = random.randint(100000,999999),
-                  tenant = unit.tenant,
-                  unit = unit.id,
-                  amount = unit.rent_amount,
-                  date_created = datetime.now(),
-                  status = "Active"
-                )
-                db.session.add(new_invoice)
-                db.session.commit()
+          if unit_transactions[-1].next_date == date.today():
+            invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
+            if invoice:
+              pass
+            else:
+              new_invoice = Invoice(
+                invoice_id = random.randint(100000,999999),
+                tenant = unit.tenant,
+                unit = unit.id,
+                amount = unit.rent_amount,
+                date_created = datetime.now(),
+                status = "Active"
+              )
+              db.session.add(new_invoice)
+              db.session.commit()
         else:
-          invoices = Invoice.query.filter_by(unit=unit.id).all()
+          invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
           if invoices:
-            for invoice in invoices:
-              invoice_month = invoice.date_created.strftime("%m")
-              this_month = datetime.now().strftime("%m")
-              if invoice_month == this_month:
-                pass
+            diff = datetime.now() - invoices[-1].date_created
+            if diff.days == 30:
+              new_invoice = Invoice(
+                invoice_id = random.randint(100000,999999),
+                tenant = unit.tenant,
+                unit = unit.id,
+                amount = unit.rent_amount,
+                date_created = datetime.now(),
+                status = "Active"
+              )
+              db.session.add(new_invoice)
+              db.session.commit()
+            else:
+              pass
           else:
             new_invoice = Invoice(
               invoice_id = random.randint(100000,999999),
@@ -297,30 +313,38 @@ def tenant_details(tenant_id):
       for unit in unitz:
         unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
         if unit_transactions:
-          for transaction in unit_transactions:
-            if transaction.next_date < date.today():
-              invoice = Invoice.query.filter_by(id=transaction.invoice).first()
-              if invoice:
-                pass
-              else:
-                new_invoice = Invoice(
-                  invoice_id = random.randint(100000,999999),
-                  tenant = unit.tenant,
-                  unit = unit.id,
-                  amount = unit.rent_amount,
-                  date_created = datetime.now(),
-                  status = "Active"
-                )
-                db.session.add(new_invoice)
-                db.session.commit()
+          if unit_transactions[-1].next_date == date.today():
+            invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
+            if invoice:
+              pass
+            else:
+              new_invoice = Invoice(
+                invoice_id = random.randint(100000,999999),
+                tenant = unit.tenant,
+                unit = unit.id,
+                amount = unit.rent_amount,
+                date_created = datetime.now(),
+                status = "Active"
+              )
+              db.session.add(new_invoice)
+              db.session.commit()
         else:
-          invoices = Invoice.query.filter_by(unit=unit.id).all()
+          invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
           if invoices:
-            for invoice in invoices:
-              invoice_month = invoice.date_created.strftime("%m")
-              this_month = datetime.now().strftime("%m")
-              if invoice_month == this_month:
-                pass
+            diff = datetime.now() - invoices[-1].date_created
+            if diff.days == 30:
+              new_invoice = Invoice(
+                invoice_id = random.randint(100000,999999),
+                tenant = unit.tenant,
+                unit = unit.id,
+                amount = unit.rent_amount,
+                date_created = datetime.now(),
+                status = "Active"
+              )
+              db.session.add(new_invoice)
+              db.session.commit()
+            else:
+              pass
           else:
             new_invoice = Invoice(
               invoice_id = random.randint(100000,999999),

@@ -8,7 +8,6 @@
   --page-header-bgColor-hover: #1d2636;
   --page-header-txtColor: #dde9f8;
   --page-header-headingColor: #7889a4;
-  --page-header-width: 220px;
   --page-content-bgColor: #04101f;
   --page-content-txtColor: #171616;
   --page-content-blockColor: #fff;
@@ -16,7 +15,6 @@
   --black: #333;
   --blue: #00b9eb;
   --red: #ec1848;
-  --border-radius: 4px;
   --box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.075);
   --switch-bgLightModeColor: #87cefa;
   --switch-sunColor: gold;
@@ -567,7 +565,10 @@ hr {
 }
 
 .info {
-  padding: 15px 0 0;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
   max-height: 24rem;
   overflow: auto;
 }
@@ -575,7 +576,6 @@ hr {
 .complaint {
   line-height: 30px;
   padding: 8px 10px;
-  margin: 0 0 20px;
   background-color: var(--other-dark-blue);
   border-radius: 5px;
   position: relative;
@@ -584,7 +584,7 @@ hr {
 #news,
 #new {
   position: absolute;
-  inset: 0 auto 0 4.5rem;
+  inset: 0 auto 0 8rem;
   margin: 6px 0;
   padding: 0 5px;
   display: flex;
@@ -607,8 +607,7 @@ hr {
 }
 
 .complaint h6 {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  font-family: "PT Sans", sans-serif;
   font-size: 20px;
   color: aliceblue;
   position: relative;
@@ -622,7 +621,7 @@ hr {
 }
 
 .complaint p {
-  font-family: "PT Sans", sans-serif;
+  font-family: "Varela Round", sans-serif;
   font-size: 16px;
   letter-spacing: 1px;
   color: whitesmoke;

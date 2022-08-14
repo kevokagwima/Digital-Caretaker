@@ -183,7 +183,7 @@
               </div>
             </div>
           </div>
-          {% if current_user.transact and current_user.transact[-1].next_date > today_time %}
+          {% if not invoices %}
           <div class="rent-transactions">
             <h4>Rent Status</h4>
             <div class="rent">
@@ -517,7 +517,7 @@
                   </h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>
-                {% elif current_user.transact[-1] and current_user.transact[-1].next_date > today_time %}
+                {% elif not invoices %}
                 <div class="disabled">
                   <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">
                   <h4>Next charge on

@@ -278,7 +278,7 @@
               <div class="panel">
                 {% if tenant.complaint %}
                 <div class="info">
-                  {% for complaint in tenant.complaint|sort(attribute='date', reverse=True) %}
+                  {% for complaint in tenant.complaint|sort(attribute='time', reverse=True) %}
                   <div class="complaint">
                     <h6>{{ complaint.title }}
                       {% if complaint.date.strftime('%d/%m/%Y') == today_time %}
