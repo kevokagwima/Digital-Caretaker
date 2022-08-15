@@ -379,21 +379,54 @@ body::-webkit-scrollbar {
 }
 
 .tenant-profile-img {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 18rem;
+}
+
+.extra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.extra a {
+  color: white;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 3px;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#revoke {
   background-color: var(--red);
+}
+
+#chat {
+  background-color: rgb(6, 187, 6);
+}
+
+.tenant-profile {
+  background-color: var(--blue);
   border-radius: 5px;
-  height: 15rem;
-  width: 15rem;
+  max-height: 15rem;
+  min-width: 15rem;
   overflow: auto;
   display: grid;
   place-items: center;
   padding: 10px 0;
 }
 
-.tenant-profile-img::-webkit-scrollbar {
+.tenant-profile::-webkit-scrollbar {
   display: none;
 }
 
-.tenant-profile-img img {
+.tenant-profile img {
   width: 10rem;
   height: 10rem;
   max-width: inherit;
@@ -402,7 +435,7 @@ body::-webkit-scrollbar {
 
 .tenant-personal-info {
   text-align: center;
-  margin: 1rem 0;
+  margin: 1rem 0 0;
 }
 
 .tenant-personal-info p {
@@ -690,39 +723,6 @@ hr {
   border-radius: 0.3rem;
   display: flex;
   justify-content: space-between;
-}
-
-.extra {
-  padding: 1rem 0;
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-#revoke {
-  background-color: #0098c2;
-  color: white;
-  text-decoration: none;
-  padding: 12px 15px;
-  border-radius: 3px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-#chat {
-  background-color: rgba(255, 166, 0, 0.821);
-  color: white;
-  text-decoration: none;
-  padding: 12px 15px;
-  border-radius: 3px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
 }
 
 .tenant-search {

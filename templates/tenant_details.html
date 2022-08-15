@@ -184,21 +184,27 @@
         <p id="more-info">This shows the full profile for the selected tenant</p>
         <div class="tenant-info">
           <div class="tenant-profile-img">
-            <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="profile image">
-            <div class="tenant-personal-info">
-              <h4><strong>Tenant Name</strong></h4>
-              <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
-              <h4><strong>Tenant Email Address</strong></h4>
-              <p>{{ tenant.email }}</p>
-              <h4><strong>Tenant Phone number</strong></h4>
-              <p>0{{ tenant.phone }}</p>
-              <h4><strong>Date Registered</strong></h4>
-              <p>{{ tenant.date.strftime('%d/%m/%Y') }}</p>
+            <div class="tenant-profile">
+              <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="profile image">
+              <div class="tenant-personal-info">
+                <h4><strong>Tenant Name</strong></h4>
+                <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
+                <h4><strong>Tenant Email Address</strong></h4>
+                <p>{{ tenant.email }}</p>
+                <h4><strong>Tenant Phone number</strong></h4>
+                <p>0{{ tenant.phone }}</p>
+                <h4><strong>Date Registered</strong></h4>
+                <p>{{ tenant.date.strftime('%d/%m/%Y') }}</p>
+              </div>
+            </div>
+            <div class="extra">
+              <a id="chat" href="#">Send Message</a>
+              <a id="revoke" href="#">Revoke Access</a>
             </div>
           </div>
           <div class="tenant-details-info">
             <div class="tenant-unit-info">
-              <button class="accordion">Unit Information
+              <button class="accordion actives">Unit Information
                 {% if tenant.unit %}
                 <span class="status assigned">
                   Assigned
@@ -351,10 +357,10 @@
               </div>
             </div>
             <div class="tenant-extra">
-              <button class="accordion">Extras</button>
+              <button class="accordion">Other</button>
               <div class="panel">
-                <div class="extra">
-                  <a id="revoke" href="#">Revoke Access</a><a id="chat" href="#">Send Message</a>
+                <div class="other">
+
                 </div>
               </div>
             </div>
