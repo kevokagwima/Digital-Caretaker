@@ -362,6 +362,12 @@ def tenant_details(tenant_id):
 
   return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions)
 
+@landlords.route("/send-message")
+@fresh_login_required
+@login_required
+def send_message():
+  return render_template("message.html")
+
 @landlords.route("/Assign_unit", methods=["POST", "GET"])
 @fresh_login_required
 @login_required

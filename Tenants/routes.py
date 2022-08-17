@@ -93,58 +93,59 @@ def tenant_dashboard():
   unit = db.session.query(Unit).filter(Unit.tenant == current_user.id).first()
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   today_time = date.today()
-  unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
-  if unit_transactions:
-    if unit_transactions[-1].next_date == date.today():
-      invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
-      if invoice:
-        pass
-      else:
-        new_invoice = Invoice(
-          invoice_id = random.randint(100000,999999),
-          tenant = unit.tenant,
-          unit = unit.id,
-          amount = unit.rent_amount,
-          date_created = datetime.now(),
-          status = "Active"
-        )
-        db.session.add(new_invoice)
-        db.session.commit()
-  else:
-    invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
-    if invoices:
-      diff = datetime.now() - invoices[-1].date_created
-      print(diff.days)
-      if diff.days == 30:
-        new_invoice = Invoice(
-          invoice_id = random.randint(100000,999999),
-          tenant = unit.tenant,
-          unit = unit.id,
-          amount = unit.rent_amount,
-          date_created = datetime.now(),
-          status = "Active"
-        )
-        db.session.add(new_invoice)
-        db.session.commit()
-      else:
-        pass
+  if unit:
+    unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
+    if unit_transactions:
+      if unit_transactions[-1].next_date == date.today():
+        invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
+        if invoice:
+          pass
+        else:
+          new_invoice = Invoice(
+            invoice_id = random.randint(100000,999999),
+            tenant = unit.tenant,
+            unit = unit.id,
+            amount = unit.rent_amount,
+            date_created = datetime.now(),
+            status = "Active"
+          )
+          db.session.add(new_invoice)
+          db.session.commit()
     else:
-      new_invoice = Invoice(
-        invoice_id = random.randint(100000,999999),
-        tenant = unit.tenant,
-        unit = unit.id,
-        amount = unit.rent_amount,
-        date_created = datetime.now(),
-        status = "Active"
-      )
-      db.session.add(new_invoice)
-      db.session.commit()
+      invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
+      if invoices:
+        diff = datetime.now() - invoices[-1].date_created
+        print(diff.days)
+        if diff.days == 30:
+          new_invoice = Invoice(
+            invoice_id = random.randint(100000,999999),
+            tenant = unit.tenant,
+            unit = unit.id,
+            amount = unit.rent_amount,
+            date_created = datetime.now(),
+            status = "Active"
+          )
+          db.session.add(new_invoice)
+          db.session.commit()
+        else:
+          pass
+      else:
+        new_invoice = Invoice(
+          invoice_id = random.randint(100000,999999),
+          tenant = unit.tenant,
+          unit = unit.id,
+          amount = unit.rent_amount,
+          date_created = datetime.now(),
+          status = "Active"
+        )
+        db.session.add(new_invoice)
+        db.session.commit()
   invoices = Invoice.query.filter_by(tenant=current_user.id, status="Active").all()
   if invoices:
     if len(invoices) == 1:
-      flash(f"You have {len(invoices)} pending invoice", category="info")
+      flash(f"You have {len(invoices)} active invoice", category="info")
     else:
-      flash(f"You have {len(invoices)} pending invoices", category="info")
+      flash(f"You have {len(invoices)} active invoices", category="info")
   
   return render_template ("new_tenant_dashboard.html",landlord=landlord,unit=unit,properties=properties, transactions=transactions, today_time=today_time, invoices=invoices)
 

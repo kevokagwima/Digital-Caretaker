@@ -225,7 +225,7 @@ body {
 .unit-information {
   padding: 20px;
   border-radius: 5px;
-  grid-column: 1/5;
+  grid-column: 1/4;
   height: 42vh;
   max-width: 81.5vw;
   position: relative;
@@ -304,12 +304,13 @@ body {
   max-height: 23rem;
 }
 
-.rent-transactions {
+.paid {
   min-height: 23rem;
   background-color: rgba(2, 192, 2, 0.7);
 }
 
 .not-paid {
+  min-height: 23rem;
   background-color: var(--red);
 }
 
@@ -467,7 +468,7 @@ table th {
   margin: 1rem 0 0;
   padding: 1.5rem 1.5rem 1rem;
   border-radius: 5px;
-  max-height: 44rem;
+  max-height: 42rem;
   overflow: auto;
   display: flex;
   gap: 3rem;
@@ -643,7 +644,7 @@ table th {
   display: grid;
   grid-template-columns: auto;
   row-gap: 10px;
-  max-height: 43.3rem;
+  max-height: 41.5rem;
   overflow: auto;
   padding-right: 8px;
 }

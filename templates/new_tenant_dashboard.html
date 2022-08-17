@@ -183,8 +183,21 @@
               </div>
             </div>
           </div>
-          {% if not invoices %}
-          <div class="rent-transactions">
+          {% if invoices %}
+          <div class="rent-transactions not-paid">
+            <h4>Rent Status</h4>
+            <div class="rent">
+              {% if unit %}
+              <p>This month's rent of <span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span> is due. Please clear it as
+                soon as
+                possible to avoid penalties.</p>
+              {% else %}
+              <p>No rent information to show</p>
+              {% endif %}
+            </div>
+          </div>
+          {% elif not invoices %}
+          <div class="rent-transactions paid">
             <h4>Rent Status</h4>
             <div class="rent">
               {% if unit %}
@@ -196,19 +209,6 @@
                 {{ transaction.next_date.strftime('%d/%m/%Y') }}
                 {% endfor %}
               </p>
-              {% else %}
-              <p>No rent information to show</p>
-              {% endif %}
-            </div>
-          </div>
-          {% else %}
-          <div class="rent-transactions not-paid">
-            <h4>Rent Status</h4>
-            <div class="rent">
-              {% if unit %}
-              <p>This month's rent of <span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span> is due. Please clear it as
-                soon as
-                possible to avoid extra charges.</p>
               {% else %}
               <p>No rent information to show</p>
               {% endif %}
@@ -501,7 +501,7 @@
                   <h4>Awaiting verification...</h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>
-                {% elif denied_verifications %}
+                {% elif invoices and denied_verifications %}
                 <a href="{{ url_for('tenant.rent_payment') }}">
                   <div class="payment-1">
                     <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">

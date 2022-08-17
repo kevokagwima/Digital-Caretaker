@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Varela+Round&display=swap");
+
+.links,
+.footer,
+#logo {
+  display: none;
+}
+
+#logos {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.logo {
+  max-height: 3.5rem;
+  margin-top: 0;
+}
+
+body {
+  background-color: var(--other-dark-blue);
+}
+
+.message {
+  padding-top: 4rem;
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--dark-blue);
+}
+
+.texts {
+  background-color: var(--dark-blue);
+  max-height: 41rem;
+  overflow: auto;
+}
+
+.sample {
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sample p {
+  padding: 0.7em;
+  font-family: "PT Sans", sans-serif;
+  font-size: 0.9rem;
+  max-width: 40rem;
+  border-radius: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  letter-spacing: 0.8px;
+  min-width: 12vw;
+}
+
+.sample p span {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: whitesmoke;
+}
+
+#landlord {
+  background-color: var(--page-header-headingColor);
+  align-self: flex-start;
+}
+
+#you {
+  background-color: green;
+  align-self: flex-end;
+}
+
+#dates {
+  align-self: flex-end;
+}
+
+form {
+  position: fixed;
+  inset: auto 0 0 0;
+}
+
+.input {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  background-color: var(--page-header-bgColor);
+}
+
+.input input {
+  flex-grow: 1;
+  padding: 0.8rem;
+  outline: 1px solid;
+  border: none;
+  border-radius: 0.3rem;
+  font-family: var(--font-1);
+}
+
+.input button {
+  padding: 0 1em;
+  border: none;
+  background-color: green;
+  color: white;
+  border-radius: 0.3rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  letter-spacing: 1px;
+  min-width: 10vw;
+  font-size: 1rem;
+  cursor: pointer;
+}

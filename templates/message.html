@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/message.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block title %}
+PMS | Chat
+{% endblock %}
+
+{% block logo %}
+<a id="logos" href="{{ url_for('landlord.landlord_dashboard') }}">
+  <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+  {% if current_user.is_authenticated %}
+  <span id="account">{{ current_user.account_type }}</span>
+  {% endif %}
+</a>
+{% endblock %}
+
+{% block body %}
+<div class="message">
+  <div class="texts">
+    <div class="sample">
+      <p id="landlord">
+        <span id="from">Tenant</span>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem itaque maxime, earum eum odit dicta
+        asperiores modi quam soluta enim.
+        <span id="dates">5:00 PM</span>
+      </p>
+      <p id="you">
+        <span id="from">You</span>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit odio doloribus commodi soluta maxime cumque?
+        Rerum, at. Harum fugit sunt inventore commodi. Provident, esse debitis?
+        <span id="dates">10:00 PM</span>
+      </p>
+    </div>
+  </div>
+  <form action="#">
+    <div class="input">
+      <input type="text" name="message" required spellcheck="false" placeholder="Send Message">
+      <button type="submit">Send</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

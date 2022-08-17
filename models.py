@@ -236,5 +236,7 @@ class Messages(db.Model):
   id = db.Column(db.Integer(), primary_key=True)
   landlord = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
   tenant = db.Column(db.Integer(), db.ForeignKey("Tenant.id"))
-  info = db.Column(db.String(), nullable=False)
+  info = db.Column(db.String(300), nullable=False)
+  author = db.Column(db.String(10))
+  date = db.Column(db.DateTime())
   status = db.Column(db.String(10), nullable=False)
