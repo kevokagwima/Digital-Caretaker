@@ -156,8 +156,8 @@
               <div class="income">
                 <h4>Revenue</h4>
                 {% set totalz = [] %}
-                {% for unit in current_user.unit if unit.tenant %}
-                {% for invoice in unit.invoice if invoice.status == "Cleared" %}
+                {% for unit in current_user.unit if unit.invoice %}
+                {% for invoice in unit.invoice if invoice.status == "Cleared" and invoice.date_closed.strftime("%m") == today.strftime("%m") %}
                 {{ totalz.append(invoice.amount) or "" }}
                 {% endfor %}
                 {% endfor %}
@@ -378,6 +378,7 @@
             <p>verification needed</p>
           </div>
           {% endif %}
+          <span id="current-month">{{ today.strftime("As at %b %d") }}</span>
         </h4>
         <p id="more-info">This tab shows all the relevant rent information</p>
         <div class="rents">
@@ -395,8 +396,8 @@
             <div class="rent-received">
               <h4>Rent Received</h4>
               {% set tenants_paid = [] %}
-              {% for tenant in current_user.tenant if tenant.unit %}
-              {% for invoice in tenant.invoice if invoice.status == "Cleared" %}
+              {% for tenant in current_user.tenant if tenant.invoice %}
+              {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.date_closed.strftime("%m") == today.strftime("%m") %}
               {{ tenants_paid.append(tenant) or "" }}
               {% endfor %}
               {% endfor %}

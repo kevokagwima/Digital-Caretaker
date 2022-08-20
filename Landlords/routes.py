@@ -80,6 +80,7 @@ def landlord_dashboard():
   properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
   tenants = db.session.query(Tenant).filter(Tenant.landlord == current_user.id).all()
   todays_time = today.strftime("%d/%m/%Y")
+  this_month = today
   expenses = 0
   properties_count = db.session.query(Properties).filter(Properties.owner == current_user.id).count()
   extras = Extras.query.all()
@@ -133,7 +134,7 @@ def landlord_dashboard():
           db.session.add(new_invoice)
           db.session.commit()
 
-  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, units=units, active_extras=active_extras)
+  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, units=units, active_extras=active_extras, today=today)
 
 @landlords.route("/approve-verification/<int:verification_id>")
 @fresh_login_required
@@ -144,7 +145,6 @@ def approve_verification(verification_id):
   verification = Verification.query.get(verification_id)
   tenant = Tenant.query.filter_by(id=verification.tenant).first()
   unit = Unit.query.filter_by(tenant=tenant.id).first()
-  transactions = db.session.query(Transaction).filter(Transaction.tenant == tenant.id).all()
   invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
   if verification and invoice:
     verification.status = 'approved'

@@ -644,7 +644,7 @@ table th {
   display: grid;
   grid-template-columns: auto;
   row-gap: 10px;
-  max-height: 41.5rem;
+  max-height: 43.2rem;
   overflow: auto;
   padding-right: 8px;
 }

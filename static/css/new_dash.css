@@ -210,13 +210,11 @@ body::-webkit-scrollbar {
 
 .notification-area {
   position: relative;
-  top: 0;
-  padding: 20px 0;
-  width: 100%;
-  margin-left: -1rem;
+  inset: 0;
+  margin-bottom: 0.5rem;
+  padding: 1rem 0;
   z-index: 1;
-  margin-bottom: 1rem;
-  background-color: var(--other-dark-blue);
+  background-color: transparent;
 }
 
 .notifications {
@@ -364,8 +362,11 @@ body::-webkit-scrollbar {
   position: relative;
 }
 
-.tabcontent {
-  margin-top: 1rem;
+#current-month {
+  position: absolute;
+  right: 0.5rem;
+  color: var(--blue);
+  font-size: 1rem;
 }
 
 #more-info {
@@ -395,9 +396,9 @@ body::-webkit-scrollbar {
   row-gap: 20px;
   overflow: hidden;
   margin: 1rem 0 0;
-  padding: 0 10px 0 0;
+  padding-right: 10px;
   max-width: 100%;
-  max-height: 100vh;
+  max-height: 44rem;
   overflow: auto;
 }
 
@@ -530,8 +531,7 @@ body::-webkit-scrollbar {
   padding: 20px 20px 0;
   background-color: var(--dark-blue);
   border-radius: 5px;
-  height: max-content;
-  height: max-content;
+  min-height: max-content;
   position: relative;
 }
 
@@ -555,7 +555,7 @@ body::-webkit-scrollbar {
 .rent {
   margin: 1rem 0 0;
   padding: 5px 0 0;
-  max-height: 17.2rem;
+  max-height: 18rem;
   height: max-content;
   overflow: auto;
 }
@@ -659,7 +659,7 @@ body::-webkit-scrollbar {
 
 .all-tenants,
 .all-units {
-  margin: 1rem 0;
+  margin: 1rem 0 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   row-gap: 20px;
@@ -669,7 +669,7 @@ body::-webkit-scrollbar {
   padding: 0 10px 5px 0;
   overflow: hidden;
   border-radius: 5px;
-  max-height: 82vh;
+  max-height: 84.5vh;
   overflow: auto;
 }
 
@@ -799,7 +799,7 @@ body::-webkit-scrollbar {
 .rents {
   border-radius: 5px;
   margin: 1rem 0 0;
-  max-height: 41rem;
+  max-height: 42rem;
 }
 
 #rent > #dash {
@@ -875,18 +875,18 @@ body::-webkit-scrollbar {
 }
 
 .rent-transactions {
-  padding: 20px 0;
+  padding: 20px 0 5px;
 }
 
 .transactions-details {
   padding-right: 15px;
   border-radius: 5px;
   margin: 0.5rem 0 0;
-  max-height: 55vh;
+  max-height: 58vh;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1rem;
 }
 
 .transaction-info {
