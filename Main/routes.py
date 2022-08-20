@@ -1,18 +1,14 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from twilio.rest import Client
 from models import Members, db, Landlord,Tenant, Properties, Unit, Bookings
 from sqlalchemy import or_
 from .form import *
-import random, os
+from modules import send_sms
+import random
 from datetime import datetime, timedelta
 from geopy.geocoders import Nominatim
 
 main = Blueprint("main", __name__)
-
-account_sid = os.environ['Twilio_account_sid']
-auth_token = os.environ['Twilio_auth_key']
-clients = Client(account_sid, auth_token)
 
 @main.route("/registration", methods=["POST", "GET"])
 def signup():
@@ -32,11 +28,8 @@ def signup():
       )
       db.session.add(member)
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'Congratulations! {member.first_name} {member.second_name} you have successfully created your account. \nLogin using your username {member.username} and password'
-      #)
+      message = f'Congratulations! {member.first_name} {member.second_name} you have successfully created your account. \nLogin using your username {member.username} and password'
+      # send_sms(message)
       flash(f"User registered successfully", category="success")
       return redirect(url_for("main.signin"))
 
@@ -47,21 +40,6 @@ def signup():
     flash(f"An error occured when submitting the form. Check your inputs and try again", category="danger")
 
   return render_template("signup.html", form=form)
-
-@main.route("/Email_verification/<token>")
-def email(token):
-  try:
-    User = Members.query.filter_by(email=email).first()
-  except:
-    flash(f"The confirmation link is invalid", category="danger")
-  if User.is_confirmed:
-    flash(f"Account already confirmed, Please login", category="success")
-  else:
-    User.confirmed = True
-    db.session.add(User)
-    db.session.commit()
-    flash(f"You have confirmed your email", category="success")
-    return redirect(url_for("main.signin"))
 
 @main.route("/signin", methods=["POST", "GET"])
 def signin():

@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request, jsonify, abort
+from flask import Blueprint, render_template, flash, url_for, redirect, request, abort
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from twilio.rest import Client
 from models import db, Tenant, Landlord, Unit, Transaction, Verification, Complaints, Invoice
 from .form import *
+from modules import generate_invoice_tenant, send_sms
 from werkzeug.utils import secure_filename
 import pytesseract
 from PIL import Image
@@ -14,10 +14,6 @@ UPLOAD_FOLDER = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 tenants = Blueprint("tenant", __name__)
-
-account_sid = os.environ['Twilio_account_sid']
-auth_token = os.environ['Twilio_auth_key']
-clients = Client(account_sid, auth_token)
 stripe.api_key = os.environ['Stripe_api_key']
 
 @tenants.route("/tenant_registration", methods=["POST", "GET"])
@@ -42,11 +38,8 @@ def tenant():
       )
       db.session.add(new_tenant)
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'Congratulations! {new_tenant.first_name} {new_tenant.second_name} you have successfully created your tenant account. \nLogin to your dashboard using your Tenant ID {new_tenant.tenant_id} and your password. \nDo not share your Tenant ID with anyone.'
-      #)
+      message = f'Congratulations! {new_tenant.first_name} {new_tenant.second_name} you have successfully created your tenant account. \nLogin to your dashboard using your Tenant ID {new_tenant.tenant_id} and your password. \nDo not share your Tenant ID with anyone.'
+      # send_sms(message)
       flash(f"Account created successfully", category="success")
       return redirect(url_for("tenant.tenant_login"))
 
@@ -61,25 +54,25 @@ def tenant():
 @tenants.route("/tenant_authentication", methods=["POST", "GET"])
 def tenant_login():
   form = tenant_login_form()
-  # try:
-  if form.validate_on_submit():
-    tenant = Tenant.query.filter_by(tenant_id=form.tenant_id.data).first()
-    if tenant and tenant.active == "True" and tenant.check_password_correction(attempted_password=form.password.data):
-      login_user(tenant, remember=True)
-      flash(f"Login successfull, welcome {tenant.username}",category="success")
-      return redirect(url_for("tenant.tenant_dashboard"))
-    elif tenant == None:
-      flash(f"No user with that Tenant ID", category="danger")
-      return redirect(url_for('tenant.tenant_login'))
-    elif tenant.active != "True":
-      flash(f"Your account is no longer active, contact ICT support", category="danger")
-      return redirect(url_for('tenant.tenant_login'))
-    else:
-      flash(f"Invalid credentials", category="danger")
-      return redirect(url_for('tenant.tenant_login'))
-  # except:
-  #   flash(f"Something went wrong, try again", category="danger")
-  #   return redirect(url_for('tenant.tenant_login'))
+  try:
+    if form.validate_on_submit():
+      tenant = Tenant.query.filter_by(tenant_id=form.tenant_id.data).first()
+      if tenant and tenant.active == "True" and tenant.check_password_correction(attempted_password=form.password.data):
+        login_user(tenant, remember=True)
+        flash(f"Login successfull, welcome {tenant.username}",category="success")
+        return redirect(url_for("tenant.tenant_dashboard"))
+      elif tenant == None:
+        flash(f"No user with that Tenant ID", category="danger")
+        return redirect(url_for('tenant.tenant_login'))
+      elif tenant.active != "True":
+        flash(f"Your account is no longer active, contact ICT support", category="danger")
+        return redirect(url_for('tenant.tenant_login'))
+      else:
+        flash(f"Invalid credentials", category="danger")
+        return redirect(url_for('tenant.tenant_login'))
+  except:
+    flash(f"Something went wrong, try again", category="danger")
+    return redirect(url_for('tenant.tenant_login'))
 
   return render_template("tenant_login.html", form=form)
 
@@ -88,58 +81,12 @@ def tenant_login():
 def tenant_dashboard():
   if current_user.account_type != "Tenant":
     abort(403)
+  generate_invoice_tenant(current_user.id)
   landlord = db.session.query(Landlord).filter(current_user.landlord == Landlord.id).first()
   properties = Properties.query.filter_by(id = current_user.properties).first()
   unit = db.session.query(Unit).filter(Unit.tenant == current_user.id).first()
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   today_time = date.today()
-  if unit:
-    unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
-    if unit_transactions:
-      if unit_transactions[-1].next_date == date.today():
-        invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
-        if invoice:
-          pass
-        else:
-          new_invoice = Invoice(
-            invoice_id = random.randint(100000,999999),
-            tenant = unit.tenant,
-            unit = unit.id,
-            amount = unit.rent_amount,
-            date_created = datetime.now(),
-            status = "Active"
-          )
-          db.session.add(new_invoice)
-          db.session.commit()
-    else:
-      invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
-      if invoices:
-        diff = datetime.now() - invoices[-1].date_created
-        print(diff.days)
-        if diff.days == 30:
-          new_invoice = Invoice(
-            invoice_id = random.randint(100000,999999),
-            tenant = unit.tenant,
-            unit = unit.id,
-            amount = unit.rent_amount,
-            date_created = datetime.now(),
-            status = "Active"
-          )
-          db.session.add(new_invoice)
-          db.session.commit()
-        else:
-          pass
-      else:
-        new_invoice = Invoice(
-          invoice_id = random.randint(100000,999999),
-          tenant = unit.tenant,
-          unit = unit.id,
-          amount = unit.rent_amount,
-          date_created = datetime.now(),
-          status = "Active"
-        )
-        db.session.add(new_invoice)
-        db.session.commit()
   invoices = Invoice.query.filter_by(tenant=current_user.id, status="Active").all()
   if invoices:
     if len(invoices) == 1:
@@ -217,11 +164,8 @@ def payment_complete():
         invoice.status = "Cleared"
         db.session.commit()
         flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-        # clients.messages.create(
-        # to = '+254796897011',
-        # from_ = '+16203191736',
-        # body = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
-        # )
+        message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
+        # send_sms(message)
         return redirect(url_for('tenant.tenant_dashboard'))
       except:
         flash(f'Payment could not be processed', category="danger")
@@ -245,11 +189,8 @@ def payment_complete():
       invoice.status = "Cleared"
       db.session.commit()
       flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-      # clients.messages.create(
-      # to = '+254796897011',
-      # from_ = '+16203191736',
-      # body = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
-      # )
+      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
+      # send_sms(message)
       return redirect(url_for('tenant.tenant_dashboard'))
     except:
       flash(f'Payment could not be processed', category="danger")
@@ -334,11 +275,8 @@ def complaint():
       landlord=Landlord.query.filter_by(id=current_user.landlord).first().id,
       Property=Properties.query.filter_by(id=current_user.properties).first().id
     )
-    #clients.messages.create(
-      #to = '+254796897011',
-      #from_ = '+16203191736',
-      #body = f'You have a new complaint from a tenant. \nTitle: {new_complaint.title} \nCategory: {new_complaint.category} \nThe complaint reads: \n{new_complaint.body}'
-    #)
+    message = f'You have a new complaint from a tenant. \nTitle: {new_complaint.title} \nCategory: {new_complaint.category} \nThe complaint reads: \n{new_complaint.body}'
+    # send_sms(message)
     db.session.add(new_complaint)
     db.session.commit()
     flash(f"Complaint sent", category="success")

@@ -1,19 +1,14 @@
 from flask import Blueprint, jsonify, render_template, flash, url_for, redirect, request, session, abort, json
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from twilio.rest import Client
 from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Bookings, Complaints, Extra_service, Invoice
 from .form import *
+from modules import generate_invoice_landlord, send_sms
 import random, os, datetime
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 landlords = Blueprint("landlord", __name__)
-
 SECRET_KEY = os.environ['Hms_secret_key']
 google_maps =os.environ["Google_maps"]
-account_sid = os.environ['Twilio_account_sid']
-auth_token = os.environ['Twilio_auth_key']
-clients = Client(account_sid, auth_token)
-
 today = datetime.now()
 
 @landlords.route("/landlord_registration", methods=["POST", "GET"])
@@ -36,11 +31,8 @@ def landlord():
       )
       db.session.add(new_landlord)
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'Congratulations! {new_landlord.first_name} {new_landlord.second_name} you have successfully created your landlord account. \nLogin to your dashboard using your Landlord ID {new_landlord.landlord_id} and your password. \nDo not share your Landlord ID with anyone other than your tenants only when they register.'
-      #)
+      message = f'Congratulations! {new_landlord.first_name} {new_landlord.second_name} you have successfully created your landlord account. \nLogin to your dashboard using your Landlord ID {new_landlord.landlord_id} and your password. \nDo not share your Landlord ID with anyone other than your tenants only when they register.'
+      # send_sms(message)
       flash(f"Account created successfully", category="success")
       return redirect(url_for("landlord.Landlord_login"))
 
@@ -77,64 +69,16 @@ def Landlord_login():
 def landlord_dashboard():
   if current_user.account_type != "Landlord":
     abort(403)
+  generate_invoice_landlord(current_user.id)
   properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
   tenants = db.session.query(Tenant).filter(Tenant.landlord == current_user.id).all()
   todays_time = today.strftime("%d/%m/%Y")
-  this_month = today
   expenses = 0
   properties_count = db.session.query(Properties).filter(Properties.owner == current_user.id).count()
   extras = Extras.query.all()
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
-  units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-  if units:
-    for unit in units:
-      unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
-      if unit_transactions:
-        if unit_transactions[-1].next_date == date.today():
-          invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
-          if invoice:
-            pass
-          else:
-            new_invoice = Invoice(
-              invoice_id = random.randint(100000,999999),
-              tenant = unit.tenant,
-              unit = unit.id,
-              amount = unit.rent_amount,
-              date_created = datetime.now(),
-              status = "Active"
-            )
-            db.session.add(new_invoice)
-            db.session.commit()
-      else:
-        invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
-        if invoices:
-          diff = datetime.now() - invoices[-1].date_created
-          if diff.days == 30:
-            new_invoice = Invoice(
-              invoice_id = random.randint(100000,999999),
-              tenant = unit.tenant,
-              unit = unit.id,
-              amount = unit.rent_amount,
-              date_created = datetime.now(),
-              status = "Active"
-            )
-            db.session.add(new_invoice)
-            db.session.commit()
-          else:
-            pass
-        else:
-          new_invoice = Invoice(
-            invoice_id = random.randint(100000,999999),
-            tenant = unit.tenant,
-            unit = unit.id,
-            amount = unit.rent_amount,
-            date_created = datetime.now(),
-            status = "Active"
-          )
-          db.session.add(new_invoice)
-          db.session.commit()
 
-  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, units=units, active_extras=active_extras, today=today)
+  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, today=today)
 
 @landlords.route("/approve-verification/<int:verification_id>")
 @fresh_login_required
@@ -169,13 +113,10 @@ def approve_verification(verification_id):
       invoice.date_closed = datetime.now()
       invoice.status = "Cleared"
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date}. Next charge will be on {new_transaction.next_date}'
-      #)
+      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date}. Next charge will be on {new_transaction.next_date}'
+      # send_sms(message)
       flash(f"Rent payment approved", category="success")
-      return redirect(url_for('landlord.landlord_dashboard'))
+      return redirect(url_for('landlord.landlord_dashboard')) 
   else:
     verification.status = 'failed'
     db.session.commit()
@@ -206,6 +147,7 @@ def property_information(property_id):
   if current_user.account_type != "Landlord":
     abort(403)
   try:
+    generate_invoice_landlord(current_user.id)
     properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
     propertiez = Properties.query.filter_by(id=property_id).first()
     users = Members.query.all()
@@ -234,54 +176,6 @@ def property_information(property_id):
     elif len(active_reservations) > 1:
       active_reservations_count = len(active_reservations)
       flash(f"You have {active_reservations_count} reservations that have Expired", category="warning")
-    unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-    if unitz:
-      for unit in unitz:
-        unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
-        if unit_transactions:
-          if unit_transactions[-1].next_date == date.today():
-            invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
-            if invoice:
-              pass
-            else:
-              new_invoice = Invoice(
-                invoice_id = random.randint(100000,999999),
-                tenant = unit.tenant,
-                unit = unit.id,
-                amount = unit.rent_amount,
-                date_created = datetime.now(),
-                status = "Active"
-              )
-              db.session.add(new_invoice)
-              db.session.commit()
-        else:
-          invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
-          if invoices:
-            diff = datetime.now() - invoices[-1].date_created
-            if diff.days == 30:
-              new_invoice = Invoice(
-                invoice_id = random.randint(100000,999999),
-                tenant = unit.tenant,
-                unit = unit.id,
-                amount = unit.rent_amount,
-                date_created = datetime.now(),
-                status = "Active"
-              )
-              db.session.add(new_invoice)
-              db.session.commit()
-            else:
-              pass
-          else:
-            new_invoice = Invoice(
-              invoice_id = random.randint(100000,999999),
-              tenant = unit.tenant,
-              unit = unit.id,
-              amount = unit.rent_amount,
-              date_created = datetime.now(),
-              status = "Active"
-            )
-            db.session.add(new_invoice)
-            db.session.commit()
   except:
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
@@ -294,6 +188,7 @@ def property_information(property_id):
 def tenant_details(tenant_id):
   if current_user.account_type != "Landlord":
     abort(403)
+  generate_invoice_landlord(current_user.id)
   today_time = today.strftime("%d/%m/%Y")
   try:
     tenant = Tenant.query.get(tenant_id)
@@ -308,54 +203,6 @@ def tenant_details(tenant_id):
     transactions = Transaction.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
-    unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-    if unitz:
-      for unit in unitz:
-        unit_transactions = Transaction.query.filter_by(Unit=unit.id).all()
-        if unit_transactions:
-          if unit_transactions[-1].next_date == date.today():
-            invoice = Invoice.query.filter_by(unit=unit.id, status="Active").first()
-            if invoice:
-              pass
-            else:
-              new_invoice = Invoice(
-                invoice_id = random.randint(100000,999999),
-                tenant = unit.tenant,
-                unit = unit.id,
-                amount = unit.rent_amount,
-                date_created = datetime.now(),
-                status = "Active"
-              )
-              db.session.add(new_invoice)
-              db.session.commit()
-        else:
-          invoices = Invoice.query.filter_by(unit=unit.id, status="Active").all()
-          if invoices:
-            diff = datetime.now() - invoices[-1].date_created
-            if diff.days == 30:
-              new_invoice = Invoice(
-                invoice_id = random.randint(100000,999999),
-                tenant = unit.tenant,
-                unit = unit.id,
-                amount = unit.rent_amount,
-                date_created = datetime.now(),
-                status = "Active"
-              )
-              db.session.add(new_invoice)
-              db.session.commit()
-            else:
-              pass
-          else:
-            new_invoice = Invoice(
-              invoice_id = random.randint(100000,999999),
-              tenant = unit.tenant,
-              unit = unit.id,
-              amount = unit.rent_amount,
-              date_created = datetime.now(),
-              status = "Active"
-            )
-            db.session.add(new_invoice)
-            db.session.commit()
   except:
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))

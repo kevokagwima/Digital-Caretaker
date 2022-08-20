@@ -1,15 +1,11 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
-from twilio.rest import Client
 from models import *
 from .form import *
-import os, random
+from modules import send_sms
+import random
 from datetime import date, datetime
 
 admins = Blueprint("admin", __name__)
-
-account_sid = os.environ['Twilio_account_sid']
-auth_token = os.environ['Twilio_auth_key']
-clients = Client(account_sid, auth_token)
 
 today = date.today()
 active_users = []
@@ -43,11 +39,8 @@ def admin_assign_landlord(tenant_id):
       tenant.landlord = landlord.id
       tenant.active = "True"
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to landlord {landlord.first_name} {landlord.second_name}.'
-      #)
+      message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to landlord {landlord.first_name} {landlord.second_name}.'
+      # send_sms(message)
       flash(f"Tenant Landlord Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -63,11 +56,8 @@ def admin_assign_property(tenant_id):
     if tenant and Property:
       tenant.properties = Property.id
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to property {Property.name} - {Property.Type}'
-      #)
+      message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to property {Property.name} - {Property.Type}'
+      send_sms(message)
       flash(f"Tenant Property Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -92,11 +82,8 @@ def admin_assign_unit(tenant_id):
     elif tenant and unit:
       unit.tenant = tenant.id
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to unit {unit.name} - {unit.Type}.'
-      #)
+      message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to unit {unit.name} - {unit.Type}.'
+      # send_sms(message)
       flash(f"Tenant Unit Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -119,11 +106,8 @@ def admin_revoke_tenant(tenant_id):
         for units in unit:
           units.tenant = None
       db.session.commit()
-      #clients.messages.create(
-        #to = '+254796897011',
-        #from_ = '+16203191736',
-        #body = f'\nTenant {tenant.first_name} {tenant.second_name} account has successfully been revoked.'
-      #)
+      message = f'\nTenant {tenant.first_name} {tenant.second_name} account has successfully been revoked.'
+      # send_sms(message)
       flash(f"Tenant revoked successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -146,3 +130,4 @@ def add_extras(form):
   db.session.add(new_extra)
   db.session.commit()
   flash(f"Successful registration of a new Extra", category="success")
+  return redirect(url_for('admin.admin'))
