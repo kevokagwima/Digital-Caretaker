@@ -1,15 +1,15 @@
 from flask import Blueprint, jsonify, render_template, flash, url_for, redirect, request, session, abort, json
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Bookings, Complaints, Extra_service, Invoice
+from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice
 from .form import *
-from modules import generate_invoice_landlord, send_sms
+from modules import generate_invoice, send_sms, send_email, check_reservation_expiry
 import random, os, datetime
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 landlords = Blueprint("landlord", __name__)
 SECRET_KEY = os.environ['Hms_secret_key']
 google_maps =os.environ["Google_maps"]
-today = datetime.now()
+today = date.today()
 
 @landlords.route("/landlord_registration", methods=["POST", "GET"])
 def landlord():
@@ -33,6 +33,7 @@ def landlord():
       db.session.commit()
       message = f'Congratulations! {new_landlord.first_name} {new_landlord.second_name} you have successfully created your landlord account. \nLogin to your dashboard using your Landlord ID {new_landlord.landlord_id} and your password. \nDo not share your Landlord ID with anyone other than your tenants only when they register.'
       # send_sms(message)
+      # send_email(message)
       flash(f"Account created successfully", category="success")
       return redirect(url_for("landlord.Landlord_login"))
 
@@ -69,16 +70,21 @@ def Landlord_login():
 def landlord_dashboard():
   if current_user.account_type != "Landlord":
     abort(403)
-  generate_invoice_landlord(current_user.id)
   properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
   tenants = db.session.query(Tenant).filter(Tenant.landlord == current_user.id).all()
-  todays_time = today.strftime("%d/%m/%Y")
+  todays_time = datetime.now().strftime("%d/%m/%Y")
+  this_month = today
   expenses = 0
   properties_count = db.session.query(Properties).filter(Properties.owner == current_user.id).count()
   extras = Extras.query.all()
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
+  units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
+  if units:
+    for unit in units:
+      invoices = Invoice.query.filter_by(unit=unit.id, status="Cleared").all()
+      generate_invoice(unit.id, unit.tenant, unit.rent_amount)
 
-  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, today=today)
+  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices)
 
 @landlords.route("/approve-verification/<int:verification_id>")
 @fresh_login_required
@@ -115,6 +121,7 @@ def approve_verification(verification_id):
       db.session.commit()
       message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date}. Next charge will be on {new_transaction.next_date}'
       # send_sms(message)
+      # send_email(message)
       flash(f"Rent payment approved", category="success")
       return redirect(url_for('landlord.landlord_dashboard')) 
   else:
@@ -147,40 +154,30 @@ def property_information(property_id):
   if current_user.account_type != "Landlord":
     abort(403)
   try:
-    generate_invoice_landlord(current_user.id)
     properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
     propertiez = Properties.query.filter_by(id=property_id).first()
-    users = Members.query.all()
-    landlord_user = Landlord.query.all()
-    tenant_user = Tenant.query.all()
-    today_time = today.strftime("%d/%m/%Y")
-    session["property"] = propertiez
     if propertiez.owner != current_user.id:
       flash(f"Unknown Property", category="info")
       return redirect(url_for("landlord.landlord_dashboard"))
+    users = Members.query.all()
+    landlord_user = Landlord.query.all()
+    tenant_user = Tenant.query.all()
+    today_time = datetime.now().strftime("%d/%m/%Y")
+    session["property"] = propertiez
     tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
     units = db.session.query(Unit).filter(Unit.Property == propertiez.id).all()
     tenants_count = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).count()
     unit_count = db.session.query(Unit).filter(Unit.Property == propertiez.id).count()
-    reservations = Bookings.query.filter_by(property=propertiez.id).all()
-    active_reservations = []
-    for reservation in reservations:
-      if reservation.expiry_date < datetime.now() and reservation.status == "Active":
-        active_reservations.append(reservation)
-        unit = Unit.query.filter_by(id=reservation.unit).first()
-        unit.reserved = "False"
-        reservation.status = "Expired"
-        db.session.commit()
-    if len(active_reservations) == 1:
-      flash(f"You have one reservation that has expired", category="warning")
-    elif len(active_reservations) > 1:
-      active_reservations_count = len(active_reservations)
-      flash(f"You have {active_reservations_count} reservations that have Expired", category="warning")
+    unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
+    check_reservation_expiry(propertiez.id)
+    if unitz:
+      for unit in unitz:
+        generate_invoice(unit.id, unit.tenant, unit.rent_amount)
   except:
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-  return render_template("property_dashboard.html",propertiez=propertiez,properties=properties,tenants=tenants,units=units,tenants_count=tenants_count,unit_count=unit_count, today_time=today_time,users=users, landlord_user=landlord_user, tenant_user=tenant_user)
+  return render_template("property_dashboard.html", propertiez=propertiez,properties=properties,tenants=tenants,units=units,tenants_count=tenants_count,unit_count=unit_count, today_time=today_time,users=users, landlord_user=landlord_user, tenant_user=tenant_user)
 
 @landlords.route("/tenant_details/<int:tenant_id>", methods=["GET", "POST"])
 @fresh_login_required
@@ -188,8 +185,7 @@ def property_information(property_id):
 def tenant_details(tenant_id):
   if current_user.account_type != "Landlord":
     abort(403)
-  generate_invoice_landlord(current_user.id)
-  today_time = today.strftime("%d/%m/%Y")
+  today_time = datetime.now().strftime("%d/%m/%Y")
   try:
     tenant = Tenant.query.get(tenant_id)
     tenant_property = Properties.query.filter_by(id=tenant.properties).first()
@@ -203,6 +199,10 @@ def tenant_details(tenant_id):
     transactions = Transaction.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
+    unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
+    if unitz:
+      for unit in unitz:
+        generate_invoice(unit.id, unit.tenant, unit.rent_amount)
   except:
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))

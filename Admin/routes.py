@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from models import *
 from .form import *
-from modules import send_sms
+from modules import send_sms, send_email
 import random
 from datetime import date, datetime
 
@@ -41,6 +41,7 @@ def admin_assign_landlord(tenant_id):
       db.session.commit()
       message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to landlord {landlord.first_name} {landlord.second_name}.'
       # send_sms(message)
+      # send_email(message)
       flash(f"Tenant Landlord Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -57,7 +58,8 @@ def admin_assign_property(tenant_id):
       tenant.properties = Property.id
       db.session.commit()
       message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to property {Property.name} - {Property.Type}'
-      send_sms(message)
+      # send_sms(message)
+      # send_email(message)
       flash(f"Tenant Property Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -84,6 +86,7 @@ def admin_assign_unit(tenant_id):
       db.session.commit()
       message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to unit {unit.name} - {unit.Type}.'
       # send_sms(message)
+      # send_email(message)
       flash(f"Tenant Unit Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -108,6 +111,7 @@ def admin_revoke_tenant(tenant_id):
       db.session.commit()
       message = f'\nTenant {tenant.first_name} {tenant.second_name} account has successfully been revoked.'
       # send_sms(message)
+      # send_email(message)
       flash(f"Tenant revoked successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:

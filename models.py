@@ -148,6 +148,7 @@ class Invoice(db.Model):
   id = db.Column(db.Integer(), primary_key=True)
   invoice_id = db.Column(db.Integer(), nullable=False, unique=True)
   amount = db.Column(db.Integer(), nullable=False)
+  month_created = db.Column(db.Date(), nullable=False)
   date_created = db.Column(db.DateTime(), nullable=False)
   date_closed = db.Column(db.DateTime())
   status = db.Column(db.String(10), nullable=False)

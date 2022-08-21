@@ -154,6 +154,7 @@ body::-webkit-scrollbar {
 .main-navigation button:focus,
 .secondary-navigation button:hover,
 .secondary-navigation button:focus {
+  background-color: var(--other-dark-blue);
   color: var(--blue);
 }
 
@@ -362,11 +363,15 @@ body::-webkit-scrollbar {
   position: relative;
 }
 
-#current-month {
+#month {
   position: absolute;
+  top: 1rem;
   right: 0.5rem;
+  padding: 0.4rem;
   color: var(--blue);
+  max-width: max-content;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 #more-info {

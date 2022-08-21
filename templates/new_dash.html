@@ -29,7 +29,7 @@
       </div>
       <div class="main-navigation">
         <h4 id="nav-title">Main</h4>
-        <button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
+        <button class="tablinks" onclick="openView(event, 'dashboard')">
           <img src="{{ url_for('static', filename='css/Images/dashboard.png') }}" alt="dashboard">
           Dashboard
         </button>
@@ -60,7 +60,7 @@
           <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="units">
           Units
         </button>
-        <button class="tablinks" onclick="openView(event, 'rent')">
+        <button class="tablinks" onclick="openView(event, 'rent')" id="defaultOpen">
           <img src="{{ url_for('static', filename='css/Images/rent.png') }}" alt="rent">
           Rent Payments
         </button>
@@ -157,7 +157,7 @@
                 <h4>Revenue</h4>
                 {% set totalz = [] %}
                 {% for unit in current_user.unit if unit.invoice %}
-                {% for invoice in unit.invoice if invoice.status == "Cleared" and invoice.date_closed.strftime("%m") == today.strftime("%m") %}
+                {% for invoice in unit.invoice if invoice.status == "Cleared" and invoice.date_created.strftime("%m") == this_month.strftime("%m") %}
                 {{ totalz.append(invoice.amount) or "" }}
                 {% endfor %}
                 {% endfor %}
@@ -378,7 +378,11 @@
             <p>verification needed</p>
           </div>
           {% endif %}
-          <span id="current-month">{{ today.strftime("As at %b %d") }}</span>
+          <select name="month-selected" id="month">
+            {% for month_created, invoice in invoices|groupby('month_created') %}
+            <option value="">{{ month_created.strftime("%B %d") }}</option>
+            {% endfor %}
+          </select>
         </h4>
         <p id="more-info">This tab shows all the relevant rent information</p>
         <div class="rents">
@@ -397,7 +401,7 @@
               <h4>Rent Received</h4>
               {% set tenants_paid = [] %}
               {% for tenant in current_user.tenant if tenant.invoice %}
-              {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.date_closed.strftime("%m") == today.strftime("%m") %}
+              {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.date_created.strftime("%m") == this_month.strftime("%m") %}
               {{ tenants_paid.append(tenant) or "" }}
               {% endfor %}
               {% endfor %}
@@ -710,7 +714,6 @@
           </div>
         </div>
       </div>
-    </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>

@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, fresh_login_required, logout
 from models import Members, db, Landlord,Tenant, Properties, Unit, Bookings
 from sqlalchemy import or_
 from .form import *
-from modules import send_sms
+from modules import send_sms, send_email
 import random
 from datetime import datetime, timedelta
 from geopy.geocoders import Nominatim
@@ -30,6 +30,7 @@ def signup():
       db.session.commit()
       message = f'Congratulations! {member.first_name} {member.second_name} you have successfully created your account. \nLogin using your username {member.username} and password'
       # send_sms(message)
+      # send_email(message)
       flash(f"User registered successfully", category="success")
       return redirect(url_for("main.signin"))
 

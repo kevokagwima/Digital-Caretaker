@@ -1097,7 +1097,8 @@ body::-webkit-scrollbar {
   margin: 1.5rem 0 0;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  padding: 20px 10px 20px 20px;
+  padding: 20px;
+  max-width: 98.5%;
   max-height: 100vh;
   overflow: auto;
   display: flex;
