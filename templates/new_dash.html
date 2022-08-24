@@ -29,7 +29,7 @@
       </div>
       <div class="main-navigation">
         <h4 id="nav-title">Main</h4>
-        <button class="tablinks" onclick="openView(event, 'dashboard')">
+        <button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
           <img src="{{ url_for('static', filename='css/Images/dashboard.png') }}" alt="dashboard">
           Dashboard
         </button>
@@ -60,7 +60,7 @@
           <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="units">
           Units
         </button>
-        <button class="tablinks" onclick="openView(event, 'rent')" id="defaultOpen">
+        <button class="tablinks" onclick="openView(event, 'rent')">
           <img src="{{ url_for('static', filename='css/Images/rent.png') }}" alt="rent">
           Rent Payments
         </button>
@@ -157,7 +157,7 @@
                 <h4>Revenue</h4>
                 {% set totalz = [] %}
                 {% for unit in current_user.unit if unit.invoice %}
-                {% for invoice in unit.invoice if invoice.status == "Cleared" and invoice.date_created.strftime("%m") == this_month.strftime("%m") %}
+                {% for invoice in unit.invoice if invoice.status == "Cleared" and invoice.month_created.strftime("%m") == this_month.strftime("%m") %}
                 {{ totalz.append(invoice.amount) or "" }}
                 {% endfor %}
                 {% endfor %}
@@ -378,9 +378,9 @@
             <p>verification needed</p>
           </div>
           {% endif %}
-          <select name="month-selected" id="month">
-            {% for month_created, invoice in invoices|groupby('month_created') %}
-            <option value="">{{ month_created.strftime("%B %d") }}</option>
+          <select name="month-selected" id="month" onchange="date_changer()">
+            {% for month_created, invoice in invoices|groupby('month_created') if invoice %}
+            <option value="{{ month_created }}">{{ month_created.strftime("%B %Y") }}</option>
             {% endfor %}
           </select>
         </h4>
@@ -401,7 +401,7 @@
               <h4>Rent Received</h4>
               {% set tenants_paid = [] %}
               {% for tenant in current_user.tenant if tenant.invoice %}
-              {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.date_created.strftime("%m") == this_month.strftime("%m") %}
+              {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.month_created.strftime("%m") == this_month.strftime("%m") %}
               {{ tenants_paid.append(tenant) or "" }}
               {% endfor %}
               {% endfor %}
@@ -720,17 +720,6 @@
     <script type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-    <script>
-      Pusher.logToConsole = true
-      var pusher = new Pusher('4f2f8c3589ae97eeb988', {
-        cluster: 'eu'
-      })
-      var channel = pusher.subscribe('my-channel')
-      channel.bind('my-event', function (data) {
-        alert(JSON.stringify(data))
-      });
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
     </script>
     <script>
@@ -758,6 +747,19 @@
           legend: { display: false }
         }
       });
+    </script>
+    <script>
+      function date_changer() {
+        const date_selector = document.getElementById("month")
+        $.ajax({
+          url: "/change-dates",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(date_selector.value)
+        })
+        window.location.replace("/Landlord_dashboard")
+        date_selector.value = "2022-08-10"
+      }
     </script>
   </body>
 

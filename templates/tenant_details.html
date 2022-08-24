@@ -198,7 +198,7 @@
               </div>
             </div>
             <div class="extra">
-              <a id="chat" href="{{ url_for('landlord.send_message') }}">Send Message</a>
+              <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">Send Message</a>
               <a id="revoke" href="#">Revoke Access</a>
             </div>
           </div>

@@ -11,37 +11,63 @@ PMS | Chat
 {% endblock %}
 
 {% block logo %}
+{% if current_user.is_authenticated and current_user.account_type == "Landlord" %}
 <a id="logos" href="{{ url_for('landlord.landlord_dashboard') }}">
   <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
-  {% if current_user.is_authenticated %}
   <span id="account">{{ current_user.account_type }}</span>
-  {% endif %}
 </a>
+<p id="chatting-with">You are chatting with
+  <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">
+    <b>{{ tenant.first_name }} {{ tenant.second_name }}</b>
+  </a>
+</p>
+{% endif %}
+{% if current_user.is_authenticated and current_user.account_type == "Tenant" %}
+<a id="logos" href="{{ url_for('tenant.tenant_dashboard') }}">
+  <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+  <span id="account">{{ current_user.account_type }}</span>
+</a>
+<p id="chatting-with">You are chatting with
+  <b>{{ landlord.first_name }} {{ landlord.second_name }}</b>
+</p>
+{% endif %}
 {% endblock %}
 
 {% block body %}
 <div class="message">
   <div class="texts">
+    {% for message in messages %}
     <div class="sample">
-      <p id="landlord">
-        <span id="from">Tenant</span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem itaque maxime, earum eum odit dicta
-        asperiores modi quam soluta enim.
-        <span id="dates">5:00 PM</span>
+      {% if message.author != current_user.account_type %}
+      <p class="{{ message.author }}">
+        <span id="from">{{ message.author }}</span>
+        {{ message.info }}
+        <span id="dates">{{ message.date.strftime("%b %d - %I:%M %p") }}</span>
       </p>
+      {% elif message.author == current_user.account_type %}
       <p id="you">
         <span id="from">You</span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit odio doloribus commodi soluta maxime cumque?
-        Rerum, at. Harum fugit sunt inventore commodi. Provident, esse debitis?
-        <span id="dates">10:00 PM</span>
+        {{ message.info }}
+        <span id="dates">{{ message.date.strftime("%b %d - %I:%M %p") }}</span>
       </p>
+      {% endif %}
     </div>
+    {% endfor %}
   </div>
-  <form action="#">
+  {% if current_user.account_type == "Landlord" %}
+  <form action="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}" , method="post">
     <div class="input">
       <input type="text" name="message" required spellcheck="false" placeholder="Send Message">
       <button type="submit">Send</button>
     </div>
   </form>
+  {% elif current_user.account_type == "Tenant" %}
+  <form action="{{ url_for('tenant.send_message', landlord_id=landlord.id) }}" , method="post">
+    <div class="input">
+      <input type="text" name="message" required spellcheck="false" placeholder="Send Message">
+      <button type="submit">Send</button>
+    </div>
+  </form>
+  {% endif %}
 </div>
 {% endblock %}

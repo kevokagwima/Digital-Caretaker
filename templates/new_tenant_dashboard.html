@@ -224,6 +224,9 @@
         <div class="landlord">
           <div class="landlord-profile-img">
             <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="profile image">
+            <a href="{{ url_for('tenant.send_message', landlord_id=landlord.id) }}">
+              <button id="send">Send Message</button>
+            </a>
           </div>
           <div class="landlord-info">
             <button class="accordion actives">Personal Information</button>

@@ -17,26 +17,30 @@
   margin-top: 0;
 }
 
-body {
-  background-color: var(--other-dark-blue);
+#chatting-with {
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  color: black;
+}
+
+#chatting-with b {
+  color: var(--red);
 }
 
 .message {
   padding-top: 4rem;
   min-height: 100vh;
   position: relative;
-  background-color: var(--dark-blue);
 }
 
 .texts {
-  background-color: var(--dark-blue);
   max-height: 41rem;
   overflow: auto;
 }
 
 .sample {
   color: white;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -61,7 +65,8 @@ body {
   color: whitesmoke;
 }
 
-#landlord {
+.Landlord,
+.Tenant {
   background-color: var(--page-header-headingColor);
   align-self: flex-start;
 }
@@ -84,7 +89,6 @@ form {
   display: flex;
   gap: 1rem;
   padding: 0.5rem;
-  background-color: var(--page-header-bgColor);
 }
 
 .input input {
@@ -108,4 +112,32 @@ form {
   min-width: 10vw;
   font-size: 1rem;
   cursor: pointer;
+}
+
+@media (prefers-color-scheme: light) {
+  .message,
+  .texts,
+  body {
+    background-color: whitesmoke;
+  }
+
+  .input {
+    background-color: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .message,
+  .texts,
+  body {
+    background-color: var(--dark-blue);
+  }
+
+  input {
+    background-color: var(--other-dark-blue);
+  }
+
+  .input {
+    background-color: var(--page-header-bgColor);
+  }
 }

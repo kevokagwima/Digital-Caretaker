@@ -1,15 +1,23 @@
 from flask import Blueprint, jsonify, render_template, flash, url_for, redirect, request, session, abort, json
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice
+from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice, Messages
 from .form import *
 from modules import generate_invoice, send_sms, send_email, check_reservation_expiry
-import random, os, datetime
+import random, os
 from datetime import date, datetime, timedelta
 
 landlords = Blueprint("landlord", __name__)
 SECRET_KEY = os.environ['Hms_secret_key']
 google_maps =os.environ["Google_maps"]
 today = date.today()
+
+@landlords.route("/change-dates", methods=["POST"])
+@login_required
+@fresh_login_required
+def change_date():
+  data = json.loads(request.get_data('data'))
+  session["this_month"] = data
+  return redirect(url_for('landlord.landlord_dashboard'))
 
 @landlords.route("/landlord_registration", methods=["POST", "GET"])
 def landlord():
@@ -73,15 +81,18 @@ def landlord_dashboard():
   properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
   tenants = db.session.query(Tenant).filter(Tenant.landlord == current_user.id).all()
   todays_time = datetime.now().strftime("%d/%m/%Y")
-  this_month = today
+  if session.get("this_month"):
+    this_month = datetime.strptime(session["this_month"], '%Y-%m-%d').date()
+  else:
+    this_month = today
   expenses = 0
   properties_count = db.session.query(Properties).filter(Properties.owner == current_user.id).count()
   extras = Extras.query.all()
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
+  invoices = Invoice.query.filter_by(status="Cleared").all()
   if units:
     for unit in units:
-      invoices = Invoice.query.filter_by(unit=unit.id, status="Cleared").all()
       generate_invoice(unit.id, unit.tenant, unit.rent_amount)
 
   return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices)
@@ -209,11 +220,26 @@ def tenant_details(tenant_id):
 
   return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions)
 
-@landlords.route("/send-message")
+@landlords.route("/send-message/<int:tenant_id>", methods=["POST","GET"])
 @fresh_login_required
 @login_required
-def send_message():
-  return render_template("message.html")
+def send_message(tenant_id):
+  tenant = Tenant.query.get(tenant_id)
+  messages = Messages.query.filter_by(landlord=current_user.id, tenant=tenant.id).all()
+  if request.method == "POST":
+    new_message = Messages(
+      landlord = current_user.id,
+      tenant = tenant.id,
+      info = request.form.get("message"),
+      author = current_user.account_type,
+      date = datetime.now(),
+      status = "Unread"
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    return redirect(url_for('landlord.send_message', tenant_id=tenant.id))
+
+  return render_template("message.html", messages=messages, tenant=tenant)
 
 @landlords.route("/Assign_unit", methods=["POST", "GET"])
 @fresh_login_required

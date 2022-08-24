@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request, abort
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import db, Tenant, Landlord, Unit, Transaction, Verification, Complaints, Invoice
+from models import Messages, db, Tenant, Landlord, Unit, Transaction, Verification, Complaints, Invoice
 from .form import *
 from modules import generate_invoice, send_sms, send_email
 from werkzeug.utils import secure_filename
@@ -97,6 +97,27 @@ def tenant_dashboard():
       flash(f"You have {len(invoices)} active invoices", category="info")
   
   return render_template ("new_tenant_dashboard.html",landlord=landlord,unit=unit,properties=properties, transactions=transactions, today_time=today_time, invoices=invoices)
+
+@tenants.route("/send-messages/<int:landlord_id>", methods=["POST","GET"])
+@fresh_login_required
+@login_required
+def send_message(landlord_id):
+  landlord = Landlord.query.get(landlord_id)
+  messages = Messages.query.filter_by(landlord=landlord.id, tenant=current_user.id).all()
+  if request.method == "POST":
+    new_message = Messages(
+      landlord = landlord.id,
+      tenant = current_user.id,
+      info = request.form.get("message"),
+      author = current_user.account_type,
+      date = datetime.now(),
+      status = "Unread"
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    return redirect(url_for('tenant.send_message', landlord_id=landlord.id))
+
+  return render_template("message.html", messages=messages, landlord=landlord)
 
 @tenants.route("/rent-payment")
 @fresh_login_required
