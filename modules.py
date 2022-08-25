@@ -1,4 +1,4 @@
-from flask import flash
+from flask import flash, redirect, url_for
 from models import *
 from datetime import datetime, date
 from twilio.rest import Client
@@ -77,3 +77,39 @@ def check_reservation_expiry(property_id):
   elif len(active_reservations) > 1:
     active_reservations_count = len(active_reservations)
     flash(f"You have {active_reservations_count} reservations that have Expired", category="warning")
+
+def assign_tenant_unit(tenant_id, unit_id, property_id, previous_url, current_user):
+  try:
+    tenant = Tenant.query.filter_by(tenant_id=tenant_id).first() or Tenant.query.filter_by(id=tenant_id).first()
+    unit = Unit.query.filter_by(unit_id=unit_id).first() or Unit.query.filter_by(id=unit_id).first()
+    if tenant.landlord != current_user:
+      flash(f"Unknown Tenant ID. Try again", category="info")
+      return redirect(previous_url)
+    elif tenant.properties == None:
+      flash(f"No property is assigned to the tenant", category="info")
+      return redirect(previous_url)
+    elif tenant.properties != property_id:
+      flash(f"Cannot assign a unit to a tenant from a different property", category="info")
+      return redirect(previous_url)
+    elif unit.landlord != current_user:
+      flash(f"Unknown Unit ID. Try again", category="info")
+      return redirect(previous_url)
+    elif unit.Property != property_id:
+      flash(f"Cannot assign a tenant a unit from a different property", category="info")
+      return redirect(previous_url)
+    elif tenant and unit:
+      if tenant.unit or unit.tenant or unit.reserved == "True":
+        flash(f"Could not assign unit. Unit already occupied or reserved or tenant has a unit. Try again",category="danger")
+      elif tenant.active == "False":
+        flash(f"Cannot assign unit, tenant is not active", category="danger")
+        return redirect(previous_url)
+      else:
+        unit.tenant = tenant.id
+        db.session.commit()
+        flash(f"Unit {unit.name} - {unit.Type} assigned to {tenant.first_name} {tenant.second_name} successfully",category="success")
+  except:
+    flash(f"Invalid Tenant ID or Unit ID. Try again",category="danger")
+    return redirect(previous_url)
+
+def revoke_tenant_access():
+  pass

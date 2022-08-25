@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template, flash, url_for, redirect,
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
 from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice, Messages
 from .form import *
-from modules import generate_invoice, send_sms, send_email, check_reservation_expiry
+from modules import generate_invoice, send_sms, send_email, check_reservation_expiry, assign_tenant_unit
 import random, os
 from datetime import date, datetime, timedelta
 
@@ -240,7 +240,7 @@ def send_message(tenant_id):
 
   return render_template("message.html", messages=messages, tenant=tenant)
 
-@landlords.route("/Assign_unit", methods=["POST", "GET"])
+@landlords.route("/assign-unit", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
 def assign_tenant():
@@ -250,41 +250,8 @@ def assign_tenant():
   unit_id = request.form.get("unit_id")
   previous_url = request.referrer
   this_property = session["property"]
-  try:
-    tenant = Tenant.query.filter_by(tenant_id=tenant_id).first()
-    unit = Unit.query.filter_by(unit_id=unit_id).first()
-    if tenant.landlord != current_user.id:
-      flash(f"Unknown Tenant ID. Try again", category="info")
-      return redirect(previous_url)
-    elif tenant.properties == None:
-      flash(f"No property is assigned to the tenant", category="info")
-      return redirect(previous_url)
-    elif tenant.properties != this_property.id:
-      flash(f"Cannot assign a unit to a tenant from a different property", category="info")
-      return redirect(previous_url)
-    elif unit.landlord != current_user.id:
-      flash(f"Unknown Unit ID. Try again", category="info")
-      return redirect(previous_url)
-    elif unit.Property != this_property.id:
-      flash(f"Cannot assign a tenant a unit from a different property", category="info")
-      return redirect(previous_url)
-    elif tenant and unit:
-      if tenant.unit or unit.tenant or unit.reserved == "True":
-        flash(f"Could not assign unit. Unit already occupied or reserved or tenant has a unit. Try again",category="danger")
-        return redirect(url_for("landlord.property_information", property_id=this_property.id))
-      elif tenant.active == "False":
-          flash(f"Cannot assign unit, tenant is not active", category="danger")
-          return redirect(previous_url)
-      else:
-        unit.tenant = tenant.id
-        db.session.commit()
-        flash(f"Unit {unit.name} - {unit.Type} assigned to {tenant.first_name} {tenant.second_name} successfully",category="success")
-        return redirect(url_for("landlord.property_information", property_id=this_property.id))
-  except:
-    flash(f"Invalid Tenant ID or Unit ID. Try again",category="danger")
-    return redirect(previous_url)
-
-  return render_template("property_dashboard.html")
+  assign_tenant_unit(tenant_id, unit_id,this_property.id, previous_url, current_user.id)
+  return redirect(url_for("landlord.property_information", property_id=this_property.id))
 
 @landlords.route("/assign-tenant/<int:tenant_id>", methods=["POST", "GET"])
 @fresh_login_required
@@ -294,29 +261,10 @@ def assign_unit_now(tenant_id):
     abort(403)
   unit_id = request.form.get("unit-assign")
   previous_url = request.referrer
-  try:
-    tenant = Tenant.query.get(tenant_id)
-    unit = Unit.query.get(unit_id)
-    if unit.reserved == "True":
-      flash(f"Cannot assign unit, Unit is reserved", category="danger")
-      return redirect(previous_url)
-    elif unit.tenant:
-      flash(f"Cannot assign unit, Unit is occupied", category="danger")
-      return redirect(previous_url)
-    elif tenant.properties == None:
-      flash(f"No property is assigned to the tenant", category="info")
-      return redirect(previous_url)
-    elif tenant and unit:
-      unit.tenant = tenant.id
-      db.session.commit()
-      flash(f"Unit {unit.name} - {unit.Type} assigned to {tenant.first_name} {tenant.second_name} successfully", category="success")
-      return redirect(url_for('landlord.tenant_details', tenant_id=tenant.id))
-    else:
-      flash(f"Invalid Unit", category="danger")
-      return redirect(previous_url)
-  except:
-    flash(f"Something went wrong", category="danger")
-    return redirect(previous_url)
+  tenant = Tenant.query.get(tenant_id)
+  this_property = tenant.properties
+  assign_tenant_unit(tenant_id, unit_id, this_property, previous_url, current_user.id)
+  return redirect(url_for('landlord.tenant_details', tenant_id=tenant_id))
 
 @landlords.route("/revoke_tenant,", methods=["POST", "GET"])
 @fresh_login_required
