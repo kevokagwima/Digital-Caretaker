@@ -50,3 +50,5 @@ window.onclick = function (event) {
     }
   }
 };
+
+$(".texts").scrollTop($(".texts")[0].scrollHeight);

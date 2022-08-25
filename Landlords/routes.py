@@ -228,12 +228,11 @@ def send_message(tenant_id):
   messages = Messages.query.filter_by(landlord=current_user.id, tenant=tenant.id).all()
   if request.method == "POST":
     new_message = Messages(
-      landlord = current_user.id,
+      landlord =current_user.id,
       tenant = tenant.id,
       info = request.form.get("message"),
       author = current_user.account_type,
       date = datetime.now(),
-      status = "Unread"
     )
     db.session.add(new_message)
     db.session.commit()

@@ -111,7 +111,6 @@ def send_message(landlord_id):
       info = request.form.get("message"),
       author = current_user.account_type,
       date = datetime.now(),
-      status = "Unread"
     )
     db.session.add(new_message)
     db.session.commit()

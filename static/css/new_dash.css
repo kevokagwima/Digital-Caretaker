@@ -574,13 +574,16 @@ body::-webkit-scrollbar {
   letter-spacing: 0.5px;
 }
 
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .insights .card {
   display: flex;
-  align-items: center;
   gap: 15px;
   border-radius: 2px;
-  padding: 4px 2px;
-  margin: 0 0 8px;
 }
 
 .insights img {

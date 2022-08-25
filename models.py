@@ -240,4 +240,3 @@ class Messages(db.Model):
   info = db.Column(db.String(300), nullable=False)
   author = db.Column(db.String(10))
   date = db.Column(db.DateTime())
-  status = db.Column(db.String(10), nullable=False)
