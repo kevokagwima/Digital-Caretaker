@@ -1170,19 +1170,16 @@ body::-webkit-scrollbar {
 .options {
   margin: 1rem 0;
   border-radius: 3px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  row-gap: 10px;
-  column-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   max-height: 88vh;
   overflow: auto;
   padding: 2px 10px 0 0;
 }
 
 .disable-property,
-.property-availability,
-.revoke-access,
-.assign-unit {
+.property-availability {
   height: max-content;
   border-radius: 5px;
   box-shadow: 0 0 10px -6px black;
@@ -1190,9 +1187,7 @@ body::-webkit-scrollbar {
 }
 
 .disable-property h4,
-.property-availability h4,
-.revoke-access h4,
-.assign-unit h4 {
+.property-availability h4 {
   padding: 10px 15px;
   color: var(--blue);
   font-size: 1rem;
@@ -1242,55 +1237,6 @@ body::-webkit-scrollbar {
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 1rem;
-}
-
-.revoke-access,
-.assign-unit {
-  grid-column: 1/3;
-}
-
-.revoke-access form,
-.assign-unit form {
-  margin: 1.5rem 0 0;
-  padding: 0 15px;
-}
-
-.revoke-access input,
-.assign-unit input {
-  padding: 15px 8px;
-  border-radius: 5px;
-  border: none;
-  margin-top: 1rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 18px;
-  width: 48%;
-  transition: 0.5s ease-in-out;
-}
-
-.revoke-access ::placeholder,
-.assign-unit ::placeholder {
-  font-size: 16px;
-  font-family: "PT Sans", sans-serif;
-}
-
-#revoke-btn,
-#assign-btn {
-  margin: 1rem 0;
-  padding: 10px 15px;
-  border-radius: 3px;
-  background-color: rgb(3, 116, 3);
-  color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-}
-
-#revoke-btn:disabled,
-#assign-btn:disabled {
-  background-color: grey;
 }
 
 .property-registration,

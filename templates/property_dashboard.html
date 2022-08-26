@@ -499,7 +499,7 @@
                 <label for="availability">Update your property availability</label>
                 <select required id="availability" name="availability">
                   {% if propertiez.status == "Rent" %}
-                  <option disabled value="">Choose an option</option>
+                  <option disabled selected value="">Choose an option</option>
                   <option value="Sale">For Sale</option>
                   {% else %}
                   <option disabled value="">Choose and option</option>
@@ -514,32 +514,6 @@
             <h4>Disable Property</h4>
             {% if propertiez %}
             {% endif %}
-          </div>
-          <div class="revoke-access">
-            <h4>Revoke Tenant Access</h4>
-            <form action="{{ url_for('landlord.remove_tenant') }}" method="POST">
-              <label for="">Enter Tenant ID</label> <br>
-              <input name="tenant_id" type="number" placeholder="Must be 6 digits" required autocomplete="on"> <br>
-              {% if propertiez.tenants %}
-              <button class="revoke" id="revoke-btn">Revoke Access</button>
-              {% else %}
-              <button disabled id="revoke-btn" type="submit">No Tenant To Revoke</button>
-              {% endif %}
-            </form>
-          </div>
-          <div class="assign-unit">
-            <h4>Assign Tenant Unit</h4>
-            <form action="{{ url_for('landlord.assign_tenant') }}" method="POST">
-              <label for="">Enter Tenant ID</label> <br>
-              <input name="tenant_id" type="number" placeholder="Must be 6 digits" required autocomplete="on"><br><br>
-              <label for="">Enter Unit ID</label><br>
-              <input name="unit_id" type="number" required placeholder="Must be 6 digits" autocomplete="on"><br>
-              {% if propertiez.tenants and propertiez.unit %}
-              <button id="assign-btn" type="submit">Assign Tenant</button>
-              {% else %}
-              <button disabled id="assign-btn" type="submit">No Tenant/Unit To Assign</button>
-              {% endif %}
-            </form>
           </div>
         </div>
       </div>

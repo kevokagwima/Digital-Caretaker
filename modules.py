@@ -1,10 +1,10 @@
 from flask import flash, redirect, url_for
 from models import *
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from twilio.rest import Client
 from sendgrid.helpers.mail import Mail
 from sendgrid import SendGridAPIClient
-import random, os
+import random, os, random
 
 account_sid = os.environ['Twilio_account_sid']
 auth_token = os.environ['Twilio_auth_key']
@@ -78,10 +78,24 @@ def check_reservation_expiry(property_id):
     active_reservations_count = len(active_reservations)
     flash(f"You have {active_reservations_count} reservations that have Expired", category="warning")
 
+def send_chat(**message):
+  try:
+    new_message = Messages(
+      landlord = message["landlord"],
+      tenant = message["tenant"],
+      info = message["info"],
+      author = message["author"],
+      date = datetime.now()
+    )
+    db.session.add(new_message)
+    db.session.commit()
+  except:
+    flash(f"An error occured", category="danger")
+
 def assign_tenant_unit(tenant_id, unit_id, property_id, previous_url, current_user):
   try:
-    tenant = Tenant.query.filter_by(tenant_id=tenant_id).first() or Tenant.query.filter_by(id=tenant_id).first()
-    unit = Unit.query.filter_by(unit_id=unit_id).first() or Unit.query.filter_by(id=unit_id).first()
+    tenant = Tenant.query.filter_by(id=tenant_id).first()
+    unit = Unit.query.filter_by(id=unit_id).first()
     if tenant.landlord != current_user:
       flash(f"Unknown Tenant ID. Try again", category="info")
       return redirect(previous_url)
@@ -111,5 +125,44 @@ def assign_tenant_unit(tenant_id, unit_id, property_id, previous_url, current_us
     flash(f"Invalid Tenant ID or Unit ID. Try again",category="danger")
     return redirect(previous_url)
 
-def revoke_tenant_access():
-  pass
+def revoke_tenant_access(tenant_id, current_user, previous_url):
+  try:
+    tenant = Tenant.query.get(tenant_id)
+    if tenant.landlord != current_user:
+      flash(f"Unknown Tenant ID", category="info")
+      return redirect(previous_url)
+    elif tenant.active == "False":
+      flash(f"{tenant.first_name} {tenant.second_name}'s Account is already revoked",category="danger")
+      return redirect(previous_url)
+    elif tenant:
+      if tenant.unit:
+        unit = db.session.query(Unit).filter(tenant.id == Unit.tenant).first()
+        unit.tenant = None
+      tenant.active = "False"
+      tenant.landlord = None
+      tenant.properties = None
+      db.session.commit()
+      flash(f"{tenant.first_name} {tenant.second_name}'s Account Revoked successfully. Tenant no longer part of your tenant list.",category="success")
+  except:
+    flash(f"An error occurred, try again later", category="danger")
+    return redirect(previous_url)
+
+def rent_transaction(**transaction):
+  try:
+    new_transaction = Transaction(
+      tenant = transaction["tenant"],
+      landlord = transaction["landlord"],
+      Property = transaction["Property"],
+      Unit = transaction["Unit"],
+      date = datetime.now(),
+      time = datetime.now(),
+      next_date = datetime.now() + timedelta(days=30),
+      transaction_id = random.randint(100000, 999999),
+      invoice = transaction["invoice"],
+      origin = transaction["origin"]
+    )
+    db.session.add(new_transaction)
+    db.session.commit()
+  except:
+    flash(f'Payment could not be processed', category="danger")
+    return redirect(url_for('tenant.tenant_dashboard'))

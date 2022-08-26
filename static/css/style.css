@@ -67,7 +67,7 @@ html {
 .container-2,
 .container-3 {
   overflow: hidden;
-  padding: 8rem 40px 20px;
+  padding: 5rem 40px 20px;
   background-color: white;
 }
 
@@ -79,6 +79,12 @@ html {
   margin: auto;
   text-transform: capitalize;
   font-family: "Lexend Exa", sans-serif;
+}
+
+.container-2 > h4,
+.properties > h4,
+.testimonials > h4 {
+  color: black;
 }
 
 .landlord-system,
@@ -301,7 +307,7 @@ html {
 .container-4 {
   padding: 2rem 3rem;
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: repeat(4, auto);
   justify-content: space-between;
   column-gap: 3rem;
   background-color: transparent;

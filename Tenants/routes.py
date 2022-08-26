@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, url_for, redirect, request,
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
 from models import Messages, db, Tenant, Landlord, Unit, Transaction, Verification, Complaints, Invoice
 from .form import *
-from modules import generate_invoice, send_sms, send_email
+from modules import generate_invoice, send_sms, send_email, send_chat, rent_transaction
 from werkzeug.utils import secure_filename
 import pytesseract
 from PIL import Image
@@ -105,15 +105,13 @@ def send_message(landlord_id):
   landlord = Landlord.query.get(landlord_id)
   messages = Messages.query.filter_by(landlord=landlord.id, tenant=current_user.id).all()
   if request.method == "POST":
-    new_message = Messages(
-      landlord = landlord.id,
-      tenant = current_user.id,
-      info = request.form.get("message"),
-      author = current_user.account_type,
-      date = datetime.now(),
-    )
-    db.session.add(new_message)
-    db.session.commit()
+    new_message = {
+      'landlord': landlord.id,
+      'tenant': current_user.id,
+      'info': request.form.get("message"),
+      'author': current_user.account_type
+    }
+    send_chat(**new_message)
     return redirect(url_for('tenant.send_message', landlord_id=landlord.id))
 
   return render_template("message.html", messages=messages, landlord=landlord)
@@ -163,62 +161,40 @@ def payment_complete():
   unit = Unit.query.filter_by(tenant=current_user.id).first()
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
+  new_transaction = {
+    'tenant': current_user.id,
+    'landlord': current_user.landlord,
+    'Property': current_user.properties,
+    'Unit': unit.id,
+    'invoice': invoice.id,
+    'origin': "Bank"
+  }
   if transactions:
     if not invoice:
       flash(f"You've already paid this month's rent, wait until next charge", category="danger")
       return redirect(url_for('tenant.tenant_dashboard'))
     else:
-      try:
-        new_transaction = Transaction(
-          tenant = current_user.id,
-          landlord = current_user.landlord,
-          Property = current_user.properties,
-          Unit = unit.id,
-          date = datetime.now(),
-          time = datetime.now(),
-          next_date = datetime.now() + timedelta(days=30),
-          transaction_id = random.randint(100000, 999999),
-          invoice=invoice.id,
-          origin = "Bank"
-        )
-        db.session.add(new_transaction)
-        invoice.date_closed = datetime.now()
-        invoice.status = "Cleared"
-        db.session.commit()
-        flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-        message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
-        send_sms(message)
-        send_email(message)
-        return redirect(url_for('tenant.tenant_dashboard'))
-      except:
-        flash(f'Payment could not be processed', category="danger")
-        return redirect(url_for('tenant.tenant_dashboard'))
-  else:
-    try:
-      new_transaction = Transaction(
-        tenant = current_user.id,
-        landlord = current_user.landlord,
-        Property = current_user.properties,
-        Unit = unit.id,
-        date = datetime.now(),
-        time = datetime.now(),
-        next_date = datetime.now() + timedelta(days=30),
-        transaction_id = random.randint(100000, 999999),
-        invoice=invoice.id,
-        origin = "Bank"
-      )
-      db.session.add(new_transaction)
+      rent_transaction(**new_transaction)
       invoice.date_closed = datetime.now()
+      invoice.month_created = datetime.now()
       invoice.status = "Cleared"
       db.session.commit()
       flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date.strftime("%d/%m/%Y")}. Next charge will be on {new_transaction.next_date.strftime("%d/%m/%Y")}'
+      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       # send_sms(message)
       # send_email(message)
       return redirect(url_for('tenant.tenant_dashboard'))
-    except:
-      flash(f'Payment could not be processed', category="danger")
-      return redirect(url_for('tenant.tenant_dashboard'))
+  else:
+    rent_transaction(**new_transaction)
+    invoice.date_closed = datetime.now()
+    invoice.month_created = datetime.now()
+    invoice.status = "Cleared"
+    db.session.commit()
+    flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
+    message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}'
+    # send_sms(message)
+    # send_email(message)
+    return redirect(url_for('tenant.tenant_dashboard'))
 
   return redirect(url_for('tenant.tenant_dashboard'))
 

@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template, flash, url_for, redirect,
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
 from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice, Messages
 from .form import *
-from modules import generate_invoice, send_sms, send_email, check_reservation_expiry, assign_tenant_unit
+from modules import generate_invoice, send_sms, send_email, send_chat, check_reservation_expiry, assign_tenant_unit, revoke_tenant_access, rent_transaction
 import random, os
 from datetime import date, datetime, timedelta
 
@@ -109,28 +109,25 @@ def approve_verification(verification_id):
   invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
   if verification and invoice:
     verification.status = 'approved'
-    new_transaction = Transaction (
-      tenant = tenant.id,
-      landlord = current_user.id,
-      Property = tenant.properties,
-      Unit = unit.id,
-      date = datetime.now(),
-      time = datetime.now(),
-      next_date = datetime.now() + timedelta(days=30),
-      transaction_id = random.randint(100000, 999999),
-      invoice = invoice.id,
-      origin = "Mpesa"
-    )
+    new_transaction = {
+      'tenant': tenant.id,
+      'landlord': current_user.id,
+      'Property': tenant.properties,
+      'Unit': unit.id,
+      'invoice': invoice.id,
+      'origin': "Mpesa"
+    }
+    rent_transaction(**new_transaction)
     if not invoice:
       flash(f"The tenant has already paid this month's rent", category="danger")
       verification.status = "denied"
       db.session.commit()
     else:
-      db.session.add(new_transaction)
       invoice.date_closed = datetime.now()
+      invoice.month_created = datetime.now()
       invoice.status = "Cleared"
       db.session.commit()
-      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {new_transaction.date}. Next charge will be on {new_transaction.next_date}'
+      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       # send_sms(message)
       # send_email(message)
       flash(f"Rent payment approved", category="success")
@@ -227,33 +224,18 @@ def send_message(tenant_id):
   tenant = Tenant.query.get(tenant_id)
   messages = Messages.query.filter_by(landlord=current_user.id, tenant=tenant.id).all()
   if request.method == "POST":
-    new_message = Messages(
-      landlord =current_user.id,
-      tenant = tenant.id,
-      info = request.form.get("message"),
-      author = current_user.account_type,
-      date = datetime.now(),
-    )
-    db.session.add(new_message)
-    db.session.commit()
+    new_message = {
+      'landlord': current_user.id,
+      'tenant': tenant.id,
+      'info': request.form.get("message"),
+      'author': current_user.account_type
+    }
+    send_chat(**new_message)
     return redirect(url_for('landlord.send_message', tenant_id=tenant.id))
 
   return render_template("message.html", messages=messages, tenant=tenant)
 
-@landlords.route("/assign-unit", methods=["POST", "GET"])
-@fresh_login_required
-@login_required
-def assign_tenant():
-  if current_user.account_type != "Landlord":
-    abort(403)
-  tenant_id = request.form.get("tenant_id")
-  unit_id = request.form.get("unit_id")
-  previous_url = request.referrer
-  this_property = session["property"]
-  assign_tenant_unit(tenant_id, unit_id,this_property.id, previous_url, current_user.id)
-  return redirect(url_for("landlord.property_information", property_id=this_property.id))
-
-@landlords.route("/assign-tenant/<int:tenant_id>", methods=["POST", "GET"])
+@landlords.route("/assign-tenant-unit/<int:tenant_id>", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
 def assign_unit_now(tenant_id):
@@ -266,52 +248,7 @@ def assign_unit_now(tenant_id):
   assign_tenant_unit(tenant_id, unit_id, this_property, previous_url, current_user.id)
   return redirect(url_for('landlord.tenant_details', tenant_id=tenant_id))
 
-@landlords.route("/revoke_tenant,", methods=["POST", "GET"])
-@fresh_login_required
-@login_required
-def remove_tenant():
-  if current_user.account_type != "Landlord":
-    abort(403)
-  tenant_id = (request.form.get("tenant_id"))
-  previous_url = request.referrer
-  this_property = session["property"]
-  try:
-    tenant = Tenant.query.filter_by(tenant_id=tenant_id).first()
-    if tenant.landlord != current_user.id:
-      flash(f"Unknown Tenant ID", category="info")
-      return redirect(previous_url)
-    elif tenant.properties != this_property.id:
-      flash(f"Cannot revoke access of a tenant from a different property", category="info")
-      return redirect(previous_url)
-    elif tenant.active == "False":
-      flash(f"{tenant.first_name} {tenant.second_name}'s Account is already revoked",category="danger")
-      return redirect(previous_url)
-    elif tenant:
-      if tenant.unit:
-        unit = db.session.query(Unit).filter(tenant.id == Unit.tenant).first()
-        unit.tenant = None
-      elif tenant.complaint:
-        complaints = db.session.query(Complaints).filter(tenant.id == Complaints.tenant).all()
-        for complaint in complaints:
-          db.session.delete(complaint)
-        db.session.commit()
-      elif tenant.transact:
-        transactions = db.session.query(Transaction).filter(tenant.id == Transaction.tenant).all()
-        db.session.delete(transactions)
-        db.session.commit()
-      tenant.active = "False"
-      tenant.landlord = None
-      tenant.properties = None
-      db.session.commit()
-      flash(f"{tenant.first_name} {tenant.second_name}'s Account Revoked successfully",category="success")
-      return redirect(previous_url)
-  except:
-    flash(f"Invalid Tenant ID. Try again", category="danger")
-    return redirect(previous_url)
-  
-  return render_template("property_dashboard.html")
-
-@landlords.route("/revoke_tenant/<int:tenant_id>", methods=["POST", "GET"])
+@landlords.route("/revoke-tenant/<int:tenant_id>", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
 def remove_tenant_now(tenant_id):
@@ -319,34 +256,8 @@ def remove_tenant_now(tenant_id):
     abort(403)
   previous_url = request.referrer
   this_property = session["property"]
-  tenant = Tenant.query.get(tenant_id)
-  if tenant.landlord != current_user.id:
-    flash(f"Unknown Tenant ID", category="info")
-    return redirect(previous_url)
-  elif tenant.active == "False":
-    flash(f"{tenant.first_name} {tenant.second_name}'s Account is already revoked",category="danger")
-    return redirect(previous_url)
-  elif tenant:
-    if tenant.unit:
-      unit = db.session.query(Unit).filter(tenant.id == Unit.tenant).first()
-      unit.tenant = None
-    elif tenant.complaint:
-      complaints = db.session.query(Complaints).filter(tenant.id == Complaints.tenant).all()
-      for complaint in complaints:
-        db.session.delete(complaint)
-      db.session.commit()
-    elif tenant.transact:
-      transactions = db.session.query(Transaction).filter(tenant.id == Transaction.tenant).all()
-      db.session.delete(transactions)
-      db.session.commit()
-    tenant.active = "False"
-    tenant.landlord = None
-    tenant.properties = None
-    db.session.commit()
-    flash(f"{tenant.first_name} {tenant.second_name}'s Account Revoked successfully. Tenant no longer part of your tenant list.",category="success")
-    return redirect(url_for("landlord.property_information", property_id=this_property.id))
-
-  return render_template("property_dashboard.html")
+  revoke_tenant_access(tenant_id, current_user.id, previous_url)
+  return redirect(url_for("landlord.property_information", property_id=this_property.id))
 
 @landlords.route("/property-registration", methods=["POST", "GET"])
 @fresh_login_required
