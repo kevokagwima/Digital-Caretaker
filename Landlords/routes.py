@@ -72,7 +72,7 @@ def Landlord_login():
 
   return render_template("landlord_login.html", form=form)
 
-def base_landlord():
+def invoice():
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
   if units:
     for unit in units:
@@ -99,7 +99,7 @@ def landlord_dashboard():
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
   invoices = Invoice.query.filter_by(status="Cleared").all()
-  base_landlord()
+  invoice()
   return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices)
 
 @landlords.route("/approve-verification/<int:verification_id>")
@@ -181,7 +181,7 @@ def property_information(property_id):
     units = db.session.query(Unit).filter(Unit.Property == propertiez.id).all()
     tenants_count = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).count()
     unit_count = db.session.query(Unit).filter(Unit.Property == propertiez.id).count()
-    base_landlord()
+    invoice()
   except:
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
@@ -208,7 +208,7 @@ def tenant_details(tenant_id):
     transactions = Transaction.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
-    base_landlord()
+    invoice()
   except:
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
