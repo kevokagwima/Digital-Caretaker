@@ -20,6 +20,11 @@ html {
   display: none;
 }
 
+.logz {
+  gap: 0.3rem;
+  align-items: center;
+}
+
 .logos {
   max-height: 6rem;
   margin-top: 3rem;
@@ -75,6 +80,7 @@ html {
 }
 
 .box h4 {
+  color: black;
   text-align: center;
   font-size: 45px;
   font-family: "Lexend Exa", sans-serif;
@@ -126,6 +132,7 @@ html {
   font-family: "Dancing Script", cursive;
   font-family: "Varela Round", sans-serif;
   text-transform: capitalize;
+  background-color: whitesmoke;
   border: none;
   outline: 2px solid black;
   letter-spacing: 1px;
@@ -199,6 +206,7 @@ html {
   align-items: center;
   position: relative;
   background-color: whitesmoke;
+  color: #212121;
   border-radius: 10px;
 }
 

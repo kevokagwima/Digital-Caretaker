@@ -14,7 +14,7 @@ window.addEventListener("scroll", () => {
       link.style.color = "black";
     });
     logo_white.style.display = "none";
-    logo.style.display = "block";
+    logo.style.display = "flex";
     logos.classList.add("logo-fixed");
     login.style.color = "black";
   } else {

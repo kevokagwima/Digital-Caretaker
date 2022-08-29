@@ -48,11 +48,13 @@ html {
   font-family: "Varela Round", sans-serif;
   margin-top: 15px;
   font-size: 45px;
+  color: black;
 }
 
 .details p {
   font-family: "PT Sans", sans-serif;
   font-size: 16px;
+  color: #212121;
 }
 
 .more-info {
@@ -127,7 +129,7 @@ html {
 }
 
 .property-details h4,
-.landlord-info h4 {
+.unit-info h4 {
   font-family: "PT Sans", sans-serif;
   letter-spacing: 1px;
   font-size: 18px;
@@ -135,6 +137,7 @@ html {
   text-transform: uppercase;
   position: relative;
   font-weight: bold;
+  color: black;
 }
 
 #prop-details::after {
@@ -164,6 +167,7 @@ table td {
   font-family: "Dancing Script", cursive;
   font-family: "Varela Round", sans-serif;
   letter-spacing: 1px;
+  color: #212121;
 }
 
 table td span {
@@ -173,7 +177,7 @@ table td span {
   font-family: "Varela Round", sans-serif;
 }
 
-.landlord-information {
+.unit-information {
   margin-top: 2rem;
 }
 
@@ -192,6 +196,8 @@ table td span {
   font-family: "Varela Round", sans-serif;
   font-size: 18px;
   border: 1px solid black;
+  color: black;
+  background-color: whitesmoke;
 }
 
 input::placeholder,
@@ -211,6 +217,8 @@ textarea::placeholder {
   font-family: "Dancing Script", cursive;
   font-family: "Varela Round", sans-serif;
   border: 1px solid black;
+  color: black;
+  background-color: whitesmoke;
 }
 
 .input-5 {
@@ -229,4 +237,42 @@ textarea::placeholder {
   font-size: 15px;
   letter-spacing: 1px;
   cursor: pointer;
+}
+
+.landlord-info {
+  padding: 3rem 2rem;
+  background-color: white;
+  color: #212121;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  grid-column: 1/3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.landlord-info h4 {
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+  font-family: "PT Sans", sans-serif;
+}
+
+.landlord-info hr {
+  min-width: 30%;
+  border: none;
+  outline: 1px solid var(--red);
+  margin-bottom: 2rem;
+}
+
+.landlord-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.landlord-details p {
+  font-size: 1.2rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
 }

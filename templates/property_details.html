@@ -154,9 +154,9 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
       </tr>
     </table>
   </div>
-  <div class="landlord-info">
+  <div class="unit-info">
     <h4 id="prop-details">Unit Enquiry</h4>
-    <div class="landlord-information">
+    <div class="unit-information">
       <form class="form" action="">
         <div class="input-1">
           <input type="text" required name="" id="" placeholder="Enter First Name">
@@ -175,6 +175,15 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
         </div>
         <button>Send</button>
       </form>
+    </div>
+  </div>
+  <div class="landlord-info">
+    <h4>Landlord Information</h4>
+    <hr>
+    <div class="landlord-details">
+      <p>Name: {{ landlord.first_name }} {{ landlord.second_name }}</p>
+      <p>Email Address: {{ landlord.email }}</p>
+      <p>Phone Number: 0{{ landlord.phone }}</p>
     </div>
   </div>
 </div>

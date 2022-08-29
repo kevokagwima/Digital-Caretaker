@@ -13,8 +13,11 @@ PMS | Properties
 {% endblock %}
 
 {% block logo %}
-<a id="logos" href="{{ url_for('main.index') }}">
+<a id="logos" class="logz" href="{{ url_for('main.index') }}">
   <img class="logos" src="{{ url_for('static', filename='css/Images/logo-white.png') }}" alt="logo">
+  {% if current_user.is_authenticated %}
+  <span id="account">{{ current_user.account_type }}</span>
+  {% endif %}
 </a>
 {% endblock %}
 

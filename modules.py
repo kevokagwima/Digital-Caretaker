@@ -121,6 +121,8 @@ def assign_tenant_unit(tenant_id, unit_id, property_id, previous_url, current_us
         unit.tenant = tenant.id
         db.session.commit()
         flash(f"Unit {unit.name} - {unit.Type} assigned to {tenant.first_name} {tenant.second_name} successfully",category="success")
+        generate_invoice(unit.id, unit.tenant, unit.rent_amount)
+        return redirect(url_for('landlord.tenant_details', tenant_id=tenant_id))
   except:
     flash(f"Invalid Tenant ID or Unit ID. Try again",category="danger")
     return redirect(previous_url)
@@ -138,6 +140,10 @@ def revoke_tenant_access(tenant_id, current_user, previous_url):
       if tenant.unit:
         unit = db.session.query(Unit).filter(tenant.id == Unit.tenant).first()
         unit.tenant = None
+      elif tenant.invoice:
+        invoices = Invoice.query.filter(Invoice.tenant == tenant.id, Invoice.status == "Active").all()
+        for invoice in invoices:
+          db.session.delete(invoice)
       tenant.active = "False"
       tenant.landlord = None
       tenant.properties = None

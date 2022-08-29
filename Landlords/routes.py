@@ -4,7 +4,7 @@ from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification,
 from .form import *
 from modules import generate_invoice, send_sms, send_email, send_chat, check_reservation_expiry, assign_tenant_unit, revoke_tenant_access, rent_transaction
 import random, os
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 landlords = Blueprint("landlord", __name__)
 SECRET_KEY = os.environ['Hms_secret_key']
@@ -72,6 +72,14 @@ def Landlord_login():
 
   return render_template("landlord_login.html", form=form)
 
+def base_landlord():
+  units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
+  if units:
+    for unit in units:
+      generate_invoice(unit.id, unit.tenant, unit.rent_amount)
+
+  return render_template("base_landlord.html", units=units)
+
 @landlords.route("/Landlord_dashboard", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
@@ -91,10 +99,7 @@ def landlord_dashboard():
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
   invoices = Invoice.query.filter_by(status="Cleared").all()
-  if units:
-    for unit in units:
-      generate_invoice(unit.id, unit.tenant, unit.rent_amount)
-
+  base_landlord()
   return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices)
 
 @landlords.route("/approve-verification/<int:verification_id>")
@@ -176,11 +181,7 @@ def property_information(property_id):
     units = db.session.query(Unit).filter(Unit.Property == propertiez.id).all()
     tenants_count = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).count()
     unit_count = db.session.query(Unit).filter(Unit.Property == propertiez.id).count()
-    unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-    check_reservation_expiry(propertiez.id)
-    if unitz:
-      for unit in unitz:
-        generate_invoice(unit.id, unit.tenant, unit.rent_amount)
+    base_landlord()
   except:
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
@@ -207,10 +208,7 @@ def tenant_details(tenant_id):
     transactions = Transaction.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
-    unitz = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-    if unitz:
-      for unit in unitz:
-        generate_invoice(unit.id, unit.tenant, unit.rent_amount)
+    base_landlord()
   except:
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
@@ -255,9 +253,10 @@ def remove_tenant_now(tenant_id):
   if current_user.account_type != "Landlord":
     abort(403)
   previous_url = request.referrer
-  this_property = session["property"]
+  tenant = Tenant.query.get(tenant_id)
+  this_property = tenant.properties
   revoke_tenant_access(tenant_id, current_user.id, previous_url)
-  return redirect(url_for("landlord.property_information", property_id=this_property.id))
+  return redirect(url_for("landlord.property_information", property_id=this_property))
 
 @landlords.route("/property-registration", methods=["POST", "GET"])
 @fresh_login_required

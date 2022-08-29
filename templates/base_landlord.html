@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base_landlord.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/css/bootstrap.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+  </head>
+  <div class="side-nav">
+    <div class="profile" onclick="openView(event, 'profile')">
+      <img src="{{ url_for('static', filename='css/Images/profile.png') }}" alt="profile image">
+      <div class="profile-info">
+        <p>{{ current_user.username }}</p>
+      </div>
+      <div class="account-type">
+        {{ current_user.account_type }}
+      </div>
+    </div>
+    <div class="main-navigation">
+      <h4 id="nav-title">Main</h4>
+      {% block nav %}{% endblock %}
+    </div>
+    <div class="secondary-navigation">
+      <h4 id="nav-title">Settings</h4>
+      <button class="tablinks" onclick="openView(event, 'settings')">
+        <img src="{{ url_for('static', filename='css/Images/setting.png') }}" alt="settings">
+        Settings
+      </button>
+      <button class="tablinks" onclick="openView(event, 'help')">
+        <img src="{{ url_for('static', filename='css/Images/info.png') }}" alt="help">
+        Help
+      </button>
+    </div>
+    <div class="logout">
+      <a href="{{ url_for('landlord.landlord_logout') }}">
+        <button>
+          <img src="{{ url_for('static', filename='css/Images/logout.png') }}" alt="logout">
+          Logout
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="content-area">
+    <div class="notification-area">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="tops">
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}}">
+          <div class="side"></div>
+          <p id="message">{{ message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      <div class="burger">
+        <div class="div"></div>
+        <div class="div"></div>
+        <div class="div"></div>
+      </div>
+      <div class="not">
+        <img class="not--img" src="{{ url_for('static', filename='css/Images/bell.png') }}" alt="notification bell">
+        {% set verifications = [] %}
+        {% for info in current_user.verification if info.status == "pending" %}
+        {{ verifications.append(info) or "" }}
+        {% endfor %}
+        {% if verifications %}
+        <div class="notification-dot"></div>
+        {% endif %}
+      </div>
+      <div class="notifications">
+        {% if verifications %}
+        {% for info in current_user.verification|sort(attribute='date', reverse=true) if info.status == "pending" %}
+        <div class="notification-info">
+          <p>You have a rent payment that requires your verification from
+            {% for tenant in current_user.tenant if tenant.id == info.tenant %} <span>{{ tenant.first_name }}
+              {{ tenant.second_name }} {% for unit in current_user.unit if unit.tenant == tenant.id %} - Unit
+              {{ unit.name }}
+              {% endfor %}</span> {% endfor %}
+          </p>
+          <p id="info">{{ info.info }}</p>
+          <div class="not-actions">
+            <button class="btn1">
+              <a href="{{ url_for('landlord.approve_verification', verification_id=info.id) }}">Approve</a>
+            </button>
+            <button class="btn2">
+              <a href="{{ url_for('landlord.deny_verification', verification_id=info.id) }}">Deny</a>
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p id="else-not">No new notifications</p>
+        {% endif %}
+      </div>
+    </div>
+    {% block content %}{% endblock %}
+    <div id="property_registration" class="tabcontent">
+      <h4 id="dash">Register Your Property</h4>
+      <p id="more-info">Enter details about your new property</p>
+      <div class="property-registration">
+        <form action="{{ url_for('landlord.property') }}" method="POST">
+          <div class="form1">
+            <label for="Landlord ID">Enter Landlord ID</label> <br>
+            <input type="number" name="landlord_id" readonly required placeholder="Enter Landlord ID"
+              value="{{ current_user.landlord_id }}">
+          </div>
+          <div class="form2">
+            <label for="property-name">Enter Property Name</label> <br>
+            <input type="text" name="property_name" spellcheck="false" required placeholder="Enter Property Name">
+          </div>
+          <div class="form3">
+            <label for="property-address">Address One</label> <br>
+            <input type="text" name="property-address" required placeholder="Enter County">
+          </div>
+          <div class="form3">
+            <label for="property-address">Address Two</label> <br>
+            <input type="text" name="property-address2" required placeholder="Enter city/town">
+          </div>
+          <div class="form4">
+            <label for="property-floors">Enter Property Floors</label> <br>
+            <input type="number" name="property-floors" required placeholder="Enter Number of Floors">
+          </div>
+          <div class="form5">
+            <label for="property-units">Enter Total Number Units</label> <br>
+            <input type="number" name="property-units" required placeholder="Enter Number of Units">
+          </div>
+          <div class="form6">
+            <label for="property_type">Choose Type of Property</label><br>
+            <select name="property-type" required>
+              <option value="Apartment">Apartment</option>
+              <option value="Office">Office</option>
+              <option disabled value="Residential">Residential</option>
+              <option disabled value="Warehouse">Warehouse </option>
+            </select>
+          </div>
+          <div class="form6">
+            <label for="property_type">Select Property Availablity</label><br>
+            <select required id="availability" name="availability">
+              <option value="Sale">For Sale</option>
+              <option value="Rent">For Rent</option>
+            </select>
+          </div>
+          <button class="btn" type="submit">
+            <span class="button--text">REGISTER PROPERTY</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div id="settings" class="tabcontent">
+      <h4 id="dash">Settings</h4>
+      <div class="extra">
+        <p>Coming Soon</p>
+      </div>
+    </div>
+    <div id="help" class="tabcontent">
+      <h4 id="dash">Help</h4>
+      <div class="extra main">
+        <p>
+          <a target="_blank" href="{{ url_for('main.index') }}">Visit Main Website</a>
+        </p>
+      </div>
+    </div>
+    <div id="profile" class="tabcontent">
+      <h4 id="dash">My Profile</h4>
+      <div class="my-profile">
+        <div class="landlord-info">
+          <div class="profile-img">
+            <img src="{{ url_for('static', filename='css/Images/profile.png') }}" alt="profile image">
+            <div class="profile-info">
+              <p>Account status <span>
+                  {% if current_user.active == 'True' %}
+                  Active
+                  {% else %}
+                  Not-Active
+                  {% endif %}
+                </span></p>
+            </div>
+          </div>
+          <div class="personal-info-details">
+            <table>
+              <tr>
+                <th>Landlord ID</th>
+                <td>{{ current_user.landlord_id }}</td>
+              </tr>
+              <tr>
+                <th>First Name</th>
+                <td>{{ current_user.first_name }}</td>
+              </tr>
+              <tr>
+                <th>Second Name</th>
+                <td>{{ current_user.second_name }}</td>
+              </tr>
+              <tr>
+                <th>Last Name</th>
+                <td>{{ current_user.last_name }}</td>
+              </tr>
+              <tr>
+                <th>Username</th>
+                <td>{{ current_user.username }}</td>
+              </tr>
+              <tr>
+                <th>Email Address</th>
+                <td>{{ current_user.email }}</td>
+              </tr>
+              <tr>
+                <th>Phone Number</th>
+                <td>0{{ current_user.phone }}</td>
+              </tr>
+              <tr>
+                <th>Account Type</th>
+                <td>{{ current_user.account_type }}</td>
+              </tr>
+              <tr>
+                <th>Date Registered</th>
+                <td>{{ current_user.date.strftime('%d/%m/%Y') }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="properties-owned">
+            <h4>Properties Owned - <span>{{ current_user.Property|count }}</span></h4>
+            <div class="properties-owned-info">
+              {% for property in current_user.Property %}
+              <div class="prop-owned-info">
+                <h4>{{ property.name }}
+                  - <span id="prop_id">{{ property.property_id }}</span>
+                </h4>
+                {% if property.Type == "Office" %}
+                <img src="{{ url_for('static', filename='css/Images/office building.png') }}" alt="apartment">
+                {% elif property.Type == "Apartment" %}
+                <img src="{{ url_for('static', filename='css/Images/3d apartment.png') }}" alt="apartment">
+                {% else %}
+                <img src="{{ url_for('static', filename='css/Images/residential.png') }}" alt="apartment">
+                {% endif %}
+                <a href="{{ url_for('landlord.property_information', property_id=property.id) }}">View Property</a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <body>
+    {% block body %}{% endblock %}
+
+    <script type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+    <script>
+      var xValues = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
+
+      new Chart("myChart", {
+        type: "line",
+        data: {
+          labels: xValues,
+          datasets: [{
+            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
+            borderColor: "red",
+            fill: false
+          }, {
+            data: [1600, 1700, 1700, 1900, 2000, 2700, 4000, 5000, 6000, 7000],
+            borderColor: "rgb(9, 197, 9)",
+            fill: false
+          }, {
+            data: [300, 700, 2000, 5000, 6000, 4000, 2000, 1000, 200, 100],
+            borderColor: "blue",
+            fill: false
+          }]
+        },
+        options: {
+          legend: { display: false }
+        }
+      });
+    </script>
+  </body>
+
+</html>

@@ -153,7 +153,9 @@ def book(unit_id):
   property = Properties.query.filter_by(id=unit.Property).first()
   booking = Bookings.query.filter_by(user=current_user.id, status="Active").count() or Bookings.query.filter_by(landlord_user=current_user.id, status="Active").count() or Bookings.query.filter_by(tenant_user=current_user.id, status="Active").count()
   try:
-    if unit.reserved == "True":
+    if unit.tenant:
+      flash(f"Unit is already occupied", category="danger")
+    elif unit.reserved == "True":
       flash(f"Unit is already reserved. It will be available after 24 hrs", category="danger")
       return redirect(url_for("main.unit_details", unit_id=unit.id))
     elif booking == 4:
