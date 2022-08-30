@@ -28,9 +28,13 @@ def signup():
       )
       db.session.add(member)
       db.session.commit()
-      message = f'Congratulations! {member.first_name} {member.second_name} you have successfully created your account. \nLogin using your username {member.username} and password'
+      message = {
+        'receiver': member.email,
+        'subject': 'Account Created Successfully',
+        'body': f'Congratulations! {member.first_name} {member.second_name} you have successfully created your account. \nLogin using your username {member.username} and password'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"User registered successfully", category="success")
       return redirect(url_for("main.signin"))
 

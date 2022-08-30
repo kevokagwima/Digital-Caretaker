@@ -39,9 +39,13 @@ def admin_assign_landlord(tenant_id):
       tenant.landlord = landlord.id
       tenant.active = "True"
       db.session.commit()
-      message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to landlord {landlord.first_name} {landlord.second_name}.'
+      message = {
+        'receiver': landlord.email,
+        'subject': 'Tenant Assigned',
+        'body': f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to landlord {landlord.first_name} {landlord.second_name}.'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Tenant Landlord Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -57,9 +61,13 @@ def admin_assign_property(tenant_id):
     if tenant and Property:
       tenant.properties = Property.id
       db.session.commit()
-      message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to property {Property.name} - {Property.Type}'
+      message = {
+        'receiver': tenant.email,
+        'subject': 'Property Assigned',
+        'body': f'\nYou have successfully been assigned to property {Property.name} - {Property.Type}'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Tenant Property Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -84,9 +92,13 @@ def admin_assign_unit(tenant_id):
     elif tenant and unit:
       unit.tenant = tenant.id
       db.session.commit()
-      message = f'\n{tenant.first_name} {tenant.second_name} has successfully been assigned to unit {unit.name} - {unit.Type}.'
+      message = {
+        'receiver': tenant.email,
+        'subject': 'Unit Assigned',
+        'body': f'\nYou have successfully been assigned to unit {unit.name} - {unit.Type}.'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Tenant Unit Information Updated Successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:
@@ -109,9 +121,13 @@ def admin_revoke_tenant(tenant_id):
         for units in unit:
           units.tenant = None
       db.session.commit()
-      message = f'\nTenant {tenant.first_name} {tenant.second_name} account has successfully been revoked.'
+      message = {
+        'receiver': tenant.email,
+        'subject': 'Revoke Access',
+        'body': f'\nYour account has successfully been revoked.'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Tenant revoked successfully", category="success")
     return redirect(url_for('admin.admin'))
   except:

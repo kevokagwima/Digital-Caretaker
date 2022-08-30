@@ -38,9 +38,13 @@ def tenant():
       )
       db.session.add(new_tenant)
       db.session.commit()
-      message = f'Congratulations! {new_tenant.first_name} {new_tenant.second_name} you have successfully created your tenant account. \nLogin to your dashboard using your Tenant ID {new_tenant.tenant_id} and your password. \nDo not share your Tenant ID with anyone.'
+      message = {
+        'receiver': new_tenant.email,
+        'subject': 'Account Created Successfully',
+        'body': f'Congratulations! {new_tenant.first_name} {new_tenant.second_name} you have successfully created your tenant account. \nLogin to your dashboard using your Tenant ID {new_tenant.tenant_id} and your password. \nDo not share your Tenant ID with anyone.'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Account created successfully", category="success")
       return redirect(url_for("tenant.tenant_login"))
 
@@ -169,6 +173,11 @@ def payment_complete():
     'invoice': invoice.id,
     'origin': "Bank"
   }
+  message = {
+    'receiver': current_user.email,
+    'subject': 'RENT PAYMENT',
+    'body': f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+  }
   if transactions:
     if not invoice:
       flash(f"You've already paid this month's rent, wait until next charge", category="danger")
@@ -180,9 +189,8 @@ def payment_complete():
       invoice.status = "Cleared"
       db.session.commit()
       flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       return redirect(url_for('tenant.tenant_dashboard'))
   else:
     rent_transaction(**new_transaction)
@@ -191,9 +199,8 @@ def payment_complete():
     invoice.status = "Cleared"
     db.session.commit()
     flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-    message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}'
     # send_sms(message)
-    # send_email(message)
+    send_email(**message)
     return redirect(url_for('tenant.tenant_dashboard'))
 
   return redirect(url_for('tenant.tenant_dashboard'))
@@ -264,6 +271,7 @@ def upload_screenshot(image):
 def complaint():
   if current_user.account_type != "Tenant":
     abort(403)
+  landlord = Landlord.query.get(current_user/landlord)
   try:
     new_complaint = Complaints(
       title=request.form.get("title"),
@@ -275,11 +283,15 @@ def complaint():
       landlord=Landlord.query.filter_by(id=current_user.landlord).first().id,
       Property=Properties.query.filter_by(id=current_user.properties).first().id
     )
-    message = f'You have a new complaint from a tenant. \nTitle: {new_complaint.title} \nCategory: {new_complaint.category} \nThe complaint reads: \n{new_complaint.body}'
-    send_sms(message)
-    send_email(message)
+    message = {
+      'receiver': landlord.email,
+      'subject': 'Tenant Complaint',
+      'body': f'You have a new complaint from a tenant. \nTitle: {new_complaint.title} \nCategory: {new_complaint.category} \nThe complaint reads: \n{new_complaint.body}'
+    }
+    # send_sms(message)
     db.session.add(new_complaint)
     db.session.commit()
+    send_email(**message)
     flash(f"Complaint sent", category="success")
     return redirect(url_for("tenant.tenant_dashboard"))
   except:

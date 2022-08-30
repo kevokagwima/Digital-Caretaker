@@ -1,15 +1,16 @@
 from flask import flash, redirect, url_for
+from email.message import EmailMessage
 from models import *
 from datetime import datetime, date, timedelta
 from twilio.rest import Client
-from sendgrid.helpers.mail import Mail
-from sendgrid import SendGridAPIClient
-import random, os, random
+import random, os, random, ssl, smtplib
 
 account_sid = os.environ['Twilio_account_sid']
 auth_token = os.environ['Twilio_auth_key']
 clients = Client(account_sid, auth_token)
-sg = SendGridAPIClient(os.environ['Email_api_key'])
+email_sender = os.environ["Email_from"]
+email_password = os.environ["Email_password"]
+em = EmailMessage()
 
 def invoice_logic(tenant, unit_id, rent):
   new_invoice = Invoice(
@@ -52,15 +53,15 @@ def send_sms(message):
     )
   print(messages)
 
-def send_email(email):
-  message = Mail(
-    from_email="kevinkagwima4@gmail.com",
-    to_emails="kevokagwima@gmail.com",
-    subject="Property Management System",
-    html_content=email
-  )
-  response = sg.send(message)
-  print(response)
+def send_email(**email):
+  em['sender'] = email_sender
+  em['to'] = email["receiver"]
+  em['subject'] = email["subject"]
+  em.set_content(email["body"])
+  context = ssl.create_default_context()
+  with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+    smtp.login(email_sender, email_password)
+    smtp.sendmail(email_sender, email["receiver"], em.as_string())
 
 def check_reservation_expiry(property_id):
   reservations = Bookings.query.filter_by(property=property_id).all()

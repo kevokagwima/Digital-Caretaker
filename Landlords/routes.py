@@ -39,9 +39,13 @@ def landlord():
       )
       db.session.add(new_landlord)
       db.session.commit()
-      message = f'Congratulations! {new_landlord.first_name} {new_landlord.second_name} you have successfully created your landlord account. \nLogin to your dashboard using your Landlord ID {new_landlord.landlord_id} and your password. \nDo not share your Landlord ID with anyone other than your tenants only when they register.'
+      message = {
+        'receiver': new_landlord.email,
+        'subject': 'Account Created Successfully',
+        'body': f'Congratulations! {new_landlord.first_name} {new_landlord.second_name} you have successfully created your landlord account. \nLogin to your dashboard using your Landlord ID {new_landlord.landlord_id} and your password. \nDo not share your Landlord ID with anyone other than your tenants only when they register.'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Account created successfully", category="success")
       return redirect(url_for("landlord.Landlord_login"))
 
@@ -132,9 +136,13 @@ def approve_verification(verification_id):
       invoice.month_created = datetime.now()
       invoice.status = "Cleared"
       db.session.commit()
-      message = f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+      message = {
+        'receiver': current_user.email,
+        'subject': 'RENT PAYMENT',
+        'body': f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+      }
       # send_sms(message)
-      # send_email(message)
+      send_email(**message)
       flash(f"Rent payment approved", category="success")
       return redirect(url_for('landlord.landlord_dashboard')) 
   else:
@@ -182,6 +190,7 @@ def property_information(property_id):
     tenants_count = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).count()
     unit_count = db.session.query(Unit).filter(Unit.Property == propertiez.id).count()
     invoice()
+    check_reservation_expiry(propertiez.id)
   except:
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
