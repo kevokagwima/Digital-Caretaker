@@ -142,6 +142,7 @@ class Unit(db.Model):
   transact = db.relationship("Transaction", backref="unit_transaction", lazy=True)
   invoice = db.relationship("Invoice", backref="unit_invoice", lazy=True)
   extra_service = db.relationship("Extra_service", backref="extras-units", lazy=True)
+  status = db.Column(db.String(length=4), nullable=False)
 
 class Invoice(db.Model):
   __tablename__ = 'invoices'

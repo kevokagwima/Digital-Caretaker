@@ -3,6 +3,7 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/new_dash.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
 {% endblock %}
 
 {% block title %}
@@ -75,7 +76,7 @@ PMS | Landlord Dashboard
         <div class="expenses">
           <h4>Expenses</h4>
           {% set expenses = [] %}
-          {% for extra in current_user.extra_service  %}
+          {% for extra in current_user.extra_service if extra.date_opened.strftime("%m") == this_month.strftime("%m")  %}
           {{ expenses.append(extra.cost) or "" }}
           {% endfor %}
           {% set total_expense = expenses|sum %}
@@ -87,9 +88,59 @@ PMS | Landlord Dashboard
           <p><span>{{ "{:,}".format(difference) }}</span> Ksh</p>
         </div>
       </div>
-      <canvas id="myChart" style="width:100%;max-width:100%"></canvas>
+      <!-- <canvas id="myChart" style="width:100%;max-width:100%"></canvas> -->
+      {% set total = [] %}
+      {% for unit in current_user.unit if unit.tenant and unit.status == "Rent" %}
+      {{ total.append(unit.rent_amount) or "" }}
+      {% endfor %}
+      <div class="table">
+        <table class="charts-css column multiple data-spacing-5 datasets-spacing-2 show-labels" id="myChart">
+          <tr>
+            <th style="font-size: 0.7rem;" scope="row">Potential Revenue / Actual Revenue</th>
+            <td id="this" style="--size: calc({{ total|sum}}/{{ total|sum }}); --color: #00b9eb;">
+              <span class="data">
+                {{ "Ksh {:,}".format(total|sum) }}
+              </span>
+              <span class="tooltip">Potential Revenue <br>{{ "Ksh {:,}".format(total|sum) }}</span>
+            </td>
+            <td style="--size: calc({{ totalz_rent}}/{{ total|sum }} + 0.1); --color: #03a6d3;">
+              <span class="data">
+                {{ "Ksh {:,}".format(totalz_rent) }}
+              </span>
+              <span class="tooltip">Actual Revenue <br>{{ "Ksh {:,}".format(totalz_rent) }}</span>
+            </td>
+          </tr>
+          <tr>
+            <th style="font-size: 0.7rem;" scope="row">Actual Expenses</th>
+            <td style="--size: calc({{ total_expense }}/{{ difference }} + 0.2); --color: #ec1848;">
+              {% if total_expense == 0 %}
+              {% else %}
+              <span class="data">
+                {{ "Ksh {:,}".format(total_expense) }}
+              </span>
+              <span class="tooltip">Actual Expenses <br>{{ "Ksh {:,}".format(total_expense) }}</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th style="font-size: 0.7rem;" scope="row">Actual Revenue / Profit</th>
+            <td style="--size: calc({{ difference }}/{{ totalz_rent }}); --color: rgb(7, 172, 7);">
+              <span class="data">
+                {{ "Ksh {:,}".format(difference) }}
+              </span>
+              <span class="tooltip">Actual Profit <br>{{ "Ksh {:,}".format(difference) }}</span>
+            </td>
+            <td style="--size: calc({{ totalz_rent}}/{{ totalz_rent }}); --color: rgb(9, 197, 9);">
+              <span class="data">
+                {{ "Ksh {:,}".format(totalz_rent) }}
+              </span>
+              <span class="tooltip">Total Revenue Generated <br>{{ "Ksh {:,}".format(totalz_rent) }}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <div class="prop-summary">
+    <div class=" prop-summary">
       {% if current_user.Property|count != 0 %}
       <div class="prop prop-count">
         <span id="property-count">{{ current_user.Property|count }}</span>
@@ -179,7 +230,7 @@ PMS | Landlord Dashboard
         <span class="tablinks" onclick="openView(event, 'rent')">View More</span>
       </h4>
       {% set total = [] %}
-      {% for unit in current_user.unit if unit.tenant %}
+      {% for unit in current_user.unit if unit.tenant and unit.status == "Rent" %}
       {{ total.append(unit.rent_amount) or "" }}
       {% endfor %}
       {% set total_rent = total|sum %}
@@ -299,7 +350,7 @@ PMS | Landlord Dashboard
       <div class="expected-rent">
         <h4>Rent Expected</h4>
         {% set unit_rent = [] %}
-        {% for unit in current_user.unit if unit.tenant %}
+        {% for unit in current_user.unit if unit.tenant and unit.status == "Rent" %}
         {{ unit_rent.append(unit) or "" }}
         {% endfor %}
         <p id="unit_rent">From {{ unit_rent|count }} units</p>

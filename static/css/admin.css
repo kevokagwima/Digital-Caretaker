@@ -164,8 +164,7 @@ body::-webkit-scrollbar {
 
 .content-area {
   margin-left: 14rem;
-  color: var(--dark-blue);
-  padding: 60px 20px 10px;
+  padding: 32px 20px 10px;
   background-color: var(--other-dark-blue);
   min-height: 100vh;
 }
@@ -191,6 +190,7 @@ body::-webkit-scrollbar {
   margin-top: 0.5rem;
 }
 
+.dashboard,
 .tenants,
 .landlords,
 .properties,
@@ -200,12 +200,126 @@ body::-webkit-scrollbar {
   margin-top: 1.4rem;
   max-height: 41rem;
   overflow: auto;
+  color: white;
+}
+
+.dashboard {
+  background-color: transparent;
+}
+
+.users-data {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+
+.users {
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.2rem;
+  background-color: var(--dark-blue);
+}
+
+.users > h4 {
+  letter-spacing: 0.8px;
+  color: whitesmoke;
+}
+
+.users-info {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.users-info p {
+  font-size: 2.5rem;
+  color: rgb(5, 189, 5);
+}
+
+.users-info span {
+  color: grey;
+  letter-spacing: 0.8px;
+  font-size: 0.9rem;
+}
+
+.other-information {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+
+.featured-info {
+  background-image: linear-gradient(150deg, purple, purple, var(--red));
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  grid-column: 1/4;
+  color: white;
+}
+
+.featured-info hr,
+.transaction-info hr {
+  border: none;
+  outline: 1px solid white;
+  opacity: 0.5;
+  margin: 0.8rem 0 1rem;
+}
+
+.featured-details {
+  display: flex;
+  flex-direction: column;
+  max-height: 11rem;
+  overflow: auto;
+}
+
+.featured-details::-webkit-scrollbar {
+  opacity: 0.3;
+}
+
+.featured,
+#featured {
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.featured-data > span {
+  color: var(--blue);
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+#featured {
+  padding: 0;
+  gap: 0.3rem;
+}
+
+#featured > p {
+  color: rgb(5, 189, 5);
+  font-weight: bold;
+}
+
+#featured span {
+  color: whitesmoke;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.transaction-info {
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  background-color: var(--black);
+  min-height: 10rem;
+  grid-column: 4/7;
 }
 
 #search-tenant,
 #unit-search {
   position: absolute;
-  top: 5rem;
+  top: 3rem;
   right: 0;
   width: 17rem;
   display: flex;

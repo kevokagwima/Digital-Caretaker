@@ -1062,6 +1062,10 @@ table th {
   border-radius: 3px;
 }
 
+.side {
+  background-color: black;
+}
+
 @media (prefers-color-scheme: dark) {
   .content-area,
   .main-navigation button:hover,
@@ -1107,6 +1111,8 @@ table th {
 @media (prefers-color-scheme: light) {
   .content-area,
   .main-navigation button:hover,
+  .main-navigation button:focus,
+  .secondary-navigation button:focus,
   .secondary-navigation button:hover,
   body,
   .upload form,

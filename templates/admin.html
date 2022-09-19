@@ -84,6 +84,83 @@
       </div>
       <div id="dashboard" class="tabcontent">
         <h4>Dashboard</h4>
+        <p id="more-info">This tab shows all the general information</p>
+        <div class="dashboard">
+          <div class="users-data">
+            <div class="users landlord">
+              <h4>Landlords</h4>
+              <div class="users-info">
+                <p>{{ landlords|count }}</p>
+                <span>Landlords</span>
+              </div>
+            </div>
+            <div class="users tenant">
+              <h4>Tenants</h4>
+              <div class="users-info">
+                <p>{{ tenants|count }}</p>
+                <span>Tenants</span>
+              </div>
+            </div>
+            <div class="users normal">
+              <h4>Normal Users</h4>
+              <div class="users-info">
+                <p>{{ users|count }}</p>
+                <span>Users</span>
+              </div>
+            </div>
+            <div class="users extra">
+              <h4>Extras</h4>
+              <div class="users-info">
+                <p>{{ extras|count }}</p>
+                <span>Extras</span>
+              </div>
+            </div>
+            <div class="users unit">
+              <h4>Properties</h4>
+              <div class="users-info">
+                <p>{{ units|count }}</p>
+                <span>Properties</span>
+              </div>
+            </div>
+            <div class="users reservations">
+              <h4>Reservations</h4>
+              <div class="users-info">
+                <p>{{ reservations|count }}</p>
+                <span>Reservations</span>
+              </div>
+            </div>
+          </div>
+          <div class="other-information">
+            <div class="featured-info">
+              <h4>Featured Properties</h4>
+              <hr>
+              <div class="featured-details">
+                {% for property in properties %}
+                <div class="featured">
+                  <div class="featured-data">
+                    <h4>{{ property.name }}</h4>
+                    <span>{{ property.Type }}</span>
+                  </div>
+                  <div id="featured">
+                    <p>
+                      {{ property.tenants|count }}
+                      <span>Tenants</span>
+                    </p>
+                    <p>
+                      {{ property.unit|count }}
+                      <span>Units</span>
+                    </p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="transaction-info">
+              <h4>Transaction Details</h4>
+              <hr>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="landlords" class="tabcontent">
         <h4>Landlords ({{ landlords|count }})</h4>

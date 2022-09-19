@@ -3,6 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;500&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Martel:wght@200&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Days+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
 
 :root {
   --dark-blue: rgb(1, 1, 29);
@@ -28,6 +29,7 @@
   --font: "Exo", sans-serif;
   --font-1: "Days One", sans-serif;
   --product-desc-font: "Martel", serif;
+  --font-2: "Nanum Gothic", sans-serif;
 }
 
 * {
@@ -234,6 +236,7 @@ body::-webkit-scrollbar {
   max-width: 25rem;
   border-radius: 3px;
   background-color: var(--page-header-bgColor-hover);
+  box-shadow: 0 0 5rem -2rem black;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -471,11 +474,6 @@ body::-webkit-scrollbar {
   color: rgb(9, 197, 9);
 }
 
-#myChart {
-  max-height: 100%;
-  cursor: pointer;
-}
-
 .prop-summary {
   display: grid;
   grid-template-columns: repeat(2, auto);
@@ -523,8 +521,7 @@ body::-webkit-scrollbar {
 .prop span {
   color: var(--red);
   font-size: 5rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  font-family: var(--font);
 }
 
 .prop p {
@@ -575,8 +572,7 @@ body::-webkit-scrollbar {
   font-size: 15px;
   margin: 0 0 20px;
   padding: 0 8px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  font-family: var(--font-2);
   letter-spacing: 0.5px;
 }
 
@@ -584,6 +580,7 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding-right: 2px;
 }
 
 .insights .card {
@@ -597,8 +594,8 @@ body::-webkit-scrollbar {
 }
 
 .insights .card p {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  font-family: var(--font-2);
+  line-height: 1.6;
   letter-spacing: 0.5px;
   font-size: 15px;
 }

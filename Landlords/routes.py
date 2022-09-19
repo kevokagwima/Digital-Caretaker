@@ -104,6 +104,7 @@ def landlord_dashboard():
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
   invoices = Invoice.query.filter_by(status="Cleared").all()
   invoice()
+
   return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices)
 
 @landlords.route("/approve-verification/<int:verification_id>")
@@ -137,7 +138,7 @@ def approve_verification(verification_id):
       invoice.status = "Cleared"
       db.session.commit()
       message = {
-        'receiver': current_user.email,
+        'receiver': [current_user.email, tenant.email],
         'subject': 'RENT PAYMENT',
         'body': f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       }
@@ -265,6 +266,12 @@ def remove_tenant_now(tenant_id):
   tenant = Tenant.query.get(tenant_id)
   this_property = tenant.properties
   revoke_tenant_access(tenant_id, current_user.id, previous_url)
+  message = {
+    'receiver': [current_user.email, tenant.email],
+    'subject': 'Account Revoked',
+    'body': f'Account successfully revoked'
+  }
+  send_email(**message)
   return redirect(url_for("landlord.property_information", property_id=this_property))
 
 @landlords.route("/property-registration", methods=["POST", "GET"])
@@ -437,9 +444,9 @@ def select_extra_service(extra_id):
   data = json.loads(request.get_data('data'))
   Property = Properties.query.filter_by(id=data.get("property")).first()
   extra = Extras.query.filter_by(id=data.get("extra")).first()
-  active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id, Extra_service.status == "Ongoing", Extra_service.extra == extra.id).all()
+  active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id, Extra_service.status == "Ongoing", Extra_service.extra == extra_id).all()
   if active_extras:
-    extra_occupancy(extra.id)
+    extra_occupancy(extra_id)
   else:
     try:
       new_service = Extra_service(

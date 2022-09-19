@@ -1,3 +1,29 @@
+#myChart {
+  min-height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+#myChart tr {
+  min-height: 12rem;
+  max-height: 14rem;
+}
+
+#myChart td {
+  border-radius: 0.2rem 0.2rem 0 0;
+  cursor: pointer;
+}
+
+.data {
+  padding: 0.5rem 0;
+}
+
+.table {
+  min-width: 100%;
+  min-height: 69%;
+  margin: 6.5rem 0;
+}
+
 @media (prefers-color-scheme: light) {
   .content-area,
   body,

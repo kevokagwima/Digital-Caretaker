@@ -18,5 +18,8 @@
   "reactSnippets.settings.prettierEnabled": true,
   "javascript.format.semicolons": "remove",
   "prettier.enable": true,
-  "editor.experimental.stickyScroll.enabled": true
+  "editor.stickyScroll.enabled": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "HookyQR.beautify"
+  }
 }

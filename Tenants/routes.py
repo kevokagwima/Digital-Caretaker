@@ -163,6 +163,7 @@ def payment_complete():
   if current_user.account_type != "Tenant":
     abort(403)
   unit = Unit.query.filter_by(tenant=current_user.id).first()
+  landlord = Landlord.query.filter_by(id=current_user.landlord).first()
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
   new_transaction = {
@@ -174,7 +175,7 @@ def payment_complete():
     'origin': "Bank"
   }
   message = {
-    'receiver': current_user.email,
+    'receiver': [current_user.email, landlord.email],
     'subject': 'RENT PAYMENT',
     'body': f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
   }

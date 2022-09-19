@@ -60,8 +60,11 @@ def send_email(**email):
   em.set_content(email["body"])
   context = ssl.create_default_context()
   with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-    smtp.login(email_sender, email_password)
-    smtp.sendmail(email_sender, email["receiver"], em.as_string())
+    try:
+      smtp.login(email_sender, email_password)
+      smtp.sendmail(email_sender, email["receiver"], em.as_string())
+    except:
+      flash("Email failed to send", category="danger")
 
 def check_reservation_expiry(property_id):
   reservations = Bookings.query.filter_by(property=property_id).all()

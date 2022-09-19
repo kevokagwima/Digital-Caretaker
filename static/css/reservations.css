@@ -190,6 +190,7 @@ body {
   font-family: "PT Sans", sans-serif;
   z-index: 1;
   box-shadow: 0 0 10px -6px black;
+  color: black;
 }
 
 .side-panel p {
