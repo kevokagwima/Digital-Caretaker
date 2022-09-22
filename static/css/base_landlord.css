@@ -406,8 +406,7 @@ body::-webkit-scrollbar {
 .dash-information {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 20px;
-  row-gap: 20px;
+  gap: 20px;
   overflow: hidden;
   margin: 1rem 0 0;
   padding-right: 10px;
