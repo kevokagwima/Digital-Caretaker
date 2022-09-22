@@ -32,3 +32,15 @@
 </ul>
 <h2>The Main Dashboard</h2>
 <p>In this dashboard, the landlord is displayed with general information about their property from how many registered units and tenants, complainst, rent collected and remaining, revenue, profit and expenses generated, rent transactions, deployed extras.</p>
+<h3>The General Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191746815-bf622627-ab27-45e2-8497-b9cf77673ff6.png">
+<h3>The Tenants Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191747054-48729815-d368-4159-819f-4502b37dd1ee.png">
+<h3>The Units Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191747345-039c06b7-3276-4ae2-96f0-1f422346c7df.png">
+<h3>The Rent Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191747631-14460b11-2f44-4efb-b2ad-d9d8dd5d8e16.png">
+<h3>The Extras Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191747762-867ebe47-6b6e-4a68-bd7f-e00b50c83f43.png">
+<h3>The Ongoing Maintenance Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191747970-19de3377-5c38-4bf5-b105-2e59269430ab.png">
