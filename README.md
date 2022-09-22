@@ -60,3 +60,5 @@
 <p>In this dashboard, the landlord can view all the information regarding a tenant from their personal information, their assigned unit, the tenant's complaints and their generated invoice for their rent payments.</p>
 <h3>The Profile Tab</h3>
 <img src="https://user-images.githubusercontent.com/63863253/191757200-fc3c9d0b-3ec2-4190-9a50-b5096e8cf078.png">
+<p>Landlords can also send chat messages to tenants directly</p>
+<img src="https://user-images.githubusercontent.com/63863253/191758279-14409cd4-16f4-4fce-8c14-a0f0a9384053.png">
