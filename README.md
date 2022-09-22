@@ -18,8 +18,8 @@
 <li>Painting Services</li>
 </ul>
 <p>The system is divided into four modules</p>
-<a href="#landlord">Landlord Module</a>
-<a href="#tenant">Tenant Module</a>
-<a href="#user">User Module</a>
-<a href="#admin">Admin Module</a>
+<a href="#landlord">Landlord Module</a> <br>
+<a href="#tenant">Tenant Module</a> <br>
+<a href="#user">User Module</a> <br>
+<a href="#admin">Admin Module</a> <br>
 <p>This system has been developed in python with the Flask Framework.
