@@ -46,3 +46,17 @@
 <img src="https://user-images.githubusercontent.com/63863253/191747970-19de3377-5c38-4bf5-b105-2e59269430ab.png">
 <h2>2. The Property Dashboard</h2>
 <p>In this dashboard, The landlord can view all information related to a specific property they select from the main dashboard. This page also displays all the complaints from tenants, and an options tab where a landlord can choose to disable the property and to change the availablity of the property,i.e. Either from rent to sele or sale to rent.</p>
+<h3>The Property Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191753495-d3b018be-2b42-47bc-995e-4f4c237cd07f.png">
+<h3>The Tenants Tab(Property dashboard)</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191753709-8010ec9a-f8df-48c2-b56b-ceb19b174ff1.png">
+<h3>The Units Tab(Property dashboard)</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191753956-eaefebaf-a93e-437c-9086-3cdf90516cbb.png">
+<h3>The Complaints Tab(Property dashboard)</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191754161-e6972d43-baf5-4cc8-a9bf-f99c4de3940f.png">
+<h3>The Options Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191754436-7f902c21-a6a6-4125-aca2-292beeda1cd3.png">
+<h2>3. The Tenant Profile Dashboard</h2>
+<p>In this dashboard, the landlord can view all the information regarding a tenant from their personal information, their assigned unit, the tenant's complaints and their generated invoice for their rent payments.</p>
+<h3>The Profile Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/191757200-fc3c9d0b-3ec2-4190-9a50-b5096e8cf078.png">
