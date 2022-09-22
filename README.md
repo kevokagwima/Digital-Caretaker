@@ -24,3 +24,9 @@
 <a href="#admin">Admin Module</a> <br>
 <h1 id="landlord">The Landlord Module</h1>
 <p>In this module, the landlord is provided with a dashboard where they can interact with their property and every aspect of it from the registered tenants and units, rent payment and complaints from tenants, and the deployed extras who are undertaking maintenance on the property.</p>
+<p>The landlord module is divided into three sections (dashboards):</p>
+<ul>
+  <li>The Main Dashboard</li>
+  <li>The Property Dashboard</li>
+  <li>The Tenant Profile Dashboard</li>
+</ul>
