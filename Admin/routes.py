@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
+from Landlords.routes import invoice
 from models import *
 from .form import *
 from modules import send_sms, send_email
@@ -20,6 +21,7 @@ def admin():
   units = Unit.query.all()
   complaints = Complaints.query.all()
   extras = Extras.query.all()
+  invoices = Invoice.query.all()
   today_time = today
   form = Extra_signup()
   if form.validate_on_submit():
@@ -29,7 +31,7 @@ def admin():
     for err_msg in form.errors.values():
       flash(f"There was an error creating the user: {err_msg}", category="danger")
 
-  return render_template("admin.html",active_users=active_users,properties=properties,tenants=tenants,landlords=landlords,users=users, units=units, complaints=complaints, extras=extras, today_time=today_time, form=form, reservations=reservations, transactions=transactions)
+  return render_template("admin.html",active_users=active_users,properties=properties,tenants=tenants,landlords=landlords,users=users, units=units, complaints=complaints, extras=extras, today_time=today_time, form=form, reservations=reservations, transactions=transactions, invoices=invoices)
 
 @admins.route("/admin/Assign-landlord/<int:tenant_id>", methods=["POST", "GET"])
 def admin_assign_landlord(tenant_id):

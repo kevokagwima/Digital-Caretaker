@@ -391,7 +391,7 @@ body::-webkit-scrollbar {
 #dash button {
   position: absolute;
   top: 0;
-  right: 27rem;
+  right: 28rem;
   padding: 6px 10px;
   background-color: #00b9eb;
   border: none;
@@ -431,14 +431,13 @@ body::-webkit-scrollbar {
 .revenue-info {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  justify-content: space-evenly;
   column-gap: 10px;
   align-items: center;
   position: absolute;
   top: 0;
-  left: 3rem;
+  left: 0;
   width: 100%;
-  padding-right: 4.5rem;
+  padding: 0 0.6rem;
 }
 
 .income,
@@ -447,19 +446,19 @@ body::-webkit-scrollbar {
   margin-top: 10px;
   padding: 10px 15px;
   border-radius: 5px;
-  background-color: rgba(1, 1, 29, 0.5);
+  background-color: var(--page-header-bgColor);
 }
 
 .income h4,
 .expenses h4,
 .profit h4 {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .income span,
 .expenses span,
 .profit span {
-  font-size: 2.2rem;
+  font-size: 2rem;
 }
 
 .income span {
@@ -539,7 +538,7 @@ body::-webkit-scrollbar {
   padding: 20px 20px 0;
   background-color: var(--dark-blue);
   border-radius: 5px;
-  min-height: max-content;
+  max-height: max-content;
   position: relative;
 }
 
@@ -564,7 +563,7 @@ body::-webkit-scrollbar {
   margin: 1rem 0 0;
   padding: 5px 0 0;
   max-height: 18rem;
-  height: max-content;
+  min-height: max-content;
   overflow: auto;
 }
 

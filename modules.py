@@ -37,7 +37,7 @@ def generate_invoice(unit_id, unit_tenant, unit_rent):
     invoices = Invoice.query.filter_by(unit=unit_id, status="Active").all()
     if invoices:
       diff = datetime.now() - invoices[-1].date_created
-      if diff.days == 30:
+      if diff.days >= 30:
         invoice_logic(unit_tenant, unit_id, unit_rent)
       else:
         pass
