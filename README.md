@@ -1,0 +1,1 @@
+<p>This Property Management System is designed to assist landlords to keep track of their properties from individual tenants and individual units in their properties, rent paid by the tenants, reservations made by potential tenants and many more.</p>
