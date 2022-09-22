@@ -30,3 +30,5 @@
   <li>The Property Dashboard</li>
   <li>The Tenant Profile Dashboard</li>
 </ul>
+<h2>The Main Dashboard</h2>
+<p>In this dashboard, the landlord is displayed with general information about their property from how many registered units and tenants, complainst, rent collected and remaining, revenue, profit and expenses generated, rent transactions, deployed extras.</p>
