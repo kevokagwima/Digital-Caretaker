@@ -22,4 +22,5 @@
 <a href="#tenant">Tenant Module</a> <br>
 <a href="#user">User Module</a> <br>
 <a href="#admin">Admin Module</a> <br>
-<p>This system has been developed in python with the Flask Framework.
+<h1 id="landlord">The Landlord Module</h1>
+<p>In this module, the landlord is provided with a dashboard where they can interact with their property and every aspect of it from the registered tenants and units, rent payment and complaints from tenants, and the deployed extras who are undertaking maintenance on the property.</p>
