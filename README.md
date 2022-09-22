@@ -25,12 +25,12 @@
 <h1 id="landlord">The Landlord Module</h1>
 <p>In this module, the landlord is provided with a dashboard where they can interact with their property and every aspect of it from the registered tenants and units, rent payment and complaints from tenants, and the deployed extras who are undertaking maintenance on the property.</p>
 <p>The landlord module is divided into three sections (dashboards):</p>
-<ul>
-  <li>The Main Dashboard</li>
-  <li>The Property Dashboard</li>
-  <li>The Tenant Profile Dashboard</li>
-</ul>
-<h2>The Main Dashboard</h2>
+<ol>
+<li>The Main Dashboard</li>
+<li>The Property Dashboard</li>
+<li>The Tenant Profile Dashboard</li>
+</ol>
+<h2>1. The Main Dashboard</h2>
 <p>In this dashboard, the landlord is displayed with general information about their property from how many registered units and tenants, complainst, rent collected and remaining, revenue, profit and expenses generated, rent transactions, deployed extras.</p>
 <h3>The General Tab</h3>
 <img src="https://user-images.githubusercontent.com/63863253/191746815-bf622627-ab27-45e2-8497-b9cf77673ff6.png">
@@ -44,3 +44,5 @@
 <img src="https://user-images.githubusercontent.com/63863253/191747762-867ebe47-6b6e-4a68-bd7f-e00b50c83f43.png">
 <h3>The Ongoing Maintenance Tab</h3>
 <img src="https://user-images.githubusercontent.com/63863253/191747970-19de3377-5c38-4bf5-b105-2e59269430ab.png">
+<h2>2. The Property Dashboard</h2>
+<p>In this dashboard, The landlord can view all information related to a specific property they select from the main dashboard. This page also displays all the complaints from tenants, and an options tab where a landlord can choose to disable the property and to change the availablity of the property,i.e. Either from rent to sele or sale to rent.</p>
