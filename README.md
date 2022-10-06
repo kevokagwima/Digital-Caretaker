@@ -63,3 +63,4 @@
 <h2>Other Pages</h2>
 <p>Landlords can also send chat messages to tenants directly</p>
 <img src="https://user-images.githubusercontent.com/63863253/191758279-14409cd4-16f4-4fce-8c14-a0f0a9384053.png">
+<h1 id="user">The User Module</h1>
