@@ -99,3 +99,5 @@
 <h3>The Reservation Page</h3>
 <p>In this page, all the user's reservations will be listed down</p>
 <img src="https://user-images.githubusercontent.com/63863253/194313832-4a0dc477-6ad8-4d11-b444-ceb66548befd.png">
+<h1 id="admin">The Admin Module</h1>
+<p>Coming Soon</p>
