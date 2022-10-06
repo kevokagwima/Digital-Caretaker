@@ -64,3 +64,13 @@
 <p>Landlords can also send chat messages to tenants directly</p>
 <img src="https://user-images.githubusercontent.com/63863253/191758279-14409cd4-16f4-4fce-8c14-a0f0a9384053.png">
 <h1 id="user">The User Module</h1>
+<p>In this module, users can explore the systems main website where they can be updated on any new changes happening. In this module, new potential tenants can view available properties for rent by navigating to the properties page. Also, users can reserve upto a maximum of 4 properties and the reservation will last for 24 hours so once a property is reserved, the user can reach out to the landlord to arrange a viewing.</p>
+<h3>The Landing Page</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194308540-c227d948-311f-4d4a-a43b-f2eb4dbbb5d6.png">
+<img src="https://user-images.githubusercontent.com/63863253/194308677-10732a99-a693-432c-8fe5-409757e51df5.png">
+<img src="https://user-images.githubusercontent.com/63863253/194308790-886f16fc-6f0c-40f8-9b2b-69c3e6f432ad.png">
+<img src="https://user-images.githubusercontent.com/63863253/194308945-29a54b24-3c3b-42fe-a096-3d9982dd502c.png">
+<img src="https://user-images.githubusercontent.com/63863253/194309053-7811cfce-8ee3-4366-8c00-c268da149c86.png">
+<img src="https://user-images.githubusercontent.com/63863253/194309138-6cd467a4-43f6-4520-9353-43c5b3575105.png">
+<img src="https://user-images.githubusercontent.com/63863253/194309238-e83782b7-b0c9-4241-851b-d8749791a463.png">
+<img src="https://user-images.githubusercontent.com/63863253/194309440-558ae9ec-2810-4fe7-a0eb-6ab85981329c.png">
