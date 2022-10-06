@@ -63,6 +63,20 @@
 <h2>Other Pages</h2>
 <p>Landlords can also send chat messages to tenants directly</p>
 <img src="https://user-images.githubusercontent.com/63863253/191758279-14409cd4-16f4-4fce-8c14-a0f0a9384053.png">
+<h1 id="tenant">The Tenant Module</h1>
+<p>In this module, a tenant is presented with a dashboard where they can view all the tenant related information such as viewing their assigned unit, property and landlord, also they can send complaints to the landlord, they can start a direct chat with their landlord, also they can pay for their rent via the provided channels</p>
+<h3>The Home Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194315847-85f260b2-60d2-43d8-9b95-335fac8d8f4d.png">
+<h3>The Landlord Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194316010-132b0510-cd87-49ec-97e6-e0a961ac6d80.png">
+<h3>The Unit Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194316173-d6338afc-5a9b-464e-8008-38e14a632e50.png">
+<h3>The Complaints Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194316483-b0d49ab7-793b-47e7-b257-4d513a6082e6.png">
+<h3>The Rent Payment Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194316693-a7d664fc-ebba-44ac-857b-a9cb624b4550.png">
+<h3>The Extras Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/194316919-2e4141c4-a364-4927-a4c3-1fe3d3115c37.png">
 <h1 id="user">The User Module</h1>
 <p>In this module, users can explore the systems main website where they can be updated on any new changes happening. In this module, new potential tenants can view available properties for rent by navigating to the properties page. Also, users can reserve upto a maximum of 4 properties and the reservation will last for 24 hours so once a property is reserved, the user can reach out to the landlord to arrange a viewing.</p>
 <h3>The Landing Page</h3>
