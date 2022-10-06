@@ -82,3 +82,6 @@
 <p>In this page, users can view all the information about the selected property and they can also reserve the unit from this page</p>
 <img src="https://user-images.githubusercontent.com/63863253/194310758-8fa269cc-08c3-4489-b898-88438169a6d5.png">
 <img src="https://user-images.githubusercontent.com/63863253/194310867-4aaddd90-2390-4e35-98f1-e83b36c7f631.png">
+<h3>The Reservation Page</h3>
+<p>In this page, all the user's reservations will be listed down</p>
+<img src="https://user-images.githubusercontent.com/63863253/194313832-4a0dc477-6ad8-4d11-b444-ceb66548befd.png">
