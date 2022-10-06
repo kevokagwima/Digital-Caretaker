@@ -74,3 +74,11 @@
 <img src="https://user-images.githubusercontent.com/63863253/194309138-6cd467a4-43f6-4520-9353-43c5b3575105.png">
 <img src="https://user-images.githubusercontent.com/63863253/194309238-e83782b7-b0c9-4241-851b-d8749791a463.png">
 <img src="https://user-images.githubusercontent.com/63863253/194309440-558ae9ec-2810-4fe7-a0eb-6ab85981329c.png">
+<h3>The Properties Page</h3>
+<p>In this page users can view all the vacant properties available for rent.</p>
+<img src="https://user-images.githubusercontent.com/63863253/194310326-5cc413ef-1b38-4f4a-9f4d-d0d1ccc6dda5.png">
+<img src="https://user-images.githubusercontent.com/63863253/194310414-e07d94d1-8118-4be0-a8d7-ea829b406887.png">
+<h3>The Property Details Page</h3>
+<p>In this page, users can view all the information about the selected property and they can also reserve the unit from this page</p>
+<img src="https://user-images.githubusercontent.com/63863253/194310758-8fa269cc-08c3-4489-b898-88438169a6d5.png">
+<img src="https://user-images.githubusercontent.com/63863253/194310867-4aaddd90-2390-4e35-98f1-e83b36c7f631.png">
