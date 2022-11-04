@@ -16,7 +16,6 @@ class Members(db.Model, UserMixin):
   date = db.Column(db.DateTime())
   username = db.Column(db.String(length=50), nullable=False, unique=True)
   password = db.Column(db.String, nullable=False)
-  bookings = db.relationship("Bookings", backref="booking", lazy=True)
   account_type = db.Column(db.String(length=10), nullable=False)
 
   @property
@@ -48,7 +47,6 @@ class Landlord(db.Model, UserMixin):
   unit = db.relationship("Unit", backref="all_units", lazy=True)
   Property = db.relationship("Properties", backref="property", lazy=True)
   active = db.Column(db.String(length=5), nullable=False)
-  bookings = db.relationship("Bookings", backref="landlord_booking", lazy=True)
   transact = db.relationship("Transaction", backref="landlord_transaction", lazy=True)
   verification = db.relationship("Verification", backref="landlord-verification", lazy=True)
   extra_service = db.relationship("Extra_service", backref="extra-service", lazy=True)
@@ -82,7 +80,6 @@ class Tenant(db.Model, UserMixin):
   unit = db.relationship("Unit", backref="unit", lazy=True)
   complaint = db.relationship("Complaints", backref="complaints", lazy=True)
   active = db.Column(db.String(length=5), nullable=False)
-  bookings = db.relationship("Bookings", backref="tenant_booking", lazy=True)
   transact = db.relationship("Transaction", backref="tenant_transaction", lazy=True)
   verification = db.relationship("Verification", backref="tenant-verification", lazy=True)
   invoice = db.relationship("Invoice", backref="tenant-invoice", lazy=True)
@@ -173,9 +170,7 @@ class Bookings(db.Model):
   __tablename__ = "Bookings"
   id = db.Column(db.Integer(), primary_key=True)
   booking_id = db.Column(db.Integer(), nullable=False, unique=True)
-  user = db.Column(db.Integer(), db.ForeignKey("members.id"))
-  landlord_user = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
-  tenant_user = db.Column(db.Integer(), db.ForeignKey("Tenant.id"))
+  user = db.Column(db.String(50))
   date = db.Column(db.DateTime())
   expiry_date = db.Column(db.DateTime())
   property = db.Column(db.Integer(), db.ForeignKey("Property.id"))

@@ -505,12 +505,13 @@
   margin: 1.5rem 0 0;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  padding: 20px;
   max-width: 98.5%;
-  max-height: 100vh;
+  max-height: 40rem;
+  padding-right: 10px;
   overflow: auto;
   display: flex;
   flex-direction: column-reverse;
+  background-color: transparent;
 }
 
 .complaints .else {
@@ -833,7 +834,6 @@ select {
   .card,
   .cards,
   .actions,
-  .complaint-info,
   .property-registration input,
   select,
   .unit-registration input,
@@ -854,7 +854,6 @@ select {
   .tenants,
   .units,
   .modal-content,
-  .complaints,
   .disable-property,
   .property-availability,
   .revoke-access,
@@ -873,7 +872,8 @@ select {
   .disable-property h4,
   .property-availability h4,
   .revoke-access h4,
-  .assign-unit h4 {
+  .assign-unit h4,
+  .complaint-info {
     background-color: var(--page-header-bgColor);
   }
 

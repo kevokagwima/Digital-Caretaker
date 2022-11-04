@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
-from models import Members
+from models import Members, Tenant, Landlord
 
 class user_registration(FlaskForm):
   first_name = StringField(label="First Name", validators=[DataRequired()])
@@ -14,7 +14,7 @@ class user_registration(FlaskForm):
   password1 = PasswordField(label="Confirm Password", validators=[EqualTo("password", message="Passwords do not match"), DataRequired()])
 
   def validate_username(self, username_to_validate):
-    username = Members.query.filter_by(username=username_to_validate.data).first()
+    username = (Members.query.filter_by(username=username_to_validate.data).first() or Tenant.query.filter_by(username=username_to_validate.data).first() or Landlord.query.filter_by(username=username_to_validate.data).first())
     if username:
       raise ValidationError("Username already exists, Please try anotherone")
 

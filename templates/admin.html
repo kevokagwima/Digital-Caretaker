@@ -189,11 +189,59 @@
               <h4>Total Amount Transacted</h4>
               <p>
                 {% set invoice_amount = [] %}
-                {% for invoice in invoices %}
+                {% for invoice in invoices if invoice.status == "Cleared" %}
                 {{ invoice_amount.append(invoice.amount) or "" }}
                 {% endfor %}
                 {{ "Ksh {:,}".format(invoice_amount|sum) }}
               </p>
+            </div>
+            <div class="total-complaints">
+              <h4>Total Complaints</h4>
+              <p>
+                {{ complaints|count }}
+                <span>Complaints</span>
+              </p>
+            </div>
+            <div class="total-complaints invoicez">
+              <h4>Total Invoices</h4>
+              <p>
+                {{ invoices|count }}
+                <span>Invoices</span>
+              </p>
+            </div>
+            <div class="dash-reservations">
+              <h4>Reservation Details</h4>
+              <div class="reserve-box">
+                {% for reservation in reservations %}
+                <div class="reserve">
+                  <span id="{{ reservation.status }}">{{ reservation.status }}</span>
+                  <h4>#{{ reservation.booking_id }}</h4>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="invoice-info">
+              <h4>Latest Invoices</h4>
+              <div class="invoice-details">
+                {% for invoice in invoices|sort(attribute="date_created", reverse=True) %}
+                <div class="invoice-card">
+                  <h4>#{{ invoice.invoice_id }}</h4>
+                  <p>
+                    {% for tenant in tenants if tenant.id == invoice.tenant %}
+                    {{ tenant.first_name }} {{ tenant.second_name }}
+                    {% endfor %}
+                  </p>
+                  <p id="date">{{ invoice.date_created.strftime("%d %b %y") }}</p>
+                  {% if invoice.status == "Cleared" %}
+                  <p id="cleared">{{ invoice.status }}</p>
+                  {% elif invoice.status == "Active" %}
+                  <p id="actives">{{ invoice.status }}</p>
+                  {% elif invoice.status == "invalid" %}
+                  <p id="invalid">{{ invoice.status }}</p>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
             </div>
           </div>
         </div>
@@ -229,6 +277,43 @@
               <td>{{ landlord.date.strftime("%d/%m/%Y") }}</td>
               <td id="td">{{ landlord.Property|count}}</td>
               <td id="td">{{ landlord.tenant|count }}</td>
+            </tr>
+            <tr class="show-info">
+              <td colspan="8">
+                <div class="actions">
+                  <h4>Landlord Control Center</h4>
+                  <span id="tenant-control">{{ landlord.first_name }} {{ landlord.second_name }} |
+                    {{ landlord.date.strftime("%d/%m/%Y") }}</span>
+                  <hr>
+                  <div class="tenant-controls">
+                    <div class="accordions">
+                      <h4>Personal Information</h4>
+                    </div>
+                    <div class="panel">
+                      <p>Name - <span>{{ landlord.first_name }} {{ landlord.second_name }}
+                          {{ landlord.last_name }}</span></p>
+                      <p>Email - <span>{{ landlord.email }}</span></p>
+                      <p>Phone Number - <span>0{{ landlord.phone }}</span></p>
+                      <p>Username - <span>{{ landlord.username }}</span></p>
+                    </div>
+                    <div class="accordions">
+                      <h4>Property Owned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% for property in properties if property.owner == landlord.id %}
+                      <div class="prop">
+                        <p>Name - <span>{{ property.name }}</span></p>
+                        <p>Type - <span>{{ property.Type }}</span></p>
+                        <p>Floors - <span>{{ property.floors }} Floors</span></p>
+                        <p>Tenants Assigned - <span>{{ property.tenants|count }} Tenants</span></p>
+                        <p>Units Assigned - <span>{{ property.unit|count }} Units</span></p>
+                        <p>Maximum Capacity - <span>{{ property.rooms }} Units\Tenants</span></p>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </td>
             </tr>
             {% endfor %}
           </table>
@@ -271,6 +356,365 @@
               <td>{{ property.date.strftime("%d/%m/%Y") }}</td>
               <td>{{ property.tenants|count }}</td>
               <td>{{ property.unit|count }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div id="tenants" class="tabcontent">
+        <h4>Tenants ({{ tenants|count }})</h4>
+        <p id="more-info">This shows all tenants in alphabetical order</p>
+        <form id="search-tenant" action="#">
+          <input type="text" spellcheck="false" name="search-tenant" id="tenant-search"
+            placeholder="Search for any tenant">
+        </form>
+        <div class="tenants">
+          <table id="table">
+            <tr>
+              <th>Full Names</th>
+              <th>Tenant ID</th>
+              <th>Email Address</th>
+              <th>Phone Number</th>
+              <th>Landlord Assigned</th>
+              <th>Property Assigned</th>
+              <th>Status</th>
+              <th>Unit Status</th>
+            </tr>
+            {% for tenant in tenants|sort(attribute="first_name") %}
+            <tr id="tenants" class="accordion">
+              <td>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</td>
+              <td>{{ tenant.tenant_id }}</td>
+              <td>{{ tenant.email }}</td>
+              <td>0{{ tenant.phone }}</td>
+              <td>
+                {% if tenant.landlord %}
+                {% for landlord in landlords if landlord.id == tenant.landlord %}
+                {{ landlord.first_name }} {{ landlord.second_name }}
+                {% endfor %}
+                {% else %}
+                <span id="not-active">No Landlord Assigned</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if tenant.properties %}
+                {% for property in properties if property.id == tenant.properties %}
+                {{ property.name }}
+                {% endfor %}
+                {% else %}
+                <span id="not-active">No Property Assigned</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if tenant.active == "True" %}
+                <span id="active">Active</span>
+                {% else %}
+                <span id="not-active">Not Active</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if tenant.unit %}
+                <span id="assigned">Assigned</span>
+                {% else %}
+                <span id="not-active">Not Assigned</span>
+                {% endif %}
+              </td>
+            </tr>
+            <tr class="show-info">
+              <td colspan="8">
+                <div class="actions">
+                  <h4>Tenant Control Center</h4>
+                  <span id="tenant-control">{{ tenant.first_name }} {{ tenant.second_name }} |
+                    {{ tenant.date.strftime("%d/%m/%Y") }}</span>
+                  <hr>
+                  <div class="tenant-controls">
+                    <div class="accordions">
+                      <h4>Personal Information</h4>
+                    </div>
+                    <div class="panel">
+                      <p>Name - <span>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</span></p>
+                      <p>Email - <span>{{ tenant.email }}</span></p>
+                      <p>Phone Number - <span>0{{ tenant.phone }}</span></p>
+                      <p>Username - <span>{{ tenant.username }}</span></p>
+                    </div>
+                    <div class="accordions">
+                      <h4>Landlord Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.landlord %}
+                      {% for landlord in landlords if landlord.id == tenant.landlord %}
+                      <p>Name -
+                        <span>{{ landlord.first_name }} {{ landlord.second_name }}</span>
+                      </p>
+                      <p>Email -
+                        <span>{{ landlord.email }}</span>
+                      </p>
+                      {% endfor %}
+                      {% else %}
+                      <h4 class="else">No landlord Assigned</h4>
+                      <div class="form">
+                        <h4>Select a landlord to assign</h4>
+                        <form action="{{ url_for('admin.admin_assign_landlord', tenant_id=tenant.tenant_id) }}"
+                          method="POST">
+                          <select name="landlord-assign" id="">
+                            {% for landlord in landlords %}
+                            <option value="{{ landlord.landlord_id }}">{{ landlord.first_name }}
+                              {{ landlord.second_name }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit">UPDATE</button>
+                        </form>
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Property Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.properties %}
+                      {% for property in properties if property.id == tenant.properties %}
+                      <p>Name -
+                        <span>{{ property.name }}</span>
+                      </p>
+                      <p> Address -
+                        <span>{{ property.address }}</span>
+                      </p>
+                      <p> Type -
+                        <span>{{ property.Type }}</span>
+                      </p>
+                      <p>Floors -
+                        <span>{{ property.floors }} Floors</span>
+                      </p>
+                      {% endfor %}
+                      </h4>
+                      {% else %}
+                      <h4 class="else">No Property Assigned</h4>
+                      <div class="form">
+                        <h4>Select a Property to assign</h4>
+                        {% set property_available = [] %}
+                        {% for property in properties if property.owner == tenant.landlord %}
+                        {{ property_available.append(property) or "" }}
+                        {% endfor %}
+                        {% if property_available|count == 0 %}
+                        <p class="elses">No available property to choose from</p>
+                        {% elif tenant.landlord != None %}
+                        <form action="{{ url_for('admin.admin_assign_property', tenant_id=tenant.tenant_id) }}"
+                          method="POST">
+                          <select name="assign-property" id="">
+                            {% for property in properties if property.owner == tenant.landlord %}
+                            <option value="{{ property.property_id }}">{{ property.name }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit">UPDATE</button>
+                        </form>
+                        {% else %}
+                        <p class="elses">No available properties to choose from</p>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Unit Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.unit %}
+                      {% for unit in units if unit.tenant == tenant.id %}
+                      <p>Name - <span>{{ unit.name }}</span></p>
+                      <p>Type - <span>{{ unit.Type }}</span></p>
+                      <p>Floor - <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+                          Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup>
+                          Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup>
+                          Floor{% else %}<sup>th</sup> Floor {%endif%}</span></p>
+                      <p>Rent - <span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span></p>
+                      {% endfor %}
+                      </h4>
+                      {% else %}
+                      <h4 class="else">No Unit Assigned</h4>
+                      <div class="form">
+                        <h4>Select a unit to assign</h4>
+                        {% set units_available = [] %}
+                        {% for unit in units if unit.tenant == None and unit.reserved == "False" and unit.Property == tenant.properties %}
+                        {{ units_available.append(unit) or "" }}
+                        {% endfor %}
+                        {% if units_available|count == 0 %}
+                        <p class="elses">No vacant units to choose from</p>
+                        {% elif tenant.landlord != None and tenant.properties != None %}
+                        <form action="{{ url_for('admin.admin_assign_unit', tenant_id=tenant.tenant_id) }}"
+                          method="POST">
+                          <select name="assign-unit" id="">
+                            {% for unit in units if unit.tenant == None and unit.reserved == "False" and unit.Property == tenant.properties %}
+                            <option value="{{ unit.unit_id }}">{{ unit.name }} - {{ unit.Type }}
+                            </option>
+                            {% endfor %}
+                          </select>
+                          <button type="submit">UPDATE</button>
+                        </form>
+                        {% else %}
+                        <p class="elses">No available units to choose from</p>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Complaints</h4>
+                    </div>
+                    <div class="panel">
+                      {% if tenant.complaint %}
+                      <div class="comp">
+                        {% for complaint in complaints|sort(attribute="date", reverse=true) if complaint.tenant == tenant.id %}
+                        <div class="complaint">
+                          <h6>{{ complaint.title }}
+                            {% if complaint.date.strftime('%d/%m/%Y') == today_time %}
+                            <span id="new">New</span>
+                            {% endif %}
+                            <span id="date">{{ complaint.date.strftime('%d/%m/%Y') }}</span>
+                          </h6>
+                          <span>Category - {{ complaint.category }}</span>
+                          <p>{{ complaint.body }}</p>
+                        </div>
+                        {% endfor %}
+                      </div>
+                      {% else %}
+                      <h4 class="else">No Complaints Made</h4>
+                      {% endif %}
+                    </div>
+                    <hr>
+                    <div class="revoke-access">
+                      <a href="{{ url_for('admin.admin_revoke_tenant', tenant_id=tenant.tenant_id) }}">Revoke Access</a>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+      <div id="units" class="tabcontent">
+        <h4>Units ({{ units|count }})</h4>
+        <p id="more-info">This shows all units from latest to earliest</p>
+        <form id="unit-search">
+          <input type="text" spellcheck="false" name="search-unit" id="search-unit" placeholder="Search for any unit">
+        </form>
+        <div class="units">
+          <table id="table">
+            <tr>
+              <th>Unit No</th>
+              <th>Unit ID</th>
+              <th>Unit Name</th>
+              <th>Unit Type</th>
+              <th>Property Assigned</th>
+              <th>Unit Address</th>
+              <th>Unit Floor</th>
+              <th>Unit Status</th>
+              <th>Unit Rent</th>
+            </tr>
+            {% for unit in []|sort(attribute="name") %}
+            <tr id="units" class="accordion">
+              <td>0{{ unit.id }}</td>
+              <td>{{ unit.unit_id }}</td>
+              <td>{{ unit.name }}</td>
+              <td>{{ unit.Type }}</td>
+              <td>
+                {% for property in properties if property.id == unit.Property %}
+                {{ property.name }}
+                {% endfor %}
+              </td>
+              <td>
+                {% for property in properties if property.id == unit.Property %}
+                {{ property.address }}
+                {% endfor %}
+              </td>
+              <td>
+                {{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+                Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup>
+                Floor{% else %}<sup>th</sup> Floor {%endif%}
+              </td>
+              <td>
+                {% if unit.tenant %}
+                <span id="active">Occupied</span>
+                {% elif unit.reserved == "True" %}
+                <span id="reserved">Reserved</span>
+                {% else %}
+                <span id="not-active">Vacant</span>
+                {% endif %}
+              </td>
+              <td>{{ "Ksh {:,}".format(unit.rent_amount) }}</td>
+            </tr>
+            <tr class="show-info">
+              <td colspan="9">
+                <div class="actions">
+                  <h4>Unit Control Center</h4>
+                  <span>{{ unit.name }} - {{ unit.Type }} | {{ unit.date.strftime("%d/%m/%Y") }}</span>
+                  <hr>
+                  <div class="unit-controls">
+                    <div class="accordions">
+                      <h4>More Unit Information</h4>
+                    </div>
+                    <div class="panel">
+                      <p>Living Area - <span>{{ unit.living_space }} SQM</span></p>
+                      <p>Balcony / Veranda - <span>{{ unit.balcony_space }} SQM</span></p>
+                      {% for property in properties if property.id == unit.Property %}
+                      {% if property.Type == "Apartment" %}
+                      <p>Bedrooms -
+                        <span>
+                          {% if unit.Type != "Bedsitter" %}
+                          {{ unit.bedrooms}}
+                          {% else %}
+                          1 Room
+                          {% endif %}
+                        </span>
+                      </p>
+                      <p>Bathrooms - <span>{{ unit.bathrooms }}</span></p>
+                      {% elif property.Type == "Office" %}
+                      <p>Furniture - <span>{{ unit.amenities }}</span></p>
+                      {% endif %}
+                      {% endfor %}
+                      <p>Air-conditioining - <span>{{ unit.air_conditioning }}</span></p>
+                      <p>Amenities - <span>{{ unit.amenities }}</span></p>
+                    </div>
+                    <div class="accordions">
+                      <h4>Tenant Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if unit.tenant %}
+                      {% for tenant in tenants if tenant.id == unit.tenant %}
+                      <p>Name - <span>{{ tenant.first_name}} {{ tenant.second_name }}</span></p>
+                      <p>Email - <span>{{ tenant.email }}</span></p>
+                      {% endfor %}
+                      {% else %}
+                      <h4 class="else">No Tenant Assigned</h4>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Property Assigned Information</h4>
+                    </div>
+                    <div class="panel">
+                      {% if unit.Property %}
+                      {% for property in properties if property.id == unit.Property %}
+                      <p>Name - <span>{{ property.name }}</span></p>
+                      <p>Address - <span>{{ property.address }}</span></p>
+                      <p>Type - <span>{{ property.Type }}</span></p>
+                      <p>Floors - <span>{{ property.floors }} Floors</span></p>
+                      {% endfor %}
+                      {% else %}
+                      <h4 class="else">No Property Assigned</h4>
+                      {% endif %}
+                    </div>
+                    <div class="accordions">
+                      <h4>Latest Rent Payment</h4>
+                    </div>
+                    <div class="panel">
+                      {% if unit.transact %}
+                      <p>
+                        {{ unit.transact[-1].next_date.strftime("%d/%m/%Y") }}
+                      </p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </td>
             </tr>
             {% endfor %}
           </table>

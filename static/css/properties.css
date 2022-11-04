@@ -20,11 +20,6 @@ html {
   display: none;
 }
 
-.logz {
-  gap: 0.3rem;
-  align-items: center;
-}
-
 .logos {
   max-height: 6rem;
   margin-top: 3rem;

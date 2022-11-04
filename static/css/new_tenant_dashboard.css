@@ -1062,8 +1062,16 @@ table th {
   border-radius: 3px;
 }
 
-.side {
-  background-color: black;
+.alert-error .side {
+  background-color: var(--red);
+}
+
+.alert-success .side {
+  background-color: green;
+}
+
+.alert-info .side {
+  background-color: rgb(0, 170, 255);
 }
 
 @media (prefers-color-scheme: dark) {

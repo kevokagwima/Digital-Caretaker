@@ -94,7 +94,8 @@ PMS | Landlord Dashboard
       {{ total.append(unit.rent_amount) or "" }}
       {% endfor %}
       <div class="table">
-        <table class="charts-css column multiple data-spacing-5 datasets-spacing-2 show-labels" id="myChart">
+        {% if totalz_rent != 0 %}
+        <table class="charts-css column data-spacing-5 datasets-spacing-2 show-labels" id="myChart">
           <tr>
             <th style="font-size: 0.7rem;" scope="row">Potential Revenue / Actual Revenue</th>
             <td id="this" style="--size: calc({{ total|sum}}/{{ total|sum }}); --color: #00b9eb;">
@@ -110,6 +111,7 @@ PMS | Landlord Dashboard
               <span class="tooltip">Actual Revenue <br>{{ "Ksh {:,}".format(totalz_rent) }}</span>
             </td>
           </tr>
+          {% if expenses %}
           <tr>
             <th style="font-size: 0.7rem;" scope="row">Actual Expenses</th>
             <td style="--size: calc({{ total_expense }}/{{ difference }} + 0.2); --color: #ec1848;">
@@ -122,6 +124,7 @@ PMS | Landlord Dashboard
               {% endif %}
             </td>
           </tr>
+          {% endif %}
           <tr>
             <th style="font-size: 0.7rem;" scope="row">Actual Revenue / Profit</th>
             <td style="--size: calc({{ difference }}/{{ totalz_rent }}); --color: rgb(7, 172, 7);">
@@ -138,6 +141,7 @@ PMS | Landlord Dashboard
             </td>
           </tr>
         </table>
+        {% endif %}
       </div>
     </div>
     <div class=" prop-summary">

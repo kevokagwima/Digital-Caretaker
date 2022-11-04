@@ -363,7 +363,7 @@ a {
 
 .tops {
   position: fixed;
-  top: 4rem;
+  top: 4.2rem;
   left: 0;
   right: 0;
   z-index: 10;
@@ -380,6 +380,18 @@ a {
     opacity: 0;
     visibility: hidden;
   }
+}
+
+.alert-error .side {
+  background-color: var(--red);
+}
+
+.alert-success .side {
+  background-color: green;
+}
+
+.alert-info .side {
+  background-color: rgb(0, 170, 255);
 }
 
 @media screen and (max-width: 800px) {

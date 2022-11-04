@@ -68,6 +68,7 @@ def signin():
 @main.route("/")
 @main.route("/home")
 def index():
+  booking = Bookings.query.all()
   properties = Properties.query.all()
   if properties:
     property_choice = random.choice(properties)
@@ -75,7 +76,7 @@ def index():
     tenants = Tenant.query.all()
     landlords = Landlord.query.all()
     
-    return render_template("index.html", properties=properties,property_choice=property_choice, units=units, tenants=tenants, landlords=landlords)
+    return render_template("index.html", properties=properties,property_choice=property_choice, units=units, tenants=tenants, landlords=landlords, booking=booking)
   
   return render_template("index.html")
 
@@ -93,11 +94,12 @@ def contact_us():
 
 @main.route("/properties")
 def properties():
+  booking = Bookings.query.all()
   properties = Properties.query.all()
   units = Unit.query.all()
   today_time = datetime.now().strftime("%d/%m/%Y")
 
-  return render_template("properties.html", properties=properties, units=units, today_time=today_time)
+  return render_template("properties.html", properties=properties, units=units, today_time=today_time, booking=booking)
 
 @main.route("/search-properties", methods=["POST", "GET"])
 def search_property():
@@ -155,7 +157,7 @@ def unit_details(unit_id):
 def book(unit_id):
   unit = Unit.query.get(unit_id)
   property = Properties.query.filter_by(id=unit.Property).first()
-  booking = Bookings.query.filter_by(user=current_user.id, status="Active").count() or Bookings.query.filter_by(landlord_user=current_user.id, status="Active").count() or Bookings.query.filter_by(tenant_user=current_user.id, status="Active").count()
+  booking = Bookings.query.filter_by(user=current_user.username, status="Active").count()
   try:
     if unit.tenant:
       flash(f"Unit is already occupied", category="danger")
@@ -171,20 +173,12 @@ def book(unit_id):
         date=datetime.now(),expiry_date=datetime.now() + timedelta(days=1),
         property=Properties.query.filter_by(id=property.id).first().id,
         unit=Unit.query.filter_by(id=unit.id).first().id,
+        user = current_user.username,
         status="Active"
       )
       db.session.add(new_booking)
       unit.reserved = "True"
       db.session.commit()
-      if current_user.account_type == "Landlord":
-        new_booking.landlord_user = current_user.id
-        db.session.commit()
-      elif current_user.account_type == "Tenant":
-        new_booking.tenant_user = current_user.id
-        db.session.commit()
-      elif current_user.account_type == "member":
-        new_booking.user = current_user.id
-        db.session.commit()
       flash(f"Reservation made successfully", category="success")
       return redirect(url_for("main.reservations"))
   except:
@@ -195,24 +189,25 @@ def book(unit_id):
 @fresh_login_required
 @login_required
 def reservations():
-  booking = Bookings.query.filter_by(user=current_user.id).all() or Bookings.query.filter_by(landlord_user=current_user.id).all() or Bookings.query.filter_by(tenant_user=current_user.id).all()
+  booking = Bookings.query.filter_by(user=current_user.username, status="Active").all()
   properties = Properties.query.all()
   units = Unit.query.all()
   expired_reservations = []
   if booking:
     for overbook in booking:
-      reserved_property = Properties.query.filter_by(id=overbook.property).first()
+      if overbook.user == current_user.id:
+        reserved_property = Properties.query.filter_by(id=overbook.property).first()
       if overbook.expiry_date < datetime.now()and overbook.status == "Active":
         expired_reservations.append(overbook)
         unit = Unit.query.filter_by(id=overbook.unit).first()
         unit.reserved = "False"
         overbook.status = "Expired"
         db.session.commit()
-    loc = Nominatim(user_agent="GetLoc")
-    location_text = f"{reserved_property.address}, {reserved_property.address2}"
-    getLoc = loc.geocode(location_text)
-    print("Latitude = ", getLoc.latitude, "\n")
-    print("Longitude = ", getLoc.longitude)
+    # loc = Nominatim(user_agent="GetLoc")
+    # location_text = f"{reserved_property.address}, {reserved_property.address2}"
+    # getLoc = loc.geocode(location_text)
+    # print("Latitude = ", getLoc.latitude, "\n")
+    # print("Longitude = ", getLoc.longitude)
 
     if len(expired_reservations) == 1:
       flash(f"One of your reservations has expired", category="info")

@@ -6,12 +6,14 @@ from modules import generate_invoice, send_sms, send_email, send_chat, rent_tran
 from werkzeug.utils import secure_filename
 import pytesseract
 from PIL import Image
-import random, os, stripe, datetime
-from datetime import datetime, timedelta, date
+import random, os, stripe, datetime, locale
+from datetime import datetime, date
 
 UPLOAD_FOLDER = 'Static/css/Images/Screenshots'
 UPLOAD_FOLDER = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+locale.setlocale(locale.LC_ALL, 'en_US')
+'en_US'
 
 tenants = Blueprint("tenant", __name__)
 stripe.api_key = os.environ['Stripe_api_key']
@@ -137,7 +139,7 @@ def rent_payment():
           'price_data': {
             'currency': 'KES',
             'product_data': {
-              'name': 'Medical Bill',
+              'name': 'Rent Payment',
             },
             'unit_amount': (invoice.amount * 100),
           },
@@ -177,7 +179,7 @@ def payment_complete():
   message = {
     'receiver': [current_user.email, landlord.email],
     'subject': 'RENT PAYMENT',
-    'body': f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+    'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
   }
   if transactions:
     if not invoice:
@@ -272,7 +274,7 @@ def upload_screenshot(image):
 def complaint():
   if current_user.account_type != "Tenant":
     abort(403)
-  landlord = Landlord.query.get(current_user/landlord)
+  landlord = Landlord.query.get(current_user.landlord)
   try:
     new_complaint = Complaints(
       title=request.form.get("title"),

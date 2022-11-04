@@ -471,19 +471,7 @@ PMS | Property Dashboard
         <span id="status">{{ reserves.status }}</span>
         <hr>
         <p>Reserved By</p>
-        {% for user in users if user.id == reserves.user %}
-        <ul id="user-info">
-          <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
-          <li>Phone Number: <span>0{{ user.phone }}</span></li>
-        </ul>
-        {% endfor %}
-        {% for user in landlord_user if user.id == reserves.landlord_user %}
-        <ul id="user-info">
-          <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
-          <li>Phone Number: <span>0{{ user.phone }}</span></li>
-        </ul>
-        {% endfor %}
-        {% for user in tenant_user if user.id == reserves.tenant_user %}
+        {% for user in all_users if user.username == reserves.user %}
         <ul id="user-info">
           <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
           <li>Phone Number: <span>0{{ user.phone }}</span></li>
@@ -520,22 +508,6 @@ PMS | Property Dashboard
       <h4>Reservation ID <span id="reserve-id">{{ reserves.booking_id }}</span></h4>
       <span id="status-expired">{{ reserves.status }}</span>
       <hr>
-      <p>Reserved By</p>
-      {% for user in users if user.id == reserves.user %}
-      <ul id="user-info">
-        <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
-      </ul>
-      {% endfor %}
-      {% for user in landlord_user if user.id == reserves.landlord_user %}
-      <ul id="user-info">
-        <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
-      </ul>
-      {% endfor %}
-      {% for user in tenant_user if user.id == reserves.tenant_user %}
-      <ul id="user-info">
-        <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
-      </ul>
-      {% endfor %}
       {% for unit in units if unit.id == reserves.unit %}
       <p>Reserved Unit</p>
       <ul id="unit-info">

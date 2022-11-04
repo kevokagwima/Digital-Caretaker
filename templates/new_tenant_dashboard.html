@@ -205,9 +205,9 @@
                 payments tab to
                 view the
                 transaction. The next charge will be on
-                {% for transaction in transactions %}
-                {{ transaction.next_date.strftime('%d/%m/%Y') }}
-                {% endfor %}
+                {% if transactions %}
+                {{ transactions[-1].next_date.strftime('%d/%m/%Y') }}
+                {% endif %}
               </p>
               {% else %}
               <p>No rent information to show</p>
@@ -526,7 +526,9 @@
                 <div class="disabled">
                   <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">
                   <h4>Next charge on
+                    {% if transactions %}
                     {{ current_user.transact[-1].next_date.strftime('%d/%m/%Y') }}
+                    {% endif %}
                   </h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>

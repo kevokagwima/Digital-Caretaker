@@ -17,7 +17,7 @@ PMS | Reservations
 
 {% block body %}
 <div class="container-1">
-  {% set booking = current_user.bookings %}
+  {% set booking = booking %}
   {% set active_reservations = [] %}
   {% for book in booking|sort(attribute="date", reverse=True) if book.status == "Active" %}
   {{ active_reservations.append(book) or "" }}

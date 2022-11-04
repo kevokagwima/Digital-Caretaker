@@ -19,6 +19,7 @@ def invoice_logic(tenant, unit_id, rent):
     unit = unit_id,
     amount = rent,
     date_created = datetime.now(),
+    month_created = date.today(),
     status = "Active"
   )
   db.session.add(new_invoice)
@@ -27,7 +28,7 @@ def invoice_logic(tenant, unit_id, rent):
 def generate_invoice(unit_id, unit_tenant, unit_rent):
   unit_transactions = Transaction.query.filter_by(Unit=unit_id).all()
   if unit_transactions:
-    if unit_transactions[-1].next_date == date.today():
+    if unit_transactions[-1].next_date == date.today() or unit_transactions[-1].next_date < date.today():
       invoice = Invoice.query.filter_by(unit=unit_id, status="Active").first()
       if invoice:
         pass
@@ -37,7 +38,7 @@ def generate_invoice(unit_id, unit_tenant, unit_rent):
     invoices = Invoice.query.filter_by(unit=unit_id, status="Active").all()
     if invoices:
       diff = datetime.now() - invoices[-1].date_created
-      if diff.days >= 30:
+      if diff.days == 30 or diff.days > 30:
         invoice_logic(unit_tenant, unit_id, unit_rent)
       else:
         pass
@@ -45,26 +46,29 @@ def generate_invoice(unit_id, unit_tenant, unit_rent):
       invoice_logic(unit_tenant, unit_id, unit_rent)
 
 def send_sms(message):
-  messages = clients.messages \
+  try:
+    messages = clients.messages \
     .create(
       to = '+254796897011',
       from_ = '+13254253790',
       body = message
-    )
-  print(messages)
+      )
+    print(messages)
+  except:
+    flash(f"Failed to send sms", category="danger")
 
 def send_email(**email):
-  em['sender'] = email_sender
-  em['to'] = email["receiver"]
-  em['subject'] = email["subject"]
-  em.set_content(email["body"])
-  context = ssl.create_default_context()
-  with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-    try:
-      smtp.login(email_sender, email_password)
-      smtp.sendmail(email_sender, email["receiver"], em.as_string())
-    except:
-      flash("Email failed to send", category="danger")
+  try:
+    em['sender'] = email_sender
+    em['to'] = email["receiver"]
+    em['subject'] = email["subject"]
+    em.set_content(email["body"])
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email["receiver"], em.as_string())
+  except:
+    flash("Email failed to send", category="danger")
 
 def check_reservation_expiry(property_id):
   reservations = Bookings.query.filter_by(property=property_id).all()
@@ -144,6 +148,10 @@ def revoke_tenant_access(tenant_id, current_user, previous_url):
       if tenant.unit:
         unit = db.session.query(Unit).filter(tenant.id == Unit.tenant).first()
         unit.tenant = None
+      elif tenant.complaint:
+        complaints = Complaints.query.filter(Complaints.tenant == tenant.id).all()
+        for complaint in complaints:
+          db.session.delete(complaint)
       elif tenant.invoice:
         invoices = Invoice.query.filter(Invoice.tenant == tenant.id, Invoice.status == "Active").all()
         for invoice in invoices:

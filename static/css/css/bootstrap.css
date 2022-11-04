@@ -2885,99 +2885,56 @@ tbody.collapse.in {
   pointer-events: none;
 }
 */
+
 .alert {
   height: 3.5rem;
   font-family: "Dancing Script", cursive;
   font-family: "Varela Round", sans-serif;
   letter-spacing: 1px;
-  font-size: 15px;
+  font-size: 0.9rem;
   margin-bottom: 4px;
-  min-width: 10vw;
+  width: max-content;
   max-width: 30vw;
   margin-inline: auto;
-  border-radius: 5px;
+  border-radius: 0.2rem;
   overflow: hidden;
   position: relative;
   display: flex;
   gap: 1.5rem;
   align-items: center;
   padding-right: 1rem;
-  box-shadow: 0 0 10px -6px black;
 }
+
 .side {
   height: 100%;
-  width: 8px;
+  min-width: 8px;
 }
-.alert h4 {
-  margin-top: 0;
-  color: inherit;
-}
-.alert .alert-link {
-  font-weight: bold;
-}
-.alert > p,
-.alert > ul {
-  margin-bottom: 0;
-}
-.alert > p + p {
-  margin-top: 5px;
-}
-.alert-dismissable,
-.alert-dismissible {
-  padding-right: 35px;
-}
-.alert-dismissable .close,
-.alert-dismissible .close {
-  position: relative;
-  top: -2px;
-  right: -21px;
-  color: inherit;
-}
+
 .alert-success {
   color: #3c763d;
   background-color: #dff0d8;
   border-color: #d6e9c6;
 }
-.alert-success hr {
-  border-top-color: #c9e2b3;
-}
-.alert-success .alert-link {
-  color: #2b542c;
-}
+
 .alert-info {
   color: #31708f;
   background-color: #d9edf7;
   border-color: #bce8f1;
-}
-.alert-info hr {
-  border-top-color: #a6e1ec;
-}
-.alert-info .alert-link {
-  color: #245269;
-}
+} 
+
 .alert-warning {
   color: #8a6d3b;
   background-color: #fcf8e3;
   border-color: #faebcc;
 }
-.alert-warning hr {
-  border-top-color: #f7e1b5;
-}
-.alert-warning .alert-link {
-  color: #66512c;
-}
+
 .alert-danger {
   color: #a94442;
   background-color: #f2dede;
   border-color: #ebccd1;
 }
-.alert-danger hr {
-  border-top-color: #e4b9c0;
-}
-.alert-danger .alert-link {
-  color: #843534;
-}
-@-webkit-keyframes progress-bar-stripes {
+
+/* @-webkit-keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
   }
@@ -3000,7 +2957,7 @@ tbody.collapse.in {
   to {
     background-position: 0 0;
   }
-}
+} */
 /*
 .progress {
   height: 20px;

@@ -3,13 +3,15 @@ from flask_login import login_user, login_required, fresh_login_required, logout
 from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice, Messages
 from .form import *
 from modules import generate_invoice, send_sms, send_email, send_chat, check_reservation_expiry, assign_tenant_unit, revoke_tenant_access, rent_transaction
-import random, os
+import random, os, locale
 from datetime import date, datetime
 
 landlords = Blueprint("landlord", __name__)
 SECRET_KEY = os.environ['Hms_secret_key']
 google_maps =os.environ["Google_maps"]
 today = date.today()
+locale.setlocale(locale.LC_ALL, 'en_US')
+'en_US'
 
 @landlords.route("/change-dates", methods=["POST"])
 @login_required
@@ -140,7 +142,7 @@ def approve_verification(verification_id):
       message = {
         'receiver': [current_user.email, tenant.email],
         'subject': 'RENT PAYMENT',
-        'body': f'Confirmed! rental payment of amount {unit.rent_amount} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+        'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       }
       # send_sms(message)
       send_email(**message)
@@ -181,9 +183,16 @@ def property_information(property_id):
     if propertiez.owner != current_user.id:
       flash(f"Unknown Property", category="info")
       return redirect(url_for("landlord.landlord_dashboard"))
-    users = Members.query.all()
-    landlord_user = Landlord.query.all()
-    tenant_user = Tenant.query.all()
+    all_users = []
+    member_users = Members.query.all()
+    tenant_users = Tenant.query.all()
+    landlord_users = Landlord.query.all()
+    for members in member_users:
+      all_users.append(members)
+    for tenantz in tenant_users:
+      all_users.append(tenantz)
+    for landlord in landlord_users:
+      all_users.append(landlord)
     today_time = datetime.now().strftime("%d/%m/%Y")
     session["property"] = propertiez
     tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
@@ -196,7 +205,7 @@ def property_information(property_id):
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-  return render_template("property_dashboard.html", propertiez=propertiez,properties=properties,tenants=tenants,units=units,tenants_count=tenants_count,unit_count=unit_count, today_time=today_time,users=users, landlord_user=landlord_user, tenant_user=tenant_user)
+  return render_template("property_dashboard.html", propertiez=propertiez,properties=properties,tenants=tenants,units=units,tenants_count=tenants_count,unit_count=unit_count, today_time=today_time,all_users=all_users)
 
 @landlords.route("/tenant_details/<int:tenant_id>", methods=["GET", "POST"])
 @fresh_login_required
@@ -310,7 +319,7 @@ def property():
     flash(f"Something went wrong. Try again later", category="danger")
     return redirect(url_for("landlord.property_information", property_id=this_property.id))
 
-@landlords.route("/delete_property/<int:property_id>", methods=["POST", "GET"])
+@landlords.route("/delete-property/<int:property_id>", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
 def delete_property(property_id):
@@ -336,7 +345,7 @@ def delete_property(property_id):
     flash(f"An error occurred", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-@landlords.route("/Landlord_portal/Property_registration/Unit_registration", methods=["POST", "GET"])
+@landlords.route("/Unit-registration", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
 def unit():

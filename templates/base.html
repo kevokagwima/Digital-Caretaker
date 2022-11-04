@@ -57,13 +57,13 @@
     </div>
     <div class="profile">
       <h4>My Profile</h4>
-      {% if current_user.bookings != 0 %}
+      {% set active_reservations = [] %}
+      {% for book in booking if book.user == current_user.username and book.status == "Active" %}
+      {{ active_reservations.append(book) or "" }}
+      {% endfor %}
+      {% if active_reservations != 0 %}
       <a id="reservations" href="{{ url_for('main.reservations') }}">
         Reservations
-        {% set active_reservations = [] %}
-        {% for book in current_user.bookings if book.status == "Active" %}
-        {{ active_reservations.append(book) or "" }}
-        {% endfor %}
         {% if active_reservations %}
         <div class="reserve-badge">
           <span>{{ active_reservations|count }}</span>

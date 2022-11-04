@@ -49,7 +49,7 @@ input::-webkit-inner-spin-button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(214, 214, 214);
+  background: grey;
   border-radius: 10px;
 }
 
@@ -205,14 +205,15 @@ body::-webkit-scrollbar {
 .units {
   background-color: var(--dark-blue);
   border-radius: 5px;
-  padding: 1.4rem 0;
-  max-height: 41rem;
+  max-height: 42.4rem;
   overflow: auto;
+  margin-top: 1rem;
   color: white;
 }
 
 .dashboard {
   background-color: transparent;
+  padding-right: 5px;
 }
 
 .users-data {
@@ -261,7 +262,7 @@ body::-webkit-scrollbar {
 }
 
 .other-information > div {
-  max-height: max-content;
+  min-height: max-content;
   border-radius: 0.5rem;
 }
 
@@ -275,7 +276,7 @@ body::-webkit-scrollbar {
 .featured-info hr,
 .transaction-info hr {
   border: none;
-  outline: 1px solid white;
+  outline: 1px solid grey;
   opacity: 0.5;
   margin: 0.8rem 0 1rem;
 }
@@ -342,19 +343,13 @@ body::-webkit-scrollbar {
   aspect-ratio: 1/1;
   background-color: transparent;
   border-radius: 50%;
-  outline: 6px solid var(--black);
+  outline: 6px solid var(--page-header-headingColor);
   box-shadow: 0 0 10px 0px black;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.2rem;
-}
-
-.box hr {
-  flex-grow: 1;
-  rotate: 90deg;
-  margin: 0;
 }
 
 .box h4 {
@@ -366,6 +361,7 @@ body::-webkit-scrollbar {
 .box p {
   text-align: center;
   font-size: 0.8rem;
+  color: grey;
 }
 
 .amount-transacted {
@@ -374,12 +370,128 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  height: max-content;
 }
 
 .amount-transacted p {
   font-family: var(--font-1);
   font-size: 1.2rem;
   letter-spacing: 1px;
+}
+
+.invoice-info {
+  background-color: var(--page-header-bgColor-hover);
+  padding: 1rem 1rem 0.5rem;
+  grid-column: 1/4;
+  grid-row: 3/5;
+  height: max-content;
+}
+
+.invoice-details {
+  max-height: 12rem;
+  overflow: auto;
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+.invoice-card {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr 0.5fr;
+  column-gap: 1rem;
+  align-items: center;
+  padding: 0.4rem;
+  background-color: var(--page-header-bgColor);
+  border-radius: 0.2rem;
+}
+
+.invoice-card p:last-child {
+  border-radius: 30rem;
+  padding: 0.2rem 1rem;
+  font-size: 0.8rem;
+  align-self: end;
+  color: white;
+  width: max-content;
+}
+
+#date {
+  color: grey;
+}
+
+#cleared {
+  background-color: rgb(5, 189, 5);
+}
+
+#actives {
+  background-color: var(--blue);
+}
+
+#invalid {
+  background-color: var(--red);
+  text-transform: capitalize;
+}
+
+.total-complaints {
+  padding: 1rem;
+  background-color: var(--red);
+  height: max-content;
+}
+
+.invoicez {
+  background-color: rgb(5, 189, 5);
+}
+
+.total-complaints p {
+  margin-top: 0.4rem;
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.total-complaints span {
+  font-size: 1rem;
+  color: whitesmoke;
+}
+
+.dash-reservations {
+  padding: 1rem;
+  background-color: var(--page-header-headingColor);
+  grid-column: 4/7;
+  grid-row: 2/5;
+}
+
+.reserve-box {
+  margin-top: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 21rem;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.reserve {
+  background-color: #212121;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  position: relative;
+}
+
+.reserve > span {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px 8px;
+  font-size: 0.9rem;
+}
+
+.reserve #Expired {
+  background-color: var(--red);
+}
+
+.reserve #Active {
+  background-color: rgb(5, 189, 5);
 }
 
 #search-tenant,
@@ -413,6 +525,7 @@ body::-webkit-scrollbar {
 }
 
 table {
+  height: max-content;
   width: 100%;
   padding: 0 15px;
   position: relative;
@@ -779,6 +892,14 @@ button {
   }
 }
 
-.side {
-  background-color: white;
+.alert-error .side {
+  background-color: var(--red);
+}
+
+.alert-success .side {
+  background-color: green;
+}
+
+.alert-info .side {
+  background-color: rgb(0, 170, 255);
 }
