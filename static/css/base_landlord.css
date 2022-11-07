@@ -391,14 +391,10 @@ body::-webkit-scrollbar {
   position: relative;
 }
 
-#month {
+.detailed-rent {
   position: absolute;
-  top: 1rem;
-  right: 0.5rem;
-  padding: 0.4rem;
-  color: var(--blue);
-  max-width: max-content;
-  font-size: 1rem;
+  right: 1rem;
+  max-height: 1.2rem;
   cursor: pointer;
 }
 
@@ -1151,14 +1147,11 @@ body::-webkit-scrollbar {
 }
 
 .complete {
-  border: none;
-  margin-top: 1rem;
-  padding: 8px;
-  border-radius: 3px;
   background-color: rgb(6, 187, 6);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  cursor: pointer;
+}
+
+.delete {
+  background-color: var(--red);
 }
 
 .my-profile {

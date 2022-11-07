@@ -199,15 +199,15 @@
               <h4>Total Complaints</h4>
               <p>
                 {{ complaints|count }}
-                <span>Complaints</span>
               </p>
+              <span>Complaints</span>
             </div>
             <div class="total-complaints invoicez">
               <h4>Total Invoices</h4>
               <p>
                 {{ invoices|count }}
-                <span>Invoices</span>
               </p>
+              <span>Invoices</span>
             </div>
             <div class="dash-reservations">
               <h4>Reservation Details</h4>
@@ -610,7 +610,7 @@
               <th>Unit Status</th>
               <th>Unit Rent</th>
             </tr>
-            {% for unit in []|sort(attribute="name") %}
+            {% for unit in units|sort(attribute="name") %}
             <tr id="units" class="accordion">
               <td>0{{ unit.id }}</td>
               <td>{{ unit.unit_id }}</td>

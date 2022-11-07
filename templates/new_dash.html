@@ -341,12 +341,9 @@ PMS | Landlord Dashboard
       <p>verification needed</p>
     </div>
     {% endif %}
-    <select name="month-selected" id="month" onchange="date_changer()">
-      {% for month_created, invoice in invoices|groupby('month_created') if invoice %}
-      <option value="{{ month_created }}">{{ month_created.strftime("%B %Y") }}</option>
-      {% endfor %}
-    </select>
   </h4>
+  <img class="detailed-rent" src="{{ url_for('static', filename='css/Images/globe.png') }}" alt="explore"
+    onclick="openView(event, 'detailed-rent')">
   <p id="more-info">This tab shows all the relevant rent information</p>
   <div class="rents">
     <h4>Rent Stats</h4>
@@ -526,7 +523,48 @@ PMS | Landlord Dashboard
             </div>
           </div>
         </div>
-        <button class="complete">Mark as complete</button>
+        <div class="actions">
+          <a href="#">
+            <button class="complete">Mark as complete</button>
+          </a>
+          <a href="{{ url_for('landlord.delete_extra_service', extra_service_id=active_extra.id) }}">
+            <button class="delete">Delete</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+<div id="detailed-rent" class="tabcontent">
+  <h4 id="dash">Rent Payment History</h4>
+  <p id="more-info">This shows a much detailed information about rent payments made by your tenants</p>
+  <div class="extra-rent">
+    {% for invoice in invoices %}
+    <p id="month">{{ invoice.date_closed.strftime("%d-%m-%Y at %I:%M %p") }}</p>
+    <div class="invoice">
+      <h4>
+        #{{ invoice.invoice_id }}
+        <span>{{ "Ksh {:,}".format(invoice.amount) }}</span>
+      </h4>
+      <hr>
+      <div class="invoice-info">
+        <p>
+          Paid By
+          <span>
+            {% for tenant in tenants if tenant.id == invoice.tenant %}
+            {{ tenant.first_name }} {{ tenant.second_name }}
+            {% endfor %}
+          </span>
+        </p>
+        <p>
+          Paid For
+          <span>
+            {% for unit in unitz if unit.id == invoice.unit %}
+            {{ unit.name }} - {{ unit.Type }}
+            {% endfor %}
+          </span>
+        </p>
       </div>
     </div>
     {% endfor %}
@@ -536,19 +574,6 @@ PMS | Landlord Dashboard
 
 {% block body %}
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
-<script>
-  function date_changer() {
-    const date_selector = document.getElementById("month")
-    $.ajax({
-      url: "/change-dates",
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(date_selector.value)
-    })
-    window.location.replace("/Landlord_dashboard")
-    date_selector.value = "2022-08-10"
-  }
-</script>
 {% endblock %}
 
 </html>

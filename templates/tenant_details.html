@@ -325,10 +325,9 @@ PMS | Tenant Profile
   </p>
   <div class="complaints">
     {% if tenant_property.complaint %}
-    {% for date, complaint in tenant_property.complaint|groupby('date') %}
+    {% for complaint in all_complaints %}
     <div class="reverse-div">
-      <p id="tenant">{{ date.strftime('%d/%m/%Y') }}</p>
-      {% for complaint in complaint %}
+      <p id="tenant">{{ complaint.time.strftime('%d-%m-%Y at %I:%M %p') }}</p>
       <div class="complaint-info">
         <h4>Title: {{ complaint.title }}
           {% if complaint.date.strftime('%d/%m/%Y') == today_time %}
@@ -348,7 +347,6 @@ PMS | Tenant Profile
         <span>Category: {{ complaint.category }}</span>
         <p>{{ complaint.body }}</p>
       </div>
-      {% endfor %}
     </div>
     {% endfor %}
     {% else %}

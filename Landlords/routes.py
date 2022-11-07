@@ -13,14 +13,6 @@ today = date.today()
 locale.setlocale(locale.LC_ALL, 'en_US')
 'en_US'
 
-@landlords.route("/change-dates", methods=["POST"])
-@login_required
-@fresh_login_required
-def change_date():
-  data = json.loads(request.get_data('data'))
-  session["this_month"] = data
-  return redirect(url_for('landlord.landlord_dashboard'))
-
 @landlords.route("/landlord_registration", methods=["POST", "GET"])
 def landlord():
   form = landlord_form()
@@ -104,10 +96,11 @@ def landlord_dashboard():
   extras = Extras.query.all()
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-  invoices = Invoice.query.filter_by(status="Cleared").all()
+  unitz = Unit.query.filter(Unit.landlord == current_user.id).all()
+  invoices = Invoice.query.filter_by(status="Cleared").order_by(Invoice.date_closed.desc()).all()
   invoice()
 
-  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices)
+  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices, unitz=unitz)
 
 @landlords.route("/approve-verification/<int:verification_id>")
 @fresh_login_required
@@ -140,7 +133,7 @@ def approve_verification(verification_id):
       invoice.status = "Cleared"
       db.session.commit()
       message = {
-        'receiver': [current_user.email, tenant.email],
+        'receiver': [tenant.email, current_user.email],
         'subject': 'RENT PAYMENT',
         'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       }
@@ -200,12 +193,13 @@ def property_information(property_id):
     tenants_count = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).count()
     unit_count = db.session.query(Unit).filter(Unit.Property == propertiez.id).count()
     invoice()
+    all_complaints = Complaints.query.filter_by(Property=propertiez.id).order_by(Complaints.date.desc()).all()
     check_reservation_expiry(propertiez.id)
   except:
     flash(f"Cannot retrieve property information at the moment. Try again later", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-  return render_template("property_dashboard.html", propertiez=propertiez,properties=properties,tenants=tenants,units=units,tenants_count=tenants_count,unit_count=unit_count, today_time=today_time,all_users=all_users)
+  return render_template("property_dashboard.html", propertiez=propertiez,properties=properties,tenants=tenants,units=units,tenants_count=tenants_count,unit_count=unit_count, today_time=today_time,all_users=all_users, all_complaints=all_complaints)
 
 @landlords.route("/tenant_details/<int:tenant_id>", methods=["GET", "POST"])
 @fresh_login_required
@@ -224,6 +218,7 @@ def tenant_details(tenant_id):
       flash(f"Cannot view tenant details. Tenant is not active", category="danger")
       return redirect(url_for("landlord.property_information", property_id=tenant_property.id))
     complaints = Complaints.query.filter_by(tenant=tenant.id).all()
+    all_complaints = Complaints.query.filter_by(Property=tenant_property.id).order_by(Complaints.date.desc()).all()
     transactions = Transaction.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
@@ -232,7 +227,7 @@ def tenant_details(tenant_id):
     flash(f"Something went wrong. Try again", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-  return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions)
+  return render_template("tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions, all_complaints=all_complaints)
 
 @landlords.route("/send-message/<int:tenant_id>", methods=["POST","GET"])
 @fresh_login_required
@@ -495,6 +490,20 @@ def extra_occupancy(extra_id):
     return jsonify({'message': occupyInfo})
   else:
     return jsonify({'messages': occupyInfo})
+
+@landlords.route("/delete-extra-service/<int:extra_service_id>")
+@fresh_login_required
+@login_required
+def delete_extra_service(extra_service_id):
+  maintenance = Extra_service.query.get(extra_service_id)
+  if maintenance:
+    db.session.delete(maintenance)
+    db.session.commit()
+    flash("Maintenance deleted successfully", category="success")
+    return redirect(url_for('landlord.landlord_dashboard'))
+  else:
+    flash("Maitenance not found", category="danger")
+    return redirect(url_for('landlord.landlord_dashboard'))
 
 @landlords.route("/logout_landlord")
 @login_required

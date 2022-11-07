@@ -135,6 +135,7 @@ def search_property():
 @main.route("/unit_details/<int:unit_id>", methods=["GET"])
 def unit_details(unit_id):
   try:
+    booking = Bookings.query.all()
     unit = Unit.query.get(unit_id)
     units = Unit.query.all()
     properties = Properties.query.all()
@@ -142,7 +143,7 @@ def unit_details(unit_id):
     if unit:
       property = Properties.query.filter_by(id = unit.Property).first()
       landlord = Landlord.query.get(property.owner)
-      return render_template("property_details.html", unit=unit, landlord=landlord, property=property, units=units, properties=properties, today_time=today_time)
+      return render_template("property_details.html", unit=unit, landlord=landlord, property=property, units=units, properties=properties, today_time=today_time, booking=booking)
     else:
       flash(f"Property does not exist", category="danger")
       return redirect(url_for("main.properties"))

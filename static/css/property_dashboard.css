@@ -510,7 +510,7 @@
   padding-right: 10px;
   overflow: auto;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   background-color: transparent;
 }
 
