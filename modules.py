@@ -60,15 +60,17 @@ def send_sms(message):
 def send_email(**email):
   try:
     em['sender'] = email_sender
-    em['to'] = email["receiver"]
+    recipients = email["receiver"]
+    em['to'] = ",".join(recipients)
     em['subject'] = email["subject"]
     em.set_content(email["body"])
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-        smtp.login(email_sender, email_password)
-        smtp.sendmail(email_sender, email["receiver"], em.as_string())
+      smtp.login(email_sender, email_password)
+      smtp.sendmail(email_sender, recipients, em.as_string())
+      smtp.quit()
   except:
-    flash("Email failed to send", category="danger")
+    print("email not sent")
 
 def check_reservation_expiry(property_id):
   reservations = Bookings.query.filter_by(property=property_id).all()

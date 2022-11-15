@@ -537,36 +537,48 @@ PMS | Landlord Dashboard
   </div>
 </div>
 <div id="detailed-rent" class="tabcontent">
-  <h4 id="dash">Rent Payment History</h4>
+  <h4 id="dash">Invoice History</h4>
   <p id="more-info">This shows a much detailed information about rent payments made by your tenants</p>
   <div class="extra-rent">
     {% for invoice in invoices %}
+    {% for tenant in tenants if tenant.id == invoice.tenant %}
     <p id="month">{{ invoice.date_closed.strftime("%d-%m-%Y at %I:%M %p") }}</p>
     <div class="invoice">
-      <h4>
-        #{{ invoice.invoice_id }}
-        <span>{{ "Ksh {:,}".format(invoice.amount) }}</span>
-      </h4>
-      <hr>
-      <div class="invoice-info">
-        <p>
-          Paid By
-          <span>
-            {% for tenant in tenants if tenant.id == invoice.tenant %}
-            {{ tenant.first_name }} {{ tenant.second_name }}
+      <div class="invoice-details">
+        <h4>
+          #{{ invoice.invoice_id }}
+          <span>{{ "Ksh {:,}".format(invoice.amount) }}</span>
+        </h4>
+        <hr>
+        <div class="invoice-info">
+          <p>
+            Paid By
+            {% for tenant in all_tenants if tenant.id == invoice.tenant %}
+            <span>
+              {{ tenant.first_name }} {{ tenant.second_name }}
+            </span>
             {% endfor %}
-          </span>
-        </p>
-        <p>
-          Paid For
-          <span>
+          </p>
+          <p>
+            Paid For
             {% for unit in unitz if unit.id == invoice.unit %}
-            {{ unit.name }} - {{ unit.Type }}
+            <span>
+              {{ unit.name }} - {{ unit.Type }}
+            </span>
             {% endfor %}
-          </span>
-        </p>
+          </p>
+        </div>
+      </div>
+      <div class="invoice-transaction">
+        {% for transaction in invoice.transaction %}
+        <div class="invoice-transaction-info">
+          <h4>Transaction #{{ transaction.transaction_id }}</h4>
+          <p>Paid via - <span>{{ transaction.origin }}</span></p>
+        </div>
+        {% endfor %}
       </div>
     </div>
+    {% endfor %}
     {% endfor %}
   </div>
 </div>

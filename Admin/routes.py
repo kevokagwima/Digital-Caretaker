@@ -7,9 +7,8 @@ import random
 from datetime import date, datetime
 
 admins = Blueprint("admin", __name__)
-
 today = date.today()
-active_users = []
+
 @admins.route("/admin", methods=["POST", "GET"])
 def admin():
   properties = Properties.query.all()
@@ -19,7 +18,17 @@ def admin():
   reservations = Bookings.query.all()
   transactions = Transaction.query.all()
   units = Unit.query.all()
-  complaints = Complaints.query.all()
+  complaints = Complaints.query.order_by(Complaints.time.desc()).all()
+  all_users = []
+  member_users = Members.query.all()
+  tenant_users = Tenant.query.all()
+  landlord_users = Landlord.query.all()
+  for members in member_users:
+    all_users.append(members)
+  for tenantz in tenant_users:
+    all_users.append(tenantz)
+  for landlord in landlord_users:
+    all_users.append(landlord)
   extras = Extras.query.all()
   invoices = Invoice.query.all()
   today_time = today
@@ -31,7 +40,7 @@ def admin():
     for err_msg in form.errors.values():
       flash(f"There was an error creating the user: {err_msg}", category="danger")
 
-  return render_template("admin.html",active_users=active_users,properties=properties,tenants=tenants,landlords=landlords,users=users, units=units, complaints=complaints, extras=extras, today_time=today_time, form=form, reservations=reservations, transactions=transactions, invoices=invoices)
+  return render_template("admin.html",properties=properties,tenants=tenants,landlords=landlords,users=users, units=units, complaints=complaints, extras=extras, today_time=today_time, form=form, reservations=reservations, transactions=transactions, invoices=invoices, all_users=all_users)
 
 @admins.route("/admin/Assign-landlord/<int:tenant_id>", methods=["POST", "GET"])
 def admin_assign_landlord(tenant_id):
@@ -155,3 +164,23 @@ def add_extras(form):
   db.session.commit()
   flash(f"Successful registration of a new Extra", category="success")
   return redirect(url_for('admin.admin'))
+
+@admins.route("/admin/delete-complaint/<int:complaint_id>")
+def delete_complaint(complaint_id):
+  complaint = Complaints.query.get(complaint_id)
+  tenant = Tenant.query.filter_by(id=complaint.tenant).first()
+  if complaint:
+    db.session.delete(complaint)
+    db.session.commit()
+    message = {
+      'receiver': tenant.email,
+      'subject': 'Complaint Deleted',
+      'body': f'\nDear, {tenant.first_name} {tenant.second_name} your complaint about {complaint.title} has been deleted by the admin.'
+    }
+    # send_sms(message)
+    send_email(**message)
+    flash(f"Complaint deleted successfully", category="success")
+    return redirect(url_for('admin.admin'))
+  else:
+    flash(f"Complaint not found", category="danger")
+    return redirect(url_for('admin.admin'))

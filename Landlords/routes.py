@@ -86,6 +86,7 @@ def landlord_dashboard():
     abort(403)
   properties = db.session.query(Properties).filter(current_user.id == Properties.owner).all()
   tenants = db.session.query(Tenant).filter(Tenant.landlord == current_user.id).all()
+  all_tenants = Tenant.query.all()
   todays_time = datetime.now().strftime("%d/%m/%Y")
   if session.get("this_month"):
     this_month = datetime.strptime(session["this_month"], '%Y-%m-%d').date()
@@ -96,11 +97,11 @@ def landlord_dashboard():
   extras = Extras.query.all()
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id, Unit.tenant != None).all()
-  unitz = Unit.query.filter(Unit.landlord == current_user.id).all()
+  unitz = Unit.query.all()
   invoices = Invoice.query.filter_by(status="Cleared").order_by(Invoice.date_closed.desc()).all()
   invoice()
 
-  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices, unitz=unitz)
+  return render_template("new_dash.html",properties=properties, tenants=tenants,properties_count=properties_count, expenses=expenses, extras=extras, todays_time=todays_time, active_extras=active_extras, this_month=this_month, units=units, invoices=invoices, unitz=unitz, all_tenants=all_tenants)
 
 @landlords.route("/approve-verification/<int:verification_id>")
 @fresh_login_required

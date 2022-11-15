@@ -122,6 +122,21 @@ def send_message(landlord_id):
 
   return render_template("message.html", messages=messages, landlord=landlord)
 
+@tenants.route("/invoice-email/<int:invoice_id>")
+@fresh_login_required
+@login_required
+def invoice_email(invoice_id):
+  invoice = Invoice.query.get(invoice_id)
+  message = {
+    'receiver': current_user.email,
+    'subject': "Invoice",
+    'body': f'Invoice #{invoice.invoice_id} of amount {locale.format("%d", invoice.amount, "en_US")} is pending, clear it to avoid penalties'
+  }
+  send_email(**message)
+  flash("Invoice sent to email successfully", category="success")
+
+  return redirect(url_for('tenant.tenant_dashboard'))
+
 @tenants.route("/rent-payment")
 @fresh_login_required
 @login_required
@@ -179,7 +194,7 @@ def payment_complete():
   message = {
     'receiver': [current_user.email, landlord.email],
     'subject': 'RENT PAYMENT',
-    'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+    'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} for unit {unit.name} - {unit.Type} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
   }
   if transactions:
     if not invoice:

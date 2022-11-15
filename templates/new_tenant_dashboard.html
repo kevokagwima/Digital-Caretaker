@@ -470,7 +470,7 @@
             {% for invoice in invoices %}
             <div class="invoice-details">
               <p>#{{ invoice.invoice_id }} | <span>{{ invoice.date_created.strftime("Created on %d/%m/%Y") }}</span></p>
-              <a href="#">Send to email</a>
+              <a href="{{ url_for('tenant.invoice_email', invoice_id=invoice.id) }}">Send to email</a>
             </div>
             {% endfor %}
           </div>

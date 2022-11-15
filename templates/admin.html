@@ -59,7 +59,7 @@
         </button>
       </div>
       <div class="logout">
-        <a href="{{ url_for('landlord.landlord_logout') }}">
+        <a href="#">
           <button>
             <img src="{{ url_for('static', filename='css/Images/logout.png') }}" alt="logout">
             Logout
@@ -212,10 +212,26 @@
             <div class="dash-reservations">
               <h4>Reservation Details</h4>
               <div class="reserve-box">
-                {% for reservation in reservations %}
+                {% for reservation in reservations|sort(attribute="date", reverse=True) %}
                 <div class="reserve">
+                  <h4>
+                    #{{ reservation.booking_id }}
+                  </h4>
+                  <p id="reserve-tenant">
+                    Reserved By:
+                    {% for user in all_users if user.username == reservation.user %}
+                    <span>{{ user.first_name }} {{ user.second_name }}</span>
+                    {% endfor %}
+                  </p>
+                  <p id="reserve-date">
+                    {% if reservation.status == "Active" %}
+                    Expires On:
+                    {% else %}
+                    Expired On
+                    {% endif %}
+                    <span>{{ reservation.expiry_date.strftime("%d/%m/%Y at %I:%M %p") }}</span>
+                  </p>
                   <span id="{{ reservation.status }}">{{ reservation.status }}</span>
-                  <h4>#{{ reservation.booking_id }}</h4>
                 </div>
                 {% endfor %}
               </div>
@@ -610,7 +626,7 @@
               <th>Unit Status</th>
               <th>Unit Rent</th>
             </tr>
-            {% for unit in units|sort(attribute="name") %}
+            {% for unit in []|sort(attribute="name") %}
             <tr id="units" class="accordion">
               <td>0{{ unit.id }}</td>
               <td>{{ unit.unit_id }}</td>
@@ -721,10 +737,116 @@
         </div>
       </div>
       <div id="complaints" class="tabcontent">
-        <h4>Complaints</h4>
+        <h4 id="dash">Complaints - ({{ complaints|count }})</h4>
+        <p id="more-info">Complaints are grouped according to the date they were sent</p>
+        <p id="more-info">Latest complaints will be placed at the top</p>
+        <div id="bottom" class="complaints">
+          {% if complaints %}
+          {% for complaint in complaints %}
+          <div class="reverse-div">
+            <p id="tenant">{{ complaint.time.strftime('%d-%m-%Y at %I:%M %p') }}</p>
+            <div class="complaint-info">
+              <h4>Title: {{ complaint.title }}</h4>
+              <p id="tenant-names">
+                {% for tenant in tenants if tenant.id == complaint.tenant %}
+                {{ tenant.first_name }} {{ tenant.second_name }},
+                {% for unit in tenant.unit %}
+                {{ unit.name }} - {{ unit.Type }}
+                {% endfor %}
+                {% endfor %}
+              </p>
+              <a href="{{ url_for('admin.delete_complaint', complaint_id=complaint.id) }}" id="delete">Delete</a>
+              <span>Category: {{ complaint.category }}</span>
+              <p>{{ complaint.body }}</p>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="else">Complaints made by your tenants will show up here</p>
+          {% endif %}
+        </div>
       </div>
       <div id="reservations" class="tabcontent">
         <h4>Reservations</h4>
+        {% set booking = [] %}
+        {% set expired_reservations = [] %}
+        {% for bookings in reservations if bookings.status == "Active" %}
+        {{ booking.append(bookings) or "" }}
+        {% endfor %}
+        {% for booking in reservations if booking.status == "Expired" %}
+        {{ expired_reservations.append(booking) or "" }}
+        {% endfor %}
+        <p id="more-info">All reservations will be shown here. The latest will be at the top</p>
+        {% if reservations %}
+        <div class="reservations">
+          <h4 id="reservation-status">Active Reservations</h4>
+          {% if booking %}
+          {% for reserves in reservations|sort(attribute='date', reverse=true) if reserves.status == "Active" %}
+          <div class="reservation-details">
+            <div class="reservation-info">
+              <h4>Reservation <span id="reserve-id">#{{ reserves.booking_id }}</span></h4>
+              <span id="status">{{ reserves.status }}</span>
+              <hr>
+              <p>Reserved By</p>
+              {% for user in all_users if user.username == reserves.user %}
+              <ul id="user-info">
+                <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
+                <li>Phone Number: <span>0{{ user.phone }}</span></li>
+              </ul>
+              {% endfor %}
+              {% for unit in units if unit.id == reserves.unit %}
+              <p>Reserved Unit</p>
+              <ul id="unit-info">
+                <li>Unit Name: <span>{{ unit.name }}</span></li>
+                <li>Unit Type: <span>{{ unit.Type }}</span></li>
+                <li>Unit Floor: <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+                    Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
+                    Floor{% elif unit.floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+                    {% endif %}</span></li>
+              </ul>
+              {% endfor %}
+              <hr>
+              <p>Expires on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y') }}</span> at <span
+                  id="expire">{{ reserves.expiry_date.strftime('%I:%M %p') }}</span></p>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <h4 class="else">No Active Reservations</h4>
+          {% endif %}
+          {% if expired_reservations %}
+          <hr id="divider">
+          {% else %}
+          {% endif %}
+          {% if expired_reservations %}
+          <h4 id="reservation-status">Expired Reservations</h4>
+          {% for reserves in reservations|sort(attribute='expiry_date', reverse=true) if reserves.status == "Expired" %}
+          <div class="expired reservation-info">
+            <h4>Reservation <span id="reserve-id">#{{ reserves.booking_id }}</span></h4>
+            <span id="status-expired">{{ reserves.status }}</span>
+            <hr>
+            {% for unit in units if unit.id == reserves.unit %}
+            <p>Reserved Unit</p>
+            <ul id="unit-info">
+              <li>Unit Name: <span>{{ unit.name }}</span></li>
+              <li>Unit Type: <span>{{ unit.Type }}</span></li>
+              <li>Unit Floor: <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
+                  Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
+                  Floor{% elif unit.floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+                  {% endif %}</span></li>
+            </ul>
+            {% endfor %}
+            <hr>
+            <p>Expired on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y') }}</span> at <span
+                id="expire">{{ reserves.expiry_date.strftime('%I:%M %p') }}</span></p>
+          </div>
+          {% endfor %}
+          {% else %}
+          {% endif %}
+        </div>
+        {% else %}
+        <h4 class="no else">No units have been reserved</h4>
+        {% endif %}
       </div>
       <div id="extra" class="tabcontent">
         <div class="extra-modal">
@@ -769,16 +891,34 @@
             <div class="modal-footer"></div>
           </div>
         </div>
-        <h4>
-          Extras ({{ extras|count }})
-          <button id="extras">Add New Extra</button>
+        <h4>Extras ({{ extras|count }})<button id="extras">Add New Extra</button>
         </h4>
         <p id="more-info">Manage all extra personell</p>
+        <div class="map">
+          <div class="elec">
+            <p>Electrician</p>
+          </div>
+          <div class="plumb">
+            <p>Plumber</p>
+          </div>
+          <div class="manso">
+            <p>Mansory</p>
+          </div>
+        </div>
         <div class="extras">
           {% if extras %}
-          <div class="extras-details">
-            <p>{{ extras }}</p>
+          {% for extra in extras %}
+          <div class="extras-details {{ extra.title }}">
+            <p id="titlez">{{ extra.title }}</p>
+            <img loading="lazy" src="{{ url_for('static', filename='css/Images/man.png') }}" alt="tenant">
+            <div class="extra-info">
+              <p>{{ extra.first_name }} {{ extra.last_name }}</p>
+              <p>{{ extra.email }}</p>
+              <p>{{ extra.phone }}</p>
+              <p>{{ "Ksh {:,}".format(extra.cost) }}/hr</p>
+            </div>
           </div>
+          {% endfor %}
           {% else %}
           <h4 class="else">No Extras</h4>
           {% endif %}

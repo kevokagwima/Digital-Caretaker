@@ -286,6 +286,7 @@ body::-webkit-scrollbar {
   flex-direction: column;
   max-height: 11rem;
   overflow: auto;
+  padding-right: 0.4rem;
 }
 
 .featured-details::-webkit-scrollbar {
@@ -343,7 +344,7 @@ body::-webkit-scrollbar {
   aspect-ratio: 1/1;
   background-color: transparent;
   border-radius: 50%;
-  outline: 6px solid var(--page-header-headingColor);
+  outline: 0.2rem solid var(--page-header-headingColor);
   box-shadow: 0 0 10px 0px black;
   display: flex;
   flex-direction: column;
@@ -476,6 +477,19 @@ body::-webkit-scrollbar {
   padding: 0.5rem;
   border-radius: 0.3rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+#reserve-tenant,
+#reserve-date {
+  font-weight: normal;
+  color: grey;
+}
+
+.reserve > p > span {
+  color: white;
 }
 
 .reserve > span {
@@ -770,6 +784,184 @@ button {
   font-weight: normal;
 }
 
+.complaints {
+  margin: 1.5rem 0 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  max-width: 98.5%;
+  max-height: 40rem;
+  padding-right: 10px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+}
+
+.complaints #tenant {
+  margin-bottom: 8px;
+  color: var(--red);
+}
+
+.complaint-info {
+  line-height: 28px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--page-header-bgColor);
+  color: white;
+}
+
+.complaint-info > h4 {
+  position: relative;
+  width: max-content;
+}
+
+.complaint-info #tenant-names {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 15px;
+  text-align: center;
+  background-color: rgb(8, 184, 8);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 0.8rem;
+}
+
+.complaint-info #delete {
+  position: absolute;
+  inset: auto 0 0 auto;
+  background-color: var(--red);
+  color: white;
+  padding: 0 10px;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.complaint-info #date {
+  position: absolute;
+  right: 5px;
+}
+
+.complaint-info h4 {
+  font-size: 22px;
+  position: relative;
+}
+
+.complaint-info span {
+  color: var(--blue);
+  font-size: 14px;
+}
+
+.complaint-info p {
+  font-family: "PT Sans", sans-serif;
+  font-size: 17px;
+}
+
+.reservations {
+  margin-top: 1rem;
+  padding-right: 10px;
+  border-radius: 5px;
+  max-height: 42.4rem;
+  overflow: auto;
+}
+
+#reservation-date {
+  color: var(--red);
+}
+
+.reservation-info {
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  position: relative;
+  background-color: var(--page-header-bgColor);
+}
+
+.expired {
+  opacity: 0.5;
+}
+
+#divider {
+  margin: 1rem 0;
+  border: 0.1px solid var(--blue);
+}
+
+#reservation-status {
+  color: rgb(7, 226, 7);
+  font-size: 18px;
+}
+
+#status,
+#status-expired {
+  position: absolute;
+  right: 1.2rem;
+  top: 20px;
+  color: rgb(7, 226, 7);
+}
+
+#status-expired {
+  color: var(--red);
+}
+
+.reservation-info h4:first-child {
+  color: whitesmoke;
+}
+
+#reserve-id {
+  color: orange;
+}
+
+.reservation-info hr {
+  margin: 0.8rem 0;
+  border: 0.1px solid grey;
+}
+
+.reservation-info p {
+  margin: 5px 0;
+  color: yellow;
+}
+
+.expired p::selection,
+.expired h4::selection,
+.expired li::selection,
+.expired span::selection {
+  background-color: transparent;
+}
+
+#user-info,
+#unit-info {
+  list-style-type: none;
+}
+
+#user-info li,
+#unit-info li {
+  margin-top: 5px;
+  margin-left: 10px;
+  color: white;
+}
+
+.reservation-info span {
+  color: var(--blue);
+}
+
+#expire {
+  color: var(--red);
+}
+
+.reservations > .else {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.no {
+  margin-top: 3rem;
+  text-align: center;
+}
+
 .extra-modal {
   background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
@@ -793,13 +985,88 @@ button {
 }
 
 .extras {
-  background-color: var(--dark-blue);
-  padding: 20px;
-  border-radius: 5px;
   margin-top: 1rem;
   color: white;
-  max-height: 40.5rem;
+  max-height: 40.4rem;
   overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.map {
+  display: flex;
+  gap: 2rem;
+  color: rgb(5, 189, 5);
+  margin-top: 0.8rem;
+}
+
+.map div > p {
+  position: relative;
+}
+
+.map div > p::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1.2rem;
+  height: 1rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
+.elec p::before {
+  background-color: var(--red);
+}
+
+.plumb p::before {
+  background-color: purple;
+}
+
+.manso p::before {
+  background-color: var(--blue);
+}
+
+.extras-details {
+  border-radius: 0.3rem;
+  padding: 2rem 1rem 1rem;
+  display: flex;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.extras-details img {
+  max-height: 5rem;
+}
+
+.Electrician {
+  background-color: var(--red);
+}
+
+.Mansory {
+  background-color: var(--blue);
+}
+
+.Plumber {
+  background-color: purple;
+}
+
+.extra-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#titlez {
+  position: absolute;
+  background-color: yellow;
+  top: 0;
+  left: 0;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  color: black;
 }
 
 .extras .else {
