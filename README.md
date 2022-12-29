@@ -100,4 +100,5 @@
 <p>In this page, all the user's reservations will be listed down</p>
 <img src="https://user-images.githubusercontent.com/63863253/194313832-4a0dc477-6ad8-4d11-b444-ceb66548befd.png">
 <h1 id="admin">The Admin Module</h1>
-<p>Coming Soon</p>
+<p>In this module, the admin has a generalized view of all aspects of the property system, from the total number of users in the system, total number of units, properties, reservations, invoices created in the system.</p>
+<p>The admin can also update tenant information, from the landlord assigned or unit assigned or property assigned. The admin can also remove any complaints an reseravtions made by users in the system.</p>
