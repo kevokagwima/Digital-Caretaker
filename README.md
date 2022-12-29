@@ -102,3 +102,21 @@
 <h1 id="admin">The Admin Module</h1>
 <p>In this module, the admin has a generalized view of all aspects of the property system, from the total number of users in the system, total number of units, properties, reservations, invoices created in the system.</p>
 <p>The admin can also update tenant information, from the landlord assigned or unit assigned or property assigned. The admin can also remove any complaints an reseravtions made by users in the system.</p>
+<h3>The Home Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209920866-ebecc6b5-b0e4-429c-81cc-028cb33fd2bb.png">
+<h3>The Tenants Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209920955-01592dd5-ad34-4ec6-8190-95ccbc07d182.png">
+<p>In this tab, the admin can view all tenenat information as well as revoke his access to the system.</p>
+<img src="https://user-images.githubusercontent.com/63863253/209921126-2d4b27c9-38c2-4bf2-8152-6f2fa18e7475.png">
+<h3>The Landlord Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209921211-49782108-fb82-4d46-b6c0-7ab9cc97c49f.png">
+<h3>The Properties Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209921308-7aabc5dd-35fd-4160-9141-74aac541aeff.png">
+<h3>The Units Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209921383-733eb063-63e8-4313-9134-67cd58112dbd.png">
+<h3>The Complaints Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209921514-5c25b279-bcbb-477c-818a-0d9de6c64c40.png">
+<h3>The Reservations Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209921617-59d90dd8-4f43-458b-97a8-1152c8d2129a.png">
+<h3>The Extras Tab</h3>
+<img src="https://user-images.githubusercontent.com/63863253/209921695-09c4048f-ce5a-4ca4-b18a-46f184d0e5ea.png">
