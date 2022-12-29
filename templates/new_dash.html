@@ -204,27 +204,32 @@ PMS | Landlord Dashboard
       <div class="insights">
         <div class="card">
           <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae explicabo nemo sed.</p>
+          <p>Athens Riviera: Beautiful living close to the city centre</p>
         </div>
         <div class="card">
           <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae explicabo nemo sed.</p>
+          <p>Tips for investing in a property in need of refurbishment - what to look out for Tips for investing in a
+            property in need of refurbishment - what to...</p>
         </div>
         <div class="card">
           <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae explicabo nemo sed.</p>
+          <p>How macro-location and micro-location help you find the right property
+            How macro-location and micro-location help you find the right property</p>
         </div>
         <div class="card">
           <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae explicabo nemo sed.</p>
+          <p>Insurance for property owners - what you need to know
+            Insurance for property owners - what you need to know...</p>
         </div>
         <div class="card">
           <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae explicabo nemo sed.</p>
+          <p>What happens with a property in the event of a divorce?
+            What happens with a property in the event of a divorce?</p>
         </div>
         <div class="card">
           <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Molestiae explicabo nemo sed.</p>
+          <p>Tips to help you face retirement with confidence
+            Tips to help you face retirement with confidence</p>
         </div>
       </div>
     </div>
@@ -493,7 +498,7 @@ PMS | Landlord Dashboard
             {% if active_extra.status == "Ongoing" %}
             In progress...
             {% else %}
-            Ended: {{ active_extra.date_closed.strftime("%d/%m/%Y %I:%M %p") }}
+            Ended: {{ active_extra.date_closed.strftime("%d/%m/%Y at %I:%M %p") }}
             {% endif %}
           </p>
         </div>
@@ -524,12 +529,16 @@ PMS | Landlord Dashboard
           </div>
         </div>
         <div class="actions">
-          <a href="#">
+          {% if active_extra.status == "Ongoing" %}
+          <a href="{{ url_for('landlord.complete_extra_service', extra_service_id=active_extra.id) }}">
             <button class="complete">Mark as complete</button>
           </a>
           <a href="{{ url_for('landlord.delete_extra_service', extra_service_id=active_extra.id) }}">
             <button class="delete">Delete</button>
           </a>
+          {% else %}
+          <p class="else">Completed &check;&check;</p>
+          {% endif %}
         </div>
       </div>
     </div>

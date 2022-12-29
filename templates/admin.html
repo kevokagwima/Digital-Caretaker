@@ -59,7 +59,7 @@
         </button>
       </div>
       <div class="logout">
-        <a href="#">
+        <a href="{{ url_for('admin.logout') }}">
           <button>
             <img src="{{ url_for('static', filename='css/Images/logout.png') }}" alt="logout">
             Logout
@@ -626,7 +626,7 @@
               <th>Unit Status</th>
               <th>Unit Rent</th>
             </tr>
-            {% for unit in []|sort(attribute="name") %}
+            {% for unit in units|sort(attribute="name") %}
             <tr id="units" class="accordion">
               <td>0{{ unit.id }}</td>
               <td>{{ unit.unit_id }}</td>

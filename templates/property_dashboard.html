@@ -437,11 +437,17 @@ PMS | Property Dashboard
       {% endif %}
       <div class="form2">
         <label for="unit-name">Air Conditioning</label> <br>
-        <input type="text" name="air-conditioning" required placeholder="Yes or No">
+        <select name="air-conditioning">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
       </div>
       <div class="form2">
         <label for="unit-name">Amenities / Furniture</label> <br>
-        <input type="text" name="furniture" required placeholder="Yes or No">
+        <select name="furniture">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
       </div>
       <button class="btn" type="submit">Add Unit</button>
     </form>

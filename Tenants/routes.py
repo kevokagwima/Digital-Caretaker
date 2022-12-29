@@ -6,7 +6,7 @@ from modules import generate_invoice, send_sms, send_email, send_chat, rent_tran
 from werkzeug.utils import secure_filename
 import pytesseract
 from PIL import Image
-import random, os, stripe, datetime, locale
+import random, os, stripe, datetime, locale, time
 from datetime import datetime, date
 
 UPLOAD_FOLDER = 'Static/css/Images/Screenshots'
@@ -183,6 +183,16 @@ def payment_complete():
   landlord = Landlord.query.filter_by(id=current_user.landlord).first()
   transactions = db.session.query(Transaction).filter(Transaction.tenant == current_user.id).all()
   invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
+  landlord_message = {
+    'receiver': [landlord.email, current_user.email],
+    'subject': 'RENT PAYMENT',
+    'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} for unit {unit.name} - {unit.Type} paid successfully on {datetime.now().strftime("%d/%m/%Y")} by tenant {current_user.first_name} { current_user.second_name }.'
+  }
+  tenant_message = {
+    'receiver': current_user.email,
+    'subject': 'RENT PAYMENT',
+    'body': f'Confirmed! You have cleared your rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} for unit {unit.name} - {unit.Type} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+  }
   new_transaction = {
     'tenant': current_user.id,
     'landlord': current_user.landlord,
@@ -190,11 +200,6 @@ def payment_complete():
     'Unit': unit.id,
     'invoice': invoice.id,
     'origin': "Bank"
-  }
-  message = {
-    'receiver': [current_user.email, landlord.email],
-    'subject': 'RENT PAYMENT',
-    'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} for unit {unit.name} - {unit.Type} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
   }
   if transactions:
     if not invoice:
@@ -208,7 +213,8 @@ def payment_complete():
       db.session.commit()
       flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
       # send_sms(message)
-      send_email(**message)
+      send_email(**landlord_message)
+      # send_email(**tenant_message)
       return redirect(url_for('tenant.tenant_dashboard'))
   else:
     rent_transaction(**new_transaction)
@@ -218,8 +224,8 @@ def payment_complete():
     db.session.commit()
     flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
     # send_sms(message)
-    send_email(**message)
-    return redirect(url_for('tenant.tenant_dashboard'))
+    send_email(**landlord_message)
+    # send_email(**tenant_message)
 
   return redirect(url_for('tenant.tenant_dashboard'))
 

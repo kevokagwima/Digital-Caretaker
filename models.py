@@ -1,9 +1,31 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
+import random
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+
+class Admin(db.Model, UserMixin):
+  __tablename__ = 'Admin'
+  id = db.Column(db.Integer(), primary_key=True)
+  unique_id = db.Column(db.Integer(), nullable=False, default=random.randint(100000,999999))
+  username = db.Column(db.String(30), nullable=False, default="admin")
+  email = db.Column(db.String(50), nullable=False, default="admin@gmail.com")
+  phone = db.Column(db.Integer(), nullable=False, default="0785698787")
+  password = db.Column(db.String(80), nullable=False)
+  account_type = db.Column(db.String(20), nullable=False, default="Admin")
+
+  @property
+  def passwords(self):
+    return self.passwords
+
+  @passwords.setter
+  def passwords(self, plain_text_password):
+    self.password = bcrypt.generate_password_hash(plain_text_password).decode("utf-8")
+
+  def check_password_correction(self, attempted_password):
+    return bcrypt.check_password_hash(self.password, attempted_password)
 
 class Members(db.Model, UserMixin):
   __tablename__ = "members"

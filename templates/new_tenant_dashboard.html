@@ -42,15 +42,15 @@
         <button class="tablinks" onclick="openView(event, 'payments')">Rent Payments
           <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="Payments">
         </button>
-        <button class="tablinks" onclick="openView(event, 'extras')">Extras
+        <!-- <button class="tablinks" onclick="openView(event, 'extras')">Extras
           <img src="{{ url_for('static', filename='css/Images/extra.png') }}" alt="extra">
-        </button>
+        </button> -->
       </div>
       <div class="secondary-navigation">
         <h4 id="nav-title">Settings</h4>
-        <button class="tablinks" onclick="openView(event, 'settings')">Settings
+        <!-- <button class="tablinks" onclick="openView(event, 'settings')">Settings
           <img src="{{ url_for('static', filename='css/Images/setting.png') }}" alt="settings">
-        </button>
+        </button> -->
         <button class="tablinks" onclick="openView(event, 'help')">Help
           <img src="{{ url_for('static', filename='css/Images/info.png') }}" alt="help">
         </button>
@@ -78,7 +78,7 @@
         </div>
         {% endif %}
         {% endwith %}
-        <img src="{{ url_for('static', filename='css/Images/bell.png') }}" alt="notification bell">
+        <!-- <img src="{{ url_for('static', filename='css/Images/bell.png') }}" alt="notification bell"> -->
       </div>
       <div id="dashboard" class="tabcontent">
         <h4 id="dash">My Dashboard</h4>
@@ -144,42 +144,57 @@
           </div>
           <div class="recent-activity">
             <h4>Recent Activity</h4>
+            {% if current_user.unit %}
             <div class="activity">
-              <p>Lorem ipsum dolor sit amet.</p>
-              <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni, quisquam?</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-              <p>Lorem ipsum dolor sit amet consectetur.</p>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis quod corrupti, laborum sequi
-                maiores itaque!</p>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo, quae.</p>
+              <p>Assigned unit by landlord</p>
+              <p>An invoice for this month has been generated</p>
+              <p>You have sent a complaint</p>
+              <p>You have cleared this months rent</p>
+              <p>You have a new message from your landlord</p>
+              <p>You have sent a complaint</p>
+              <p>You have sent a complaint</p>
+              <p>You have sent a complaint</p>
+              <p>You have sent a complaint</p>
+              <p>You have sent a complaint</p>
+              <p>You have sent a complaint</p>
+              <p>You have sent a complaint</p>
             </div>
+            {% else %}
+            <p class="else">No Activity</p>
+            {% endif %}
           </div>
           <div class="property-insights">
             <h4>Property Insights</h4>
             <div class="insights">
               <div class="card">
                 <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, aspernatur.</p>
+                <p>Athens Riviera: Beautiful living close to the city centre</p>
               </div>
               <div class="card">
                 <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, aspernatur.</p>
+                <p>Tips for investing in a property in need of refurbishment - what to look out for Tips for investing
+                  in a
+                  property in need of refurbishment - what to...</p>
               </div>
               <div class="card">
                 <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, aspernatur.</p>
+                <p>How macro-location and micro-location help you find the right property
+                  How macro-location and micro-location help you find the right property</p>
               </div>
               <div class="card">
                 <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, aspernatur.</p>
+                <p>Insurance for property owners - what you need to know
+                  Insurance for property owners - what you need to know...</p>
               </div>
               <div class="card">
                 <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, aspernatur.</p>
+                <p>What happens with a property in the event of a divorce?
+                  What happens with a property in the event of a divorce?</p>
               </div>
               <div class="card">
                 <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, aspernatur.</p>
+                <p>Tips to help you face retirement with confidence
+                  Tips to help you face retirement with confidence</p>
               </div>
             </div>
           </div>
@@ -209,7 +224,7 @@
                 {{ transactions[-1].next_date.strftime('%d/%m/%Y') }}
                 {% endif %}
               </p>
-              {% else %}
+              {% elif not unit %}
               <p>No rent information to show</p>
               {% endif %}
             </div>
@@ -535,7 +550,9 @@
                 <div class="disabled">
                   <img src="{{ url_for('static', filename='css/Images/mpesa.png') }}" alt="Mpesa">
                   <h4>Next charge on
+                    {% if transactions %}
                     {{ current_user.transact[-1].next_date.strftime('%d/%m/%Y') }}
+                    {% endif %}
                   </h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>

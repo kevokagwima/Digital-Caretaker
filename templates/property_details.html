@@ -46,7 +46,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
       </p>
     </div>
     {% if unit.reserved == "True" %}
-    <button class="reserve-btn" disabled="disabled">Unit Is Reserved</button>
+    <p id="reserved">Unit is reserved</p>
     {% else %}
     <a href="{{ url_for('main.book', unit_id=unit.id) }}">
       <button class="reserve-btn">Reserve Unit</button>
@@ -157,23 +157,23 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
   <div class="unit-info">
     <h4 id="prop-details">Unit Enquiry</h4>
     <div class="unit-information">
-      <form class="form" action="">
+      <form class="form" action="{{ url_for('main.unit_enquiry', unit_id=unit.id) }}" method="post">
         <div class="input-1">
-          <input type="text" required name="" id="" placeholder="Enter First Name">
+          <input type="text" required name="fname" id="" placeholder="Enter First Name">
         </div>
         <div class="input-2">
-          <input type="text" required name="" id="" placeholder="Enter Last Name">
+          <input type="text" required name="lname" id="" placeholder="Enter Last Name">
         </div>
         <div class="input-3">
-          <input type="text" required name="" id="" placeholder="Enter Email Address">
+          <input type="text" required name="email" id="" placeholder="Enter Email Address">
         </div>
         <div class="input-4">
-          <input type="number" required name="" id="" placeholder="Enter Phone Number">
+          <input type="number" required name="phone" id="" placeholder="Enter Phone Number">
         </div>
         <div class="input-5">
-          <textarea name="" required id="" cols="30" rows="5" placeholder="Message"></textarea>
+          <textarea name="message" required id="" cols="30" rows="5" placeholder="Message"></textarea>
         </div>
-        <button>Send</button>
+        <button type="submit">Send</button>
       </form>
     </div>
   </div>

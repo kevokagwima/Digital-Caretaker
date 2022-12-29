@@ -1,16 +1,39 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request
+from flask import Blueprint, render_template, flash, url_for, redirect, request, abort
+from flask_login import login_user, logout_user, login_required, fresh_login_required, current_user
 from Landlords.routes import invoice
 from models import *
 from .form import *
-from modules import send_sms, send_email
+from modules import send_sms, send_email, assign_tenant_unit
 import random
 from datetime import date, datetime
 
 admins = Blueprint("admin", __name__)
 today = date.today()
 
+@admins.route("/admin-login", methods=["POST", "GET"])
+def admin_login():
+  form = Admin_login_form()
+  if form.validate_on_submit():
+    admin = Admin.query.filter_by(unique_id=form.admin_id.data).first()
+    if admin and admin.check_password_correction(attempted_password=form.password.data):
+      login_user(admin, remember=True)
+      flash("Login successfull", category="success")
+      return redirect(url_for('admin.admin'))
+    elif admin == None:
+      flash("No admin with that ID", category="danger")
+      return redirect(url_for('admin.admin_login'))
+    else:
+      flash("Invalid credentials", category="danger")
+      return redirect(url_for('admin.admin_login'))
+
+  return render_template("admin_login.html", form=form)
+
 @admins.route("/admin", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
 def admin():
+  if current_user.account_type != "Admin":
+    abort(403)
   properties = Properties.query.all()
   tenants = Tenant.query.all()
   users = Members.query.all()
@@ -43,7 +66,11 @@ def admin():
   return render_template("admin.html",properties=properties,tenants=tenants,landlords=landlords,users=users, units=units, complaints=complaints, extras=extras, today_time=today_time, form=form, reservations=reservations, transactions=transactions, invoices=invoices, all_users=all_users)
 
 @admins.route("/admin/Assign-landlord/<int:tenant_id>", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
 def admin_assign_landlord(tenant_id):
+  if current_user.account_type != "Admin":
+    abort(403)
   landlord_id = request.form.get("landlord-assign")
   try:
     tenant = Tenant.query.filter_by(tenant_id=tenant_id).first()
@@ -66,7 +93,11 @@ def admin_assign_landlord(tenant_id):
     return redirect(url_for('admin.admin'))
 
 @admins.route("/admin/Assign-property/<int:tenant_id>", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
 def admin_assign_property(tenant_id):
+  if current_user.account_type != "Admin":
+    abort(403)
   property_id = request.form.get("assign-property")
   try:
     tenant = Tenant.query.filter_by(tenant_id=tenant_id).first()
@@ -88,38 +119,35 @@ def admin_assign_property(tenant_id):
     return redirect(url_for('admin.admin'))
 
 @admins.route("/admin/Assign-unit/<int:tenant_id>", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
 def admin_assign_unit(tenant_id):
+  if current_user.account_type != "Admin":
+    abort(403)
   unit_id = request.form.get("assign-unit")
   try:
     tenant = Tenant.query.filter_by(tenant_id=tenant_id).first()
     unit = Unit.query.filter_by(unit_id=unit_id).first()
-    if tenant.properties == None and tenant.landlord == None:
-      flash(f"Tenant does not have a property or landlord assigned", category="danger")
-      return redirect(url_for('admin.admin'))
-    elif tenant.unit:
-      flash(f"Tenant already has a unit assigned", category="danger")
-      return redirect(url_for('admin.admin'))
-    elif unit.tenant:
-      flash(f"Unit already occupied", category="danger")
-      return redirect(url_for('admin.admin'))
-    elif tenant and unit:
-      unit.tenant = tenant.id
-      db.session.commit()
-      message = {
-        'receiver': tenant.email,
-        'subject': 'Unit Assigned',
-        'body': f'\nYou have successfully been assigned to unit {unit.name} - {unit.Type}.'
-      }
-      # send_sms(message)
-      send_email(**message)
-      flash(f"Tenant Unit Information Updated Successfully", category="success")
+    previous_url = request.referrer
+    assign_tenant_unit(tenant.id, unit.id, tenant.properties, previous_url, tenant.landlord)
+    message = {
+      'receiver': tenant.email,
+      'subject': 'Unit Assigned',
+      'body': f'\nYou have successfully been assigned to unit {unit.name} - {unit.Type}.'
+    }
+    # send_sms(message)
+    send_email(**message)
     return redirect(url_for('admin.admin'))
   except:
     flash(f"An Error Occurred", category="danger")
-    return redirect(url_for('admin.admin'))
+  return redirect(url_for('admin.admin'))
 
 @admins.route("/admin/revoke-tenant/<int:tenant_id>", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
 def admin_revoke_tenant(tenant_id):
+  if current_user.account_type != "Admin":
+    abort(403)
   try:
     tenant = Tenant.query.filter_by(tenant_id=tenant_id).first()
     if tenant.active=="False":
@@ -148,7 +176,11 @@ def admin_revoke_tenant(tenant_id):
     return redirect(url_for('admin.admin'))
 
 @admins.route("/add-extra-personell", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
 def add_extras(form):
+  if current_user.account_type != "Admin":
+    abort(403)
   new_extra = Extras(
     extra_id = random.randint(100000, 999999),
     first_name = form.first_name.data,
@@ -166,7 +198,11 @@ def add_extras(form):
   return redirect(url_for('admin.admin'))
 
 @admins.route("/admin/delete-complaint/<int:complaint_id>")
+@fresh_login_required
+@login_required
 def delete_complaint(complaint_id):
+  if current_user.account_type != "Admin":
+    abort(403)
   complaint = Complaints.query.get(complaint_id)
   tenant = Tenant.query.filter_by(id=complaint.tenant).first()
   if complaint:
@@ -184,3 +220,13 @@ def delete_complaint(complaint_id):
   else:
     flash(f"Complaint not found", category="danger")
     return redirect(url_for('admin.admin'))
+
+@admins.route("/logout")
+@fresh_login_required
+@login_required
+def logout():
+  if current_user.account_type != "Admin":
+    abort(403)
+  logout_user()
+  flash("Logout successfull", category="success")
+  return redirect(url_for('admin.admin_login'))

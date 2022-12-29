@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, PasswordField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
 from models import Extras
 
@@ -21,3 +21,7 @@ class Extra_signup(FlaskForm):
     email = Extras.query.filter_by(email=email_to_validate.data).first()
     if email:
       raise ValidationError("Email Address already exists, Please try another one")
+
+class Admin_login_form(FlaskForm):
+  admin_id = IntegerField(label="Enter Admin ID", validators=[DataRequired()])
+  password = PasswordField(label="Enter password", validators=[DataRequired()])

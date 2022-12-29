@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import Members, db, Landlord,Tenant, Properties, Unit, Bookings
+from models import Members, db, Landlord,Tenant, Properties, Unit, Bookings, Admin
 from sqlalchemy import or_
 from .form import *
 from modules import send_sms, send_email
@@ -51,7 +51,7 @@ def signin():
   form = login()
   if form.validate_on_submit():
     member = (
-      Members.query.filter_by(username=form.username.data).first() or Landlord.query.filter_by(username=form.username.data).first() or Tenant.query.filter_by(username=form.username.data).first()
+      Members.query.filter_by(username=form.username.data).first() or Landlord.query.filter_by(username=form.username.data).first() or Tenant.query.filter_by(username=form.username.data).first() or Admin.query.filter_by(username=form.username.data).first()
     )
     if member and member.check_password_correction(attempted_password=form.password.data):
       login_user(member, remember=True)
@@ -185,6 +185,29 @@ def book(unit_id):
   except:
     flash(f"An error occurred. Try again", category="danger")
     return redirect(url_for("main.unit_details", unit_id=unit.id))
+
+@main.route("/unit-enquiry/<int:unit_id>", methods=["POST", "GET"])
+@fresh_login_required
+@login_required
+def unit_enquiry(unit_id):
+  unit = Unit.query.get(unit_id)
+  if request.method == "POST":
+    fname = request.form.get("fname")
+    lname = request.form.get("lname")
+    user_email = request.form.get("email")
+    enquiry = request.form.get("message")
+    message = {
+      'receiver': user_email,
+      'subject': f"{unit.name} - {unit.Type} Unit enquiry",
+      'body': f"Dear client, {fname} {lname}\nThank you for your enquiry - {enquiry}.\nThe landlord will be in touch"
+    }
+    send_email(**message)
+    flash(f"Enquiry sent", category="success")
+  else:
+    flash(f"Invalid url", category="danger")
+    return redirect(url_for('main.properties'))
+
+  return redirect(url_for('main.unit_details', unit_id=unit.id))
 
 @main.route("/my_reservations")
 @fresh_login_required

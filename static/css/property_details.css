@@ -77,6 +77,13 @@ html {
   font-weight: bold;
 }
 
+#reserved {
+  margin-top: 2rem;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  color: var(--red);
+}
+
 .reserve-btn {
   margin-top: 20px;
   border: none;

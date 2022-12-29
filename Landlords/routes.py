@@ -133,13 +133,19 @@ def approve_verification(verification_id):
       invoice.month_created = datetime.now()
       invoice.status = "Cleared"
       db.session.commit()
-      message = {
-        'receiver': [tenant.email, current_user.email],
+      landlord_message = {
+        'receiver': f'{current_user.email}',
         'subject': 'RENT PAYMENT',
-        'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
+        'body': f'Confirmed! rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} for unit {unit.name} - {unit.Type} paid successfully on {datetime.now().strftime("%d/%m/%Y")} by tenant {tenant.first_name} { tenant.second_name }.'
+      }
+      tenant_message = {
+        'receiver': f'{tenant.email}',
+        'subject': 'RENT PAYMENT',
+        'body': f'Confirmed! You have cleared your rental payment of amount {locale.format("%d", unit.rent_amount, "en_US")} for unit {unit.name} - {unit.Type} paid successfully on {datetime.now().strftime("%d/%m/%Y")}.'
       }
       # send_sms(message)
-      send_email(**message)
+      send_email(**landlord_message)
+      send_email(**tenant_message)
       flash(f"Rent payment approved", category="success")
       return redirect(url_for('landlord.landlord_dashboard')) 
   else:
@@ -348,48 +354,51 @@ def unit():
   if current_user.account_type != "Landlord":
     abort(403)
   this_property = session["property"]
-  try:
-    new_unit = Unit(
-      name=request.form.get("unit-name"),
-      floor=request.form.get("unit-floor"),
-      Type=request.form.get("unit-type"),
-      date=datetime.now(),
-      unit_id=random.randint(100000, 999999),
-      rent_amount=request.form.get("unit-rent"),
-      living_space=request.form.get("living-space"),
-      balcony_space=request.form.get("veranda"),
-      bedrooms = request.form.get("no-of-bedrooms"),
-      bathrooms = request.form.get("no-of-bathrooms"),
-      air_conditioning = request.form.get("air-conditioning"),
-      amenities = request.form.get("furniture"),
-      reserved="False",
-      Property=Properties.query.filter_by(property_id=request.form.get("property-id")).first().id,
-      landlord=Landlord.query.filter_by(id=current_user.id).first().id
-    )
-    all_units = Unit.query.filter_by(Property=this_property.id).all()
-    for unit in all_units:
-      unit_exists = db.session.query(Unit).filter(new_unit.name == unit.name).first()
-      if unit_exists:
-        flash(f"A unit with name {new_unit.name} already exists in {this_property.name}", category="danger")
-        return redirect(url_for("landlord.property_information", property_id=this_property.id))
-    all_units_count = Unit.query.filter_by(Property=this_property.id).count()
-    if all_units_count == this_property.rooms:
-      flash(f"Maximum units allowed of this property has been reached", category="warning")
+  # try:
+  new_unit = Unit(
+    name=request.form.get("unit-name"),
+    floor=request.form.get("unit-floor"),
+    Type=request.form.get("unit-type"),
+    date=datetime.now(),
+    unit_id=random.randint(100000, 999999),
+    rent_amount=request.form.get("unit-rent"),
+    living_space=request.form.get("living-space"),
+    balcony_space=request.form.get("veranda"),
+    bedrooms = request.form.get("no-of-bedrooms"),
+    bathrooms = request.form.get("no-of-bathrooms"),
+    air_conditioning = request.form.get("air-conditioning"),
+    amenities = request.form.get("furniture"),
+    reserved="False",
+    Property=Properties.query.filter_by(property_id=request.form.get("property-id")).first().id,
+    landlord=Landlord.query.filter_by(id=current_user.id).first().id
+  )
+  all_units = Unit.query.filter_by(Property=this_property.id).all()
+  for unit in all_units:
+    unit_exists = db.session.query(Unit).filter(new_unit.name == unit.name).first()
+    if unit_exists:
+      flash(f"A unit with name {new_unit.name} already exists in {this_property.name}", category="danger")
       return redirect(url_for("landlord.property_information", property_id=this_property.id))
-    if this_property.Type == "Office":
-      new_unit.bedrooms = 0
-      new_unit.bathrooms = 0
-      db.session.commit()
-    if new_unit.Property != this_property.id:
-      flash(f"Invalid Property ID", category="danger")
-      return redirect(url_for("landlord.property_information", property_id=this_property.id))
-    db.session.add(new_unit)
+  all_units_count = Unit.query.filter_by(Property=this_property.id).count()
+  if int(new_unit.floor) > this_property.floors or int(new_unit.floor) < 0:
+    flash(f"Floor {new_unit.floor} does not exist", category="danger")
+    return redirect(url_for("landlord.property_information", property_id=this_property.id))
+  if all_units_count == this_property.rooms or all_units_count > this_property.rooms:
+    flash(f"Maximum units allowed of this property has been reached", category="warning")
+    return redirect(url_for("landlord.property_information", property_id=this_property.id))
+  if this_property.Type == "Office":
+    new_unit.bedrooms = 0
+    new_unit.bathrooms = 0
     db.session.commit()
-    flash(f"Unit {new_unit.name} - {new_unit.Type} Added successfully",category="success")
+  if new_unit.Property != this_property.id:
+    flash(f"Invalid Property ID", category="danger")
     return redirect(url_for("landlord.property_information", property_id=this_property.id))
-  except:
-    flash(f"Something went wrong. Try again later", category="danger")
-    return redirect(url_for("landlord.property_information", property_id=this_property.id))
+  db.session.add(new_unit)
+  db.session.commit()
+  flash(f"Unit {new_unit.name} - {new_unit.Type} Added successfully",category="success")
+  return redirect(url_for("landlord.property_information", property_id=this_property.id))
+  # except:
+  #   flash(f"Something went wrong. Try again later", category="danger")
+  #   return redirect(url_for("landlord.property_information", property_id=this_property.id))
 
 @landlords.route("/update-property-availability/<int:property_id>", methods=["POST", "GET"])
 @fresh_login_required
@@ -446,8 +455,8 @@ def unit_select(property_id):
 def select_extra_service(extra_id):
   if current_user.account_type != "Landlord":
     abort(403)
-  data = json.loads(request.get_data('data'))
-  Property = Properties.query.filter_by(id=data.get("property")).first()
+  if request.get_data('data'):
+    data = json.loads(request.get_data('data'))
   extra = Extras.query.filter_by(id=data.get("extra")).first()
   active_extras = Extra_service.query.filter(Extra_service.landlord == current_user.id, Extra_service.status == "Ongoing", Extra_service.extra == extra_id).all()
   if active_extras:
@@ -505,6 +514,21 @@ def delete_extra_service(extra_service_id):
   else:
     flash("Maitenance not found", category="danger")
     return redirect(url_for('landlord.landlord_dashboard'))
+
+@landlords.route("/maintenance-complete/<int:extra_service_id>")
+@fresh_login_required
+@login_required
+def complete_extra_service(extra_service_id):
+  maintenance = Extra_service.query.get(extra_service_id)
+  if maintenance:
+    maintenance.date_closed = datetime.now()
+    maintenance.status = "Closed"
+    db.session.commit()
+    flash(f"Maintenance #{maintenance.extra_service_id} marked as complete", category="success")
+  else:
+    flash("Maintenance record not found", category="danger")
+
+  return redirect(url_for('landlord.landlord_dashboard'))
 
 @landlords.route("/logout_landlord")
 @login_required

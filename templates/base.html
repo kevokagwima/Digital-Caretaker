@@ -27,10 +27,10 @@
     </a>
     {% block logo %} {% endblock %}
     <div class="links">
-      <a id="links" href="{{ url_for('main.about_us') }}">ABOUT US</a>
-      <a id="links" href="{{ url_for('main.services') }}">SERVICES</a>
+      <!-- <a id="links" href="{{ url_for('main.about_us') }}">ABOUT US</a>
+      <a id="links" href="{{ url_for('main.services') }}">SERVICES</a> -->
       <div class="dropdown">
-        <a href="#" id="links">SYSTEMS
+        <a href="#" id="links">USER PORTALS
           <i class="fa fa-caret-down"></i>
         </a>
         <div class="dropdown-content">
@@ -44,11 +44,15 @@
           {% else %}
           <a href="{{ url_for('tenant.tenant_login') }}">Tenant Portal</a>
           {% endif %}
-          <a href="{{ url_for('admin.admin') }}" target="_blank">Admin Portal</a>
+          {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
+          <a href="{{ url_for('admin.admin') }}">Admin Portal</a>
+          {% else %}
+          <a href="{{ url_for('admin.admin_login') }}">Admin Portal</a>
+          {% endif %}
         </div>
       </div>
       <a id="links" href="{{ url_for('main.properties') }}">PROPERTIES</a>
-      <a id="links" href="{{ url_for('main.contact_us') }}">CONTACT US</a>
+      <!-- <a id="links" href="{{ url_for('main.contact_us') }}">CONTACT US</a> -->
       {% block content %}{% endblock %}
     </div>
     {% if current_user.is_authenticated %}

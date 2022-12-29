@@ -46,6 +46,11 @@
   width: 100%;
 }
 
+.actions .else {
+  margin: 0;
+  color: orange;
+}
+
 .extra-rent {
   padding-right: 1rem;
   margin-top: 1rem;

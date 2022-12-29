@@ -376,7 +376,7 @@ body::-webkit-scrollbar {
 
 .amount-transacted p {
   font-family: var(--font-1);
-  font-size: 1.2rem;
+  font-size: 1.38rem;
   letter-spacing: 1px;
 }
 
@@ -446,7 +446,7 @@ body::-webkit-scrollbar {
 
 .total-complaints p {
   margin-top: 0.4rem;
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: bold;
 }
 
