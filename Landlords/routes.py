@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, flash, url_for, redirect, request, session, abort, json
 from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice, Messages
+from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Members, Complaints, Extra_service, Invoice, Messages, bcrypt
 from .form import *
 from modules import generate_invoice, send_sms, send_email, send_chat, check_reservation_expiry, assign_tenant_unit, revoke_tenant_access, rent_transaction
 import random, os, locale
@@ -529,6 +529,21 @@ def complete_extra_service(extra_service_id):
     flash("Maintenance record not found", category="danger")
 
   return redirect(url_for('landlord.landlord_dashboard'))
+
+@landlords.route("/change-password", methods=["POST", "GET"])
+@login_required
+def change_password():
+  previous_url = request.referrer
+  if request.method == "POST":
+    new_password = request.form.get("password")
+    new_password_hash = bcrypt.generate_password_hash(new_password).decode("utf-8")
+    if current_user.check_password_correction(attempted_password=new_password):
+      flash("The new password matches the old password", category="danger")
+    else:
+      current_user.password = new_password_hash
+      db.session.commit()
+      flash(f"Password changed successfully", category="success")
+  return redirect(previous_url)
 
 @landlords.route("/logout_landlord")
 @login_required

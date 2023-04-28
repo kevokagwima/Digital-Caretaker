@@ -1003,6 +1003,45 @@ body::-webkit-scrollbar {
   max-width: max-content;
 }
 
+.settings {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--page-content-bgColor);
+  border-radius: 0.3rem;
+}
+
+#password-change {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 1rem;
+}
+
+#password-change input {
+  border: none;
+  border-radius: 3px;
+  padding: 15px;
+  margin: 0.5rem 0 1rem;
+  width: 100%;
+  background-color: var(--page-header-bgColor);
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  font-size: 18px;
+}
+
+#password-change button {
+  background-color: rgb(3, 116, 3);
+  color: white;
+  font-family: "Dancing Script", cursive;
+  font-family: "Varela Round", sans-serif;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
 .extras {
   margin: 1rem 0 0;
   border-radius: 5px;
