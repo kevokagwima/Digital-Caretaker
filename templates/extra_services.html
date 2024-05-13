@@ -12,7 +12,7 @@ PMS | Extra Service
 
 {% block logo %}
 <a id="logos" href="{{ url_for('landlord.landlord_dashboard') }}">
-  <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+  <img class="logo" src="{{ url_for('static', filename='Images/logo.png') }}" alt="logo">
   {% if current_user.is_authenticated %}
   <span id="account">{{ current_user.account_type }}</span>
   {% endif %}
@@ -62,7 +62,7 @@ PMS | Extra Service
   <div class="all-cards">
     {% for extra in available_extra %}
     <div data-extra="{{ extra.id }}" class="card">
-      <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="">
+      <img src="{{ url_for('static', filename='Images/man.png') }}" alt="">
       <div class="card-info">
         <p>{{ extra.first_name }} {{ extra.last_name }}</p>
         <p>{{ extra.phone }}</p>

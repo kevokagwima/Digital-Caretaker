@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
-import random
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -9,8 +8,7 @@ bcrypt = Bcrypt()
 class Admin(db.Model, UserMixin):
   __tablename__ = 'Admin'
   id = db.Column(db.Integer(), primary_key=True)
-  unique_id = db.Column(db.Integer(), nullable=False, default=random.randint(100000,999999))
-  username = db.Column(db.String(30), nullable=False, default="admin")
+  unique_id = db.Column(db.Integer(), nullable=False)
   email = db.Column(db.String(50), nullable=False, default="admin@gmail.com")
   phone = db.Column(db.Integer(), nullable=False, default="0785698787")
   password = db.Column(db.String(80), nullable=False)
@@ -27,16 +25,15 @@ class Admin(db.Model, UserMixin):
   def check_password_correction(self, attempted_password):
     return bcrypt.check_password_hash(self.password, attempted_password)
 
-class Members(db.Model, UserMixin):
-  __tablename__ = "members"
+class Users(db.Model, UserMixin):
+  __tablename__ = "users"
   id = db.Column(db.Integer(), primary_key=True)
+  unique_id = db.Column(db.Integer(), nullable=False, unique=True)
   first_name = db.Column(db.String(length=50), nullable=False)
-  second_name = db.Column(db.String(length=50), nullable=False)
   last_name = db.Column(db.String(length=50), nullable=False)
   email = db.Column(db.String(length=100), nullable=False, unique=True)
   phone = db.Column(db.Integer(), nullable=False, unique=True)
   date = db.Column(db.DateTime())
-  username = db.Column(db.String(length=50), nullable=False, unique=True)
   password = db.Column(db.String, nullable=False)
   account_type = db.Column(db.String(length=10), nullable=False)
 
@@ -54,24 +51,21 @@ class Members(db.Model, UserMixin):
 class Landlord(db.Model, UserMixin):
   __tablename__ = "Landlord"
   id = db.Column(db.Integer(), primary_key=True)
+  unique_id = db.Column(db.Integer(), nullable=False, unique=True)
   first_name = db.Column(db.String(length=50), nullable=False)
-  second_name = db.Column(db.String(length=50), nullable=False)
   last_name = db.Column(db.String(length=50), nullable=False)
   email = db.Column(db.String(length=100), nullable=False, unique=True)
   phone = db.Column(db.Integer(), nullable=False, unique=True)
-  username = db.Column(db.String(length=50), nullable=False, unique=True)
   date = db.Column(db.DateTime())
-  landlord_id = db.Column(db.Integer(), nullable=False, unique=True)
   account_type = db.Column(db.String(length=10), nullable=False)
   password = db.Column(db.String(), nullable=False)
   tenant = db.relationship("Tenant", backref="tenant", lazy=True)
   complaint = db.relationship("Complaints", backref="complaint", lazy=True)
   unit = db.relationship("Unit", backref="all_units", lazy=True)
   Property = db.relationship("Properties", backref="property", lazy=True)
-  active = db.Column(db.String(length=5), nullable=False)
   transact = db.relationship("Transaction", backref="landlord_transaction", lazy=True)
-  verification = db.relationship("Verification", backref="landlord-verification", lazy=True)
-  extra_service = db.relationship("Extra_service", backref="extra-service", lazy=True)
+  verification = db.relationship("Verification", backref="landlord_verification", lazy=True)
+  extra_service = db.relationship("Extra_service", backref="extra_service", lazy=True)
 
   @property
   def passwords(self):
@@ -87,21 +81,19 @@ class Landlord(db.Model, UserMixin):
 class Tenant(db.Model, UserMixin):
   __tablename__ = "Tenant"
   id = db.Column(db.Integer(), primary_key=True)
+  unique_id = db.Column(db.Integer(), nullable=False, unique=True)
   first_name = db.Column(db.String(length=50), nullable=False)
-  second_name = db.Column(db.String(length=50), nullable=False)
   last_name = db.Column(db.String(length=50), nullable=False)
   email = db.Column(db.String(length=100), nullable=False, unique=True)
   phone = db.Column(db.Integer(), nullable=False, unique=True)
-  username = db.Column(db.String(length=50), nullable=False, unique=True)
   date = db.Column(db.DateTime())
-  tenant_id = db.Column(db.Integer(), nullable=False, unique=True)
   password = db.Column(db.String(), nullable=False)
   account_type = db.Column(db.String(length=10), nullable=False)
   landlord = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
   properties = db.Column(db.Integer(), db.ForeignKey("Property.id"))
+  is_active = db.Column(db.Boolean(), default=False)
   unit = db.relationship("Unit", backref="unit", lazy=True)
   complaint = db.relationship("Complaints", backref="complaints", lazy=True)
-  active = db.Column(db.String(length=5), nullable=False)
   transact = db.relationship("Transaction", backref="tenant_transaction", lazy=True)
   verification = db.relationship("Verification", backref="tenant-verification", lazy=True)
   invoice = db.relationship("Invoice", backref="tenant-invoice", lazy=True)
@@ -120,6 +112,7 @@ class Tenant(db.Model, UserMixin):
 class Properties(db.Model):
   __tablename__ = "Property"
   id = db.Column(db.Integer, primary_key=True)
+  property_id = db.Column(db.Integer(), nullable=False, unique=True)
   name = db.Column(db.String(length=50), nullable=False)
   address = db.Column(db.String(length=100), nullable=False)
   address2 = db.Column(db.String(length=100), nullable=False)
@@ -127,7 +120,6 @@ class Properties(db.Model):
   rooms = db.Column(db.Integer(), nullable=False)
   date = db.Column(db.DateTime())
   Type = db.Column(db.String(length=50), nullable=False)
-  property_id = db.Column(db.Integer(), nullable=False, unique=True)
   owner = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
   unit = db.relationship("Unit", backref="units", lazy=True)
   tenants = db.relationship("Tenant", backref="tenants", lazy=True)
@@ -135,33 +127,27 @@ class Properties(db.Model):
   complaint = db.relationship("Complaints", backref="complaintz", lazy=True)
   transact = db.relationship("Transaction", backref="property_transaction", lazy=True)
   extra_service = db.relationship("Extra_service", backref="extras", lazy=True)
-  status = db.Column(db.String(length=4), nullable=False)
 
 class Unit(db.Model):
   __tablename__ = "Unit"
   id = db.Column(db.Integer(), primary_key=True)
+  unit_id = db.Column(db.Integer(), nullable=False, unique=True)
   name = db.Column(db.String(length=50), nullable=False)
   floor = db.Column(db.Integer(), nullable=False)
   date = db.Column(db.DateTime())
   Type = db.Column(db.String(length=50), nullable=False)
-  unit_id = db.Column(db.Integer(), nullable=False, unique=True)
   rent_amount = db.Column(db.Integer(), nullable=False)
   living_space = db.Column(db.Integer(), nullable=False)
   balcony_space = db.Column(db.Integer(), nullable=False)
   bedrooms = db.Column(db.Integer(), nullable=False)
   bathrooms = db.Column(db.Integer(), nullable=False)
-  air_conditioning = db.Column(db.String(length=3), nullable=False)
-  amenities = db.Column(db.String(length=3), nullable=False)
-  unit_image = db.Column(db.String(length=50), nullable=True, default='screenshot.png')
   Property = db.Column(db.Integer(), db.ForeignKey("Property.id"))
   tenant = db.Column(db.Integer(), db.ForeignKey("Tenant.id"))
   landlord = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
   booking = db.relationship("Bookings", backref="unit_booked", lazy=True)
-  reserved = db.Column(db.String(length=5), nullable=False)
   transact = db.relationship("Transaction", backref="unit_transaction", lazy=True)
   invoice = db.relationship("Invoice", backref="unit_invoice", lazy=True)
   extra_service = db.relationship("Extra_service", backref="extras-units", lazy=True)
-  status = db.Column(db.String(length=4), nullable=False)
 
 class Invoice(db.Model):
   __tablename__ = 'invoices'
@@ -195,7 +181,7 @@ class Bookings(db.Model):
   user = db.Column(db.String(50))
   date = db.Column(db.DateTime())
   expiry_date = db.Column(db.DateTime())
-  property = db.Column(db.Integer(), db.ForeignKey("Property.id"))
+  property_id = db.Column(db.Integer(), db.ForeignKey("Property.id"))
   unit = db.Column(db.Integer(), db.ForeignKey("Unit.id"))
   status = db.Column(db.String(length=7), nullable=False)
 
@@ -249,12 +235,3 @@ class Extra_service(db.Model):
   date_opened = db.Column(db.DateTime(), nullable=False)
   date_closed = db.Column(db.DateTime())
   status = db.Column(db.String(length=10), nullable=False)
-
-class Messages(db.Model):
-  __tablename__ = 'messages'
-  id = db.Column(db.Integer(), primary_key=True)
-  landlord = db.Column(db.Integer(), db.ForeignKey("Landlord.id"))
-  tenant = db.Column(db.Integer(), db.ForeignKey("Tenant.id"))
-  info = db.Column(db.String(300), nullable=False)
-  author = db.Column(db.String(10))
-  date = db.Column(db.DateTime())

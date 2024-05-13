@@ -22,24 +22,16 @@ PMS | SignUp
       {{ form.first_name(placeholder="Enter First Name") }}
     </div>
     <div class="input">
-      {{ form.second_name.label }}
-      {{ form.second_name(placeholder="Enter Second Name") }}
-    </div>
-    <div class="input">
       {{ form.last_name.label }}
       {{ form.last_name(placeholder="Enter Last Name") }}
     </div>
-    <div class="input">
+    <div class="input extend">
       {{ form.email_address.label }}
       {{ form.email_address(placeholder="Enter Email Address") }}
     </div>
     <div class="input">
       {{ form.phone_number.label }}
       {{ form.phone_number(placeholder="Enter Phone Number")}}
-    </div>
-    <div class="input">
-      {{ form.username.label }}
-      {{ form.username(placeholder="Enter Username")}}
     </div>
     <div class="input">
       {{ form.password.label }}
@@ -50,12 +42,12 @@ PMS | SignUp
       {{ form.password1(placeholder="Confirm Password") }}
     </div>
     <button class="btn" type="submit">
-      <span class="button--text">SIGN UP</span>
+      <span class="button--text">Sign Up</span>
     </button>
   </form>
   <div class="box">
     <p>Already have an account?</p>
-    <a href="{{ url_for('main.signin') }}">Login</a>
+    <a href="{{ url_for('auth.signin') }}">Login</a>
   </div>
 </div>
 

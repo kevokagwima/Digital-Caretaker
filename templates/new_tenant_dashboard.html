@@ -16,9 +16,9 @@
   <body>
     <div class="side-nav">
       <div class="profile" onclick="openView(event, 'profile')">
-        <img src="{{ url_for('static', filename='css/Images/profile.png') }}" alt="profile image">
+        <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile image">
         <div class="profile-info">
-          <p>{{ current_user.username }}</p>
+          <p>{{ current_user.first_name }}</p>
         </div>
         <div class="account-type">
           {{ current_user.account_type }}
@@ -28,37 +28,37 @@
         <h4 id="nav-title">Main</h4>
         <button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
           Dashboard
-          <img src="{{ url_for('static', filename='css/Images/dashboard.png') }}" alt="dashboard">
+          <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
         </button>
         <button class="tablinks" onclick="openView(event, 'landlord')">My Landlord
-          <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="Landlord">
+          <img src="{{ url_for('static', filename='Images/man.png') }}" alt="Landlord">
         </button>
         <button class="tablinks" onclick="openView(event, 'unit')">My Unit
-          <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="Unit">
+          <img src="{{ url_for('static', filename='Images/home.png') }}" alt="Unit">
         </button>
         <button class="tablinks" onclick="openView(event, 'complaints')">Complaints
-          <img src="{{ url_for('static', filename='css/Images/feedback.png') }}" alt="complaints">
+          <img src="{{ url_for('static', filename='Images/feedback.png') }}" alt="complaints">
         </button>
         <button class="tablinks" onclick="openView(event, 'payments')">Rent Payments
-          <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="Payments">
+          <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="Payments">
         </button>
         <!-- <button class="tablinks" onclick="openView(event, 'extras')">Extras
-          <img src="{{ url_for('static', filename='css/Images/extra.png') }}" alt="extra">
+          <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
         </button> -->
       </div>
       <div class="secondary-navigation">
         <h4 id="nav-title">Settings</h4>
         <button class="tablinks" onclick="openView(event, 'settings')">Settings
-          <img src="{{ url_for('static', filename='css/Images/setting.png') }}" alt="settings">
+          <img src="{{ url_for('static', filename='Images/setting.png') }}" alt="settings">
         </button>
         <button class="tablinks" onclick="openView(event, 'help')">Help
-          <img src="{{ url_for('static', filename='css/Images/info.png') }}" alt="help">
+          <img src="{{ url_for('static', filename='Images/info.png') }}" alt="help">
         </button>
       </div>
       <div class="logout">
-        <a href="{{ url_for('tenant.tenant_logout') }}">
+        <a href="{{ url_for('auth.logout') }}">
           <button>
-            <img src="{{ url_for('static', filename='css/Images/logout.png') }}" alt="logout">
+            <img src="{{ url_for('static', filename='Images/logout.png') }}" alt="logout">
             Logout
           </button>
         </a>
@@ -78,7 +78,7 @@
         </div>
         {% endif %}
         {% endwith %}
-        <!-- <img src="{{ url_for('static', filename='css/Images/bell.png') }}" alt="notification bell"> -->
+        <!-- <img src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell"> -->
       </div>
       <div id="dashboard" class="tabcontent">
         <h4 id="dash">My Dashboard</h4>
@@ -110,11 +110,11 @@
               </div>
               <div class="property-info">
                 {% if properties.Type == "Office" %}
-                <img src="{{ url_for('static', filename='css/Images/office building.png') }}" alt="apartment">
+                <img src="{{ url_for('static', filename='Images/office building.png') }}" alt="apartment">
                 {% elif properties.Type == "Apartment" %}
-                <img src="{{ url_for('static', filename='css/Images/3d apartment.png') }}" alt="apartment">
+                <img src="{{ url_for('static', filename='Images/3d apartment.png') }}" alt="apartment">
                 {% else %}
-                <img src="{{ url_for('static', filename='css/Images/residential.png') }}" alt="apartment">
+                <img src="{{ url_for('static', filename='Images/residential.png') }}" alt="apartment">
                 {% endif %}
               </div>
               <div class="property-details">
@@ -167,32 +167,32 @@
             <h4>Property Insights</h4>
             <div class="insights">
               <div class="card">
-                <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
+                <img src="{{ url_for('static', filename='Images/house.png') }}" alt="house">
                 <p>Athens Riviera: Beautiful living close to the city centre</p>
               </div>
               <div class="card">
-                <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
+                <img src="{{ url_for('static', filename='Images/house.png') }}" alt="house">
                 <p>Tips for investing in a property in need of refurbishment - what to look out for Tips for investing
                   in a
                   property in need of refurbishment - what to...</p>
               </div>
               <div class="card">
-                <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
+                <img src="{{ url_for('static', filename='Images/house.png') }}" alt="house">
                 <p>How macro-location and micro-location help you find the right property
                   How macro-location and micro-location help you find the right property</p>
               </div>
               <div class="card">
-                <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
+                <img src="{{ url_for('static', filename='Images/house.png') }}" alt="house">
                 <p>Insurance for property owners - what you need to know
                   Insurance for property owners - what you need to know...</p>
               </div>
               <div class="card">
-                <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
+                <img src="{{ url_for('static', filename='Images/house.png') }}" alt="house">
                 <p>What happens with a property in the event of a divorce?
                   What happens with a property in the event of a divorce?</p>
               </div>
               <div class="card">
-                <img src="{{ url_for('static', filename='css/Images/house.png') }}" alt="house">
+                <img src="{{ url_for('static', filename='Images/house.png') }}" alt="house">
                 <p>Tips to help you face retirement with confidence
                   Tips to help you face retirement with confidence</p>
               </div>
@@ -238,7 +238,7 @@
         {% if landlord %}
         <div class="landlord">
           <div class="landlord-profile-img">
-            <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="profile image">
+            <img src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
             <a href="{{ url_for('tenant.send_message', landlord_id=landlord.id) }}">
               <button id="send">Send Message</button>
             </a>
@@ -277,11 +277,11 @@
               <div class="landlord-property">
                 <div class="landlord-property-img">
                   {% if properties.Type == "Office" %}
-                  <img src="{{ url_for('static', filename='css/Images/office building.png') }}" alt="apartment">
+                  <img src="{{ url_for('static', filename='Images/office building.png') }}" alt="apartment">
                   {% elif properties.Type == "Apartment" %}
-                  <img src="{{ url_for('static', filename='css/Images/3d apartment.png') }}" alt="apartment">
+                  <img src="{{ url_for('static', filename='Images/3d apartment.png') }}" alt="apartment">
                   {% else %}
-                  <img src="{{ url_for('static', filename='css/Images/residential.png') }}" alt="apartment">
+                  <img src="{{ url_for('static', filename='Images/residential.png') }}" alt="apartment">
                   {% endif %}
                 </div>
                 <div class="landlord-property-info">
@@ -321,7 +321,7 @@
         {% if current_user.unit %}
         <div class="my-unit">
           <div class="unit-img">
-            <img src="{{ url_for('static', filename='css/Images/unit.png') }}" alt="unit-image">
+            <img src="{{ url_for('static', filename='Images/unit.png') }}" alt="unit-image">
           </div>
           <div class="unit-details">
             <div class="unit-first">
@@ -361,46 +361,42 @@
               <div class="panel">
                 <div class="unit-infos">
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/area.png') }}"
-                      alt="square meters">
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/area.png') }}" alt="square meters">
                     Floor Area
                     <span>{{ unit.living_space }} SQM</span>
                   </p>
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/balcony.png') }}"
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/balcony.png') }}"
                       alt="square meters">
                     Balcony Area
                     <span>{{ unit.balcony_space }} SQM</span>
                   </p>
                   {% if properties.Type == "Apartment" %}
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/beds.png') }}"
-                      alt="square meters">
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/beds.png') }}" alt="square meters">
                     No of Bedrooms
                     <span>{{ unit.bedrooms }}</span>
                   </p>
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/bathtub.png') }}"
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/bathtub.png') }}"
                       alt="square meters">
                     No of Bathrooms
                     <span>{{ unit.bathrooms }}</span>
                   </p>
                   {% endif %}
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/air-conditioner.png') }}"
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/air-conditioner.png') }}"
                       alt="square meters">
                     Air Conditioning
                     <span>{{ unit.air_conditioning }}</span>
                   </p>
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/sofa.png') }}"
-                      alt="square meters">
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/sofa.png') }}" alt="square meters">
                     Furniture
                     <span>{{ unit.amenities }}</span>
                   </p>
                   <p>
-                    <img loading="lazy" src="{{ url_for('static', filename='css/Images/sunbed.png') }}"
-                      alt="square meters">
+                    <img loading="lazy" src="{{ url_for('static', filename='Images/sunbed.png') }}" alt="square meters">
                     Amenities
                     <span>{{ unit.amenities }}</span>
                   </p>
@@ -494,7 +490,7 @@
             <div class="rent-to-pay">
               <div class="rent-amount">
                 <span>
-                  <img src="{{ url_for('static', filename='css/Images/cashless-payment.png') }}" alt="cashless Payment">
+                  <img src="{{ url_for('static', filename='Images/cashless-payment.png') }}" alt="cashless Payment">
                   {{ "Ksh {:,}".format(unit.rent_amount) }}
                 </span>
               </div>
@@ -510,25 +506,25 @@
                 {% endfor %}
                 {% if verifications %}
                 <div class="disabled">
-                  <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">
+                  <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">
                   <h4>Awaiting verification...</h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>
                 <div class="disabled">
-                  <img src="{{ url_for('static', filename='css/Images/mpesa.png') }}" alt="Mpesa">
+                  <img src="{{ url_for('static', filename='Images/mpesa.png') }}" alt="Mpesa">
                   <h4>Awaiting verification...</h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>
                 {% elif invoices and denied_verifications %}
                 <a href="{{ url_for('tenant.rent_payment') }}">
                   <div class="payment-1">
-                    <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">
+                    <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">
                     <h4>Bank/Credit card</h4>
                     <i class="fa fa-angle-right" style="font-size:22px"></i>
                   </div>
                 </a>
                 <div class="payment-2" onclick="openView(event, 'upload-transaction')">
-                  <img src="{{ url_for('static', filename='css/Images/mpesa.png') }}" alt="Mpesa">
+                  <img src="{{ url_for('static', filename='Images/mpesa.png') }}" alt="Mpesa">
                   <h4>
                     Upload Mpesa Transaction
                     <span id="previous">
@@ -539,7 +535,7 @@
                 </div>
                 {% elif not invoices %}
                 <div class="disabled">
-                  <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">
+                  <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">
                   <h4>Next charge on
                     {% if transactions %}
                     {{ current_user.transact[-1].next_date.strftime('%d/%m/%Y') }}
@@ -548,7 +544,7 @@
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>
                 <div class="disabled">
-                  <img src="{{ url_for('static', filename='css/Images/mpesa.png') }}" alt="Mpesa">
+                  <img src="{{ url_for('static', filename='Images/mpesa.png') }}" alt="Mpesa">
                   <h4>Next charge on
                     {% if transactions %}
                     {{ current_user.transact[-1].next_date.strftime('%d/%m/%Y') }}
@@ -559,13 +555,13 @@
                 {% else %}
                 <a href="{{ url_for('tenant.rent_payment') }}">
                   <div class="payment-1">
-                    <img src="{{ url_for('static', filename='css/Images/credit-card.png') }}" alt="cedit card">
+                    <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">
                     <h4>Bank/Credit card</h4>
                     <i class="fa fa-angle-right" style="font-size:22px"></i>
                   </div>
                 </a>
                 <div class="payment-2" onclick="openView(event, 'upload-transaction')">
-                  <img src="{{ url_for('static', filename='css/Images/mpesa.png') }}" alt="Mpesa">
+                  <img src="{{ url_for('static', filename='Images/mpesa.png') }}" alt="Mpesa">
                   <h4>Upload Mpesa Transaction</h4>
                   <i class="fa fa-angle-right" style="font-size:22px"></i>
                 </div>
@@ -631,7 +627,7 @@
               <div class="premium">
                 <p>Premium</p>
               </div>
-              <img src="{{ url_for('static', filename='css/Images/interior-plan.png') }}" alt="interior design">
+              <img src="{{ url_for('static', filename='Images/interior-plan.png') }}" alt="interior design">
               <h4>Interior Design</h4>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequatur tempora deleniti minus quod aut
                 repellendus sunt, necessitatibus rerum eligendi ratione.</p>
@@ -640,7 +636,7 @@
               <div class="premium">
                 <p>Premium</p>
               </div>
-              <img src="{{ url_for('static', filename='css/Images/carpenter.png') }}" alt="capentry">
+              <img src="{{ url_for('static', filename='Images/carpenter.png') }}" alt="capentry">
               <h4>Capentry</h4>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequatur tempora deleniti minus quod aut
                 repellendus sunt, necessitatibus rerum eligendi ratione.</p>
@@ -649,7 +645,7 @@
               <div class="premium">
                 <p>Premium</p>
               </div>
-              <img src="{{ url_for('static', filename='css/Images/brickwall.png') }}" alt="brick wall">
+              <img src="{{ url_for('static', filename='Images/brickwall.png') }}" alt="brick wall">
               <h4>Mansory</h4>
               <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequatur tempora deleniti minus quod aut
                 repellendus sunt, necessitatibus rerum eligendi ratione.</p>
@@ -687,7 +683,7 @@
         <div class="my-profile">
           <div class="tenant-info">
             <div class="profile-img">
-              <img src="{{ url_for('static', filename='css/Images/profile.png') }}" alt="profile image">
+              <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile image">
               <div class="profile-info">
                 <p>Account status <span>
                     {% if current_user.active == 'True' %}

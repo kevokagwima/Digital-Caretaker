@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block title %}
+PMS | Unit Registration
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="form">
+  <h4>Add Unit</h4>
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.name.label }}
+      {{ form.name(placeholder="Enter Unit Name") }}
+    </div>
+    <div class="input">
+      {{ form.floor.label }}
+      {{ form.floor(placeholder="Enter Unit Floor") }}
+    </div>
+    <div class="input">
+      {{ form.rent_amount.label }}
+      {{ form.rent_amount(placeholder="Enter Monthly Rent")}}
+    </div>
+    <div class="input">
+      {{ form.unit_type.label }}
+      {{ form.unit_type() }}
+    </div>
+    <div class="input">
+      {{ form.living_room_space.label }}
+      {{ form.living_room_space(placeholder="Enter Living Room Floor Area")}}
+    </div>
+    <div class="input">
+      {{ form.balcony_room_space.label }}
+      {{ form.balcony_room_space(placeholder="Enter Balcony Floor Area")}}
+    </div>
+    <div class="input">
+      {{ form.bedrooms.label }}
+      {{ form.bedrooms(placeholder="Enter number of bedrooms") }}
+    </div>
+    <div class="input">
+      {{ form.bathrooms.label }}
+      {{ form.bathrooms(placeholder="Enter number of bathrooms") }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">Add Unit</span>
+    </button>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+{% endblock %}

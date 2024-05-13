@@ -1,11 +1,13 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Varela+Round&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Exo:wght@200;500&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Martel:wght@200&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Days+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
+  --main-light: rgb(227, 227, 255);
   --dark-blue: rgb(1, 1, 29);
   --other-dark-blue: rgb(0, 20, 49);
   --page-header-bgColor: #242e42;
@@ -26,16 +28,16 @@
   --switch-sunColor: gold;
   --switch-moonColor: #f4f4f4;
   --switch-bgDarkModeColor: #1f1f27;
-  --font: "Exo", sans-serif;
-  --font-1: "Days One", sans-serif;
-  --product-desc-font: "Martel", serif;
-  --font-2: "Nanum Gothic", sans-serif;
+  --font-1: "Outfit", sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+::-webkit-scrollbar {
+  width: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+  border-radius: 50rem;
 }
 
 input::-webkit-outer-spin-button,
@@ -44,142 +46,136 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgb(214, 214, 214);
-  border-radius: 10px;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  min-height: 100vh;
-  max-height: 100vh;
   display: flex;
   background-color: var(--other-dark-blue);
+  font-family: var(--font-1);
 }
 
-body::-webkit-scrollbar {
-  display: none;
+h1 {
+  font-weight: 900;
+}
+
+h2,
+h3,
+h4 {
+  font-weight: 700;
+}
+
+p,
+span {
+  font-weight: 400;
+}
+
+a {
+  text-decoration: none;
 }
 
 .side-nav {
   position: relative;
   min-width: 14rem;
   max-width: 14rem;
-  height: inherit;
-  max-height: 100vh;
+  height: 100svh;
   background-color: var(--dark-blue);
-  padding: 20px 0;
   overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .profile {
   display: flex;
-  justify-content: safe;
+  gap: 1rem;
   align-items: center;
-  max-height: 3rem;
   cursor: pointer;
-  padding: 0 10px;
-  position: relative;
 }
 
 .profile img {
-  height: 3rem;
-}
-
-.profile-info {
-  padding: 0 10px;
+  max-height: 2.5rem;
 }
 
 .profile-info p {
-  color: var(--blue);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  letter-spacing: 1px;
+  color: whitesmoke;
 }
 
-.account-type {
-  position: absolute;
-  bottom: -5px;
-  left: 4.2rem;
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--red);
+.profile-info span {
+  color: grey;
+  font-size: 1.4ch;
+}
+
+.navigation {
+  margin-top: 2.7rem;
+  display: flex;
+  gap: 3rem;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .main-navigation,
 .secondary-navigation,
 .logout {
-  margin: 4rem 0;
-  display: grid;
-  grid-template-columns: auto;
-  row-gap: 5px;
-  max-height: 42.5vh;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 .main-navigation button,
 .logout button,
 .secondary-navigation button {
   border: none;
-  padding: 15px 50px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  background-color: transparent;
-  text-align: left;
-  font-size: 15px;
+  border-radius: 0.3rem;
+  background-color: var(--other-dark-blue);
+  padding: 0.6rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
   cursor: pointer;
-  position: relative;
+  font-size: 1.4ch;
 }
 
 .dropdown-btn i {
   position: absolute;
   right: 2rem;
-  font-size: 20px;
+  font-size: 2ch;
 }
 
 .main-navigation button img,
 .logout button img,
 .secondary-navigation img {
-  height: 1.8rem;
-  position: absolute;
-  top: 8px;
-  left: 10px;
+  max-height: 1.5rem;
 }
 
 .main-navigation button:hover,
-.main-navigation button:focus,
-.secondary-navigation button:hover,
-.secondary-navigation button:focus {
+.secondary-navigation button:hover {
   background-color: var(--other-dark-blue);
   color: var(--blue);
 }
 
-#dashboard > button,
-#dashboards > button {
-  min-width: 100%;
+.active {
+  /* background-color: var(--red); */
+  color: var(--blue);
 }
 
 #nav-title {
-  color: grey;
-  font-family: "PT Sans", sans-serif;
-  margin: 0 10px;
-  letter-spacing: 1px;
-  font-weight: bold;
+  color: var(--switch-moonColor);
+}
+
+.secondary-navigation {
+  flex-grow: 1;
 }
 
 .logout {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  margin: 0;
+  justify-content: flex-end;
 }
 
-.logout button {
+.logout a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   color: var(--red);
 }
 
@@ -199,8 +195,6 @@ body::-webkit-scrollbar {
   text-decoration: none;
   display: block;
   color: var(--red);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   font-size: 15px;
   padding: 10px 5px;
   margin-left: 30px;
@@ -229,20 +223,20 @@ body::-webkit-scrollbar {
 
 .content-area {
   background-color: var(--other-dark-blue);
-  min-height: 100vh;
-  max-height: 100vh;
-  overflow: auto;
+  min-height: 100svh;
+  max-height: 100svh;
+  overflow-y: auto;
   width: 100%;
   padding: 0 1rem;
 }
 
 .notification-area {
-  position: relative;
-  inset: 0;
-  margin-bottom: 0.5rem;
-  padding: 1rem 0;
+  position: sticky;
+  padding-block: 0.4rem;
+  top: 0;
   z-index: 1;
-  background-color: transparent;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .notifications {
@@ -277,8 +271,6 @@ body::-webkit-scrollbar {
 }
 
 .notification-info p {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   font-weight: bold;
 }
 
@@ -288,8 +280,6 @@ body::-webkit-scrollbar {
 
 #info {
   font-size: 14px;
-  font-family: "PT Sans", sans-serif;
-  font-weight: 400;
 }
 
 .not-actions {
@@ -314,9 +304,7 @@ body::-webkit-scrollbar {
 .not-actions button a {
   text-decoration: none;
   color: white;
-  font-family: system-ui;
   text-transform: uppercase;
-  font-weight: 600;
 }
 
 .btn1 {
@@ -337,9 +325,6 @@ body::-webkit-scrollbar {
 }
 
 .not {
-  position: absolute;
-  top: 5px;
-  right: 0.5rem;
   cursor: pointer;
 }
 
@@ -386,6 +371,10 @@ body::-webkit-scrollbar {
   height: 1.5rem;
 }
 
+.tabcontent {
+  margin-top: 1rem;
+}
+
 #dash {
   font-size: 1.4rem;
   position: relative;
@@ -406,321 +395,97 @@ body::-webkit-scrollbar {
 #dash button {
   position: absolute;
   top: 0;
-  right: 28rem;
-  padding: 6px 10px;
-  background-color: #00b9eb;
+  right: 0;
+  padding: 0.4rem 0.6rem;
   border: none;
   border-radius: 3px;
   color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  background-color: var(--blue);
   cursor: pointer;
   font-size: 14px;
 }
 
 .dash-information {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  overflow: hidden;
-  margin: 1rem 0 0;
-  padding-right: 10px;
-  max-width: 100%;
-  max-height: 44rem;
-  overflow: auto;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
 }
 
-.revenue {
-  grid-column: 1/3;
-  background-color: var(--dark-blue);
-  border-radius: 5px;
-  height: 100%;
-  max-height: 20rem;
-  max-width: 100%;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-.revenue-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 10px;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 0 0.6rem;
-}
-
-.income,
-.expenses,
-.profit {
-  margin-top: 10px;
-  padding: 10px 15px;
-  border-radius: 5px;
-  background-color: var(--page-header-bgColor);
-}
-
-.income h4,
-.expenses h4,
-.profit h4 {
-  font-size: 1rem;
-}
-
-.income span,
-.expenses span,
-.profit span {
-  font-size: 2rem;
-}
-
-.income span {
-  color: var(--blue);
-}
-
-.expenses span {
-  color: red;
-}
-
-.profit span {
-  color: rgb(9, 197, 9);
-}
-
-.prop-summary {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  row-gap: 10px;
-  column-gap: 30px;
-  justify-content: center;
-  align-items: center;
-}
-
-.prop {
-  padding: 15px;
-  background-color: var(--dark-blue);
-  position: relative;
-  border-radius: 50% 20%;
-  height: 10rem;
-  width: 12rem;
-  max-width: 12rem;
-  display: grid;
-  place-items: center;
-}
-
-.no-prop {
-  background-color: var(--dark-blue);
-  height: 20rem;
-  width: 25rem;
-  display: grid;
-  place-items: center;
-}
-
-.no-prop img {
-  max-height: 8rem;
-}
-
-.no-prop h4 {
-  color: var(--red);
-}
-
-.prop img {
-  position: absolute;
-  height: 4rem;
-  right: 0;
-  bottom: 5px;
-}
-
-.prop span {
-  color: var(--red);
-  font-size: 5rem;
-  font-family: var(--font);
-}
-
-.prop p {
-  position: absolute;
-  bottom: 10px;
-  left: 2rem;
-  font-size: 1.1rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-}
-
-.recent-activity,
-.property-insights,
-.rent-status {
-  padding: 20px 20px 0;
-  background-color: var(--dark-blue);
-  border-radius: 5px;
-  max-height: max-content;
-  position: relative;
-}
-
-/* .property-insights {
-  grid-column: 1/3;
-}
-
-.rent-status {
-  grid-column: 3/5;
-} */
-
-.recent-activity span,
-.rent-status h4 > span {
-  position: absolute;
-  right: 10px;
-  color: var(--red);
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.recent-activity h4,
-.property-insights h4,
-.rent-status h4 {
-  font-size: 1.1rem;
-}
-
-.activity,
-.insights,
-.rent {
-  margin: 1rem 0 0;
-  padding: 5px 0 0;
-  max-height: 18rem;
-  min-height: max-content;
-  overflow: auto;
-}
-
-.activity p {
-  font-size: 15px;
-  margin: 0 0 20px;
-  padding: 0 8px;
-  font-family: var(--font-2);
-  letter-spacing: 0.5px;
-}
-
-.insights {
+#tenant-heading {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  padding-right: 2px;
-}
-
-.insights .card {
-  display: flex;
-  gap: 15px;
-  border-radius: 2px;
-}
-
-.insights img {
-  height: 3rem;
-}
-
-.insights .card p {
-  font-family: var(--font-2);
-  line-height: 1.6;
-  letter-spacing: 0.5px;
-  font-size: 15px;
-}
-
-.tenant-search {
-  position: absolute;
-  top: 3.5rem;
-  right: 0;
-  width: 17rem;
-  display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.tenant-search input {
-  padding: 10px;
+#tenant_search,
+#tenant-search {
+  padding: 0.8em;
   border: none;
-  border-radius: 5px;
-  background-color: var(--page-header-bgColor);
+  border-radius: 0.3rem;
+  background-color: var(--page-header-headingColor);
   text-transform: capitalize;
-  width: 15rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  outline: 2px solid white;
 }
 
-.tenant-search input::placeholder {
-  color: var(--page-header-txtColor);
-  font-family: "PT Sans", sans-serif;
-  letter-spacing: 1px;
+#tenant_search:focus,
+#tenant-search:focus {
+  outline: 2px solid var(--red);
+}
+
+#tenant_search::placeholder,
+#tenant-search::placeholder {
+  color: var(--white);
 }
 
 .all-tenants,
 .all-units {
-  margin: 1rem 0 0;
+  margin-top: 1rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  row-gap: 20px;
-  column-gap: 20px;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 0 10px 5px 0;
-  overflow: hidden;
-  border-radius: 5px;
-  max-height: 84.5vh;
-  overflow: auto;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.all-units {
+  grid-template-columns: repeat(4, 1fr);
 }
 
 #just-info {
-  margin-top: 10px;
   color: grey;
-  font-family: "PT Sans", sans-serif;
 }
 
 .tenant-card,
 .unit-card {
-  background-color: var(--red);
-  padding: 10px;
-  border-radius: 5px;
-  display: grid;
-  grid-template-columns: 1fr 1.8fr;
-  align-items: center;
+  padding: 1rem;
+  display: flex;
+  gap: 2rem;
   transition: transform 200ms ease-in;
   position: relative;
   overflow: hidden;
-  visibility: visible;
-}
-
-.showsz {
-  visibility: visible;
-}
-
-.tenant-card {
-  padding: 20px 15px;
-}
-
-.unit-card {
-  grid-template-columns: auto auto;
+  border-radius: 0.3rem;
+  background-color: var(--page-header-bgColor-hover);
 }
 
 .tenant-unit-assigned,
-.tenant-unit-unassigned {
+.tenant-unit-unassigned,
+.occupation {
   position: absolute;
-  padding: 5px 10px;
+  padding: 0.2rem 0.4rem;
   top: 0;
-  left: 0;
-  font-size: 12px;
+  right: 0;
+  font-size: 1.3ch;
+  color: white;
+  border-bottom-left-radius: 0.3rem;
 }
 
 .tenant-unit-assigned {
   background-color: rgb(6, 187, 6);
 }
 
-.tenant-unit-assigned h4 {
-  color: white;
-}
-
 .tenant-unit-unassigned {
-  background-color: var(--page-header-bgColor);
-}
-
-.tenant-unit-unassigned h4 {
-  font-size: 12px;
-  color: red;
+  background-color: var(--red);
 }
 
 .unit-property-assigned {
@@ -728,11 +493,6 @@ body::-webkit-scrollbar {
   padding: 5px;
   bottom: 0;
   left: 0;
-  font-size: 12px;
-}
-
-.unit-property-assigned h4 {
-  color: gold;
 }
 
 .tenant-unit-assigned a,
@@ -741,256 +501,108 @@ body::-webkit-scrollbar {
   color: white;
 }
 
-.occupation {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 5px 15px;
-  font-size: 12px;
-}
-
 .unit-occupied {
   background-color: rgb(6, 187, 6);
-  color: white;
 }
 
 .unit-reserved {
   background-color: orange;
-  color: white;
 }
 
 .unit-vacant {
-  background-color: var(--page-header-bgColor);
-  color: var(--red);
+  background-color: var(--red);
 }
 
 .tenant-card img,
 .unit-card img {
-  height: 5rem;
-}
-
-.unit-card img {
-  margin-left: 15px;
+  height: 4rem;
 }
 
 .tenant-details,
 .unit-details {
-  padding: 10px;
+  display: grid;
+  gap: 0.5rem;
 }
-
 .tenant-details p,
 .unit-details p {
-  margin-top: 5px;
-  font-size: 16px;
-  letter-spacing: 1px;
-  font-family: "PT Sans", sans-serif;
-  max-width: 15rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 1.6ch;
 }
 
 .tenant-details hr {
-  background-color: transparent;
+  outline: 1px solid var(--page-header-headingColor);
+  opacity: 0.3;
   border: none;
-  margin: 10px 0;
-  height: 0.2px;
 }
 
 .tenant-details a {
-  color: gold;
-  text-decoration: none;
+  color: var(--blue);
 }
 
 .rent {
   display: grid;
   grid-template-columns: 1fr;
-  row-gap: 10px;
-  margin: 20px 0;
-  min-height: 15.8rem;
-  max-height: 15.8rem;
-  overflow: auto;
-}
-
-.rent-details {
   padding: 0.5rem;
-  border-radius: 5px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: white;
+  margin-top: 1rem;
 }
 
-.rent-details:first-child {
-  background-color: var(--blue);
-}
-
-.rent-details:nth-child(2) {
-  background-color: rgb(6, 187, 6);
-}
-
-.rent-details:last-child {
-  background-color: var(--red);
-}
-
-.rent-details p {
-  font-size: 15px;
-}
-
-.rent-details span {
-  font-size: 26px;
-}
-
-.rents {
-  border-radius: 5px;
-  margin: 1rem 0 0;
-  max-height: 42rem;
-}
-
-#rent > #dash {
+#rent #dash {
   display: flex;
   gap: 15px;
   align-items: center;
 }
 
-.verify {
-  background-color: orange;
-  padding: 5px 8px;
-  border-radius: 1rem;
-  color: white;
-}
-
-.verify p {
-  font-size: 12px;
-  letter-spacing: 0.5px;
-}
-
-.rents-info {
-  margin-top: 0.5rem;
+.transactions-details,
+.transaction-details {
+  border-radius: 0.3rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  column-gap: 20px;
-}
-
-.rents-info div {
-  padding: 10px;
-  border-radius: 5px;
-  min-height: 8rem;
-  max-height: 10rem;
-}
-
-.rents-info div h4 {
-  color: white;
-}
-
-.rents-info div p {
-  margin: 1.5rem 0 0;
-  color: whitesmoke;
-  text-align: center;
-}
-
-.rents-info div span {
-  font-size: 40px;
-}
-
-.rents-info div:first-child {
-  background-color: var(--blue);
-}
-
-.rents-info div:nth-child(2) {
-  background-color: rgb(6, 187, 6);
-}
-
-.rents-info div:last-child {
-  background-color: var(--red);
-}
-
-.rent-received,
-.expected-rent {
-  position: relative;
-}
-
-#tenants_paid,
-#unit_rent {
-  position: absolute;
-  right: 1rem;
-  top: -1.2rem;
-  color: var(--dark-blue);
-  font-size: 14px;
-}
-
-.rent-transactions {
-  padding: 20px 0 5px;
-}
-
-.transactions-details {
-  padding-right: 15px;
-  border-radius: 5px;
-  margin: 0.5rem 0 0;
-  max-height: 58vh;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
   gap: 1rem;
 }
 
+.transaction-details {
+  border-radius: 0;
+}
+
 .transaction-info {
-  padding: 10px;
-  background-color: var(--page-header-bgColor);
-  border-radius: 5px;
+  padding: 1rem;
+  background-color: var(--page-header-bgColor-hover);
+  border-radius: 0.3rem;
   position: relative;
 }
 
-.transaction-info h4 {
-  font-weight: normal;
-  position: relative;
-  width: 100%;
-}
-
-.transaction-info span {
-  color: var(--red);
-  font-weight: bold;
-}
-
-.transaction-info #new {
-  position: absolute;
-  inset: 1px auto auto 12rem;
-  color: white;
-  font-size: 10px;
-  background-color: orange;
-  border-radius: 2px;
-  padding: 2px 5px;
-}
-
-.transaction-info p > span {
-  font-weight: bold;
-  color: rgb(6, 187, 6);
+#transaction-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  justify-content: space-between;
 }
 
 .transaction-info #date {
-  position: absolute;
-  right: 0;
-  font-weight: lighter;
-  letter-spacing: 1px;
-  color: rgb(9, 197, 9);
-  font-size: 14px;
+  color: var(--page-header-headingColor);
+}
+
+.transaction-info > p {
+  color: whitesmoke;
+}
+
+.transaction-info p > span {
+  color: var(--switch-bgLightModeColor);
 }
 
 .transaction-info hr {
-  border: 0.1px solid grey;
+  border: none;
+  outline: 0.1px solid grey;
   background-color: grey;
+  opacity: 0.3;
   margin: 0.5rem 0;
 }
 
 .watermark {
-  color: grey;
-  margin-top: 1rem;
+  color: var(--page-header-headingColor);
 }
 
 .else {
   color: var(--red);
   text-align: center;
-  margin-top: 1rem;
 }
 
 #extra > #dash {
@@ -1003,69 +615,24 @@ body::-webkit-scrollbar {
   max-width: max-content;
 }
 
-.settings {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: var(--page-content-bgColor);
-  border-radius: 0.3rem;
-}
-
-#password-change {
-  display: grid;
-  gap: 0.2rem;
-  margin-top: 1rem;
-}
-
-#password-change input {
-  border: none;
-  border-radius: 3px;
-  padding: 15px;
-  margin: 0.5rem 0 1rem;
-  width: 100%;
-  background-color: var(--page-header-bgColor);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 18px;
-}
-
-#password-change button {
-  background-color: rgb(3, 116, 3);
-  color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  border: none;
-  border-radius: 3px;
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
 .extras {
-  margin: 1rem 0 0;
-  border-radius: 5px;
-  max-height: 100vh;
-  overflow: auto;
-  padding-right: 5px;
+  margin-top: 1rem;
 }
 
 .extras > p {
-  font-size: 16px;
+  font-size: 2ch;
   color: grey;
 }
 
 .extras h4 {
-  font-size: 18px;
-  margin: 1.5rem 0;
+  font-size: 1.8ch;
 }
 
 .extra-services {
+  margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: 20px 25px;
-  align-items: center;
-  padding: 0 0 15px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
 
 .extra-services a {
@@ -1074,24 +641,27 @@ body::-webkit-scrollbar {
 }
 
 .extra-services-items {
-  background-color: var(--red);
-  padding: 20px;
-  border-radius: 5px;
-  cursor: pointer;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.3rem;
   position: relative;
-  overflow: hidden;
+  background-color: var(--page-header-bgColor);
 }
 
-.extra-services-items h4 {
-  font-size: 1.2rem;
+.extra-services-info {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--page-header-txtColor);
 }
 
-.extra-services-items span {
+.extra-services-info h4 {
+  font-size: 2.5ch;
   color: white;
 }
 
 .extra-services-items img {
-  height: 4rem;
+  height: 3rem;
 }
 
 .active-extra {
@@ -1120,8 +690,6 @@ body::-webkit-scrollbar {
   top: 0;
   padding: 3px 5px;
   background-color: #00b9eb;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   font-size: 0.7rem;
 }
 
@@ -1155,8 +723,6 @@ body::-webkit-scrollbar {
 .timeline-info {
   margin-top: 1rem;
   color: whitesmoke;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   letter-spacing: 1px;
   display: flex;
   flex-direction: column;
@@ -1168,8 +734,6 @@ body::-webkit-scrollbar {
   min-width: 100%;
   padding: 8px;
   text-align: left;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   cursor: pointer;
   border-radius: 5px 5px 0 0;
   background-color: var(--page-header-bgColor-hover);
@@ -1190,7 +754,6 @@ body::-webkit-scrollbar {
   flex-direction: column;
   gap: 0.4rem;
   font-size: 0.9rem;
-  font-family: "PT Sans", sans-serif;
   padding: 8px;
 }
 
@@ -1203,45 +766,15 @@ body::-webkit-scrollbar {
 }
 
 .my-profile {
-  margin: 1rem 0 0;
-  border-radius: 5px;
-  max-height: 44rem;
+  margin-top: 1rem;
   overflow: auto;
-}
-
-.landlord-info {
-  padding: 20px;
-  height: max-content;
-  display: grid;
-  grid-template-columns: auto;
-  row-gap: 20px;
-}
-
-.profile-img {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-  max-width: 17vw;
-}
-
-.profile-info span {
-  color: var(--red);
-}
-
-.profile-img img {
-  max-height: 5rem;
-}
-
-.personal-info-details {
-  margin-top: 15px;
+  border-radius: 0.3rem;
   background-color: var(--dark-blue);
-  border-radius: 5px;
-  padding: 20px 10px;
+  padding: 2rem;
 }
 
 .personal-info-details table {
   width: 100%;
-  padding: 0 10px;
 }
 
 .personal-info-details table th,
@@ -1253,44 +786,6 @@ td {
   color: grey;
   text-align: left;
   width: 35rem;
-}
-
-.properties-owned {
-  padding: 20px;
-  background-color: var(--dark-blue);
-  border-radius: 5px;
-}
-
-.properties-owned span {
-  color: var(--red);
-}
-
-.properties-owned-info {
-  margin: 1rem 0 0;
-  padding: 10px 20px;
-  display: flex;
-}
-
-.prop-owned-info img {
-  height: 2rem;
-}
-
-.prop-owned-info {
-  background-color: var(--other-dark-blue);
-  width: max-content;
-  padding: 20px;
-  border-radius: 5px;
-  line-height: 25px;
-  margin-right: 1rem;
-}
-
-.prop-owned-info #prop_id {
-  color: green;
-}
-
-.prop-owned-info > a {
-  text-decoration: none;
-  color: blue;
 }
 
 .extra {
@@ -1306,83 +801,37 @@ td {
 
 .property-registration {
   background-color: var(--dark-blue);
-  padding: 20px;
+  padding: 1rem;
   margin: 1rem 0;
   border-radius: 5px;
 }
 
 .property-registration form {
-  max-height: 100vh;
-  overflow: auto;
-  padding: 10px;
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  align-items: center;
-  column-gap: 40px;
-  row-gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
 .property-registration form::-webkit-scrollbar {
   display: none;
 }
 
-.property-registration ::placeholder {
-  font-family: "PT Sans", sans-serif;
-  color: var(--page-header-headingColor);
-  font-size: 16px;
-}
-
-.property-registration input,
-select {
-  border: none;
-  border-radius: 3px;
-  padding: 15px;
-  margin: 0.5rem 0 1rem;
-  width: 100%;
-  background-color: var(--page-header-bgColor);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 18px;
-}
-
-.property-registration select {
-  cursor: pointer;
-}
-
 .property-registration .btn {
-  border: none;
-  background-color: rgb(3, 116, 3);
+  background-color: green;
   color: white;
-  padding: 10px;
-  border-radius: 3px;
-  font-family: system-ui;
-  font-size: 15px;
-  letter-spacing: 1px;
-  cursor: pointer;
+  padding: 0.8em;
+  border-radius: 0.3rem;
+  font-size: 2ch;
   grid-column: 1/3;
 }
 
-.alert-error .side {
-  background-color: var(--red);
-}
-
-.alert-success .side {
-  background-color: green;
-}
-
-.alert-info .side {
-  background-color: rgb(0, 170, 255);
-}
-
 .tops {
-  position: absolute;
-  top: 5px;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  max-height: max-content;
-  margin-bottom: 0;
-  animation: fade-away 1s 4s forwards;
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+  display: grid;
+  gap: 0.2rem;
+  animation: fade-away 1s 6s forwards;
 }
 
 @keyframes fade-away {
@@ -1393,5 +842,133 @@ select {
   to {
     opacity: 0;
     visibility: hidden;
+    display: none;
+  }
+}
+
+.alert {
+  position: relative;
+  gap: 1.5rem;
+  align-items: center;
+  text-align: center;
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.3rem;
+}
+
+.alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.alert-info {
+  color: #31708f;
+  background-color: #a9dcf6;
+  border-color: #bce8f1;
+}
+
+.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+@media (prefers-color-scheme: light) {
+  .content-area,
+  body,
+  .main-navigation button,
+  .main-navigation button:focus,
+  .secondary-navigation button,
+  .secondary-navigation button:focus,
+  .logout button,
+  .prop-owned-info,
+  .property-registration input,
+  .property-registration select,
+  .notification-area {
+    background-color: whitesmoke;
+  }
+
+  .main-navigation button:hover,
+  .main-navigation button:focus,
+  .secondary-navigation button:hover,
+  .secondary-navigation button:focus {
+    background-color: bisque;
+    color: black;
+  }
+
+  .side-nav,
+  .tenant-search input,
+  .transaction-info,
+  .properties-owned,
+  .personal-info-details,
+  .property-registration,
+  .notification-info,
+  .active-extra,
+  .invoice,
+  .stat,
+  .rent-stats-box,
+  .invoice-box {
+    background-color: white;
+  }
+
+  #nav-title {
+    color: black;
+  }
+
+  .burger > div {
+    background-color: black;
+  }
+
+  .income,
+  .expenses,
+  .profit {
+    background-color: rgba(241, 241, 241, 0.9);
+  }
+
+  .tenant-search input {
+    outline: 2px solid black;
+  }
+
+  .tenant-details a,
+  .unit-property-assigned h4 {
+    color: var(--blue);
+  }
+
+  .tenant-search input::placeholder,
+  .property-registration input::placeholder {
+    color: grey;
+  }
+
+  .transaction-info,
+  .rents-info div {
+    box-shadow: 0 0 10px -8px black;
+  }
+
+  .notifications,
+  .tenant-card,
+  .unit-card,
+  .rent-stat,
+  .extra-services-items {
+    background-color: bisque;
+    color: black;
+  }
+
+  .extra-services-info h4,
+  .extra-services-info p {
+    color: black;
+  }
+
+  .invoice-info {
+    background-color: aliceblue;
+  }
+
+  .side {
+    background-color: black;
   }
 }

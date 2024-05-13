@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark light">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/css/bootstrap.css') }}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="{{ url_for('static', filename='Images/Favicon/favicon-16x16.png') }}">
@@ -18,74 +17,62 @@
     <title>{% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
-  <div class="nav">
+  <header class="nav">
     <a id="logo" href="{{ url_for('main.index') }}">
-      <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
-      {% if current_user.is_authenticated %}
-      <span id="account">{{ current_user.account_type }}</span>
-      {% endif %}
+      <h1>PMS</h1>
     </a>
     {% block logo %} {% endblock %}
     <div class="links">
       <!-- <a id="links" href="{{ url_for('main.about_us') }}">ABOUT US</a>
       <a id="links" href="{{ url_for('main.services') }}">SERVICES</a> -->
       <div class="dropdown">
-        <a href="#" id="links">USER PORTALS
+        <p id="links">Client Portals
           <i class="fa fa-caret-down"></i>
-        </a>
+        </p>
         <div class="dropdown-content">
           {% if current_user.is_authenticated and current_user.account_type == "Landlord" %}
           <a href="{{ url_for('landlord.landlord_dashboard') }}">Landlord Portal</a>
           {% else %}
-          <a href="{{ url_for('landlord.Landlord_login') }}">Landlord Portal</a>
+          <a href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
           {% endif %}
           {% if current_user.is_authenticated and current_user.account_type == "Tenant" %}
           <a href="{{ url_for('tenant.tenant_dashboard') }}">Tenant Portal</a>
           {% else %}
-          <a href="{{ url_for('tenant.tenant_login') }}">Tenant Portal</a>
+          <a href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
           {% endif %}
           {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
           <a href="{{ url_for('admin.admin') }}">Admin Portal</a>
           {% else %}
-          <a href="{{ url_for('admin.admin_login') }}">Admin Portal</a>
+          <a href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
           {% endif %}
         </div>
       </div>
-      <a id="links" href="{{ url_for('main.properties') }}">PROPERTIES</a>
+      <a id="links" href="{{ url_for('main.properties') }}">Properties</a>
       <!-- <a id="links" href="{{ url_for('main.contact_us') }}">CONTACT US</a> -->
       {% block content %}{% endblock %}
     </div>
     {% if current_user.is_authenticated %}
     <div class="login">
-      <p id="login">Welcome, <b>{{ current_user.username }}</b></p>
-    </div>
-    <div class="profile">
-      <h4>My Profile</h4>
-      {% set active_reservations = [] %}
-      {% for book in booking if book.user == current_user.username and book.status == "Active" %}
-      {{ active_reservations.append(book) or "" }}
-      {% endfor %}
-      {% if active_reservations != 0 %}
-      <a id="reservations" href="{{ url_for('main.reservations') }}">
-        Reservations
-        {% if active_reservations %}
-        <div class="reserve-badge">
-          <span>{{ active_reservations|count }}</span>
-        </div>
-        {% endif %}
-      </a>
-      {% endif %}
-      <a id="logout" href="{{ url_for('main.logout') }}">
-        <p>Logout</p>
-      </a>
+      <p id="login">Welcome, <b>{{ current_user.first_name }} {{ current_user.last_name }}</b></p>
+      <div class="profile">
+        <p>My Profile</p>
+        <a id="reservations" href="{{ url_for('main.reservations') }}">
+          <p>Reservations</p>
+        </a>
+        <a id="logout" href="{{ url_for('auth.logout') }}">
+          <p>Logout</p>
+        </a>
+      </div>
     </div>
     {% else %}
     <div class="user">
-      <a href="{{ url_for('main.signup') }}">
-        <button id="sign-up">SIGN UP</button>
+      <a href="{{ url_for('auth.signup') }}">
+        <p>Sign Up</p>
+        <!-- <button id="sign-up">SIGN UP</button> -->
       </a>
-      <a href="{{ url_for('main.signin') }}">
-        <button id="sign-in">SIGN IN</button>
+      <a href="{{ url_for('auth.signin') }}">
+        <p>Sign In</p>
+        <!-- <button id="sign-in">SIGN IN</button> -->
       </a>
     </div>
     {% endif %}
@@ -94,13 +81,12 @@
       <div class="line2"></div>
       <div class="line3"></div>
     </div>
-  </div>
+  </header>
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
   <div class="tops">
     {% for category, message in messages %}
     <div class="alert alert-{{category}}">
-      <div class="side"></div>
       <p id="message">{{ message }}</p>
     </div>
     {% endfor %}

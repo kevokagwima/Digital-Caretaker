@@ -6,6 +6,10 @@ errors = Blueprint("errors", __name__)
 def error_404(error):
   return render_template("Errors/404.html"), 404
 
+@errors.app_errorhandler(401)
+def error_401(error):
+  return render_template("Errors/401.html"), 401
+
 @errors.app_errorhandler(405)
 def error_405(error):
   return render_template("Errors/405.html"), 405

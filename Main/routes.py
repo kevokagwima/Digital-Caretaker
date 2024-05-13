@@ -1,69 +1,12 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
-from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import Members, db, Landlord,Tenant, Properties, Unit, Bookings, Admin
+from flask_login import login_required, fresh_login_required, current_user
+from models import db, Landlord,Tenant, Properties, Unit, Bookings
 from sqlalchemy import or_
 from .form import *
-from modules import send_sms, send_email
 import random
 from datetime import datetime, timedelta
-from geopy.geocoders import Nominatim
 
 main = Blueprint("main", __name__)
-
-@main.route("/registration", methods=["POST", "GET"])
-def signup():
-  form = user_registration()
-  try:
-    if form.validate_on_submit():
-      member = Members(
-        first_name=form.first_name.data,
-        second_name=form.second_name.data,
-        last_name=form.last_name.data,
-        email=form.email_address.data,
-        phone=form.phone_number.data,
-        date=datetime.now(),
-        account_type="member",
-        username=form.username.data,
-        passwords=form.password.data,
-      )
-      db.session.add(member)
-      db.session.commit()
-      message = {
-        'receiver': member.email,
-        'subject': 'Account Created Successfully',
-        'body': f'Congratulations! {member.first_name} {member.second_name} you have successfully created your account. \nLogin using your username {member.username} and password'
-      }
-      # send_sms(message)
-      send_email(**message)
-      flash(f"User registered successfully", category="success")
-      return redirect(url_for("main.signin"))
-
-    if form.errors != {}:
-      for err_msg in form.errors.values():
-        flash(f"There was an error creating the user: {err_msg}", category="danger")
-  except:
-    flash(f"An error occured when submitting the form. Check your inputs and try again", category="danger")
-
-  return render_template("signup.html", form=form)
-
-@main.route("/signin", methods=["POST", "GET"])
-def signin():
-  form = login()
-  if form.validate_on_submit():
-    member = (
-      Members.query.filter_by(username=form.username.data).first() or Landlord.query.filter_by(username=form.username.data).first() or Tenant.query.filter_by(username=form.username.data).first() or Admin.query.filter_by(username=form.username.data).first()
-    )
-    if member and member.check_password_correction(attempted_password=form.password.data):
-      login_user(member, remember=True)
-      flash(f"Login successfull, welcome {member.username}",category="success",)
-      next = request.args.get("next")
-      return redirect(next or url_for("main.index"))
-    elif member == None:
-      flash(f"No user with that username", category="danger")
-    else:
-      flash(f"Invalid login credentials", category="danger")
-
-  return render_template("signin.html", form=form)
 
 @main.route("/")
 @main.route("/home")
@@ -158,7 +101,7 @@ def unit_details(unit_id):
 def book(unit_id):
   unit = Unit.query.get(unit_id)
   property = Properties.query.filter_by(id=unit.Property).first()
-  booking = Bookings.query.filter_by(user=current_user.username, status="Active").count()
+  booking = Bookings.query.filter_by(user=current_user.email, status="Active").count()
   try:
     if unit.tenant:
       flash(f"Unit is already occupied", category="danger")
@@ -172,9 +115,9 @@ def book(unit_id):
       new_booking = Bookings(
         booking_id=random.randint(100000, 999999),
         date=datetime.now(),expiry_date=datetime.now() + timedelta(days=1),
-        property=Properties.query.filter_by(id=property.id).first().id,
+        property_id=Properties.query.filter_by(id=property.id).first().id,
         unit=Unit.query.filter_by(id=unit.id).first().id,
-        user = current_user.username,
+        user = current_user.email,
         status="Active"
       )
       db.session.add(new_booking)
@@ -182,57 +125,34 @@ def book(unit_id):
       db.session.commit()
       flash(f"Reservation made successfully", category="success")
       return redirect(url_for("main.reservations"))
-  except:
-    flash(f"An error occurred. Try again", category="danger")
+  except Exception as e:
+    flash(f"{repr(e)}", category="danger")
     return redirect(url_for("main.unit_details", unit_id=unit.id))
 
 @main.route("/unit-enquiry/<int:unit_id>", methods=["POST", "GET"])
 @fresh_login_required
 @login_required
 def unit_enquiry(unit_id):
-  unit = Unit.query.get(unit_id)
-  if request.method == "POST":
-    fname = request.form.get("fname")
-    lname = request.form.get("lname")
-    user_email = request.form.get("email")
-    enquiry = request.form.get("message")
-    message = {
-      'receiver': user_email,
-      'subject': f"{unit.name} - {unit.Type} Unit enquiry",
-      'body': f"Dear client, {fname} {lname}\nThank you for your enquiry - {enquiry}.\nThe landlord will be in touch"
-    }
-    send_email(**message)
-    flash(f"Enquiry sent", category="success")
-  else:
-    flash(f"Invalid url", category="danger")
-    return redirect(url_for('main.properties'))
-
-  return redirect(url_for('main.unit_details', unit_id=unit.id))
+  pass
 
 @main.route("/my_reservations")
 @fresh_login_required
 @login_required
 def reservations():
-  booking = Bookings.query.filter_by(user=current_user.username, status="Active").all()
+  booking = Bookings.query.filter_by(user=current_user.email, status="Active").all()
   properties = Properties.query.all()
   units = Unit.query.all()
   expired_reservations = []
   if booking:
     for overbook in booking:
       if overbook.user == current_user.id:
-        reserved_property = Properties.query.filter_by(id=overbook.property).first()
+        reserved_property = Properties.query.filter_by(id=overbook.property_id).first()
       if overbook.expiry_date < datetime.now()and overbook.status == "Active":
         expired_reservations.append(overbook)
         unit = Unit.query.filter_by(id=overbook.unit).first()
         unit.reserved = "False"
         overbook.status = "Expired"
         db.session.commit()
-    # loc = Nominatim(user_agent="GetLoc")
-    # location_text = f"{reserved_property.address}, {reserved_property.address2}"
-    # getLoc = loc.geocode(location_text)
-    # print("Latitude = ", getLoc.latitude, "\n")
-    # print("Longitude = ", getLoc.longitude)
-
     if len(expired_reservations) == 1:
       flash(f"One of your reservations has expired", category="info")
     elif len(expired_reservations) > 1:
@@ -254,10 +174,3 @@ def delete_reservation(reservation_id):
   db.session.commit()
   flash(f"Reservation deleted successfully", category="success")
   return redirect(url_for('main.reservations'))
-
-@main.route("/logout")
-@login_required
-def logout():
-  logout_user()
-  flash(f"Logged out successfully", category="success")
-  return redirect(url_for("main.signin"))

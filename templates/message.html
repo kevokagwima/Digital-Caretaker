@@ -13,7 +13,7 @@ PMS | Chat
 {% block logo %}
 {% if current_user.is_authenticated and current_user.account_type == "Landlord" %}
 <a id="logos" href="{{ url_for('landlord.landlord_dashboard') }}">
-  <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+  <img class="logo" src="{{ url_for('static', filename='Images/logo.png') }}" alt="logo">
   <span id="account">{{ current_user.account_type }}</span>
 </a>
 <p id="chatting-with">You are chatting with
@@ -24,7 +24,7 @@ PMS | Chat
 {% endif %}
 {% if current_user.is_authenticated and current_user.account_type == "Tenant" %}
 <a id="logos" href="{{ url_for('tenant.tenant_dashboard') }}">
-  <img class="logo" src="{{ url_for('static', filename='css/Images/logo.png') }}" alt="logo">
+  <img class="logo" src="{{ url_for('static', filename='Images/logo.png') }}" alt="logo">
   <span id="account">{{ current_user.account_type }}</span>
 </a>
 <p id="chatting-with">You are chatting with

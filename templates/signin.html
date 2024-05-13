@@ -2,6 +2,7 @@
 
 {% block head %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
 {% endblock %}
 
@@ -18,20 +19,20 @@ PMS | Signin
   <form method="POST">
     {{ form.hidden_tag() }}
     <div class="input">
-      {{ form.username.label }}
-      {{ form.username(placeholder="Enter Username") }} <br>
+      {{ form.email_address.label }}
+      {{ form.email_address(placeholder="Enter Email Address") }} <br>
     </div>
     <div class="input">
       {{ form.password.label }}
       {{ form.password(placeholder="Enter Password") }} <br>
     </div>
     <button class="btn" type="submit">
-      <span class="button--text">SIGN IN</span>
+      <span class="button--text">Sign In</span>
     </button>
   </form>
   <div class="box">
-    <p>Don't have an account, proceed to Registration</p>
-    <a href="{{ url_for('main.signup') }}">Register</a>
+    <p>Don't have an account?</p>
+    <a href="{{ url_for('auth.signup') }}">Sign Up</a>
   </div>
 </div>
 

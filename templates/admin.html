@@ -15,7 +15,7 @@
   <body>
     <div class="side-nav">
       <div class="profile" onclick="openView(event, 'profile')">
-        <img src="{{ url_for('static', filename='css/Images/profile.png') }}" alt="profile image">
+        <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile image">
         <div class="profile-info">
           <p>Admin</p>
         </div>
@@ -26,42 +26,42 @@
       <div class="main-navigation">
         <h4 id="nav-title">Main</h4>
         <button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
-          <img src="{{ url_for('static', filename='css/Images/dashboard.png') }}" alt="dashboard">
+          <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
           Dashboard
         </button>
         <button class="tablinks" onclick="openView(event, 'landlords')">
-          <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="tenants">
+          <img src="{{ url_for('static', filename='Images/man.png') }}" alt="tenants">
           Landlords
         </button>
         <button class="tablinks" onclick="openView(event, 'properties')">
-          <img src="{{ url_for('static', filename='css/Images/building.png') }}" alt="property">
+          <img src="{{ url_for('static', filename='Images/building.png') }}" alt="property">
           Properties
         </button>
         <button class="tablinks" onclick="openView(event, 'tenants')">
-          <img src="{{ url_for('static', filename='css/Images/group.png') }}" alt="tenants">
+          <img src="{{ url_for('static', filename='Images/group.png') }}" alt="tenants">
           Tenants
         </button>
         <button class="tablinks" onclick="openView(event, 'units')">
-          <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="units">
+          <img src="{{ url_for('static', filename='Images/home.png') }}" alt="units">
           Units
         </button>
         <button class="tablinks" onclick="openView(event, 'complaints')">
-          <img src="{{ url_for('static', filename='css/Images/feedback.png') }}" alt="rent">
+          <img src="{{ url_for('static', filename='Images/feedback.png') }}" alt="rent">
           Complaints
         </button>
         <button class="tablinks" onclick="openView(event, 'reservations')">
-          <img src="{{ url_for('static', filename='css/Images/group.png') }}" alt="tenants">
+          <img src="{{ url_for('static', filename='Images/group.png') }}" alt="tenants">
           Reservations
         </button>
         <button class="tablinks" onclick="openView(event, 'extra')">
-          <img src="{{ url_for('static', filename='css/Images/extra.png') }}" alt="extra">
+          <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
           Extras
         </button>
       </div>
       <div class="logout">
-        <a href="{{ url_for('admin.logout') }}">
+        <a href="{{ url_for('auth.logout') }}">
           <button>
-            <img src="{{ url_for('static', filename='css/Images/logout.png') }}" alt="logout">
+            <img src="{{ url_for('static', filename='Images/logout.png') }}" alt="logout">
             Logout
           </button>
         </a>
@@ -244,7 +244,7 @@
                   <h4>#{{ invoice.invoice_id }}</h4>
                   <p>
                     {% for tenant in tenants if tenant.id == invoice.tenant %}
-                    {{ tenant.first_name }} {{ tenant.second_name }}
+                    {{ tenant.first_name }}
                     {% endfor %}
                   </p>
                   <p id="date">{{ invoice.date_created.strftime("%d %b %y") }}</p>
@@ -398,8 +398,8 @@
             </tr>
             {% for tenant in tenants|sort(attribute="first_name") %}
             <tr id="tenants" class="accordion">
-              <td>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</td>
-              <td>{{ tenant.tenant_id }}</td>
+              <td>{{ tenant.first_name }} {{ tenant.last_name }}</td>
+              <td>{{ tenant.unique__id }}</td>
               <td>{{ tenant.email }}</td>
               <td>0{{ tenant.phone }}</td>
               <td>
@@ -421,7 +421,7 @@
                 {% endif %}
               </td>
               <td>
-                {% if tenant.active == "True" %}
+                {% if tenant.is_active == True %}
                 <span id="active">Active</span>
                 {% else %}
                 <span id="not-active">Not Active</span>
@@ -439,7 +439,7 @@
               <td colspan="8">
                 <div class="actions">
                   <h4>Tenant Control Center</h4>
-                  <span id="tenant-control">{{ tenant.first_name }} {{ tenant.second_name }} |
+                  <span id="tenant-control">{{ tenant.first_name }} |
                     {{ tenant.date.strftime("%d/%m/%Y") }}</span>
                   <hr>
                   <div class="tenant-controls">
@@ -447,7 +447,7 @@
                       <h4>Personal Information</h4>
                     </div>
                     <div class="panel">
-                      <p>Name - <span>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</span></p>
+                      <p>Name - <span>{{ tenant.first_name }} {{ tenant.last_name }}</span></p>
                       <p>Email - <span>{{ tenant.email }}</span></p>
                       <p>Phone Number - <span>0{{ tenant.phone }}</span></p>
                       <p>Username - <span>{{ tenant.username }}</span></p>
@@ -469,12 +469,12 @@
                       <h4 class="else">No landlord Assigned</h4>
                       <div class="form">
                         <h4>Select a landlord to assign</h4>
-                        <form action="{{ url_for('admin.admin_assign_landlord', tenant_id=tenant.tenant_id) }}"
+                        <form action="{{ url_for('admin.admin_assign_landlord', tenant_id=tenant.unique_id) }}"
                           method="POST">
                           <select name="landlord-assign" id="">
                             {% for landlord in landlords %}
                             <option value="{{ landlord.landlord_id }}">{{ landlord.first_name }}
-                              {{ landlord.second_name }}
+                              {{ landlord.last_name }}
                             </option>
                             {% endfor %}
                           </select>
@@ -514,7 +514,7 @@
                         {% if property_available|count == 0 %}
                         <p class="elses">No available property to choose from</p>
                         {% elif tenant.landlord != None %}
-                        <form action="{{ url_for('admin.admin_assign_property', tenant_id=tenant.tenant_id) }}"
+                        <form action="{{ url_for('admin.admin_assign_property', tenant_id=tenant.unique_id) }}"
                           method="POST">
                           <select name="assign-property" id="">
                             {% for property in properties if property.owner == tenant.landlord %}
@@ -556,7 +556,7 @@
                         {% if units_available|count == 0 %}
                         <p class="elses">No vacant units to choose from</p>
                         {% elif tenant.landlord != None and tenant.properties != None %}
-                        <form action="{{ url_for('admin.admin_assign_unit', tenant_id=tenant.tenant_id) }}"
+                        <form action="{{ url_for('admin.admin_assign_unit', tenant_id=tenant.unique_id) }}"
                           method="POST">
                           <select name="assign-unit" id="">
                             {% for unit in units if unit.tenant == None and unit.reserved == "False" and unit.Property == tenant.properties %}
@@ -597,7 +597,7 @@
                     </div>
                     <hr>
                     <div class="revoke-access">
-                      <a href="{{ url_for('admin.admin_revoke_tenant', tenant_id=tenant.tenant_id) }}">Revoke Access</a>
+                      <a href="{{ url_for('admin.admin_revoke_tenant', tenant_id=tenant.unique_id) }}">Revoke Access</a>
                     </div>
                   </div>
                 </div>
@@ -696,7 +696,7 @@
                     <div class="panel">
                       {% if unit.tenant %}
                       {% for tenant in tenants if tenant.id == unit.tenant %}
-                      <p>Name - <span>{{ tenant.first_name}} {{ tenant.second_name }}</span></p>
+                      <p>Name - <span>{{ tenant.first_name}}</span></p>
                       <p>Email - <span>{{ tenant.email }}</span></p>
                       {% endfor %}
                       {% else %}
@@ -749,7 +749,7 @@
               <h4>Title: {{ complaint.title }}</h4>
               <p id="tenant-names">
                 {% for tenant in tenants if tenant.id == complaint.tenant %}
-                {{ tenant.first_name }} {{ tenant.second_name }},
+                {{ tenant.first_name }},
                 {% for unit in tenant.unit %}
                 {{ unit.name }} - {{ unit.Type }}
                 {% endfor %}
@@ -910,7 +910,7 @@
           {% for extra in extras %}
           <div class="extras-details {{ extra.title }}">
             <p id="titlez">{{ extra.title }}</p>
-            <img loading="lazy" src="{{ url_for('static', filename='css/Images/man.png') }}" alt="tenant">
+            <img loading="lazy" src="{{ url_for('static', filename='Images/man.png') }}" alt="tenant">
             <div class="extra-info">
               <p>{{ extra.first_name }} {{ extra.last_name }}</p>
               <p>{{ extra.email }}</p>

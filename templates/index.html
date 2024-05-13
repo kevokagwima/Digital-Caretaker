@@ -23,7 +23,7 @@ PMS | Home
   <h4>Intergrating modern systems into property management</h4>
   <div class="landlord-system">
     <div class="landlord-system-img">
-      <img loading="lazy" src="{{ url_for('static', filename='css/Images/landlord-dashboard.png') }}"
+      <img loading="lazy" src="{{ url_for('static', filename='Images/landlord-dashboard.png') }}"
         alt="landlord dashboard">
     </div>
     <div class="landlord-system-info">
@@ -35,7 +35,7 @@ PMS | Home
         <button>Proceed To Portal</button>
       </a>
       {% else %}
-      <a href="{{ url_for('landlord.Landlord_login') }}">
+      <a href="{{ url_for('auth.landlord_login') }}">
         <button>Proceed To Portal</button>
       </a>
       {% endif %}
@@ -43,8 +43,7 @@ PMS | Home
   </div>
   <div class="tenant-system">
     <div class="tenant-system-img">
-      <img loading="lazy" src="{{ url_for('static', filename='css/Images/tenant-dashboard.png') }}"
-        alt="tenant dashboard">
+      <img loading="lazy" src="{{ url_for('static', filename='Images/tenant-dashboard.png') }}" alt="tenant dashboard">
     </div>
     <div class="tenant-system-info">
       <h4>Tenant Dashboard</h4>
@@ -55,7 +54,7 @@ PMS | Home
         <button>Proceed To Portal</button>
       </a>
       {% else %}
-      <a href="{{ url_for('tenant.tenant_login') }}">
+      <a href="{{ url_for('auth.tenant_login') }}">
         <button>Proceed To Portal</button>
       </a>
       {% endif %}
@@ -190,8 +189,7 @@ PMS | Home
   <h4>Best Selling Property</h4>
   <div class="property-info">
     <div class="property-img">
-      <img loading="lazy" src="{{ url_for('static', filename='css/Images/apartments.jpg') }}"
-        alt="Best Selling Property">
+      <img loading="lazy" src="{{ url_for('static', filename='Images/apartments.jpg') }}" alt="Best Selling Property">
     </div>
     <div class="property-details">
       <h4>{{ property_choice.name }}</h4>
@@ -216,7 +214,7 @@ PMS | Home
     <div class="test testimonial-1">
       <div class="test-profile">
         <div class="test-img">
-          <img src="{{ url_for('static', filename='css/Images/testimonial1.jpg') }}" alt="Profile">
+          <img src="{{ url_for('static', filename='Images/testimonial1.jpg') }}" alt="Profile">
         </div>
         <div class="test-info">
           <h4>Cynthia Wairimu</h4>
@@ -236,7 +234,7 @@ PMS | Home
     <div class="test testimonial-2">
       <div class="test-profile">
         <div class="test-img">
-          <img src="{{ url_for('static', filename='css/Images/testimonial2.jpg') }}" alt="Profile">
+          <img src="{{ url_for('static', filename='Images/testimonial2.jpg') }}" alt="Profile">
         </div>
         <div class="test-info">
           <h4>Paul Kimani</h4>
@@ -253,7 +251,7 @@ PMS | Home
     <div class="test testimonial-3">
       <div class="test-profile">
         <div class="test-img">
-          <img src="{{ url_for('static', filename='css/Images/testimonial3.jpg') }}" alt="Profile">
+          <img src="{{ url_for('static', filename='Images/testimonial3.jpg') }}" alt="Profile">
         </div>
         <div class="test-info">
           <h4>Antony Juma</h4>
@@ -275,7 +273,7 @@ PMS | Home
     <div class="test testimonial-4">
       <div class="test-profile">
         <div class="test-img">
-          <img src="{{ url_for('static', filename='css/Images/testimonial4.jpg') }}" alt="Profile">
+          <img src="{{ url_for('static', filename='Images/testimonial4.jpg') }}" alt="Profile">
         </div>
         <div class="test-info">
           <h4>Kimberly Njeri</h4>
@@ -291,7 +289,7 @@ PMS | Home
     <div class="test testimonial-5">
       <div class="test-profile">
         <div class="test-img">
-          <img src="{{ url_for('static', filename='css/Images/testimonial5.jpg') }}" alt="Profile">
+          <img src="{{ url_for('static', filename='Images/testimonial5.jpg') }}" alt="Profile">
         </div>
         <div class="test-info">
           <h4>Simon Njenga</h4>

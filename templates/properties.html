@@ -14,7 +14,7 @@ PMS | Properties
 
 {% block logo %}
 <a id="logos" class="logz" href="{{ url_for('main.index') }}">
-  <img class="logos" src="{{ url_for('static', filename='css/Images/logo-white.png') }}" alt="logo">
+  <img class="logos" src="{{ url_for('static', filename='Images/logo-white.png') }}" alt="logo">
   <!-- {% if current_user.is_authenticated %}
   <span id="account">{{ current_user.account_type }}</span>
   {% endif %} -->
@@ -62,9 +62,9 @@ PMS | Properties
       {% endif %}
       {% for property in properties or propertiez if property.id == unit.Property %}
       {% if property.Type == "Apartment" %}
-      <img loading="lazy" src="{{ url_for('static', filename='css/Images/inside_apartment.jpg') }}" alt="apartment">
+      <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
       {% else %}
-      <img loading="lazy" src="{{ url_for('static', filename='css/Images/inside_office.jpg') }}" alt="office">
+      <img loading="lazy" src="{{ url_for('static', filename='Images/inside_office.jpg') }}" alt="office">
       {% endif %}
       {% endfor %}
       <div id="unit-info" class="unit-info">
@@ -86,13 +86,13 @@ PMS | Properties
         <table id="table">
           <tr>
             <th>
-              <img src="{{ url_for('static', filename='css/Images/area.png') }}" alt="square meters">
+              <img src="{{ url_for('static', filename='Images/area.png') }}" alt="square meters">
             </th>
             <td>{{ unit.living_space }} SQM</td>
           </tr>
           <tr>
             <th>
-              <img src="{{ url_for('static', filename='css/Images/beds.png') }}" alt="bedrooms">
+              <img src="{{ url_for('static', filename='Images/beds.png') }}" alt="bedrooms">
             </th>
             {% for property in properties or propertiez if property.id == unit.Property %}
             {% if property.Type == "Apartment" and unit.Type != "Bedsitter" %}
@@ -106,7 +106,7 @@ PMS | Properties
           </tr>
           <tr>
             <th>
-              <img src="{{ url_for('static', filename='css/Images/bathtub.png') }}" alt="bathrooms">
+              <img src="{{ url_for('static', filename='Images/bathtub.png') }}" alt="bathrooms">
             </th>
             {% for property in properties or propertiez if property.id == unit.Property %}
             {% if property.Type == "Apartment" %}

@@ -13,29 +13,26 @@ db.init_app(app)
 def main():
   f = open("download.csv")
   reader = csv.reader(f)
-  for first_name, second_name, last_name, email, username, phone, properties, landlord, account_type, active, date in reader:
+  for first_name, last_name, email, phone, properties, landlord, account_type, date in reader:
     tenant = Tenant(
       first_name=first_name,
-      second_name=second_name,
       last_name=last_name,
       email=email,
-      username=username,
       password=bcrypt.generate_password_hash("11111").decode("utf-8"),
       phone=phone,
       properties=properties,
       landlord=landlord,
       account_type=account_type,
-      active=active,
       date=date,
-      tenant_id=random.randint(100000,999999)
+      unique_id=random.randint(100000,999999)
     )
     db.session.add(tenant)
-    db.session.commit()
-  # for name, floor, type, Property, landlord, living_space, balcony_space, air_conditioning, amenities, reserved, date, rent_amount in reader:
+    # db.session.commit()
+  # for name, floor, Type, Property, landlord, living_space, balcony_space, air_conditioning, amenities, reserved, date, rent_amount in reader:
   #   unit = Unit(
   #     name=name,
   #     floor=floor,
-  #     Type=type,
+  #     Type=Type,
   #     landlord=landlord,
   #     Property=Property,
   #     living_space=living_space,
@@ -54,12 +51,14 @@ def main():
 
 def admin():
   new_admin = Admin(
-    passwords="11111"
+    unique_id = random.randint(100000,999999),
+    passwords = "11111",
   )
   db.session.add(new_admin)
   db.session.commit()
-  print("Admin addedd")
+  print("Admin added")
 
 if __name__ == '__main__':
   with app.app_context():
     admin()
+    # main()

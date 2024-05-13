@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
+{% block body %}
+<main>
+  <h1>Unauthorized Access (401)</h1>
+  <p>The server could not verify that you are authorized to access the URL requested. You either supplied the wrong
+    credentials</p>
+</main>
+{% endblock %}

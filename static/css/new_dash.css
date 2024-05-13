@@ -1,28 +1,25 @@
-#myChart {
-  min-height: 100%;
-  max-height: 100%;
-  padding: 0 0.3rem;
-  overflow: hidden;
+.general-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
 }
 
-#myChart tr {
-  min-height: 12rem;
-  max-height: 14rem;
+.stat {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background-color: var(--page-header-bgColor);
 }
 
-#myChart td {
-  border-radius: 0.2rem 0.2rem 0 0;
-  cursor: pointer;
+.stat img {
+  max-height: 3rem;
 }
 
-.data {
-  padding: 0.5rem 0;
-}
-
-.table {
-  min-width: 100%;
-  min-height: 69%;
-  margin: 6.5rem 0;
+.stat-info p {
+  font-size: 2.5ch;
+  color: var(--blue);
 }
 
 .actions {
@@ -40,9 +37,6 @@
   border: none;
   padding: 8px;
   border-radius: 3px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  cursor: pointer;
   width: 100%;
 }
 
@@ -127,10 +121,11 @@
 @media (prefers-color-scheme: light) {
   .content-area,
   body,
-  .main-navigation button:hover,
+  .main-navigation button,
   .main-navigation button:focus,
-  .secondary-navigation button:hover,
+  .secondary-navigation button,
   .secondary-navigation button:focus,
+  .logout button,
   .prop-owned-info,
   .property-registration input,
   select,
@@ -152,8 +147,15 @@
   .property-registration,
   .notification-info,
   .active-extra,
-  .invoice {
+  .invoice,
+  .stat,
+  .rent-stats-box,
+  .invoice-box {
     background-color: white;
+  }
+
+  #nav-title {
+    color: black;
   }
 
   .burger > div {
@@ -187,7 +189,8 @@
 
   .notifications,
   .tenant-card,
-  .unit-card {
+  .unit-card,
+  .rent-stat {
     background-color: bisque;
   }
 

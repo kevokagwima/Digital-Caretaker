@@ -12,17 +12,17 @@ PMS | Tenant Profile
 {% block nav %}
 <a id="dashboards" href="{{ url_for('landlord.landlord_dashboard') }}">
   <button>
-    <img src="{{ url_for('static', filename='css/Images/dashboard.png') }}" alt="dashboard">
+    <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
     Dashboard
   </button>
 </a>
 <button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
-  <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="dashboard">
+  <img src="{{ url_for('static', filename='Images/man.png') }}" alt="dashboard">
   Full Profile
 </button>
 <button class="dropdown-btn">
-  <img src="{{ url_for('static', filename='css/Images/building.png') }}" alt="property">
-  My Property
+  <img src="{{ url_for('static', filename='Images/building.png') }}" alt="property">
+  My Properties
   <i class='fa fa-angle-down'></i>
 </button>
 <div class="drop-down-container">
@@ -32,30 +32,9 @@ PMS | Tenant Profile
     href="{{ url_for('landlord.property_information', property_id=property.id) }}">{{ property.name }}</a>
   {% endfor %}
   {% else %}
-  <h4 id="no">No Property Added</h4>
+  <a href="#" class="tablinks" onclick="openView(event, 'property_registration')" id="no">No property added</a>
   {% endif %}
 </div>
-<button class="tablinks" onclick="openView(event, 'tenant')">
-  <img src="{{ url_for('static', filename='css/Images/group.png') }}" alt="tenants">
-  Tenants
-</button>
-<button class="tablinks" onclick="openView(event, 'units')">
-  <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="units">
-  Units
-</button>
-<button class="tablinks comp" onclick="openView(event, 'complaints')">
-  <img src="{{ url_for('static', filename='css/Images/feedback.png') }}" alt="complaints">
-  Complaints
-  {% set comp_count = [] %}
-  {% for complaint in tenant_property.complaint if complaint.date.strftime('%d/%m/%Y') == today_time %}
-  {{ comp_count.append(complaint) or "" }}
-  {% if comp_count|count != 0 %}
-  <div class="complaint-count">
-    <span>{{ comp_count|count }}</span>
-  </div>
-  {% endif %}
-  {% endfor %}
-</button>
 {% endblock %}
 
 {% block content %}
@@ -65,21 +44,25 @@ PMS | Tenant Profile
   <div class="tenant-info">
     <div class="tenant-profile-img">
       <div class="tenant-profile">
-        <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="profile image">
+        <img src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
         <div class="tenant-personal-info">
-          <h4><strong>Tenant Name</strong></h4>
+          <h4>Tenant Name</h4>
           <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
-          <h4><strong>Tenant Email Address</strong></h4>
+          <h4>Tenant Email Address</h4>
           <p>{{ tenant.email }}</p>
-          <h4><strong>Tenant Phone number</strong></h4>
+          <h4>Tenant Phone number</h4>
           <p>0{{ tenant.phone }}</p>
-          <h4><strong>Date Registered</strong></h4>
+          <h4>Date Registered</h4>
           <p>{{ tenant.date.strftime('%d/%m/%Y') }}</p>
         </div>
       </div>
-      <div class="extra">
-        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">Start Chat</a>
-        <a id="revoke" href="#">Revoke Access</a>
+      <div class="tenant-extra">
+        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">
+          Start Chat
+        </a>
+        <button id="revoke">
+          Revoke Access
+        </button>
       </div>
     </div>
     <div class="tenant-details-info">
@@ -98,8 +81,8 @@ PMS | Tenant Profile
         <div class="panel">
           {% if tenant.unit %}
           <div class="card">
-            <div>
-              <img class="image" src="{{ url_for('static', filename='css/Images/home.png') }}" />
+            <div class="image">
+              <img src="{{ url_for('static', filename='Images/home.png') }}" />
             </div>
             <div class="text">
               <table>
@@ -134,8 +117,6 @@ PMS | Tenant Profile
             </div>
           </div>
           {% else %}
-          <p class="else">No unit assigned to this tenant</p>
-          <hr>
           <div class="unit-assign">
             {% set property = tenant_property %}
             {% set unit_count = [] %}
@@ -166,19 +147,14 @@ PMS | Tenant Profile
           <div class="info">
             {% for complaint in tenant.complaint|sort(attribute='time', reverse=True) %}
             <div class="complaint">
-              <h6>{{ complaint.title }}
-                {% if complaint.date.strftime('%d/%m/%Y') == today_time %}
-                <span id="new">New</span>
-                {% endif %}
-                <span id="date">{{ complaint.date.strftime('%d/%m/%Y') }}</span>
-              </h6>
-              <span>Category: {{ complaint.category }}</span>
+              <h1>{{ complaint.title }}</h1>
+              <h4>Category: {{ complaint.category }}</h4>
               <p>{{ complaint.body }}</p>
             </div>
             {% endfor %}
           </div>
           {% else %}
-          <p class="else">No Complaints</p>
+          <h4 class="else">No Complaints</h4>
           {% endif %}
         </div>
       </div>
@@ -200,7 +176,7 @@ PMS | Tenant Profile
             <div class="invoice-details">
               <h4>Invoice - #{{ invoice.invoice_id }}</h4>
               <p>{{ "Ksh {:,}".format(invoice.amount) }}</p>
-              <p>{{ invoice.date_created.strftime("Created on %d %B  %y") }}</p>
+              <p>{{ invoice.date_created.strftime("Created on %d %B  %Y") }}</p>
               {% if invoice.date_closed %}
               <p>{{ invoice.date_closed.strftime("Cleared on %d %B %y") }}</p>
               {% endif %}
@@ -216,7 +192,7 @@ PMS | Tenant Profile
             </div>
             {% endfor %}
             {% for invoice in tenant_invoices|sort(attribute="date_created", reverse=true) if invoice.status == 'invalid' %}
-            <div class="invoice-details invalids">
+            <div class="invoice-details">
               <h4>Invoice - #{{ invoice.invoice_id }}</h4>
               <p>{{ "Ksh {:,}".format(invoice.amount) }}</p>
               <p>{{ invoice.date_created.strftime("Created on %d %B  %y") }}</p>
@@ -236,121 +212,7 @@ PMS | Tenant Profile
           {% endif %}
         </div>
       </div>
-      <!-- <div class="tenant-extra">
-        <button class="accordion">Other</button>
-        <div class="panel">
-          <div class="other">
-          </div>
-        </div>
-      </div> -->
     </div>
-  </div>
-</div>
-<div id="tenant" class="tabcontent">
-  <h4 id="dash">Tenants - {{ tenant_property.name }} ({{ tenant_property.tenants|count }})</h4>
-  <form class="tenant-search">
-    <input spellcheck="false" required type="text" id="tenant_search" placeholder="Search for any Tenant">
-  </form>
-  <p id="just-info">This shows other tenants who belong to the same property as {{ tenant.first_name }}
-    {{ tenant.second_name }}
-  </p>
-  <div id="tenant_details" class="all-tenants">
-    {% for tenant in tenant_property.tenants|sort(attribute="first_name") %}
-    <div loading="lazy" id="card" class="tenant-card">
-      {% if tenant.unit %}
-      <div class="tenant-unit-assigned">
-        {% for unit in tenant.unit %}
-        <h4>{{ unit.name }}, {{ unit.Type }}</h4>
-        {% endfor %}
-      </div>
-      {% else %}
-      <div class="tenant-unit-unassigned">
-        <h4>No Unit Assigned</h4>
-      </div>
-      {% endif %}
-      <img src="{{ url_for('static', filename='css/Images/man.png') }}" alt="tenant">
-      <div class="tenant-details">
-        <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
-        <p>{{ tenant.email }}</p>
-        <p>0{{ tenant.phone }}</p>
-        <hr>
-        <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">Tenant Profile</a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-<div id="units" class="tabcontent">
-  <h4 id="dash">Units - {{ tenant_property.name }} ({{ tenant_property.unit|count }})</h4>
-  <form class="tenant-search">
-    <input spellcheck="false" required type="text" id="tenant-search" placeholder="Search for any Unit">
-  </form>
-  <p id="just-info">This shows units from the property in session - {{ tenant_property.name }}</p>
-  <div id="unit_details" class="all-units">
-    {% for unit in tenant_property.unit|sort(attribute="unit_id") %}
-    <div loading="lazy" id="cards" class="unit-card">
-      {% if unit.tenant %}
-      <div class="occupation unit-occupied">
-        <h4>Occupied</h4>
-      </div>
-      {% elif unit.reserved == "True" %}
-      <div class="occupation unit-reserved">
-        <h4>Reserved</h4>
-      </div>
-      {% else %}
-      <div class="occupation unit-vacant">
-        <h4>Vacant</h4>
-      </div>
-      {% endif %}
-      <img src="{{ url_for('static', filename='css/Images/home.png') }}" alt="unit">
-      <div class="unit-details">
-        <p>{{ unit.unit_id }}</p>
-        <p>{{ unit.name }}</p>
-        <p>{{ unit.Type }}</p>
-        <p>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-          Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.floor
-              % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {% endif %}</p>
-        <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-<div id="complaints" class="tabcontent">
-  <h4 id="dash">Complaints ({{ tenant_property.complaint|count }})</h4>
-  <p id="more-info">Complaints are grouped according to the date they were sent</p>
-  <p id="more-info">This shows complaints made by tenants in the same property as {{ tenant.first_name }}
-    {{ tenant.second_name }}
-  </p>
-  <div class="complaints">
-    {% if tenant_property.complaint %}
-    {% for complaint in all_complaints %}
-    <div class="reverse-div">
-      <p id="tenant">{{ complaint.time.strftime('%d-%m-%Y at %I:%M %p') }}</p>
-      <div class="complaint-info">
-        <h4>Title: {{ complaint.title }}
-          {% if complaint.date.strftime('%d/%m/%Y') == today_time %}
-          <span id="news">New</span>
-          {% endif %}
-        </h4>
-        <span id="tenant-name">
-          {% for tenant in tenant_property.tenants if tenant.id == complaint.tenant %}
-          <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">
-            {{ tenant.first_name }} {{ tenant.second_name }}
-          </a>,
-          {% for unit in tenant.unit %}
-          {{ unit.name }}
-          {% endfor %}
-          {% endfor %}
-        </span>
-        <span>Category: {{ complaint.category }}</span>
-        <p>{{ complaint.body }}</p>
-      </div>
-    </div>
-    {% endfor %}
-    {% else %}
-    <p class="else">Complaints made by your tenants will show up here</p>
-    {% endif %}
   </div>
 </div>
 {% endblock %}
@@ -362,7 +224,7 @@ PMS | Tenant Profile
       <span class="closemodal">&times;</span>
     </div>
     <div class="modal-body">
-      <p>Are you sure you want to remove <strong>{{ tenant.first_name }} {{ tenant.second_name }}
+      <p>Are you sure you want to remove tenant <strong>{{ tenant.first_name }} {{ tenant.second_name }}
           {{ tenant.last_name }}</strong> from your property, this action is irreversible once completed.</p>
       <br>
       <p>Review your actions before proceeding.</p>
@@ -377,7 +239,7 @@ PMS | Tenant Profile
             <li>If there's a unit assigned to {{ tenant.first_name }} {{ tenant.second_name }}, it will become
               vacant.</li>
             <li>Any complaint made by {{ tenant.first_name }} {{ tenant.second_name }} will be deleted.</li>
-            <li>{{ tenant.first_name }} {{ tenant.second_name }} will not be able to log in to his account.</li>
+            <li>{{ tenant.first_name }} {{ tenant.second_name }} will not be able to log in to their account.</li>
             <li>If this process was an accident, contact the admin for assistance.</li>
           </ul>
         </div>

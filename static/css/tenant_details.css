@@ -1,19 +1,19 @@
+a button {
+  min-width: 100%;
+}
+
 .else {
-  font-size: 16px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  margin-top: 1rem;
+  font-size: 1.6ch;
   color: var(--red);
   letter-spacing: 1px;
-  text-align: left;
+  text-align: center;
 }
 
 .tenant-info {
-  margin: 2rem 0 0;
+  margin-top: 2rem;
   display: flex;
   gap: 1rem;
-  border-radius: 5px;
-  max-height: 42rem;
-  overflow: auto;
 }
 
 .tenant-profile-img {
@@ -23,37 +23,41 @@
   max-width: 18rem;
 }
 
-.extra {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+.tenant-extra {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
   padding: 0;
 }
 
-.extra a {
+.tenant-extra a {
   color: white;
-  text-decoration: none;
-  padding: 12px 15px;
+  padding: 0.8em;
   border-radius: 3px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
   text-transform: uppercase;
+  text-align: center;
+  font-size: 1.5ch;
 }
 
 #revoke {
+  border: none;
+  padding: 0.8em;
+  border-radius: 0.3rem;
+  font-size: 1.5ch;
+  text-transform: uppercase;
   background-color: var(--red);
+  font-family: var(--font-1);
+  cursor: pointer;
 }
 
 #chat {
-  background-color: rgb(6, 187, 6);
+  background-color: var(--page-header-bgColor);
 }
 
 .tenant-profile {
   background-color: var(--blue);
   border-radius: 5px;
-  max-height: 15rem;
+  max-height: 14.5rem;
   min-width: 15rem;
   overflow: auto;
   display: grid;
@@ -67,14 +71,12 @@
 
 .tenant-profile img {
   width: 10rem;
-  height: 10rem;
-  max-width: inherit;
-  max-height: inherit;
+  aspect-ratio: 1/1;
 }
 
 .tenant-personal-info {
   text-align: center;
-  margin: 1rem 0 0;
+  margin-top: 1rem;
 }
 
 .tenant-personal-info p {
@@ -83,12 +85,9 @@
 
 .tenant-details-info {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
-  gap: 0.8rem;
-  max-height: 43rem;
-  overflow: auto;
-  padding-right: 10px;
+  gap: 1rem;
+  flex-grow: 1;
 }
 
 .status {
@@ -108,24 +107,21 @@
   background-color: var(--page-header-bgColor);
   min-width: 100%;
   text-align: left;
-  font-weight: bold;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  border: none;
   padding: 15px;
   color: white;
-  font-size: 1.2rem;
+  font-size: 2ch;
   cursor: pointer;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   position: relative;
+  font-family: var(--font-1);
 }
 
 .panel {
   background-color: var(--page-header-bgColor-hover);
   border-bottom-left-radius: 5px;
   border-top-right-radius: 5px;
-  padding: 0 18px;
+  padding: 0 1rem;
   max-height: 0;
   min-width: 100%;
   max-width: 100%;
@@ -134,7 +130,7 @@
 }
 
 .panel .else {
-  padding-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .panel hr {
@@ -143,23 +139,22 @@
 
 .card {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 58vw;
-  padding: 20px;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1rem;
 }
 
-.image {
-  height: 18vh;
-  width: 8vw;
+.image img {
+  height: 10rem;
+  aspect-ratio: 1/1;
 }
 
 .text {
-  margin-left: 20px;
+  flex-grow: 1;
 }
 
 table {
-  width: 35vw;
+  width: 100%;
 }
 
 td,
@@ -170,22 +165,12 @@ th {
 }
 
 th {
-  font-size: 20px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  font-size: 2ch;
 }
 
 td {
-  font-size: 20px;
-  font-family: "PT Sans", sans-serif;
-  letter-spacing: 2px;
+  font-size: 2ch;
   text-align: center;
-  font-weight: normal;
-}
-
-hr {
-  background-color: grey;
-  border: 0.1px solid grey;
 }
 
 .unit-assign {
@@ -193,8 +178,6 @@ hr {
   align-items: center;
   justify-content: space-between;
   padding: 10px 5px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
 }
 
 .unit-assign p {
@@ -214,8 +197,6 @@ hr {
   background-color: var(--page-header-bgColor);
   border: 1px solid var(--page-header-bgColor);
   color: rgb(228, 225, 225);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   margin-right: 10px;
 }
 
@@ -232,8 +213,6 @@ hr {
   border: none;
   border-radius: 5px;
   color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   cursor: pointer;
   letter-spacing: 0.5px;
 }
@@ -248,31 +227,11 @@ hr {
 }
 
 .complaint {
-  line-height: 30px;
-  padding: 8px 10px;
+  padding: 0.8rem 1rem;
   background-color: var(--other-dark-blue);
-  border-radius: 5px;
+  line-height: 1.4rem;
+  border-radius: 0.3rem;
   position: relative;
-}
-
-#news,
-#new {
-  position: absolute;
-  inset: 0 auto 0 8rem;
-  margin: 6px 0;
-  padding: 0 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 10px;
-  background-color: orange;
-  border-radius: 2px;
-  animation: none;
-  color: white;
-}
-
-#news {
-  inset: 2px -2.5rem 0 auto;
 }
 
 .complaint #date {
@@ -280,49 +239,39 @@ hr {
   right: 5px;
 }
 
-.complaint h6 {
-  font-family: "PT Sans", sans-serif;
-  font-size: 20px;
-  color: aliceblue;
+.complaint h1 {
+  font-size: 2.5ch;
+  color: white;
   position: relative;
 }
 
-.complaint span {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
+.complaint h4 {
+  font-size: 2ch;
   color: var(--blue);
 }
 
 .complaint p {
-  font-family: "Varela Round", sans-serif;
-  font-size: 16px;
-  letter-spacing: 1px;
+  font-size: 2ch;
   color: whitesmoke;
 }
 
-#paid-rent {
+.tenant-rent-info .accordion span {
+  background-color: red;
+  border-radius: 30rem;
+  padding: 0.2rem 0.5rem;
   position: absolute;
-  top: 1rem;
+  top: 0.8rem;
   right: 1rem;
   color: white;
-  border-radius: 30rem;
-  padding: 2px 10px;
+  font-size: 1ch;
+}
+
+#paid-rent {
   background-color: rgb(6, 187, 6);
-  font-size: 0.8rem;
-  font-weight: normal;
 }
 
 #rent-info {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  color: white;
-  border-radius: 30rem;
-  padding: 2px 10px;
   background-color: var(--red);
-  font-size: 0.8rem;
-  font-weight: normal;
 }
 
 .invoice-status {
@@ -343,14 +292,6 @@ hr {
   background-color: var(--red);
 }
 
-.invalids {
-  opacity: 0.4;
-}
-
-.invalids > *::selection {
-  background-color: transparent;
-}
-
 .rent-info {
   padding: 1rem 0;
   display: flex;
@@ -366,103 +307,11 @@ hr {
   justify-content: space-between;
 }
 
-#just-info {
-  margin-top: 10px;
-  color: grey;
-  font-family: "PT Sans", sans-serif;
-}
-
-.complaints {
-  margin: 1rem 0 0;
-  padding-right: 10px;
-  border-radius: 5px;
-  max-height: 40rem;
-  overflow: auto;
-}
-
-.complaints .else {
-  text-align: center;
-}
-
-#more-info {
-  margin-top: 8px;
-  color: grey;
-}
-
-.complaints #tenant {
-  margin-bottom: 8px;
-  color: var(--red);
-}
-
-.complaint-info {
-  line-height: 28px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: var(--page-header-bgColor);
-  margin-bottom: 10px;
-  position: relative;
-  overflow: hidden;
-}
-
-.complaint-info > h4 {
-  position: relative;
-  width: max-content;
-}
-
-#tenant-name {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0 15px;
-  text-decoration: none;
-  text-align: center;
-  background-color: rgb(8, 184, 8);
-  color: white;
-}
-
-#tenant-name a {
-  text-decoration: none;
-  color: white;
-}
-
-.complaint-info #date {
-  position: absolute;
-  right: 5px;
-}
-
-.complaint-info h4 {
-  font-size: 22px;
-  position: relative;
-}
-
-.complaint-info span {
-  color: var(--blue);
-  font-size: 14px;
-}
-
-.complaint-info p {
-  font-family: "PT Sans", sans-serif;
-  font-size: 17px;
-  color: whitesmoke;
-}
-
-.settings {
-  background-color: var(--dark-blue);
-  margin: 15px 0;
-  padding: 15px;
-  border-radius: 5px;
-}
-
 .modal {
   position: fixed;
   display: none;
   place-items: center;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  overflow: auto;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1;
 }
@@ -476,18 +325,24 @@ hr {
 }
 
 .modal-header {
-  position: relative;
-  padding: 1rem 0;
+  padding: 0.2rem 1rem;
+  text-align: right;
   background-color: var(--page-content-bgColor);
 }
 
+.closemodal {
+  color: red;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
 .modal-body {
-  padding: 3rem 2rem;
+  padding: 2rem;
   color: white;
 }
 
 .modal-body strong {
-  color: var(--red);
+  color: var(--blue);
   font-size: 1.2rem;
 }
 
@@ -499,21 +354,15 @@ hr {
   justify-content: space-between;
 }
 
-.actions img {
-  height: 10rem;
-}
-
 .actions h4 {
-  font-size: 1.2rem;
+  font-size: 2.5ch;
 }
 
 .actions ul {
   margin: 0.8rem 1rem 0;
   color: grey;
-}
-
-.actions li {
-  margin-bottom: 8px;
+  display: grid;
+  gap: 0.5rem;
 }
 
 .modal-footer {
@@ -529,25 +378,11 @@ hr {
 
 .modal-footer button {
   border: none;
-  padding: 10px 20px;
-  border-radius: 35px;
-  font-size: 12px;
+  padding: 0.8em;
+  border-radius: 0.3rem;
+  font-size: 1.6ch;
   text-transform: uppercase;
-  letter-spacing: 1px;
   background-color: green;
   cursor: pointer;
   color: white;
-  min-width: 15rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  margin-left: 1rem;
-}
-
-.closemodal {
-  position: absolute;
-  color: red;
-  font-size: 2rem;
-  right: 1rem;
-  top: -5px;
-  cursor: pointer;
 }

@@ -9,22 +9,15 @@
 PMS | Tenant Portal
 {% endblock %}
 
-{% block content %}
-{% endblock %}
-
 {% block body %}
 <div class="container">
-  <h4>create a tenant account</h4>
+  <h4>Create a tenant account</h4>
   <form method="POST">
     {{ form.hidden_tag() }}
     {{ form.csrf_token }}
     <div class="input">
       {{ form.first_name.label }}
       {{ form.first_name(placeholder="Enter First Name") }}<br>
-    </div>
-    <div class="input">
-      {{ form.second_name.label }}
-      {{ form.second_name(placeholder="Enter Second Name") }}<br>
     </div>
     <div class="input">
       {{ form.last_name.label }}
@@ -37,10 +30,6 @@ PMS | Tenant Portal
     <div class="input">
       {{ form.phone_number.label }}
       {{ form.phone_number(placeholder="Enter Phone Number")}}<br>
-    </div>
-    <div class="input">
-      {{ form.username.label }}
-      {{ form.username(placeholder="Enter Username")}}<br>
     </div>
     <div class="input">
       {{ form.landlord_id.label }}
@@ -64,7 +53,7 @@ PMS | Tenant Portal
   </form>
   <div class="box">
     <p>Already have an account?</p>
-    <a href="{{ url_for('tenant.tenant_login') }}">Login</a>
+    <a href="{{ url_for('auth.tenant_login') }}">Login</a>
   </div>
 </div>
 

@@ -1,172 +1,84 @@
-#prop_id {
-  color: rgb(0, 255, 0);
-  font-size: 1rem;
-}
-
-#other {
-  color: rgb(0, 255, 0);
-}
-
-#dash button {
-  right: 1rem;
-}
-
-.shifting {
-  position: absolute;
-  height: 100%;
+#dashboard button {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 0;
-  display: none;
-}
-
-.shifting img {
-  max-height: 5rem;
-  animation: rotate 1s forwards infinite ease;
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .dash-information {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: 20px;
-  row-gap: 20px;
-  overflow: hidden;
-  margin: 1rem 0 0.5rem;
-  min-width: 100%;
-  max-width: 100%;
-  max-height: 88vh;
-  overflow: auto;
-  padding-right: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding-bottom: 1rem;
 }
 
 .property-summary {
-  border-radius: 5px;
-  grid-column: 1/5;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
   align-items: center;
-  justify-content: space-between;
-  max-width: 100%;
-  min-height: 42vh;
-  max-height: 42vh;
-  overflow: auto;
   position: relative;
+  grid-column: 1/3;
+  padding: 1rem;
+  border-radius: 0.3rem;
+  overflow: hidden;
 }
 
-.property-summary > p {
+#modalbtn {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 5px 10px;
+  padding: 0.3rem;
   border: none;
-  border-radius: 2px;
-  font-size: 14px;
+  border-radius: 0 0 0.3rem 0;
   color: white;
   background-color: var(--red);
-  text-decoration: none;
   cursor: pointer;
 }
 
 .property-info {
-  max-width: 30vw;
-  min-width: 26vw;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  justify-content: center;
-  row-gap: 20px;
-  column-gap: 20px;
+  gap: 2rem;
 }
 
-.property-info p {
-  font-size: 22px;
+.property-details {
+  display: grid;
   position: relative;
-  padding: 15px 1px;
+}
+
+.property-details p {
+  font-size: 2ch;
 }
 
 .property-info span {
-  color: var(--blue);
-  min-width: max-content;
-  max-width: 8vw;
-  font-weight: bold;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  position: absolute;
-  top: -10px;
-  left: -5px;
-  font-family: "PT Sans", sans-serif;
-  letter-spacing: 1px;
+  font-size: 1.6ch;
+  color: grey;
+}
+
+.property-img {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .property-img img {
-  height: 20rem;
-  margin-left: -6rem;
-}
-
-.property-img #apartment {
-  height: 18rem;
-}
-
-#warehouse {
-  height: 14rem;
-  width: 16rem;
+  height: 15rem;
 }
 
 .property-stats {
   display: grid;
-  grid-template-columns: 1fr;
-  justify-content: center;
-  row-gap: 10px;
-  padding: 10px;
+  gap: 1rem;
 }
 
 .prop-tenants,
 .prop-units {
-  padding: 30px 10px 10px;
-  border-radius: 5px;
-  min-width: 18vw;
-  max-width: 40vw;
-  font-size: 20px;
-  position: relative;
-  text-align: center;
-}
-
-.prop-tenants p,
-.prop-units p {
-  margin: 10px 0 0;
-}
-
-.prop-tenants > p > span,
-.prop-units > p span {
-  color: var(--blue);
-  font-size: 50px;
+  padding: 0.5rem;
 }
 
 .extra-info {
-  position: absolute;
-  top: 5px;
-  left: 0;
-  font-size: 14px;
-  padding: 0 5px;
   display: flex;
-  width: 100%;
-}
-
-.extra-info h4 {
-  padding-right: 10px;
-  font-weight: normal;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1.4ch;
 }
 
 #extra-reserved {
@@ -174,21 +86,144 @@
 }
 
 .extra-info span {
-  color: greenyellow;
-  font-size: 15px;
+  color: var(--blue);
+}
+
+.tenant-info,
+.unit-info {
+  margin-top: 0.5rem;
+}
+
+.tenant-info p,
+.unit-info p {
+  text-align: center;
+}
+
+.tenant-info span,
+.unit-info span {
+  font-size: 4ch;
+}
+
+.rent-stats-box {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: var(--dark-blue);
+  grid-column: 1/3;
+}
+
+#rent-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#rent-heading span {
+  color: var(--page-header-headingColor);
+}
+
+.rent-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.rent-stat {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  display: grid;
+  gap: 0.5rem;
+  background-color: var(--page-header-bgColor);
+}
+
+.rent-stat-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rent-stat-info p {
+  font-size: 2.5ch;
+}
+
+#expected {
+  color: var(--blue);
+}
+
+#received {
+  color: green;
+}
+
+#remaining {
+  color: var(--red);
+}
+
+.rent-stat-info span {
+  color: var(--page-header-headingColor);
+}
+
+.payments-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  grid-column: 1/3;
+}
+
+.invoice-box,
+.transaction-box {
+  padding: 1rem;
+  border-radius: 0.3rem;
+  background-color: var(--dark-blue);
+  height: max-content;
+}
+
+.invoices,
+.transactions {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  max-height: 20rem;
+  overflow: auto;
+}
+
+.invoicez {
+  padding: 1rem;
+  background-color: var(--page-header-bgColor-hover);
+  border-radius: 0.3rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+#invoice-date {
+  flex-grow: 1;
+}
+
+.invoice-status,
+.invoicez span {
+  padding: 0.2rem 0.5rem;
+  border-radius: 30rem;
+  font-size: 1.2ch;
+  justify-self: flex-end;
+}
+
+#origin {
+  background-color: var(--page-header-headingColor);
+}
+
+.pending {
+  background-color: var(--blue);
+}
+
+.cleared {
+  background-color: green;
 }
 
 .tenants,
 .units {
   border-radius: 5px;
   overflow: hidden;
-  max-width: 100%;
-  min-width: 100%;
-  height: max-content;
-}
-
-.tenants {
-  grid-column: 1/3;
 }
 
 .tenants h4,
@@ -200,194 +235,95 @@
 .tenant-list,
 .unit-list {
   display: grid;
-  grid-template-columns: repeat(1, auto);
-  row-gap: 10px;
-  padding: 10px;
-  height: fit-content;
-  max-height: 30rem;
-  overflow: auto;
+  gap: 0.2rem;
+  max-height: max-content;
+  max-height: 20rem;
+  overflow-y: auto;
+  padding: 0.2rem 0.5rem;
 }
 
-#unit-name,
-#tenant-name,
-.tenant-icon,
-.unit-icon {
-  position: relative;
-}
-
-#tenant-name {
-  min-width: max-content;
-  max-width: 12vw;
-  text-overflow: ellipsis;
-}
-
-#tenant-names a {
-  text-decoration: none;
-  color: white;
-}
-
-#new,
-#newz {
-  position: absolute;
-  top: -1.1rem;
-  left: -2.9rem;
-  margin-left: 10px;
-  background-color: orange;
-  border-radius: 2px;
-  padding: 3px 4px;
-  color: white;
-  font-size: 8px;
-  animation: pulse 1.2s infinite;
-}
-
-#newz {
-  left: -4rem;
-}
-
-#news {
-  position: absolute;
-  inset: 2px -2.5rem 0 auto;
-  margin: 6px 0;
-  padding: 0 5px;
+.card {
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-size: 10px;
-  background-color: orange;
-  border-radius: 2px;
-  animation: none;
-  color: white;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.4;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-.card,
-.cards {
-  height: 3.5rem;
+  gap: 2rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 5px;
-  display: grid;
-  grid-template-columns: 0.8fr 3fr 1.5fr 2fr;
-  justify-content: left;
-  align-items: center;
-  column-gap: 2rem;
-  padding: 0 0 0 20px;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
 .dot {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0 auto 0 0;
   padding: 2px;
   height: inherit;
 }
 
 .active {
-  background-color: #00b9eb;
+  background-color: var(--blue);
 }
 
 .non-active {
-  background-color: grey;
+  background-color: var(--red);
 }
 
-.cards {
-  grid-template-columns: 0.8fr 1fr 0.8fr 1.5fr 1fr;
+.card img {
+  height: 2.5rem;
 }
 
-.card img,
-.cards img {
-  height: 2.8rem;
-}
-
-.card a {
-  color: var(--blue);
-  text-decoration: none;
-  font-family: "PT Sans", sans-serif;
+#tenant-name,
+#unit-type {
+  flex-grow: 1;
 }
 
 #tenant-assigned,
-#tenant-unassigned {
-  padding: 5px 10px;
-  width: max-content;
-  border-radius: 3px;
-  font-size: 14px;
+#tenant-unassigned,
+.unit-status {
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  font-size: 1.3ch;
 }
 
 #tenant-assigned {
-  background-color: rgb(6, 187, 6);
+  background-color: green;
 }
 
 #tenant-unassigned {
-  background-color: red;
-}
-
-.units {
-  grid-column: 3/5;
+  background-color: var(--red);
 }
 
 .units > h4 {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 #btn {
-  position: absolute;
-  right: 1rem;
   padding: 5px 10px;
-  background-color: white;
   cursor: pointer;
+  font-family: var(--font-1);
   border-radius: 3px;
   border: none;
-  color: rgb(6, 187, 6);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
-}
-
-.cards p:nth-child(2) {
-  color: grey;
-}
-
-.cards p:nth-child(3) {
-  color: #00b9eb;
-}
-
-.unit-status {
-  text-align: center;
-  width: max-content;
-  padding: 5px 15px;
-  border-radius: 3px;
-  font-size: 14px;
+  background-color: var(--blue);
 }
 
 .occupied {
-  background-color: rgb(6, 187, 6);
+  background-color: green;
 }
 
 .vacant {
-  background-color: red;
+  background-color: var(--red);
 }
 
 .reserved {
-  background-color: rgb(215, 140, 0);
+  background-color: orange;
 }
 
 .else {
+  margin: 0;
+  padding: 0.4rem 0;
   background-color: transparent;
   color: var(--red);
-  font-size: 1.2rem;
 }
 
 .tenant-unit-unassigned > .else {
@@ -398,26 +334,20 @@
   position: fixed;
   display: none;
   place-items: center;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1;
-}
-
-.modal-content {
-  max-width: 90%;
-  width: 50%;
-  border-radius: 5px;
-  overflow: hidden;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5;
 }
 
 .modal-header {
-  position: relative;
-  padding: 1.2rem 0;
+  text-align: right;
+  padding-right: 1rem;
+}
+
+.modal-content {
+  width: 50%;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .modal-body {
@@ -425,7 +355,7 @@
 }
 
 .actions {
-  padding: 20px;
+  padding: 1rem;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
@@ -436,16 +366,14 @@
 }
 
 .actions h4 {
-  font-size: 1.2rem;
+  font-size: 2.2ch;
 }
 
 .actions ul {
   margin: 0.8rem 1rem 0;
   color: grey;
-}
-
-.actions li {
-  margin-bottom: 8px;
+  display: grid;
+  gap: 0.5rem;
 }
 
 .suggestions {
@@ -458,7 +386,7 @@
 }
 
 .suggestions h4 {
-  color: gold;
+  color: orange;
   margin-left: 10px;
 }
 
@@ -468,59 +396,41 @@
 }
 
 .modal-footer {
-  padding: 0.5rem 1rem;
-  text-align: center;
+  display: grid;
 }
 
-.modal-footer a {
-  text-decoration: none;
+.modal-footer a button {
+  width: 100%;
 }
 
 .modal-footer button {
   border: none;
-  padding: 10px 20px;
-  border-radius: 35px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: 0.5em 1em;
   background-color: green;
   cursor: pointer;
   color: white;
-  min-width: 15rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  margin-left: 1rem;
 }
 
 .closemodal {
-  position: absolute;
-  color: red;
+  color: var(--red);
   font-size: 2rem;
-  right: 1rem;
-  top: -5px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .complaints {
   margin: 1.5rem 0 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  max-width: 98.5%;
-  max-height: 40rem;
-  padding-right: 10px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  background-color: transparent;
+  border-radius: 0.3rem;
+  display: grid;
+  gap: 1rem;
 }
 
 .complaints .else {
-  font-size: 1rem;
+  font-size: 2ch;
   text-align: center;
 }
 
 #more-info {
-  margin-top: 8px;
   color: grey;
 }
 
@@ -530,186 +440,102 @@
 }
 
 .complaint-info {
-  line-height: 28px;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  padding: 0.5rem;
   position: relative;
-  overflow: hidden;
 }
 
 .complaint-info > h4 {
   position: relative;
-  width: max-content;
 }
 
 .complaint-info #tenant-names {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 0 15px;
-  text-align: center;
-  background-color: rgb(8, 184, 8);
-  color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
-}
-
-.complaint-info #date {
-  position: absolute;
-  right: 5px;
+  padding: 0.1rem 0.5rem;
+  background-color: green;
+  font-size: 1.5ch;
 }
 
 .complaint-info h4 {
-  font-size: 22px;
+  font-size: 2.5ch;
   position: relative;
 }
 
-.complaint-info span {
-  color: var(--blue);
-  font-size: 14px;
-}
-
 .complaint-info p {
-  font-family: "PT Sans", sans-serif;
-  font-size: 17px;
+  font-size: 2ch;
+  opacity: 0.8;
 }
 
 .options {
   margin: 1rem 0;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
+  border-radius: 0.3rem;
+  display: grid;
   gap: 1rem;
-  max-height: 88vh;
-  overflow: auto;
-  padding: 2px 10px 0 0;
 }
 
 .disable-property,
 .property-availability {
-  height: max-content;
-  border-radius: 5px;
-  box-shadow: 0 0 10px -6px black;
-  overflow: hidden;
+  border-radius: 0.3rem;
 }
 
 .disable-property h4,
 .property-availability h4 {
-  padding: 10px 15px;
+  padding: 0.8rem;
+  font-size: 2ch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#property-status {
   color: var(--blue);
-  font-size: 1rem;
-  letter-spacing: 1px;
 }
 
 .availability {
-  border-radius: 5px;
-  margin: 1rem 0 0;
-  padding: 0 15px;
-}
-
-.availability p {
-  padding: 10px;
-  max-width: max-content;
-  border-radius: 5px;
-  font-family: "PT Sans", sans-serif;
-}
-
-.availability > p span {
-  color: var(--blue);
-  font-size: 1.2rem;
+  border-radius: 0 0 0.3rem 0.3rem;
+  padding: 1rem;
 }
 
 .availability form {
-  margin: 1rem 0 0;
+  display: grid;
+  gap: 1rem;
 }
 
 .availability form select {
-  padding: 12px 0;
-  text-indent: 10px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 0.9rem;
-  margin-top: 1rem;
+  padding: 0.8em;
+  font-size: 2ch;
 }
 
 .availability form button {
-  background-color: rgb(3, 116, 3);
+  background-color: green;
   color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   border: none;
-  border-radius: 3px;
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 1rem;
+  border-radius: 0.3rem;
+  padding: 0.8em;
+  font-size: 2ch;
 }
 
 .unit-registration {
-  padding: 20px;
+  padding: 1rem;
   margin: 1rem 0 0;
-  border-radius: 5px;
-}
-
-.unit-registration {
-  max-height: 100vh;
-  overflow: auto;
+  border-radius: 0.3rem;
 }
 
 .unit-registration form {
-  padding: 10px 10px;
+  padding: 0.5rem;
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  align-items: center;
-  column-gap: 40px;
-  row-gap: 20px;
-  max-height: 39.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
-.unit-registration ::placeholder {
-  font-family: "PT Sans", sans-serif;
-  color: var(--page-header-headingColor);
-  font-size: 16px;
-}
-
-.unit-registration input,
-select {
-  border: none;
-  border-radius: 3px;
-  padding: 15px;
-  margin: 0.5rem 0 1rem;
-  width: 100%;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 18px;
-}
-
-.unit-registration select {
-  cursor: pointer;
-}
-
-.btn {
-  grid-column: 1/3;
-}
-
-.unit-registration .btn {
-  border: none;
-  background-color: rgb(3, 116, 3);
+.unit-registration form .btn {
+  background-color: green;
   color: white;
-  padding: 10px;
-  border-radius: 3px;
-  font-family: system-ui;
-  font-size: 15px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.unit-registration .form5 {
+  padding: 0.8em;
   grid-column: 1/3;
+  border-radius: 0.3rem;
+  font-size: 2ch;
 }
 
 #unit-info {
@@ -725,10 +551,7 @@ select {
 
 .reservations {
   margin-top: 1rem;
-  padding-right: 10px;
-  border-radius: 5px;
-  max-height: 40.7rem;
-  overflow: auto;
+  border-radius: 0.3rem;
 }
 
 #reservation-date {
@@ -814,12 +637,37 @@ select {
 
 .reservations > .else {
   font-size: 14px;
-  margin-top: 10px;
 }
 
 .no {
   margin-top: 3rem;
   text-align: center;
+}
+
+.shifting {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  display: none;
+}
+
+.shifting img {
+  max-height: 5rem;
+  animation: rotate 1s forwards infinite ease;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -831,8 +679,6 @@ select {
   .secondary-navigation button:focus,
   .prop-tenants,
   .prop-units,
-  .card,
-  .cards,
   .actions,
   .property-registration input,
   select,
@@ -862,7 +708,9 @@ select {
   .unit-registration,
   .reservation-info,
   .personal-info-details,
-  .properties-owned {
+  .properties-owned,
+  .card,
+  .cards {
     background-color: var(--dark-blue);
   }
 
@@ -873,7 +721,9 @@ select {
   .property-availability h4,
   .revoke-access h4,
   .assign-unit h4,
-  .complaint-info {
+  .complaint-info,
+  .tenant-list,
+  .unit-list {
     background-color: var(--page-header-bgColor);
   }
 
@@ -994,874 +844,5 @@ select {
   .burger > div,
   .side {
     background-color: black;
-  }
-}
-
-@media screen and (max-width: 1400px) {
-  .side-nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateX(-14rem);
-    transition: 0.2s ease;
-  }
-
-  .show-side-nav {
-    position: fixed;
-    z-index: 2;
-    transform: translateX(0);
-  }
-
-  .burger {
-    display: block;
-  }
-
-  .content-area {
-    padding: 0 2rem;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .show-close {
-    animation-delay: 1s;
-    visibility: visible;
-    left: 14rem;
-  }
-}
-
-@media screen and (min-width: 300px) and (max-width: 400px) {
-  .property-img {
-    display: none;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .notifications {
-    min-width: 16rem;
-    max-width: 18rem;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-info {
-    min-width: 100%;
-    padding: 0 10px;
-    grid-template-columns: repeat(2, 1fr);
-    justify-content: center;
-    align-items: center;
-    margin-top: 3rem;
-  }
-
-  .property-summary {
-    padding: 0 10px;
-    height: max-content;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .property-info p {
-    font-size: 0.8rem;
-  }
-
-  .property-info span {
-    font-size: 0.6rem;
-  }
-
-  .extra-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info h4 {
-    font-size: 0.7rem;
-  }
-
-  .property-stats p {
-    font-size: 0.6rem;
-  }
-
-  .prop-tenants > p,
-  .prop-units > p {
-    font-size: 1rem;
-  }
-
-  .prop-tenants > p > span,
-  .prop-units > p > span {
-    font-size: 1.5rem;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  .card,
-  .cards {
-    overflow: auto;
-  }
-
-  .tenant-details p,
-  .unit-details p {
-    max-width: 15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    min-width: 70vw;
-    max-width: 70vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .modal-content {
-    width: 80%;
-  }
-
-  .actions img {
-    display: none;
-  }
-
-  .tenant-search,
-  #dash button,
-  .complaint-info #tenant-names {
-    position: unset;
-    margin-top: 10px;
-  }
-
-  .card,
-  .cards {
-    grid-template-columns: repeat(3, auto);
-    justify-content: space-between;
-  }
-
-  .card {
-    grid-template-columns: repeat(2, auto);
-    padding-right: 1.5rem;
-  }
-
-  #tenant-name,
-  #unit-name,
-  #unit-type,
-  #tenant-assigned,
-  #tenant-unassigned {
-    display: none;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-
-  .property-registration > form,
-  .unit-registration > form {
-    grid-template-columns: 1fr;
-  }
-
-  .btn,
-  .unit-registration .form5 {
-    grid-column: 1/2;
-  }
-}
-
-@media screen and (min-width: 400px) and (max-width: 500px) {
-  .property-img {
-    display: none;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-info {
-    min-width: 100%;
-    padding: 0 10px;
-    grid-template-columns: repeat(2, 1fr);
-    justify-content: center;
-    align-items: center;
-    margin-top: 3rem;
-  }
-
-  .property-summary {
-    padding: 0 10px;
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .property-info p {
-    font-size: 1rem;
-  }
-
-  .property-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info h4 {
-    font-size: 0.7rem;
-  }
-
-  .property-stats p {
-    font-size: 0.6rem;
-  }
-
-  .prop-tenants > p,
-  .prop-units > p {
-    font-size: 1rem;
-  }
-
-  .prop-tenants > p > span,
-  .prop-units > p > span {
-    font-size: 1.5rem;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  .card,
-  .cards {
-    overflow: auto;
-  }
-
-  .tenant-details p,
-  .unit-details p {
-    max-width: 15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    min-width: 70vw;
-    max-width: 70vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .modal-content {
-    width: 80%;
-  }
-
-  .actions img {
-    display: none;
-  }
-
-  .tenant-search,
-  #dash button,
-  .complaint-info #tenant-names {
-    position: unset;
-    margin-top: 10px;
-  }
-
-  .card,
-  .cards {
-    grid-template-columns: repeat(3, auto);
-    justify-content: space-between;
-  }
-
-  #tenant-name,
-  #unit-name,
-  #unit-type {
-    display: none;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-
-  .property-registration > form,
-  .unit-registration > form {
-    grid-template-columns: 1fr;
-  }
-
-  .btn,
-  .unit-registration .form5 {
-    grid-column: 1/2;
-  }
-}
-
-@media screen and (min-width: 500px) and (max-width: 650px) {
-  .property-img {
-    display: none;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-info {
-    width: 30vw;
-    grid-template-columns: 1fr;
-    row-gap: 0;
-  }
-
-  .property-summary {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .property-info p {
-    font-size: 1rem;
-  }
-
-  .property-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info h4 {
-    font-size: 0.7rem;
-  }
-
-  .property-stats p {
-    font-size: 0.6rem;
-  }
-
-  .prop-tenants > p,
-  .prop-units > p {
-    font-size: 1rem;
-  }
-
-  .prop-tenants > p > span,
-  .prop-units > p > span {
-    font-size: 1.5rem;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  .card,
-  .cards {
-    overflow: auto;
-  }
-
-  .tenant-details p,
-  .unit-details p {
-    max-width: 15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    width: 35vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .modal-content {
-    width: 80%;
-  }
-
-  .actions img {
-    display: none;
-  }
-
-  .tenant-search {
-    position: unset;
-    margin-top: 10px;
-  }
-
-  .card,
-  .cards {
-    grid-template-columns: repeat(3, auto);
-    justify-content: space-between;
-  }
-
-  .cards {
-    grid-template-columns: repeat(4, auto);
-  }
-
-  #tenant-name,
-  #unit-name {
-    display: none;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-
-  .property-registration > form,
-  .unit-registration > form {
-    grid-template-columns: 1fr;
-  }
-
-  .btn,
-  .unit-registration .form5 {
-    grid-column: 1/2;
-  }
-}
-
-@media screen and (min-width: 650px) and (max-width: 800px) {
-  .property-img {
-    display: none;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .property-img #apartment {
-    height: 16rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-info {
-    width: 30vw;
-    grid-template-columns: 1fr;
-    row-gap: 0;
-  }
-
-  .property-info p {
-    font-size: 1rem;
-  }
-
-  .property-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info span {
-    font-size: 0.8rem;
-  }
-
-  .extra-info h4 {
-    font-size: 0.7rem;
-  }
-
-  .property-stats p {
-    font-size: 0.6rem;
-  }
-
-  .prop-tenants > p,
-  .prop-units > p {
-    font-size: 1rem;
-  }
-
-  .prop-tenants > p > span,
-  .prop-units > p > span {
-    font-size: 1.5rem;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  #tenant-name {
-    max-width: 10vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .tenant-details p,
-  .unit-details p {
-    max-width: 15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    width: 35vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .modal-content {
-    width: 80%;
-  }
-
-  .tenant-search {
-    width: 12rem;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 800px) and (max-width: 900px) {
-  .property-img {
-    display: none;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .property-img #apartment {
-    height: 16rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-info {
-    width: 30vw;
-  }
-
-  .prop-tenants > p > span,
-  .prop-units > p > span {
-    font-size: 2rem;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  #tenant-name {
-    min-width: max-content;
-    max-width: 20vw;
-    text-overflow: ellipsis;
-  }
-
-  .tenant-details p,
-  .unit-details p {
-    max-width: 15rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    width: 30vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .modal-content {
-    width: 80%;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 900px) and (max-width: 1000px) {
-  .property-img img {
-    height: 16rem;
-    margin-left: -3rem;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .property-img #apartment {
-    height: 16rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-info {
-    grid-template-columns: 1fr;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  #tenant-name {
-    min-width: max-content;
-    max-width: 20vw;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    width: 23vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .modal-content {
-    width: 80%;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 1000px) and (max-width: 1100px) {
-  .property-img img {
-    height: 16rem;
-    margin-left: -3rem;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .property-img #apartment {
-    height: 16rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  #tenant-name {
-    min-width: max-content;
-    max-width: 20vw;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    width: 23vw;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .disable-property,
-  .property-availability {
-    grid-column: 1/3;
-  }
-
-  .revoke-access input,
-  .assign-unit input,
-  #revoke-btn,
-  #assign-btn {
-    width: 100%;
-  }
-}
-
-@media screen and (min-width: 1100px) and (max-width: 1200px) {
-  .property-img img {
-    height: 16rem;
-    margin-left: -3rem;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-
-  .property-img #apartment {
-    height: 16rem;
-  }
-
-  .dash-information {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-
-  .property-summary,
-  .tenants,
-  .units {
-    grid-column: 1/3;
-  }
-
-  .all-tenants,
-  .all-units {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  #tenant-name {
-    min-width: max-content;
-    max-width: 20vw;
-    text-overflow: ellipsis;
-  }
-
-  .prop-tenants,
-  .prop-units {
-    width: 23vw;
-  }
-}
-
-@media screen and (min-width: 1200px) and (max-width: 1250px) {
-  .property-img img {
-    height: 20rem;
-    margin-left: -3rem;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
-  }
-}
-
-@media screen and (min-width: 1250px) and (max-width: 1400px) {
-  .property-img img {
-    height: 20rem;
-    margin-left: -3rem;
-  }
-
-  .notification-area {
-    position: fixed;
-    width: 97%;
-  }
-
-  .tabcontent {
-    margin-top: 4rem;
   }
 }

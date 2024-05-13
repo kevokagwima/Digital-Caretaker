@@ -58,16 +58,16 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
   </div>
   <div class="unit-image">
     {% if property.Type == "Apartment" %}
-    <img loading="lazy" src="{{ url_for('static', filename='css/Images/inside_apartment.jpg') }}" alt="apartment">
+    <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
     {% else %}
-    <img loading="lazy" src="{{ url_for('static', filename='css/Images/inside_office.jpg') }}" alt="office">
+    <img loading="lazy" src="{{ url_for('static', filename='Images/inside_office.jpg') }}" alt="office">
     {% endif %}
   </div>
   <div class="property-details">
     <h4 id="prop-details">Property Details</h4>
     <table>
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/condominium.png') }}"
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/condominium.png') }}"
             alt="apartment building">
         </td>
         <td>
@@ -82,7 +82,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
         </td>
       </tr>
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/area.png') }}" alt="square meters">
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/area.png') }}" alt="square meters">
         </td>
         <td>
           {% if property.Type == "Apartment" %}
@@ -94,7 +94,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
         </td>
       </tr>
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/balcony.png') }}" alt="balcony">
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/balcony.png') }}" alt="balcony">
         </td>
         <td>
           Veranda / Balcony Area
@@ -103,7 +103,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
       </tr>
       {% if property.Type == "Apartment" %}
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/beds.png') }}" alt="bedrooms">
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/beds.png') }}" alt="bedrooms">
         </td>
         <td>
           No of Bedrooms
@@ -117,7 +117,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
         </td>
       </tr>
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/bathtub.png') }}" alt="bathrooms">
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/bathtub.png') }}" alt="bathrooms">
         </td>
         <td>
           No of Bathrooms
@@ -126,7 +126,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
       </tr>
       {% endif %}
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/air-conditioner.png') }}"
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/air-conditioner.png') }}"
             alt="air conditioning">
         </td>
         <td>
@@ -136,7 +136,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
       </tr>
       {% if property.Type == "Office" %}
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/sofa.png') }}" alt="furniture">
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/sofa.png') }}" alt="furniture">
         </td>
         <td>
           Furniture
@@ -145,7 +145,7 @@ PMS | {{ unit.Type }} {{ property.Type }} - {{ unit.name }}
       </tr>
       {% endif %}
       <tr>
-        <td><img loading="lazy" src="{{ url_for('static', filename='css/Images/sunbed.png') }}" alt="amenities">
+        <td><img loading="lazy" src="{{ url_for('static', filename='Images/sunbed.png') }}" alt="amenities">
         </td>
         <td>
           Amenities

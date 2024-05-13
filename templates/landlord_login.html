@@ -13,7 +13,7 @@ PMS | Landlord Login
 <div class="form">
   <h4>Confirm Your Identity</h4>
   <form method="POST">
-    {{ form.hidden_tag() }}
+    {{ form.csrf_token}}
     <div class="input">
       {{ form.landlord_id.label }}
       {{ form.landlord_id(placeholder="Landlord ID") }}
@@ -28,7 +28,7 @@ PMS | Landlord Login
   </form>
   <div class="box">
     <p>Don't have an account, proceed to Registration</p>
-    <a href="{{ url_for('landlord.landlord') }}">Register</a>
+    <a href="{{ url_for('auth.landlord_signup') }}">Register</a>
   </div>
 </div>
 

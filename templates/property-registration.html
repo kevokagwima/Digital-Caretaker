@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block title %}
+PMS | Property Registration
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="form">
+  <h4>Register Property</h4>
+  <form method="post">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.name.label }}
+      {{ form.name(placeholder="Enter Property Name") }}
+    </div>
+    <div class="input">
+      {{ form.county.label }}
+      {{ form.county(placeholder="Enter County") }}
+    </div>
+    <div class="input">
+      {{ form.city.label }}
+      {{ form.city(placeholder="Enter City/Town")}}
+    </div>
+    <div class="input">
+      {{ form.floors.label }}
+      {{ form.floors(placeholder="Enter Number of Property Floors")}}
+    </div>
+    <div class="input">
+      {{ form.total_units.label }}
+      {{ form.total_units(placeholder="Enter Maximum number of units") }}
+    </div>
+    <div class="input">
+      {{ form.property_type.label }}
+      {{ form.property_type() }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">Add Property</span>
+    </button>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+{% endblock %}
