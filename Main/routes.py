@@ -39,12 +39,16 @@ def contact_us():
 def properties():
   booking = Bookings.query.all()
   properties = Properties.query.all()
-  units = Unit.query.all()
+  page = request.args.get('page', 1, type=int)
+  query = Unit.query.filter_by(tenant=None).order_by(Unit.id)
+  units = query.paginate(page=page, per_page=8, error_out=False)
+  next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
+  prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
   today_time = datetime.now().strftime("%d/%m/%Y")
 
-  return render_template("properties.html", properties=properties, units=units, today_time=today_time, booking=booking)
+  return render_template("properties.html", properties=properties, units=units.items, today_time=today_time, booking=booking, next_url=next_url, prev_url=prev_url, next_page_number = units.next_num, prev_page_number = units.prev_num)
 
-@main.route("/search-properties", methods=["POST", "GET"])
+@main.route("/search", methods=["POST", "GET"])
 def search_property():
   search_text = request.form.get("search")
   search = search_text.title()
@@ -52,28 +56,30 @@ def search_property():
   today_time = datetime.now().strftime("%d/%m/%Y")
   if propertiez:
     for prop in propertiez:
-      units = Unit.query.filter_by(Property=prop.id, tenant=None, reserved="False").all()
+      query = Unit.query.filter_by(Property=prop.id, tenant=None).order_by(Unit.id)
+      units = query.paginate(page=1, per_page=8, error_out=False)
+      next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
+      prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
     if len(propertiez) > 0:
-      flash(f"Search complete. Found {len(units)} results", category="success")
-    elif len(propertiez) == 1:
-      flash(f"Search complete. Found {len(units)} result", category="success")
+      flash(f"Search complete", category="success")
     else:
       flash(f"Search complete. could not find what you're looking for. Now showing all available units", category="danger")
       return redirect(url_for('main.properties'))
   else:
-    units = Unit.query.filter(or_(Unit.Type.like(search), Unit.name.like(search), Unit.bathrooms.like(search), Unit.bedrooms.like(search), Unit.rent_amount.like(search)), Unit.tenant == None, Unit.reserved == "False").all()
+    query = Unit.query.filter(or_(Unit.Type.like(search), Unit.name.like(search), Unit.bathrooms.like(search), Unit.bedrooms.like(search), Unit.rent_amount.like(search)), Unit.tenant == None).order_by(Unit.id)
     properties = Properties.query.all()
-    if len(units) > 0:
-      flash(f"Search complete. Found {len(units)} results", category="success")
-    elif len(units) == 1:
-      flash(f"Search complete. Found {len(units)} result", category="success")
+    units = query.paginate(page=1, per_page=8, error_out=False)
+    next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
+    prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
+    if units.items:
+      flash(f"Search complete.", category="success")
     else:
       flash(f"Search complete. could not find what you're looking for. Now showing all available units", category="danger")
       return redirect(url_for('main.properties'))
 
-    return render_template("properties.html", properties=properties, units=units, today_time=today_time)
+    return render_template("properties.html", properties=properties, units=units.items, today_time=today_time, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
 
-  return render_template("properties.html", units=units, today_time=today_time, propertiez=propertiez)
+  return render_template("properties.html", units=units, today_time=today_time, propertiez=propertiez, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
 
 @main.route("/unit_details/<int:unit_id>", methods=["GET"])
 def unit_details(unit_id):

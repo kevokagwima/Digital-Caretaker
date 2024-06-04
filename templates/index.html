@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -6,18 +7,25 @@
 {% endblock %}
 
 {% block title %}
-PMS | Home
+Home
 {% endblock %}
 
 {% block content %}
 {% endblock %}
 
 {% block body %}
-<div class="container-1">
-  <div class="info-container">
-    <h4>digitizing the property industry</h4>
+<div class="hero">
+  <div class="hero-overlay">
+    <div class="hero-info">
+      <h1>Streamline your property management with ease and efficiency</h1>
+      <h4>Your Digital Caretaker</h4>
+      <p>Our property management system simplifies your tasks, saves you time, and boosts your productivity. Experience
+        the difference today.</p>
+      <div class="hero-btns">
+        <button>Get Started</button>
+      </div>
+    </div>
   </div>
-  <div class="image-container"></div>
 </div>
 <div class="container-2">
   <h4>Intergrating modern systems into property management</h4>

@@ -3,37 +3,16 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/properties.css') }}">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block title %}
-PMS | Properties
-{% endblock %}
-
-{% block logo %}
-<a id="logos" class="logz" href="{{ url_for('main.index') }}">
-  <img class="logos" src="{{ url_for('static', filename='Images/logo-white.png') }}" alt="logo">
-  <!-- {% if current_user.is_authenticated %}
-  <span id="account">{{ current_user.account_type }}</span>
-  {% endif %} -->
-</a>
-{% endblock %}
-
-{% block content %}
+Properties
 {% endblock %}
 
 {% block body %}
-<div class="container">
-  <div class="overlay">
-    <h4>View latest properties <br> in the market</h4>
-  </div>
-</div>
 <div loading="lazy" class="container-3" id="properties">
   <div class="box">
     <h4>Find Your Dream Home</h4>
-    <hr id="hr">
     <div class="form">
       <form id="form1" action="{{ url_for('main.search_property') }}" method="post">
         <input id="search-property" required type="text" name="search" spellcheck="false"
@@ -48,14 +27,9 @@ PMS | Properties
       </form>
     </div>
   </div>
-  {% set available_units = [] %}
-  {% for unit in units if unit.tenant == none and unit.reserved == "False" %}
-  {{ available_units.append(unit) or "" }}
-  {% endfor %}
-  {% if available_units %}
+  {% if  units %}
   <div id="all-units" class="all-units">
-    {% for unit in available_units
-      |sort(attribute="date", reverse=True) if unit.tenant == None and unit.reserved == "False" %}
+    {% for unit in units %}
     <div id="units" class="units">
       {% if unit.date.strftime("%d/%m/%Y") == today_time %}
       <span id="new">New to market</span>
@@ -63,8 +37,6 @@ PMS | Properties
       {% for property in properties or propertiez if property.id == unit.Property %}
       {% if property.Type == "Apartment" %}
       <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
-      {% else %}
-      <img loading="lazy" src="{{ url_for('static', filename='Images/inside_office.jpg') }}" alt="office">
       {% endif %}
       {% endfor %}
       <div id="unit-info" class="unit-info">
@@ -133,6 +105,34 @@ PMS | Properties
       </a>
     </div>
     {% endfor %}
+  </div>
+  <div class="navigation-btns">
+    <div class="pagination">
+      {% if prev_url %}
+      <a href="{{ prev_url }}">Previous Page</a>
+      {% endif %}
+      <div class="page-number">
+        {% if prev_page_number %}
+        <a href="{{ url_for('main.properties', page=prev_page_number) }}"
+          class="page-number active">{{ prev_page_number }}</a>
+        {% endif %}
+        {% if not next_page_number and not prev_page_number %}
+        {% elif not next_page_number %}
+        <a id="current" href="{{ url_for('main.properties', page=prev_page_number+1) }}"
+          class="page-number active">{{ prev_page_number + 1 }}</a>
+        {% else %}
+        <a id="current" href="{{ url_for('main.properties', page=next_page_number-1) }}"
+          class="page-number active">{{ next_page_number - 1 }}</a>
+        {% endif %}
+        {% if next_page_number %}
+        <a href="{{ url_for('main.properties', page=next_page_number) }}"
+          class="page-number active">{{ next_page_number }}</a>
+        {% endif %}
+      </div>
+      {% if next_url %}
+      <a href="{{ next_url }}">Next Page</a>
+      {% endif %}
+    </div>
   </div>
   {% else %}
   <div class="no-units">

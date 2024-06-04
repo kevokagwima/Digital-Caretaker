@@ -1,67 +1,43 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
-
-:root {
-  --dark-blue: rgb(1, 1, 29);
-  --other-dark-blue: rgb(0, 20, 49);
-  --red: #ec1848;
-}
-
-body,
-html {
-  height: 100%;
-}
-
-.container-1 {
-  background-color: white;
-  height: 95%;
-  margin-top: 5rem;
-  position: relative;
-  isolation: isolate;
-}
-
-.info-container {
-  position: absolute;
-  top: 12rem;
-  left: 0;
-  min-height: 20%;
-  max-height: max-content;
-  width: 38%;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: rgba(255, 255, 255);
-  z-index: 1;
-  padding: 50px 50px;
-}
-
-.info-container h4 {
-  color: #212121;
-  font-size: 55px;
-  margin-left: 3rem;
-  text-transform: capitalize;
-  letter-spacing: 1px;
-  line-height: 70px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-weight: bold;
-}
-
-.image-container {
-  position: absolute;
-  top: -1rem;
-  right: 0;
-  width: 80%;
-  height: 97%;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+.hero {
+  min-height: 70svh;
   display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 2px;
-  row-gap: 2px;
-  box-shadow: -2px 2px 10px -5px black;
-  background-image: url(images/nairobi.jpg);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  align-items: center;
+  background-image: url("../Images/nairobi.jpg");
+  background-size: cover;
   background-position: center;
+}
+
+.hero-overlay {
+  background-color: rgb(0, 20, 49, 0.7);
+  padding: 4rem;
+  height: 100%;
+  display: grid;
+  align-items: center;
+}
+
+.hero-info {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-info h1 {
+  font-size: 4ch;
+  max-width: 60%;
+}
+
+.hero-info h4 {
+  font-size: 2.5ch;
+  color: var(--red);
+}
+
+.hero-info p {
+  max-width: 50%;
+  font-size: 2.4ch;
+  font-weight: 200;
+}
+
+.hero-btns {
+  margin-top: 1rem;
 }
 
 .container-2,
@@ -78,7 +54,6 @@ html {
   max-width: 40rem;
   margin: auto;
   text-transform: capitalize;
-  font-family: "Lexend Exa", sans-serif;
 }
 
 .container-2 > h4,
@@ -130,15 +105,12 @@ html {
 .tenant-system-info h4,
 .property-details h4 {
   font-size: 30px;
-  font-family: "Lexend Exa", sans-serif;
-  font-family: "Saira Stencil One", cursive;
   margin-bottom: 1rem;
 }
 
 .landlord-system-info p,
 .tenant-system-info p,
 .property-details p {
-  font-family: "PT Sans", sans-serif;
   font-size: 18px;
   color: #212121;
 }
@@ -151,7 +123,6 @@ html {
   border: none;
   background-color: var(--red);
   color: white;
-  font-family: "Quicksand", sans-serif;
   font-size: 16px;
   text-transform: capitalize;
   cursor: pointer;
@@ -188,7 +159,6 @@ html {
   border: none;
   padding: 10px 2em;
   border-radius: 3px;
-  font-family: "Quicksand", sans-serif;
   font-size: 15px;
   letter-spacing: 1px;
   cursor: pointer;
@@ -210,8 +180,6 @@ html {
 
 #landlord h4,
 #tenant h4 {
-  font-family: "Lexend Exa", sans-serif;
-  font-family: "Saira Stencil One", cursive;
   font-size: 25px;
   text-align: center;
 }
@@ -299,7 +267,6 @@ html {
 
 .line-content p {
   font-size: 20px;
-  font-family: "PT Sans", sans-serif;
   max-width: 15rem;
   color: white;
 }
@@ -321,7 +288,6 @@ html {
 .div span {
   color: plum;
   font-size: 80px;
-  font-family: "Lexend Exa", sans-serif;
 }
 
 .div p {
@@ -332,6 +298,7 @@ html {
 
 .properties {
   padding: 8rem 60px 40px;
+  background-color: whitesmoke;
 }
 
 .property-info {
@@ -363,8 +330,6 @@ html {
 
 .property-details span {
   color: var(--red);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
 }
 
 .property-details p {
@@ -377,8 +342,6 @@ html {
   margin-top: 2rem;
   border: none;
   border-radius: 3px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   font-size: 16px;
   color: white;
   background-color: var(--red);
@@ -396,12 +359,11 @@ html {
   text-align: center;
   font-size: 40px;
   text-transform: capitalize;
-  font-family: "Lexend Exa", sans-serif;
 }
 
 .testimonials-details {
   display: grid;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: repeat(4, auto);
   gap: 30px;
   margin: 3rem 5rem 0;
 }
@@ -443,7 +405,6 @@ html {
 
 .test-info p {
   font-size: 10px;
-  font-family: "Noto Sans", sans-serif;
   letter-spacing: 1px;
 }
 
@@ -472,8 +433,4 @@ html {
 
 .testimony {
   padding: 5px 10px;
-}
-
-.testimony p {
-  font-family: "PT Sans", sans-serif;
 }

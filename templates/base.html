@@ -10,11 +10,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css')}}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='Images/Favicon/favicon-16x16.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <title>{% block title %}{% endblock %}</title>
+    <title>PMS | {% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
   <header class="nav">
@@ -68,11 +67,9 @@
     <div class="user">
       <a href="{{ url_for('auth.signup') }}">
         <p>Sign Up</p>
-        <!-- <button id="sign-up">SIGN UP</button> -->
       </a>
       <a href="{{ url_for('auth.signin') }}">
         <p>Sign In</p>
-        <!-- <button id="sign-in">SIGN IN</button> -->
       </a>
     </div>
     {% endif %}
@@ -98,7 +95,7 @@
     {% block body %}
     {% endblock %}
     <div class="footer">
-      <p>Copyright &copy; PMS <span id="date"></span>. All Rights Reserved</p>
+      <p>Copyright &copy; PMS 2024. All Rights Reserved</p>
     </div>
   </body>
 

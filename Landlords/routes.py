@@ -176,9 +176,9 @@ def add_property():
       date = datetime.now(),
       owner = current_user.id,
     )
-    for existing_property in current_user.Property:
-      if existing_property.name == new_property.name:
-        flash(f"A property with the name {existing_property.name} already exists", category="danger")
+    existing_property = Properties.query.filter_by(name=new_property.name, owner=current_user.id).first()
+    if existing_property:
+      flash(f"A property with the name {existing_property.name} already exists", category="warning")
     else:
       db.session.add(new_property)
       db.session.commit()
@@ -191,6 +191,37 @@ def add_property():
 
   return render_template("property-registration.html", form=form)
 
+@landlords.route("/update-property/<int:property_id>", methods=["POST", "GET"])
+@login_required
+def edit_property(property_id):
+  try:
+    form = PropertyRegistrationForm()
+    edit_property = Properties.query.get(property_id)
+    if edit_property.owner != current_user.id:
+      flash("You do not have permission to edit this property.", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    if form.validate_on_submit():
+      if form.name.data != edit_property.name:
+        existing_property = Properties.query.filter_by(name=form.name.data, owner=current_user.id).first()
+        if existing_property:
+          flash(f"A property with the name {existing_property.name} already exists", category="warning")
+      else:
+        edit_property.floors = form.floors.data,
+        db.session.commit()
+        flash(f"Property {edit_property.name}  updated successfully",category="success")
+      return redirect(url_for('landlord.property_information', property_id=edit_property.id))
+
+    if form.errors != {}:
+      for err_msg in form.errors.values():
+        flash(f"{err_msg}", category="danger")
+  
+    return render_template("edit-property.html", form=form, property=edit_property)
+
+  except Exception as e:
+    flash(f"An error occurred: {repr(e)}", category="danger")
+    db.session.rollback()
+    return redirect(url_for('landlord.landlord_dashboard'))
+
 @landlords.route("/delete-property/<int:property_id>", methods=["POST", "GET"])
 @login_required
 def delete_property(property_id):
@@ -200,13 +231,15 @@ def delete_property(property_id):
     landlord_property = Properties.query.get(property_id)
     if not landlord_property:
       flash("Property not found", category="danger")
-    if landlord_property.tenants or landlord_property.unit:
-      flash(f"Cannot remove {landlord_property.name}. Some tenants or units are still linked",category="danger")
+    elif landlord_property.tenants or landlord_property.unit:
+      flash(f"Cannot remove {landlord_property.name}. Some units are occupied",category="danger")
       return redirect(url_for("landlord.property_information", property_id=landlord_property.id))
     elif landlord_property.owner != current_user.id:
-      flash(f"No property with the name {landlord_property.name}",category="danger",)
+      flash(f"No property with the name {landlord_property.name}",category="danger")
     else:
       db.session.delete(landlord_property)
+      for unit in landlord_property.unit:
+        db.session.delete(unit)
       db.session.commit()
       flash(f"Property {landlord_property.name} has been removed successfully",category="success",)
     return redirect(url_for("landlord.landlord_dashboard"))
