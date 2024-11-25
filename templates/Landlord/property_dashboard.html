@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | Property Dashboard
+Property Dashboard | {{ propertiez.name }}
 {% endblock %}
 
 {% block nav %}
@@ -74,9 +74,14 @@ PMS | Property Dashboard
       </a>
       <img id="modalbtn" src="{{ url_for('static', filename='Images/delete.png') }}" alt="">
     </div>
-    <a href="{{ url_for('landlord.add_property') }}">
-      <button id="add-property">Add New Property</button>
-    </a>
+    <div class="property-btns">
+      <a href="{{ url_for('landlord.add_property') }}">
+        <button id="add-property">Add New Property</button>
+      </a>
+      <a href="{{ url_for('landlord.add_unit', property_id=propertiez.property_id) }}">
+        <button id="add-property">Add Unit</button>
+      </a>
+    </div>
   </div>
   <div class="dash-information">
     {% if propertiez %}

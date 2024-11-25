@@ -1,5 +1,5 @@
 from flask import Flask
-from models import *
+from Models.models import *
 from config import Config
 
 app = Flask(__name__)
@@ -15,5 +15,5 @@ def create_tables():
 
 if __name__ == '__main__':
   with app.app_context():
-    drop_tables()
+    # drop_tables()
     create_tables()

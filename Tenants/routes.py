@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request, abort
-from flask_login import login_user, login_required, fresh_login_required, logout_user, current_user
-from models import db, Tenant, Landlord, Unit, Transaction, Verification, Complaints, Invoice
+from flask_login import login_required, fresh_login_required, current_user
+from Models.models import db, Landlord, Unit, Transaction, Complaints, Invoice
 from .form import *
 from modules import generate_invoice, rent_transaction
-import random, os, stripe, datetime, locale
+import os, stripe, datetime, locale
 from datetime import datetime, date
 
 locale.setlocale(locale.LC_ALL, 'en_US')

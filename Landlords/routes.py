@@ -1,12 +1,24 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request, session, abort, jsonify, json
-from flask_login import login_required, fresh_login_required, current_user
-from models import db, Landlord, Tenant, Unit, Properties, Extras, Verification, Transaction, Users, Complaints, Extra_service, Invoice
+from flask_login import login_required, current_user
+from Models.models import db, Landlord, Tenant, Unit, Properties, Extras, Transaction, Users, Complaints, Extra_service, Invoice, UnitImage
 from .form import PropertyRegistrationForm, UnitRegistrationForm
-from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_access, rent_transaction
-import random
+from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_access
 from datetime import date, datetime
+import random, boto3, asyncio, aiohttp, os
 
 landlords = Blueprint("landlord", __name__, url_prefix="/landlord")
+s3 = boto3.resource(
+  "s3",
+  aws_access_key_id = os.environ.get("aws_access_key"),
+  aws_secret_access_key = os.environ.get("aws_secret_key")
+)
+client = boto3.client(
+  "s3",
+  aws_access_key_id = os.environ.get("aws_access_key"),
+  aws_secret_access_key = os.environ.get("aws_secret_key")
+)
+bucket_name = os.environ.get("bucket_name")
+region = os.environ.get("region")
 today = date.today()
 
 @landlords.route("/dashboard", methods=["POST", "GET"])
@@ -248,7 +260,7 @@ def delete_property(property_id):
     flash(f"{repr(e)}", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
 
-@landlords.route("/<int:property_id>/unit-registration", methods=["POST", "GET"])
+@landlords.route("/add-unit/<int:property_id>", methods=["POST", "GET"])
 @login_required
 def add_unit(property_id):
   if current_user.account_type != "Landlord":
@@ -279,8 +291,10 @@ def add_unit(property_id):
     if check_if_property_is_full(current_property.id):
       return redirect(url_for('landlord.property_information',property_id=current_property.id))
 
+    files = request.files.getlist("unit_image")
     db.session.add(new_unit)
     db.session.commit()
+    asyncio.run(upload_file(new_unit.id, files, property_id))
     flash(f"Unit {new_unit.name} - {new_unit.Type} Added successfully",category="success")
     return redirect(url_for('landlord.property_information',property_id=current_property.id))
 
@@ -311,7 +325,30 @@ def check_if_property_is_full(property_id):
   units = Unit.query.filter_by(Property=property_id).all()
   if len(units) >= current_property.rooms:
     flash(f"Maximum units allowed of this property has been reached", category="warning")
-    return True
+    return False
+
+async def upload_file(unit_id, property_id, files):
+  if files:
+    unit = Unit.query.filter_by(unit_id=unit_id).first()
+    unit_property = Properties.query.filter_by(property_id=property_id).first()
+    for file in files:
+      unit_image = UnitImage(
+        name = file.filename,
+        bucket = bucket_name,
+        region = region,
+        unit = unit.id
+      )
+      db.session.add(unit_image)
+      db.session.commit()
+      try:
+        async with aiohttp.ClientSession() as session:
+          async with session.put(f"s3://{bucket_name}/{file.filename}", data=file.read()) as response:
+            if response.status == 200:
+              flash("Images uploaded successfully", category="success")
+            else:
+              flash("Failed to upload images", category="danger")
+      except Exception as e:
+        flash(f"{repr(e)}", category="danger")
 
 @landlords.route("/update-property-availability/<int:property_id>", methods=["POST", "GET"])
 @login_required

@@ -1,6 +1,6 @@
 from flask import Flask, abort
-from models import db, Landlord, Tenant, Users, Admin, Unit
-from flask_login import login_manager, LoginManager, current_user, login_required
+from Models.models import db, Landlord, Tenant, Users, Admin, Unit
+from flask_login import login_manager, LoginManager
 from flask_migrate import Migrate
 from config import Config
 from Auth.routes import auth
@@ -8,6 +8,7 @@ from Landlords.routes import landlords
 from Tenants.routes import tenants
 from Main.routes import main
 from Admin.routes import admins
+from Payments.routes import payments
 from Errors.handlers import errors
 from modules import generate_invoice
 
@@ -17,6 +18,7 @@ app.register_blueprint(auth)
 app.register_blueprint(landlords)
 app.register_blueprint(tenants)
 app.register_blueprint(main)
+app.register_blueprint(payments)
 app.register_blueprint(admins)
 app.register_blueprint(errors)
 

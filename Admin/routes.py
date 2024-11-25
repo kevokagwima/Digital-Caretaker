@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request, abort
 from flask_login import login_required, current_user
-from models import *
+from Models.models import *
 from .form import *
 from modules import assign_tenant_unit
 import random

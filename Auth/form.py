@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
-from models import Landlord, Tenant, Properties, Users
+from Models.models import Landlord, Tenant, Properties, Users
 
 class LandlordRegistrationForm(FlaskForm):
   first_name = StringField(label="First Name", validators=[DataRequired(message="First Name field required")])

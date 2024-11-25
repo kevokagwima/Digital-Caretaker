@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_user, login_required, logout_user
-from models import db, Tenant, Landlord, Users, Admin
+from Models.models import db, Tenant, Landlord, Users, Admin
 from .form import *
 from datetime import datetime
 import random

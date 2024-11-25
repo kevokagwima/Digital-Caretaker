@@ -25,6 +25,11 @@ a img {
   cursor: pointer;
 }
 
+.property-btns {
+  display: flex;
+  gap: 1rem;
+}
+
 .dash-information {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

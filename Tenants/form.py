@@ -2,7 +2,7 @@ from logging import raiseExceptions
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField, SelectField, TextAreaField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
-from models import Tenant, Landlord, Properties
+from Models.models import Tenant, Landlord, Properties
 
 class ComplaintForm(FlaskForm):
   tenant_id = IntegerField(label="Enter Tenant ID", validators=[DataRequired(message="Tenant ID field required")])

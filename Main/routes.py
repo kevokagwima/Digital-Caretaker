@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_required, fresh_login_required, current_user
-from models import db, Landlord,Tenant, Properties, Unit, Bookings
+from Models.models import db, Landlord,Tenant, Properties, Unit, Bookings
 from sqlalchemy import or_
 from .form import *
 import random

@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | Unit Registration
+Unit Registration
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@ PMS | Unit Registration
 {% block body %}
 <div class="form">
   <h4>Add Unit</h4>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {{ form.csrf_token }}
     <div class="input">
       {{ form.name.label }}
@@ -48,6 +48,10 @@ PMS | Unit Registration
     <div class="input">
       {{ form.bathrooms.label }}
       {{ form.bathrooms(placeholder="Enter number of bathrooms") }}
+    </div>
+    <div class="input extend">
+      {{ form.unit_image.label }}
+      {{ form.unit_image }}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">Add Unit</span>
