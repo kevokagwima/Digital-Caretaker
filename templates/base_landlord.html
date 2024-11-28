@@ -20,7 +20,11 @@
         <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile-image">
         <div class="profile-info">
           <p>Hi, {{ current_user.first_name }} {{ current_user.last_name }}</p>
+          {% if current_user.landlord.name == "Landlord" %}
           <span>{{ current_user.landlord.name }}</span>
+          {% elif current_user.tenant_role.name == "Tenant" %}
+          <span>{{ current_user.tenant_role.name }}</span>
+          {% endif %}
         </div>
       </div>
       <div class="navigation">

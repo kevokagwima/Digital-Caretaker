@@ -5,10 +5,30 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
 {% endblock %}
 
+{% block title %}
+{{ message }}
+{% endblock %}
+
 {% block body %}
-<main>
-  <h1>Unauthorized Access (401)</h1>
-  <p>The server could not verify that you are authorized to access the URL requested. You either supplied the wrong
-    credentials</p>
-</main>
+<div class="container">
+  <div class="error-box">
+    <div class="error-title">
+      <h1>{{ message }}</h1>
+    </div>
+    <div class="error-img">
+      <img src="{{ url_for('static', filename='images/error-image.png') }}" alt="">
+    </div>
+    <div class="error-info">
+      <p>{{ error }}</p>
+    </div>
+    <div class="error-actions">
+      <a href="{{ url_for('main.index') }}">
+        <button>Back Home</button>
+      </a>
+      <a href="#">
+        <button>Contact Us</button>
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}

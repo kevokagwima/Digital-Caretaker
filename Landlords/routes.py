@@ -125,14 +125,13 @@ def tenant_details(tenant_id):
 @landlord_role_required("Landlord")
 def send_message(tenant_id):
   tenant = Tenant.query.get(tenant_id)
-  flash("Functionality in progress", category="info")
+  flash("Feature coming soon", category="info")
   return redirect(url_for('landlord.tenant_details', tenant_id=tenant.id))
 
 @landlords.route("/assign-tenant-unit/<int:tenant_id>", methods=["POST", "GET"])
 @login_required
 @landlord_role_required("Landlord")
 def assign_unit_now(tenant_id):
-  
   try:
     tenant = Tenant.query.get(tenant_id)
     if not tenant:
@@ -148,7 +147,6 @@ def assign_unit_now(tenant_id):
       flash("Unit already occupied", category="danger")
     else:
       assign_tenant_unit(tenant_id, unit_id)
-
     return redirect(url_for('landlord.tenant_details', tenant_id=tenant_id))
   except Exception as e:
     flash(f"{repr(e)}", category="danger")

@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.users import Landlord
-from Models.unit import Unit
+from Models.unit import Unit, UnitMetrics
+from Models.property import Properties
 from Models.transactions import Transactions
 from Models.complaints import Complaints
 from Models.invoice import Invoice
@@ -25,6 +26,7 @@ def tenant_dashboard():
   landlord = db.session.query(Landlord).filter(current_user.landlord == Landlord.id).first()
   properties = Properties.query.filter_by(id = current_user.properties).first()
   unit = db.session.query(Unit).filter(Unit.tenant == current_user.id).first()
+  unit_metrics = UnitMetrics.query.filter_by(unit=unit.id).first()
   transactions = db.session.query(Transactions).filter(Transactions.tenant == current_user.id).all()
   today_time = date.today()
   invoices = Invoice.query.filter_by(tenant=current_user.id, status="Active").all()
@@ -36,7 +38,7 @@ def tenant_dashboard():
     else:
       flash(f"You have {len(invoices)} active invoices", category="info")
   
-  return render_template ("Tenant/new_tenant_dashboard.html",landlord=landlord,unit=unit,properties=properties, transactions=transactions, today_time=today_time, invoices=invoices)
+  return render_template ("Tenant/new_tenant_dashboard.html",landlord=landlord,unit=unit,properties=properties, transactions=transactions, today_time=today_time, invoices=invoices, unit_metrics=unit_metrics)
 
 @tenants.route("/send-messages/<int:landlord_id>", methods=["POST","GET"])
 @login_required
@@ -138,8 +140,8 @@ def upload_screenshot(image):
 @login_required
 @tenant_role_required("Tenant")
 def complaint():
-  landlord = Landlord.query.get(current_user.landlord)
   try:
+    landlord = Landlord.query.get(current_user.landlord)
     new_complaint = Complaints(
       title=request.form.get("title"),
       category=request.form.get("category"),
@@ -148,7 +150,7 @@ def complaint():
       time=datetime.now(),
       tenant=current_user.id,
       landlord=Landlord.query.filter_by(id=current_user.landlord).first().id,
-      Property=Properties.query.filter_by(id=current_user.properties).first().id
+      properties=Properties.query.filter_by(id=current_user.properties).first().id
     )
     db.session.add(new_complaint)
     db.session.commit()

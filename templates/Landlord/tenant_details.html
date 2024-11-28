@@ -170,7 +170,7 @@ Tenant Profile
           <div class="rent-info">
             {% for invoice in tenant_invoices|sort(attribute="date_created", reverse=true) if invoice.status != 'invalid' %}
             <div class="invoice-details">
-              <h4>Invoice - #{{ invoice.invoice_id }}</h4>
+              <h4>Invoice - #{{ invoice.unique_id }}</h4>
               <p>{{ "Ksh {:,}".format(invoice.amount) }}</p>
               <p>{{ invoice.date_created.strftime("Created on %d %B  %Y") }}</p>
               {% if invoice.date_closed %}

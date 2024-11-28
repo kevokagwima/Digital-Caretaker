@@ -285,7 +285,7 @@ Property Dashboard | {{ propertiez.name }}
       {% if tenant.unit %}
       <div class="tenant-unit-assigned">
         {% for unit in tenant.unit %}
-        <h4>{{ unit.name }}, {{ unit.Type }}</h4>
+        <h4>{{ unit.name }}, {{ unit.unit_type }}</h4>
         {% endfor %}
       </div>
       {% else %}

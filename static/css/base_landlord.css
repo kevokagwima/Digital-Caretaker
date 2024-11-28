@@ -57,7 +57,8 @@ h1 {
 
 h2,
 h3,
-h4 {
+h4,
+th {
   font-weight: 700;
   font-family: var(--font-1);
 }
@@ -70,7 +71,8 @@ select,
 label,
 a,
 ul,
-li {
+li,
+td {
   font-weight: 400;
   font-family: var(--font-1);
 }
