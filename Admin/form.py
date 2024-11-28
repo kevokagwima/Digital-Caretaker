@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
-from Models.models import Extras
+from models import Extras
 
 class Extra_signup(FlaskForm):
   first_name = StringField(label="Enter First Name", validators=[DataRequired(Length(min=5, max=80, message="Invalid Name"))])

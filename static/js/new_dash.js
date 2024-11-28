@@ -9,21 +9,22 @@ sidenav.addEventListener("click", () => {
   sidenav.classList.remove("show-side-nav");
 });
 
-function openView(evt, cityName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(cityName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
+function openView(event, tabName) {
+  const tabContents = document.querySelectorAll(".tabcontent");
+  tabContents.forEach((content) => {
+    content.classList.remove("active");
+  });
 
-document.getElementById("defaultOpen").click();
+  // Remove active class from all buttons
+  const tabButtons = document.querySelectorAll(".tablinks");
+  tabButtons.forEach((button) => {
+    button.classList.remove("active");
+  });
+
+  // Show the selected tab content and add active class to the button
+  document.getElementById(tabName).classList.add("active");
+  event.currentTarget.classList.add("active");
+}
 
 var dropdown = document.getElementsByClassName("dropdown-btn");
 var i;

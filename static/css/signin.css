@@ -1,6 +1,5 @@
 form {
   grid-template-columns: 1fr;
-  gap: 0;
   min-width: 25vw;
 }
 

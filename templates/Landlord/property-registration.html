@@ -6,10 +6,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | Property Registration
-{% endblock %}
-
-{% block content %}
+Property Registration
 {% endblock %}
 
 {% block body %}
@@ -17,27 +14,27 @@ PMS | Property Registration
   <h4>Register Property</h4>
   <form method="post">
     {{ form.csrf_token }}
-    <div class="input">
+    <div class="input extend">
       {{ form.name.label }}
-      {{ form.name(placeholder="Enter Property Name") }}
+      {{ form.name(placeholder="Enter Property Name", class="name") }}
     </div>
     <div class="input">
       {{ form.county.label }}
-      {{ form.county(placeholder="Enter County") }}
+      {{ form.county(placeholder="Enter County", class="name") }}
     </div>
     <div class="input">
       {{ form.city.label }}
-      {{ form.city(placeholder="Enter City/Town")}}
+      {{ form.city(placeholder="Enter City/Town", class="name")}}
     </div>
     <div class="input">
       {{ form.floors.label }}
-      {{ form.floors(placeholder="Enter Number of Property Floors")}}
+      {{ form.floors(placeholder="Property Floors", class="name")}}
     </div>
     <div class="input">
       {{ form.total_units.label }}
-      {{ form.total_units(placeholder="Enter Maximum number of units") }}
+      {{ form.total_units(placeholder="Property Units", class="name") }}
     </div>
-    <div class="input">
+    <div class="input extend">
       {{ form.property_type.label }}
       {{ form.property_type() }}
     </div>

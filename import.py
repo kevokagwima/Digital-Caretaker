@@ -1,7 +1,7 @@
 import csv, random
 from flask import Flask
 from flask_bcrypt import Bcrypt
-from Models.models import *
+from models import *
 from config import Config
 
 app = Flask(__name__)

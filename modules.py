@@ -1,5 +1,11 @@
 from flask import flash, redirect, url_for
-from Models.models import *
+from Models.base_model import db
+from Models.users import Tenant
+from Models.complaints import Complaints
+from Models.invoice import Invoice
+from Models.bookings import Bookings
+from Models.unit import Unit
+from Models.transactions import Transactions
 from datetime import datetime, date, timedelta
 import random
 
@@ -17,7 +23,7 @@ def invoice_logic(tenant, unit_id, rent):
   db.session.commit()
 
 def generate_invoice(unit_id, unit_tenant, unit_rent):
-  unit_transactions = Transaction.query.filter_by(Unit=unit_id).all()
+  unit_transactions = Transactions.query.filter_by(Unit=unit_id).all()
   if unit_transactions:
     if unit_transactions[-1].next_date <= date.today():
       invoice = Invoice.query.filter_by(unit=unit_id, status="Active").first()
@@ -92,7 +98,7 @@ def revoke_tenant_access(tenant_id):
 
 def rent_transaction(**transaction):
   try:
-    new_transaction = Transaction(
+    new_transaction = Transactions(
       tenant = transaction["tenant"],
       landlord = transaction["landlord"],
       Property = transaction["Property"],

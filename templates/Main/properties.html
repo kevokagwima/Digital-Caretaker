@@ -31,28 +31,28 @@ Properties
   <div id="all-units" class="all-units">
     {% for unit in units %}
     <div id="units" class="units">
-      {% if unit.date.strftime("%d/%m/%Y") == today_time %}
+      {% if unit.date_added.strftime("%d/%m/%Y") == today_time %}
       <span id="new">New to market</span>
       {% endif %}
-      {% for property in properties or propertiez if property.id == unit.Property %}
-      {% if property.Type == "Apartment" %}
+      {% for property in properties or propertiez if property.id == unit.properties %}
+      {% if property.property_type == "Apartment" %}
       <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
       {% endif %}
       {% endfor %}
       <div id="unit-info" class="unit-info">
         <h4>
-          {% for property in properties or propertiez if property.id == unit.Property %}
-          {% if property.Type == "Office" %}
-          {{ unit.Type }}
+          {% for property in properties or propertiez if property.id == unit.properties %}
+          {% if property.property_type == "Office" %}
+          {{ unit.unit_type }}
           {% else %}
-          {{ unit.Type }} {{ property.Type }}
+          {{ unit.unit_type }} {{ property.property_type }}
           {% endif %}
           {% endfor %}
           {{ unit.name }}
         </h4>
         <span id="address">
-          {% for property in properties or propertiez if property.id == unit.Property %}
-          {{ property.address }}, {{ property.address2 }}
+          {% for property in properties or propertiez if property.id == unit.properties %}
+          {{ property.county }}, {{ property.city }}
           {% endfor %}
         </span>
         <table id="table">
@@ -66,12 +66,12 @@ Properties
             <th>
               <img src="{{ url_for('static', filename='Images/beds.png') }}" alt="bedrooms">
             </th>
-            {% for property in properties or propertiez if property.id == unit.Property %}
-            {% if property.Type == "Apartment" and unit.Type != "Bedsitter" %}
+            {% for property in properties or propertiez if property.id == unit.properties %}
+            {% if property.property_type == "Apartment" and unit.unit_type != "Bedsitter" %}
             <td>{{ unit.bedrooms }} Bedrooms</td>
-            {% elif unit.Type == "Bedsitter" %}
+            {% elif unit.unit_type == "Bedsitter" %}
             <td>1 Room</td>
-            {% elif property.Type == "Office" %}
+            {% elif property.property_type == "Office" %}
             <td>Furniture Available</td>
             {% endif %}
             {% endfor %}
@@ -80,10 +80,10 @@ Properties
             <th>
               <img src="{{ url_for('static', filename='Images/bathtub.png') }}" alt="bathrooms">
             </th>
-            {% for property in properties or propertiez if property.id == unit.Property %}
-            {% if property.Type == "Apartment" %}
+            {% for property in properties or propertiez if property.id == unit.properties %}
+            {% if property.property_type == "Apartment" %}
             <td>{{ unit.bathrooms }} Bathrooms</td>
-            {% elif property.Type == "Office" %}
+            {% elif property.property_type == "Office" %}
             <td>Amenities Available</td>
             {% endif %}
             {% endfor %}
@@ -92,7 +92,7 @@ Properties
         <hr>
         <div class="rent">
           <p><span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span>
-            {% for property in properties or propertiez if unit.Property == property.id %}
+            {% for property in properties or propertiez if unit.properties == property.id %}
             {% if property.status == "Rent" %}
             / Month
             {% endif %}

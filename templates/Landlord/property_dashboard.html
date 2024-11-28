@@ -66,7 +66,7 @@ Property Dashboard | {{ propertiez.name }}
   <div id="property-heading">
     <h4 id="dash">
       {{ propertiez.name }}
-      <span title="Property ID" id="prop_id">- {{ propertiez.property_id }}</span>
+      <span title="Property ID" id="prop_id">- {{ propertiez.unique_id }}</span>
     </h4>
     <div class="property-actions">
       <a href="{{ url_for('landlord.edit_property', property_id=propertiez.id) }}">
@@ -78,7 +78,7 @@ Property Dashboard | {{ propertiez.name }}
       <a href="{{ url_for('landlord.add_property') }}">
         <button id="add-property">Add New Property</button>
       </a>
-      <a href="{{ url_for('landlord.add_unit', property_id=propertiez.property_id) }}">
+      <a href="{{ url_for('landlord.add_unit', property_id=propertiez.unique_id) }}">
         <button id="add-property">Add Unit</button>
       </a>
     </div>
@@ -93,15 +93,15 @@ Property Dashboard | {{ propertiez.name }}
         </div>
         <div class="property-details">
           <span>Property Address</span>
-          <p>{{ propertiez.address }}, {{ propertiez.address2 }}</p>
+          <p>{{ propertiez.county }}, {{ propertiez.city }}</p>
         </div>
         <div class="property-details">
           <span>Property Type</span>
-          <p>{{ propertiez.Type }}</p>
+          <p>{{ propertiez.properties.name }}</p>
         </div>
         <div class="property-details">
           <span>Property Floors</span>
-          <p>{{ propertiez.floors }} Floors</p>
+          <p>{{ propertiez.property_floors }} Floors</p>
         </div>
       </div>
       <div class="property-img">
@@ -115,12 +115,12 @@ Property Dashboard | {{ propertiez.name }}
             {{ occupied_tenant.append(num) or ""}}
             {% endfor %}
             <p><span>{{ occupied_tenant|count }}</span> Assigned</p>
-            {% set diff = propertiez.tenants|count - occupied_tenant|count %}
+            {% set diff = propertiez.tenant|count - occupied_tenant|count %}
             <p><span>{{ diff }}</span> Unassigned</p>
           </div>
           <div class="tenant-info">
-            <p><span>{{ propertiez.tenants|count }}</span>
-              {% if propertiez.tenants|count == 1 %}
+            <p><span>{{ propertiez.tenant|count }}</span>
+              {% if propertiez.tenant|count == 1 %}
               Tenant
               {% else %}
               Tenants
@@ -274,13 +274,13 @@ Property Dashboard | {{ propertiez.name }}
 </div>
 <div id="tenants" class="tabcontent">
   <div id="tenant-heading">
-    <h4 id="dash">Tenants - {{ propertiez.name }} ({{ propertiez.tenants|count }})
+    <h4 id="dash">Tenants - {{ propertiez.name }} ({{ propertiez.tenant|count }})
     </h4>
     <input spellcheck="false" required type="text" id="tenant_search" placeholder="Search for any Tenant">
   </div>
   <p id="more-info">This shows all tenants from your property and their respective assigned units</p>
   <div id="tenant_details" class="all-tenants">
-    {% for tenant in propertiez.tenants|sort(attribute="first_name") %}
+    {% for tenant in propertiez.tenant|sort(attribute="first_name") %}
     <div id="card" class="tenant-card">
       {% if tenant.unit %}
       <div class="tenant-unit-assigned">
@@ -314,31 +314,33 @@ Property Dashboard | {{ propertiez.name }}
   <p id="more-info">This shows all units from your property and their status</p>
   <div id="unit_details" class="all-units">
     {% for unit in propertiez.unit|sort(attribute="unit_id") %}
-    <div loading="lazy" id="cards" class="unit-card">
-      {% if unit.tenant %}
-      <div class="occupation unit-occupied">
-        <h4>Occupied</h4>
+    <a href="{{ url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id) }}">
+      <div id="cards" class="unit-card">
+        {% if unit.tenant %}
+        <div class="occupation unit-occupied">
+          <h4>Occupied</h4>
+        </div>
+        {% elif unit.reserved == "True" %}
+        <div class="occupation unit-reserved">
+          <h4 onclick="openView(event, 'reservations')">Reserved</h4>
+        </div>
+        {% else %}
+        <div class="occupation unit-vacant">
+          <h4>Vacant</h4>
+        </div>
+        {% endif %}
+        <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
+        <div class="unit-details">
+          <p>{{ unit.name }}</p>
+          <p>{{ unit.unit_type }}</p>
+          <p>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup> Floor{%
+                  elif unit.unit_floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.unit_floor
+                  % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {%
+                  endif%}</p>
+          <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
+        </div>
       </div>
-      {% elif unit.reserved == "True" %}
-      <div class="occupation unit-reserved">
-        <h4 onclick="openView(event, 'reservations')">Reserved</h4>
-      </div>
-      {% else %}
-      <div class="occupation unit-vacant">
-        <h4>Vacant</h4>
-      </div>
-      {% endif %}
-      <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
-      <div class="unit-details">
-        <p>{{ unit.name }}</p>
-        <p>{{ unit.Type }}</p>
-        <p>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup> Floor{%
-                elif unit.floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.floor
-                % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {%
-                endif%}</p>
-        <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
-      </div>
-    </div>
+    </a>
     {% endfor %}
   </div>
 </div>
@@ -354,7 +356,7 @@ Property Dashboard | {{ propertiez.name }}
       <div class="complaint-info">
         <h4>{{ complaint.title }}</h4>
         <p id="tenant-names">
-          {% for tenant in propertiez.tenants if tenant.id == complaint.tenant %}
+          {% for tenant in propertiez.tenant if tenant.id == complaint.tenant %}
           <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">
             {{ tenant.first_name }} {{ tenant.second_name }},
           </a>
@@ -409,9 +411,9 @@ Property Dashboard | {{ propertiez.name }}
         <ul id="unit-info">
           <li>Unit Name: <span>{{ unit.name }}</span></li>
           <li>Unit Type: <span>{{ unit.Type }}</span></li>
-          <li>Unit Floor: <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-              Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
-              Floor{% elif unit.floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+          <li>Unit Floor: <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+              Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+              Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
               {% endif %}</span></li>
         </ul>
         {% endfor %}
@@ -440,9 +442,9 @@ Property Dashboard | {{ propertiez.name }}
       <ul id="unit-info">
         <li>Unit Name: <span>{{ unit.name }}</span></li>
         <li>Unit Type: <span>{{ unit.Type }}</span></li>
-        <li>Unit Floor: <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-            Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
-            Floor{% elif unit.floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+        <li>Unit Floor: <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+            Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+            Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
             {% endif %}</span></li>
       </ul>
       {% endfor %}

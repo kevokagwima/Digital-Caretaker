@@ -22,32 +22,34 @@
     </a>
     {% block logo %} {% endblock %}
     <div class="links">
-      <!-- <a id="links" href="{{ url_for('main.about_us') }}">ABOUT US</a>
-      <a id="links" href="{{ url_for('main.services') }}">SERVICES</a> -->
+      <a id="link" href="#">About Us</a>
+      <a id="link" href="#">Services</a>
       <div class="dropdown">
-        <p id="links">Client Portals
+        <p id="link">Client Portals
           <i class="fa fa-caret-down"></i>
         </p>
         <div class="dropdown-content">
-          {% if current_user.is_authenticated and current_user.account_type == "Landlord" %}
-          <a href="{{ url_for('landlord.landlord_dashboard') }}">Landlord Portal</a>
+          {% if current_user.is_authenticated and current_user.landlord.name == "Landlord" %}
+          <a id="link" href="{{ url_for('landlord.landlord_dashboard') }}">Landlord Portal</a>
           {% else %}
-          <a href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
+          <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
           {% endif %}
-          {% if current_user.is_authenticated and current_user.account_type == "Tenant" %}
-          <a href="{{ url_for('tenant.tenant_dashboard') }}">Tenant Portal</a>
+
+          {% if current_user.is_authenticated and current_user.tenant_role == "Tenant" %}
+          <a id="link" href="{{ url_for('tenant.tenant_dashboard') }}">Tenant Portal</a>
           {% else %}
-          <a href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
+          <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
           {% endif %}
-          {% if current_user.is_authenticated and current_user.account_type == "Admin" %}
-          <a href="{{ url_for('admin.admin') }}">Admin Portal</a>
+
+          {% if current_user.is_authenticated and current_user.admin == "Admin" %}
+          <a id="link" href="{{ url_for('admin.admin') }}">Admin Portal</a>
           {% else %}
-          <a href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
+          <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
           {% endif %}
         </div>
       </div>
-      <a id="links" href="{{ url_for('main.properties') }}">Properties</a>
-      <!-- <a id="links" href="{{ url_for('main.contact_us') }}">CONTACT US</a> -->
+      <a id="link" href="{{ url_for('main.properties') }}">Properties</a>
+      <a id="link" href="#">Contact</a>
       {% block content %}{% endblock %}
     </div>
     {% if current_user.is_authenticated %}
@@ -66,10 +68,10 @@
     {% else %}
     <div class="user">
       <a href="{{ url_for('auth.signup') }}">
-        <p>Sign Up</p>
+        <button>Sign Up</button>
       </a>
       <a href="{{ url_for('auth.signin') }}">
-        <p>Sign In</p>
+        <button>Sign In</button>
       </a>
     </div>
     {% endif %}

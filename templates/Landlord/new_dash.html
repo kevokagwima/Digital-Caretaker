@@ -6,11 +6,11 @@
 {% endblock %}
 
 {% block title %}
-PMS | Landlord Dashboard
+Landlord Dashboard
 {% endblock %}
 
 {% block nav %}
-<button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
+<button class="tablinks active" onclick="openView(event, 'dashboard')">
   <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
   Dashboard
 </button>
@@ -48,12 +48,13 @@ PMS | Landlord Dashboard
 {% endblock %}
 
 {% block content %}
-<div id="dashboard" class="tabcontent">
-  <h4 id="dash">My Dashboard
+<div id="dashboard" class="tabcontent active">
+  <div class="tab-header">
+    <h4 id="dash">My Dashboard</h4>
     <a href="{{ url_for('landlord.add_property') }}">
       <button class="tablinks">Add New Property</button>
     </a>
-  </h4>
+  </div>
   <div class="dash-information">
     <div class="general-stats">
       <div class="stat">

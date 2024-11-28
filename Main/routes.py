@@ -1,6 +1,11 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_required, fresh_login_required, current_user
-from Models.models import db, Landlord,Tenant, Properties, Unit, Bookings
+from Models.base_model import db
+from Models.bookings import Bookings
+from Models.property import Properties
+from Models.unit import Unit
+from Models.users import Tenant, Landlord
+
 from sqlalchemy import or_
 from .form import *
 import random
@@ -19,21 +24,21 @@ def index():
     tenants = Tenant.query.all()
     landlords = Landlord.query.all()
     
-    return render_template("index.html", properties=properties,property_choice=property_choice, units=units, tenants=tenants, landlords=landlords, booking=booking)
+    return render_template("Main/index.html", properties=properties,property_choice=property_choice, units=units, tenants=tenants, landlords=landlords, booking=booking)
   
-  return render_template("index.html")
+  return render_template("Main/index.html")
 
 @main.route("/about_us")
 def about_us():
-  return render_template("about.html")
+  return render_template("Main/about.html")
 
 @main.route("/services")
 def services():
-  return render_template("services.html")
+  return render_template("Main/services.html")
 
 @main.route("/contact_us")
 def contact_us():
-  return render_template("contact.html")
+  return render_template("Main/contact.html")
 
 @main.route("/properties")
 def properties():
@@ -46,7 +51,7 @@ def properties():
   prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
   today_time = datetime.now().strftime("%d/%m/%Y")
 
-  return render_template("properties.html", properties=properties, units=units.items, today_time=today_time, booking=booking, next_url=next_url, prev_url=prev_url, next_page_number = units.next_num, prev_page_number = units.prev_num)
+  return render_template("Main/properties.html", properties=properties, units=units.items, today_time=today_time, booking=booking, next_url=next_url, prev_url=prev_url, next_page_number = units.next_num, prev_page_number = units.prev_num)
 
 @main.route("/search", methods=["POST", "GET"])
 def search_property():
@@ -77,9 +82,9 @@ def search_property():
       flash(f"Search complete. could not find what you're looking for. Now showing all available units", category="danger")
       return redirect(url_for('main.properties'))
 
-    return render_template("properties.html", properties=properties, units=units.items, today_time=today_time, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
+    return render_template("Main/properties.html", properties=properties, units=units.items, today_time=today_time, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
 
-  return render_template("properties.html", units=units, today_time=today_time, propertiez=propertiez, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
+  return render_template("Main/properties.html", units=units, today_time=today_time, propertiez=propertiez, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
 
 @main.route("/unit_details/<int:unit_id>", methods=["GET"])
 def unit_details(unit_id):
@@ -92,7 +97,7 @@ def unit_details(unit_id):
     if unit:
       property = Properties.query.filter_by(id = unit.Property).first()
       landlord = Landlord.query.get(property.owner)
-      return render_template("property_details.html", unit=unit, landlord=landlord, property=property, units=units, properties=properties, today_time=today_time, booking=booking)
+      return render_template("Main/property_details.html", unit=unit, landlord=landlord, property=property, units=units, properties=properties, today_time=today_time, booking=booking)
     else:
       flash(f"Property does not exist", category="danger")
       return redirect(url_for("main.properties"))
@@ -165,9 +170,9 @@ def reservations():
       all_expired = len(expired_reservations)
       flash(f"{all_expired} of your reservations have expired", category="info")
   else:
-    return render_template("reservations.html")
+    return render_template("Main/reservations.html")
   
-  return render_template("reservations.html", booking=booking, units=units, properties=properties)
+  return render_template("Main/reservations.html", booking=booking, units=units, properties=properties)
 
 @main.route("/delete-reservations/<int:reservation_id>")
 @fresh_login_required

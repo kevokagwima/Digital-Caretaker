@@ -19,39 +19,19 @@ Unit Registration
     {{ form.csrf_token }}
     <div class="input">
       {{ form.name.label }}
-      {{ form.name(placeholder="Enter Unit Name") }}
+      {{ form.name(placeholder="Enter Unit Name", class="name") }}
     </div>
     <div class="input">
       {{ form.floor.label }}
-      {{ form.floor(placeholder="Enter Unit Floor") }}
+      {{ form.floor(placeholder="Enter Unit Floor", class="name") }}
     </div>
     <div class="input">
       {{ form.rent_amount.label }}
-      {{ form.rent_amount(placeholder="Enter Monthly Rent")}}
+      {{ form.rent_amount(placeholder="Enter Monthly Rent", class="name")}}
     </div>
     <div class="input">
       {{ form.unit_type.label }}
       {{ form.unit_type() }}
-    </div>
-    <div class="input">
-      {{ form.living_room_space.label }}
-      {{ form.living_room_space(placeholder="Enter Living Room Floor Area")}}
-    </div>
-    <div class="input">
-      {{ form.balcony_room_space.label }}
-      {{ form.balcony_room_space(placeholder="Enter Balcony Floor Area")}}
-    </div>
-    <div class="input">
-      {{ form.bedrooms.label }}
-      {{ form.bedrooms(placeholder="Enter number of bedrooms") }}
-    </div>
-    <div class="input">
-      {{ form.bathrooms.label }}
-      {{ form.bathrooms(placeholder="Enter number of bathrooms") }}
-    </div>
-    <div class="input extend">
-      {{ form.unit_image.label }}
-      {{ form.unit_image }}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">Add Unit</span>
@@ -59,5 +39,5 @@ Unit Registration
   </form>
 </div>
 
-<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

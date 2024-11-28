@@ -1,9 +1,8 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_user, login_required, logout_user
-from Models.models import db, Tenant, Landlord, Users, Admin
+from Models.base_model import db
+from Models.users import Admin, Users, Landlord, Tenant, Role
 from .form import *
-from datetime import datetime
-import random
 
 auth = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -16,9 +15,7 @@ def landlord_signup():
       last_name = form.last_name.data,
       email = form.email_address.data,
       phone = form.phone_number.data,
-      date = datetime.now(),
-      unique_id = random.randint(100000,999999),
-      account_type = "Landlord",
+      account_type = Role.query.filter_by(name="Landlord").first().id,
       passwords = form.password.data,
     )
     db.session.add(new_landlord)
@@ -30,26 +27,26 @@ def landlord_signup():
     for err_msg in form.errors.values():
       flash(f"{err_msg}", category="danger")
 
-  return render_template("landlord.html", form=form)
+  return render_template("Auth/landlord-signup.html", form=form)
 
 @auth.route("/landlord-login", methods=["POST", "GET"])
 def landlord_login():
   form = LandlordLoginForm()
   if form.validate_on_submit():
-    landlord = Landlord.query.filter_by(unique_id=form.landlord_id.data).first()
+    landlord = Landlord.query.filter_by(email=form.email_address.data).first()
     if not landlord:
-      flash(f"No user with that Landlord ID", category="danger")
+      flash(f"No user with that email address", category="danger")
       return redirect(url_for("auth.landlord_login"))
     elif landlord and landlord.check_password_correction(attempted_password=form.password.data):
       login_user(landlord, remember=True)
-      flash(f"Login successfull, welcome {landlord.first_name}",category="success")
+      flash(f"Login successfull",category="success")
       next = request.args.get("next")
       return redirect(next or url_for("landlord.landlord_dashboard"))
     else:
       flash(f"Invalid credentials", category="danger")
       return redirect(url_for("auth.landlord_login"))
 
-  return render_template("landlord_login.html", form=form)
+  return render_template("Auth/landlord-login.html", form=form)
 
 @auth.route("/tenant-signup", methods=["POST", "GET"])
 def tenant_signup():
@@ -60,12 +57,10 @@ def tenant_signup():
       last_name = form.last_name.data,
       email = form.email_address.data,
       phone = form.phone_number.data,
-      date = datetime.now(),
-      unique_id = random.randint(100000,999999),
       passwords = form.password.data,
-      account_type = "Tenant",
+      account_type = Role.query.filter_by(name="Tenant").first().id,
       landlord = Landlord.query.filter_by(unique_id=form.landlord_id.data).first().id,
-      properties = Properties.query.filter_by(property_id=form.property_id.data).first().id,
+      properties = Properties.query.filter_by(unique_id=form.property_id.data).first().id,
     )
     db.session.add(new_tenant)
     db.session.commit()
@@ -76,17 +71,19 @@ def tenant_signup():
     for err_msg in form.errors.values():
       flash(f"{err_msg}",category="danger")
 
-  return render_template("tenant.html", form=form)
+  return render_template("Auth/tenant-signup.html", form=form)
 
 @auth.route("/tenant-login", methods=["POST", "GET"])
 def tenant_login():
   form = TenantLoginForm()
   if form.validate_on_submit():
-    tenant = Tenant.query.filter_by(unique_id=form.tenant_id.data).first()
+    tenant = Tenant.query.filter_by(email=form.email_address.data).first()
     if not tenant:
-      flash(f"No user with that Tenant ID", category="danger")
+      flash(f"No user with that email address", category="danger")
       return redirect(url_for('auth.tenant_login'))
     if tenant and tenant.check_password_correction(attempted_password=form.password.data):
+      tenant.is_active = True
+      db.session.commit()
       login_user(tenant, remember=True)
       flash(f"Login successfull", category="success")
       return redirect(url_for("tenant.tenant_dashboard"))
@@ -94,38 +91,36 @@ def tenant_login():
       flash(f"Invalid credentials", category="danger")
       return redirect(url_for('auth.tenant_login'))
 
-  return render_template("tenant_login.html", form=form)
+  return render_template("Auth/tenant-login.html", form=form)
 
 @auth.route("/signup", methods=["POST", "GET"])
 def signup():
-  form = UserRegistrationForm()
   try:
+    form = UserRegistrationForm()
     if form.validate_on_submit():
       member = Users(
         first_name = form.first_name.data,
-        second_name = form.second_name.data,
         last_name = form.last_name.data,
         email = form.email_address.data,
         phone = form.phone_number.data,
-        date = datetime.now(),
-        unique_id = random.randint(100000,999999),
-        account_type = "member",
+        account_type = Role.query.filter_by(name="Member").first().id,
         passwords = form.password.data,
       )
       db.session.add(member)
       db.session.commit()
-      flash(f"User registered successfully", category="success")
+      flash(f"Registration successfully", category="success")
       return redirect(url_for("auth.signin"))
 
     if form.errors != {}:
       for err_msg in form.errors.values():
         flash(f"{err_msg}", category="danger")
         return redirect(url_for("auth.signup"))
+
+    return render_template("Auth/signup.html", form=form)
+
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
     return redirect(url_for("auth.signup"))
-
-  return render_template("signup.html", form=form)
 
 @auth.route("/signin", methods=["POST", "GET"])
 def signin():
@@ -146,7 +141,7 @@ def signin():
       flash(f"Invalid login credentials", category="danger")
       return redirect(url_for("auth.signin"))
 
-  return render_template("signin.html", form=form)
+  return render_template("Auth/signin.html", form=form)
 
 @auth.route("/admin-login", methods=["POST", "GET"])
 def admin_login():
@@ -164,7 +159,7 @@ def admin_login():
       flash("Invalid credentials", category="danger")
       return redirect(url_for('auth.admin_login'))
 
-  return render_template("admin_login.html", form=form)
+  return render_template("Auth/admin-login.html", form=form)
 
 @auth.route("/logout")
 @login_required

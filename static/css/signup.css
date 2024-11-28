@@ -5,19 +5,15 @@
   display: none;
 }
 
-body {
-  background-color: var(--dark-blue);
-}
-
 .form {
   padding: 2rem;
   display: grid;
   place-items: center;
-  gap: 4rem;
+  gap: 2rem;
 }
 
 .form > h4 {
-  color: white;
+  color: var(--other-dark-blue);
   font-size: 4ch;
 }
 
@@ -27,19 +23,27 @@ body {
 }
 
 .box p {
-  color: white;
+  color: var(--black);
 }
 
 .box a {
-  color: var(--red);
+  color: var(--blue);
   text-align: center;
 }
 
 form {
+  padding: 2rem;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   max-width: 40vw;
-  gap: 2rem;
+  gap: 1rem;
+  background-color: var(--white);
+  border-radius: var(--radius-s);
+  box-shadow: var(--box-shadow);
+}
+
+label {
+  color: var(--other-dark-blue);
 }
 
 .extend {

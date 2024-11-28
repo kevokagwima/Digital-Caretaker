@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | SignUp
+SignUp
 {% endblock %}
 
 {% block content %}
@@ -14,42 +14,41 @@ PMS | SignUp
 
 {% block body %}
 <div class="form">
-  <h4>Register Below</h4>
+  <h4>Create Account</h4>
   <form method="POST">
-    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
     <div class="input">
       {{ form.first_name.label }}
-      {{ form.first_name(placeholder="Enter First Name") }}
+      {{ form.first_name(placeholder="Enter First Name", class="name") }}
     </div>
     <div class="input">
       {{ form.last_name.label }}
-      {{ form.last_name(placeholder="Enter Last Name") }}
+      {{ form.last_name(placeholder="Enter Last Name", class="name") }}
     </div>
     <div class="input">
       {{ form.email_address.label }}
-      {{ form.email_address(placeholder="Enter Email Address") }}
+      {{ form.email_address(placeholder="Enter Email Address", class="name") }}
     </div>
     <div class="input">
       {{ form.phone_number.label }}
-      {{ form.phone_number(placeholder="Enter Phone Number")}}
+      {{ form.phone_number(placeholder="Enter Phone Number", class="name")}}
     </div>
     <div class="input">
       {{ form.password.label }}
-      {{ form.password(placeholder="Enter Password")}}
+      {{ form.password(placeholder="Enter Password", class="name")}}
     </div>
     <div class="input">
       {{ form.password1.label }}
-      {{ form.password1(placeholder="Confirm Password") }}
+      {{ form.password1(placeholder="Confirm Password", class="name") }}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">Sign Up</span>
     </button>
   </form>
   <div class="box">
-    <p>Already have an account?</p>
-    <a href="{{ url_for('auth.signin') }}">Login</a>
+    <p>Already have an account? <a href="{{ url_for('auth.signin') }}">Login</a></p>
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}
