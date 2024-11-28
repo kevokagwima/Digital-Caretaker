@@ -278,13 +278,13 @@ a img {
   height: inherit;
 }
 
-.active {
+/* .active {
   background-color: var(--blue);
 }
 
 .non-active {
   background-color: var(--red);
-}
+} */
 
 .card img {
   height: 2.5rem;

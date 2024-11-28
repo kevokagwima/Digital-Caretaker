@@ -58,50 +58,49 @@ def landlord_dashboard():
 @login_required
 @landlord_role_required("Landlord")
 def property_information(property_id):
-  # try:
-  propertiez = Properties.query.get(property_id)
-  properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
-  if propertiez.property_owner != current_user.id:
-    flash(f"Unknown Property", category="info")
+  try:
+    propertiez = Properties.query.filter_by(unique_id=property_id).first()
+    properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
+    if propertiez.property_owner != current_user.id:
+      flash(f"Unknown Property", category="info")
+      return redirect(url_for("landlord.landlord_dashboard"))
+    all_users = []
+    member_users = Users.query.all()
+    tenant_users = Tenant.query.all()
+    landlord_users = Landlord.query.all()
+    for members in member_users:
+      all_users.append(members)
+    for tenantz in tenant_users:
+      all_users.append(tenantz)
+    for landlord in landlord_users:
+      all_users.append(landlord)
+    today_time = datetime.now().strftime("%d/%m/%Y")
+    # session["property"] = propertiez
+    tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
+    units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
+    
+    all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
+    check_reservation_expiry(propertiez.id)
+    context = {
+      "propertiez": propertiez,
+      "properties": properties,
+      "tenants": tenants,
+      "units": units,
+      "all_complaints": all_complaints,
+      "all_users": all_users,
+      "this_month": today
+    }
+
+    return render_template("Landlord/property_dashboard.html", **context)
+
+  except Exception as e:
+    flash(f"{repr(e)}", category="warning")
     return redirect(url_for("landlord.landlord_dashboard"))
-  all_users = []
-  member_users = Users.query.all()
-  tenant_users = Tenant.query.all()
-  landlord_users = Landlord.query.all()
-  for members in member_users:
-    all_users.append(members)
-  for tenantz in tenant_users:
-    all_users.append(tenantz)
-  for landlord in landlord_users:
-    all_users.append(landlord)
-  today_time = datetime.now().strftime("%d/%m/%Y")
-  # session["property"] = propertiez
-  tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
-  units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
-  
-  all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
-  check_reservation_expiry(propertiez.id)
-  # except Exception as e:
-  #   flash(f"{repr(e)}", category="warning")
-  #   return redirect(url_for("landlord.landlord_dashboard"))
-
-  context = {
-    "propertiez": propertiez,
-    "properties": properties,
-    "tenants": tenants,
-    "units": units,
-    "all_complaints": all_complaints,
-    "all_users": all_users,
-    "this_month": today
-  }
-
-  return render_template("Landlord/property_dashboard.html", **context)
 
 @landlords.route("/tenant-profile/<int:tenant_id>", methods=["GET", "POST"])
 @login_required
 @landlord_role_required("Landlord")
 def tenant_details(tenant_id):
-  
   try:
     today_time = datetime.now().strftime("%d/%m/%Y")
     tenant = Tenant.query.get(tenant_id)
@@ -110,16 +109,16 @@ def tenant_details(tenant_id):
       flash(f"Unknown Tenant ID", category="info")
       return redirect(url_for("landlord.landlord_dashboard"))
     complaints = Complaints.query.filter_by(tenant=tenant.id).all()
-    all_complaints = Complaints.query.filter_by(Property=tenant_property.id).order_by(Complaints.date.desc()).all()
+    all_complaints = Complaints.query.filter_by(properties=tenant_property.id).order_by(Complaints.date.desc()).all()
     transactions = Transactions.query.filter_by(tenant=tenant.id).all()
     units = Unit.query.all()
     tenant_invoices = Invoice.query.filter_by(tenant=tenant.id).all()
+
+    return render_template("Landlord/tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions, all_complaints=all_complaints)
     
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
     return redirect(url_for("landlord.landlord_dashboard"))
-
-  return render_template("Landlord/tenant_details.html",tenant=tenant,complaints=complaints,units=units, today_time=today_time, tenant_property=tenant_property, tenant_invoices=tenant_invoices, transactions=transactions, all_complaints=all_complaints)
 
 @landlords.route("/send-message/<int:tenant_id>", methods=["POST","GET"])
 @login_required
@@ -211,17 +210,17 @@ def add_property():
 def edit_property(property_id):
   try:
     form = PropertyRegistrationForm()
-    edit_property = Properties.query.get(property_id)
-    if edit_property.owner != current_user.id:
+    edit_property = Properties.query.filter_by(unique_id=property_id).first()
+    if edit_property.property_owner != current_user.id:
       flash("You do not have permission to edit this property.", category="danger")
       return redirect(url_for('landlord.landlord_dashboard'))
     if form.validate_on_submit():
       if form.name.data != edit_property.name:
-        existing_property = Properties.query.filter_by(name=form.name.data, owner=current_user.id).first()
+        existing_property = Properties.query.filter_by(name=form.name.data, property_owner=current_user.id).first()
         if existing_property:
           flash(f"A property with the name {existing_property.name} already exists", category="warning")
       else:
-        edit_property.floors = form.floors.data,
+        edit_property.property_floors = form.floors.data,
         db.session.commit()
         flash(f"Property {edit_property.name}  updated successfully",category="success")
       return redirect(url_for('landlord.property_information', property_id=edit_property.id))

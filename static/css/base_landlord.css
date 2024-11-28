@@ -48,10 +48,10 @@ html {
 body {
   display: flex;
   background-color: var(--other-dark-blue);
-  font-family: var(--font-1);
 }
 
 h1 {
+  font-family: var(--font-1);
   font-weight: 900;
 }
 
@@ -59,14 +59,24 @@ h2,
 h3,
 h4 {
   font-weight: 700;
+  font-family: var(--font-1);
 }
 
 p,
-span {
+span,
+b,
+input,
+select,
+label,
+a,
+ul,
+li {
   font-weight: 400;
+  font-family: var(--font-1);
 }
 
 a {
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -201,9 +211,9 @@ button {
   text-decoration: none;
   display: block;
   color: var(--red);
-  font-size: 15px;
-  padding: 10px 5px;
-  margin-left: 30px;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  margin-left: 2rem;
   cursor: pointer;
 }
 
@@ -860,12 +870,27 @@ td {
 }
 
 .alert {
-  position: relative;
-  gap: 1.5rem;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
-  padding: 0.3rem 0.5rem;
+  padding: 0 0.5rem;
   border-radius: 0.3rem;
+}
+
+#message {
+  flex-grow: 1;
+  text-align: center;
+}
+
+#close,
+.close {
+  color: var(--red);
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.close {
+  display: none;
 }
 
 .alert-success {

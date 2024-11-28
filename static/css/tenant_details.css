@@ -31,20 +31,18 @@ a button {
 }
 
 .tenant-extra a {
-  color: white;
+  color: var(--white);
   padding: 0.8em;
   border-radius: 3px;
-  text-transform: uppercase;
   text-align: center;
   font-size: 1.5ch;
 }
 
-#revoke {
+#modalbtn {
   border: none;
   padding: 0.8em;
   border-radius: 0.3rem;
   font-size: 1.5ch;
-  text-transform: uppercase;
   background-color: var(--red);
   font-family: var(--font-1);
   cursor: pointer;

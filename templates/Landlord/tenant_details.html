@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | Tenant Profile
+Tenant Profile
 {% endblock %}
 
 {% block nav %}
@@ -16,9 +16,9 @@ PMS | Tenant Profile
     Dashboard
   </button>
 </a>
-<button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
+<button class="tablinks active" onclick="openView(event, 'dashboard')">
   <img src="{{ url_for('static', filename='Images/man.png') }}" alt="dashboard">
-  Full Profile
+  Tenant Profile
 </button>
 <button class="dropdown-btn">
   <img src="{{ url_for('static', filename='Images/building.png') }}" alt="property">
@@ -26,10 +26,10 @@ PMS | Tenant Profile
   <i class='fa fa-angle-down'></i>
 </button>
 <div class="drop-down-container">
-  {% if current_user.Property %}
-  {% for property in current_user.Property %}
+  {% if current_user.properties %}
+  {% for property in current_user.properties %}
   <a id="{{ property.id }}"
-    href="{{ url_for('landlord.property_information', property_id=property.id) }}">{{ property.name }}</a>
+    href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}">{{ property.name }}</a>
   {% endfor %}
   {% else %}
   <a href="#" class="tablinks" onclick="openView(event, 'property_registration')" id="no">No property added</a>
@@ -37,8 +37,8 @@ PMS | Tenant Profile
 </div>
 {% endblock %}
 
-{% block content %}
-<div id="dashboard" class="tabcontent">
+{% block body %}
+<div id="dashboard" class="tabcontent active">
   <h4 id="dash">Tenant Profile</h4>
   <p id="more-info">This shows the full profile for the selected tenant</p>
   <div class="tenant-info">
@@ -47,7 +47,7 @@ PMS | Tenant Profile
         <img src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
         <div class="tenant-personal-info">
           <h4>Tenant Name</h4>
-          <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
+          <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
           <h4>Tenant Email Address</h4>
           <p>{{ tenant.email }}</p>
           <h4>Tenant Phone number</h4>
@@ -57,12 +57,8 @@ PMS | Tenant Profile
         </div>
       </div>
       <div class="tenant-extra">
-        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">
-          Start Chat
-        </a>
-        <button id="revoke">
-          Revoke Access
-        </button>
+        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">Start Chat</a>
+        <button id="modalbtn">Revoke Access</button>
       </div>
     </div>
     <div class="tenant-details-info">
@@ -97,13 +93,13 @@ PMS | Tenant Profile
                 </tr>
                 <tr>
                   <th>Unit Type</th>
-                  <td>{{ unit.Type}}</td>
+                  <td>{{ unit.unit_type}}</td>
                 </tr>
                 <tr>
                   <th>Unit Floor</th>
                   <td>
-                    {{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup> Floor{%
-                        elif unit.floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.floor
+                    {{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup> Floor{%
+                        elif unit.unit_floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.unit_floor
                         % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {%
                         endif%}
                   </td>
@@ -128,7 +124,7 @@ PMS | Tenant Profile
             <form action="{{ url_for('landlord.assign_unit_now', tenant_id=tenant.id) }}" method="POST">
               <select name="unit-assign">
                 {% for unit in property.unit if unit.tenant == None %}
-                <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.Type }}</option>
+                <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.unit_type }}</option>
                 {% endfor %}
               </select>
               <button type="submit">Assign</button>
@@ -149,7 +145,7 @@ PMS | Tenant Profile
             <div class="complaint">
               <h1>{{ complaint.title }}</h1>
               <h4>Category: {{ complaint.category }}</h4>
-              <p>{{ complaint.body }}</p>
+              <p>{{ complaint.message }}</p>
             </div>
             {% endfor %}
           </div>
@@ -215,9 +211,6 @@ PMS | Tenant Profile
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block body %}
 <div id="myModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -252,8 +245,9 @@ PMS | Tenant Profile
     </div>
   </div>
 </div>
-
-<script src="{{ url_for('static', filename='js/tenant_details.js') }}"></script>
 {% endblock %}
 
-</html>
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
+{% endblock %}

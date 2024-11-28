@@ -23,7 +23,7 @@ Landlord Dashboard
   {% if properties %}
   {% for property in properties %}
   <a id="{{ property.id }}"
-    href="{{ url_for('landlord.property_information', property_id=property.id) }}">{{ property.name }}</a>
+    href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}">{{ property.name }}</a>
   {% endfor %}
   {% else %}
   <a href="{{ url_for('landlord.add_property') }}" class="tablinks" id="no">No property added</a>
@@ -47,7 +47,7 @@ Landlord Dashboard
 </button>
 {% endblock %}
 
-{% block content %}
+{% block body %}
 <div id="dashboard" class="tabcontent active">
   <div class="tab-header">
     <h4 id="dash">My Dashboard</h4>
@@ -304,8 +304,6 @@ Landlord Dashboard
 </div>
 {% endblock %}
 
-{% block body %}
+{% block script %}
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
 {% endblock %}
-
-</html>

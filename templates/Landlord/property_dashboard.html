@@ -23,15 +23,15 @@ Property Dashboard | {{ propertiez.name }}
 </button>
 <div class="drop-down-container">
   {% if properties|count > 1 %}
-  {% for property in properties if property.id == propertiez.id %}
-  <a class="tablinks" onclick="openView(event, '{{ propertiez.name}}')" id="defaultOpen">{{ property.name }}</a>
+  {% for property in properties if property.unique_id == propertiez.unique_id %}
+  <a class="tablinks" onclick="openView(event, '{{ propertiez.name}}')">{{ property.name }}</a>
   {% endfor %}
-  {% for property in properties if property.id != propertiez.id %}
-  <a id="other" href="{{ url_for('landlord.property_information', property_id=property.id) }}" class="tablinks"
-    onclick="openView(event, '{{ property.name }}')" id="defaultOpen">{{ property.name }}</a>
+  {% for property in properties if property.unique_id != propertiez.unique_id %}
+  <a id="other" href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}" class="tablinks"
+    onclick="openView(event, '{{ property.name }}')">{{ property.name }}</a>
   {% endfor %}
   {% else %}
-  <a class="tablinks" onclick="openView(event, '{{ propertiez.name }}')" id="defaultOpen">{{ propertiez.name }}</a>
+  <a class="tablinks" onclick="openView(event, '{{ propertiez.name }}')">{{ propertiez.name }}</a>
   {% endif %}
 </div>
 <button class="tablinks" onclick="openView(event, 'tenants')">
@@ -61,15 +61,15 @@ Property Dashboard | {{ propertiez.name }}
 </button>
 {% endblock %}
 
-{% block content %}
-<div id="{{ propertiez.name }}" class="tabcontent">
+{% block body %}
+<div id="{{ propertiez.name }}" class="tabcontent active">
   <div id="property-heading">
     <h4 id="dash">
       {{ propertiez.name }}
       <span title="Property ID" id="prop_id">- {{ propertiez.unique_id }}</span>
     </h4>
     <div class="property-actions">
-      <a href="{{ url_for('landlord.edit_property', property_id=propertiez.id) }}">
+      <a href="{{ url_for('landlord.edit_property', property_id=propertiez.unique_id) }}">
         <img src="{{ url_for('static', filename='Images/edit.png') }}" alt="">
       </a>
       <img id="modalbtn" src="{{ url_for('static', filename='Images/delete.png') }}" alt="">
@@ -460,9 +460,6 @@ Property Dashboard | {{ propertiez.name }}
   <h4 class="no else">No units have been reserved</h4>
   {% endif %}
 </div>
-{% endblock %}
-
-{% block body %}
 <div id="myModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -491,7 +488,7 @@ Property Dashboard | {{ propertiez.name }}
       </div>
     </div>
     <div class="modal-footer">
-      <a href="{{ url_for('landlord.delete_property', property_id=propertiez.id) }}">
+      <a href="{{ url_for('landlord.delete_property', property_id=propertiez.unique_id) }}">
         <button>Remove</button>
       </a>
     </div>
@@ -500,9 +497,9 @@ Property Dashboard | {{ propertiez.name }}
 <div class="shifting">
   <img src="{{ url_for('static',filename='Images/refresh.png') }}" alt="switching properties">
 </div>
+{% endblock %}
 
+{% block script %}
 <script src="{{ url_for('static', filename='js/property_dashboard.js') }}"></script>
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
 {% endblock %}
-
-</html>
