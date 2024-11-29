@@ -243,7 +243,7 @@ def delete_property(property_id):
       flash("Property not found", category="danger")
     elif landlord_property.tenant or landlord_property.unit:
       flash(f"Cannot remove {landlord_property.name}. Some units are occupied",category="danger")
-      return redirect(url_for("landlord.property_information", property_id=landlord_property.id))
+      return redirect(url_for("landlord.property_information", property_id=landlord_property.unique_id))
     elif landlord_property.property_owner != current_user.id:
       flash(f"No property with the name {landlord_property.name}",category="danger")
     else:
@@ -397,7 +397,7 @@ def update_property_availability(property_id):
 @landlord_role_required("Landlord")
 def extra_service(extra_type):
   extras = Extras.query.filter_by(title=extra_type).all()
-  properties = Properties.query.filter(Properties.owner == current_user.id).all()
+  properties = Properties.query.filter(Properties.property_owner == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id).all()
 
   return render_template("Landlord/extra_services.html", extras=extras, extra_type=extra_type, properties=properties, units=units)
