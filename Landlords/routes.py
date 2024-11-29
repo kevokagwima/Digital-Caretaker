@@ -193,7 +193,7 @@ def add_property():
       db.session.add(new_property)
       db.session.commit()
       flash(f"Property {new_property.name}  was created successfully",category="success")
-      return redirect(url_for('landlord.property_information', property_id=new_property.id))
+      return redirect(url_for('landlord.property_information', property_id=new_property.unique_id))
 
   if form.errors != {}:
     for err_msg in form.errors.values():
@@ -220,7 +220,7 @@ def edit_property(property_id):
         edit_property.property_floors = form.floors.data,
         db.session.commit()
         flash(f"Property {edit_property.name}  updated successfully",category="success")
-      return redirect(url_for('landlord.property_information', property_id=edit_property.id))
+      return redirect(url_for('landlord.property_information', property_id=edit_property.unique_id))
 
     if form.errors != {}:
       for err_msg in form.errors.values():
@@ -276,11 +276,11 @@ def add_unit(property_id):
         landlord = current_user.id
       )
       if check_if_unit_exists(current_property.id, new_unit.name):
-        return redirect(url_for('landlord.property_information',property_id=current_property.id))
+        return redirect(url_for('landlord.property_information',property_id=current_property.unique_id))
       if check_if_floor_exists(current_property.id, new_unit.unit_floor):
-        return redirect(url_for('landlord.property_information',property_id=current_property.id))
+        return redirect(url_for('landlord.property_information',property_id=current_property.unique_id))
       if check_if_property_is_full(current_property.id):
-        return redirect(url_for('landlord.property_information',property_id=current_property.id))
+        return redirect(url_for('landlord.property_information',property_id=current_property.unique_id))
       db.session.add(new_unit)
       db.session.commit()
       flash(f"Unit {new_unit.name} - {new_unit.unit_type} Added successfully",category="success")
@@ -293,7 +293,7 @@ def add_unit(property_id):
     return render_template("Landlord/unit-registration.html", form=form)
   except Exception as e:
     flash(f"{repr(e)}. Try again later", category="danger")
-    return redirect(url_for("landlord.property_information", property_id=current_property.id))
+    return redirect(url_for("landlord.property_information", property_id=current_property.unique_id))
 
 def check_if_unit_exists(property_id, new_unit_name):
   current_property = Properties.query.get(property_id)
@@ -338,7 +338,7 @@ def upload_unit_metrics(unit_id):
     db.session.add(new_unit_metrics)
     db.session.commit()
     asyncio.run(upload_file(current_unit.unique_id, files))
-    return redirect(url_for('landlord.property_information',property_id=current_property.id))
+    return redirect(url_for('landlord.property_information',property_id=current_property.unique_id))
 
   if form.errors != {}:
     for err_msg in form.errors.values():
@@ -364,13 +364,13 @@ async def upload_file(unit_id, files):
     )
     try:
       s3.Bucket(bucket_name).upload_fileobj(file, file.filename)
-      flash("Unit metrics uploaded successfully", category="success")
       db.session.add(unit_image)
       db.session.commit()
     except (NoCredentialsError, PartialCredentialsError) as e:
       flash(f"Credentials error: {repr(e)}", category="danger")
     except Exception as e:
       flash(f"Error: {repr(e)}", category="danger")
+  flash("Unit metrics uploaded successfully", category="success")
 
 @landlords.route("/update-property-availability/<int:property_id>", methods=["POST", "GET"])
 @login_required
