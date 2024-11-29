@@ -237,15 +237,14 @@ def edit_property(property_id):
 @login_required
 @landlord_role_required("Landlord")
 def delete_property(property_id):
-  
   try:
-    landlord_property = Properties.query.get(property_id)
+    landlord_property = Properties.query.filter_by(unique_id=property_id).first()
     if not landlord_property:
       flash("Property not found", category="danger")
     elif landlord_property.tenants or landlord_property.unit:
       flash(f"Cannot remove {landlord_property.name}. Some units are occupied",category="danger")
       return redirect(url_for("landlord.property_information", property_id=landlord_property.id))
-    elif landlord_property.owner != current_user.id:
+    elif landlord_property.property_owner != current_user.id:
       flash(f"No property with the name {landlord_property.name}",category="danger")
     else:
       db.session.delete(landlord_property)
