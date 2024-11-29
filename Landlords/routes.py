@@ -241,7 +241,7 @@ def delete_property(property_id):
     landlord_property = Properties.query.filter_by(unique_id=property_id).first()
     if not landlord_property:
       flash("Property not found", category="danger")
-    elif landlord_property.tenants or landlord_property.unit:
+    elif landlord_property.tenant or landlord_property.unit:
       flash(f"Cannot remove {landlord_property.name}. Some units are occupied",category="danger")
       return redirect(url_for("landlord.property_information", property_id=landlord_property.id))
     elif landlord_property.property_owner != current_user.id:
