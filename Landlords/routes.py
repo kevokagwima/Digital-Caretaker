@@ -156,7 +156,6 @@ def assign_unit_now(tenant_id):
 @login_required
 @landlord_role_required("Landlord")
 def remove_tenant_now(tenant_id):
-  
   try:
     tenant = Tenant.query.get(tenant_id)
     if not tenant:

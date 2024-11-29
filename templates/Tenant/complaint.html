@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
+{% endblock %}
+
+{% block title %}
+Complaint
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="form">
+  <h4>Complaint Form</h4>
+  <form method="POST">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.title.label }}
+      {{ form.title(placeholder="Eg. No lights, Water not working...", class="name") }}
+    </div>
+    <div class="input">
+      {{ form.category.label }}
+      {{ form.category(class="name") }}
+    </div>
+    <div class="input">
+      {{ form.message.label }}
+      {{ form.message(placeholder="Write your full complaint", class="name") }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">Send Complaint</span>
+    </button>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

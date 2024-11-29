@@ -207,27 +207,6 @@ Property Dashboard | {{ propertiez.name }}
       </div>
     </div>
     <div class="payments-box">
-      <div class="transaction-box">
-        <h4>Recent Transactions</h4>
-        <div class="transactions">
-          {% if propertiez.transact %}
-          {% for transaction in propertiez.transact|sort(attribute="time", reverse=true) %}
-          <div class="invoicez">
-            <h4>#{{ transaction.transaction_id }}</h4>
-            {% for tenant in tenants if tenant.id == transaction.tenant %}
-            <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
-            {% endfor %}
-            <p id="invoice-date" title="Date Created">
-              {{ transaction.time.strftime("Completed on: %d/%m/%Y at %I:%M %p") }}
-            </p>
-            <span id="origin">{{ transaction.origin }}</span>
-          </div>
-          {% endfor %}
-          {% else %}
-          <p class="else">No Transactions</p>
-          {% endif %}
-        </div>
-      </div>
       <div class="invoice-box">
         <h4>Invoice History</h4>
         <div class="invoices">
@@ -266,6 +245,27 @@ Property Dashboard | {{ propertiez.name }}
           {% endfor %}
           {% else %}
           <p class="else">No Invoices</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="transaction-box">
+        <h4>Recent Transactions</h4>
+        <div class="transactions">
+          {% if propertiez.transaction %}
+          {% for transaction in propertiez.transaction|sort(attribute="time", reverse=true) %}
+          <div class="invoicez">
+            <h4>#{{ transaction.unique_id }}</h4>
+            {% for tenant in tenants if tenant.id == transaction.tenant %}
+            <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
+            {% endfor %}
+            <p id="invoice-date" title="Date Created">
+              {{ transaction.time.strftime("Completed on: %d/%m/%Y at %I:%M %p") }}
+            </p>
+            <span id="origin">{{ transaction.origin }}</span>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="else">No Transactions</p>
           {% endif %}
         </div>
       </div>
