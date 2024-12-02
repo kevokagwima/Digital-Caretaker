@@ -55,47 +55,15 @@
     </div>
     <div class="content-area">
       <div class="notification-area">
-        <div class="burger">
-          <div class="div"></div>
-          <div class="div"></div>
-          <div class="div"></div>
-        </div>
-        <span class="close">&Cross;</span>
-        <div class="not">
-          <img class="not--img" src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell">
-          {% set verifications = [] %}
-          {% for info in current_user.verification if info.status == "pending" %}
-          {{ verifications.append(info) or "" }}
-          {% endfor %}
-          {% if verifications %}
-          <div class="notification-dot"></div>
-          {% endif %}
-        </div>
-        <div class="notifications">
-          {% if verifications %}
-          {% for info in current_user.verification|sort(attribute='date', reverse=true) if info.status == "pending" %}
-          <div class="notification-info">
-            <p>You have a rent payment that requires your verification from
-              {% for tenant in current_user.tenant if tenant.id == info.tenant %} <span>{{ tenant.first_name }}
-                {{ tenant.last_name }} {% for unit in current_user.unit if unit.tenant == tenant.id %} - Unit
-                {{ unit.name }}
-                {% endfor %}</span> {% endfor %}
-            </p>
-            <p id="info">{{ info.info }}</p>
-            <div class="not-actions">
-              <button class="btn1">
-                <a href="{{ url_for('landlord.approve_verification', verification_id=info.id) }}">Approve</a>
-              </button>
-              <button class="btn2">
-                <a href="{{ url_for('landlord.deny_verification', verification_id=info.id) }}">Deny</a>
-              </button>
-            </div>
+        <div class="nav-actions">
+          <div class="burger">
+            <div class="div"></div>
+            <div class="div"></div>
+            <div class="div"></div>
           </div>
-          {% endfor %}
-          {% else %}
-          <p id="else-not">No new notifications</p>
-          {% endif %}
+          <span class="close">&Cross;</span>
         </div>
+        <img class="not--img" src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell">
       </div>
       {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -116,10 +84,8 @@
       </div>
       <div id="help" class="tabcontent">
         <h4 id="dash">Help</h4>
-        <div class="extra main">
-          <p>
-            <a href="{{ url_for('main.index') }}">Visit Main Website</a>
-          </p>
+        <div class="extra">
+          <a href="{{ url_for('main.index') }}">Visit Main Website</a>
         </div>
       </div>
       <div id="profile" class="tabcontent">
@@ -149,7 +115,7 @@
               </tr>
               <tr>
                 <th>Date Registered</th>
-                <td>{{ current_user.date.strftime('%d/%m/%Y') }}</td>
+                <td>{{ current_user.date.strftime('%d %B %Y') }}</td>
               </tr>
             </table>
           </div>

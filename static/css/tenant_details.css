@@ -384,3 +384,33 @@ td {
   cursor: pointer;
   color: white;
 }
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --dark-blue: #fff;
+    --other-dark-blue: whitesmoke;
+    --page-header-bgColor: #e5e5e5;
+    --page-header-bgColor-hover: #e0e0e0;
+    --page-content-bgColor: #f9f9f9;
+    --page-content-txtColor: #212121;
+    --white: #212121;
+    --black: #000;
+    --light-blue: #00b8eb;
+    --grey: #686767;
+    --dark-grey: #444444;
+    --shadow: 0 0 10px -2px rgba(0, 0, 0, 0.1);
+  }
+
+  button,
+  .tenant-unit-assigned,
+  .tenant-unit-unassigned,
+  .occupation {
+    color: var(--dark-blue);
+  }
+
+  .tablinks,
+  #dashboards button,
+  .dropdown-btn {
+    color: var(--black);
+  }
+}

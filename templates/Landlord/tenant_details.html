@@ -32,7 +32,7 @@ Tenant Profile
     href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}">{{ property.name }}</a>
   {% endfor %}
   {% else %}
-  <a href="#" class="tablinks" onclick="openView(event, 'property_registration')" id="no">No property added</a>
+  <a href="#" class="tablinks">No property added</a>
   {% endif %}
 </div>
 {% endblock %}

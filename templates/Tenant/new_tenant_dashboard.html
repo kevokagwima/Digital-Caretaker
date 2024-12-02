@@ -201,6 +201,7 @@ Tenant Dashboard
         </div>
         <div class="panel">
           <div class="unit-metrics">
+            {% for unit_metrics in unit.unit_metrics %}
             <p>
               <img loading="lazy" src="{{ url_for('static', filename='Images/area.png') }}" alt="square meters">
               Floor Area
@@ -239,6 +240,7 @@ Tenant Dashboard
               Amenities
               <span>{{ unit.amenities }}</span>
             </p>
+            {% endfor %}
           </div>
         </div>
       </div>

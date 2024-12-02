@@ -29,10 +29,6 @@ Landlord Dashboard
   <a href="{{ url_for('landlord.add_property') }}" class="tablinks" id="no">No property added</a>
   {% endif %}
 </div>
-<!-- <button class="tablinks" onclick="openView(event, 'rent')">
-  <img src="{{ url_for('static', filename='Images/rent.png') }}" alt="rent">
-  Rent Payments
-</button> -->
 <button class="tablinks" onclick="openView(event, 'extra')">
   <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
   Extras
@@ -135,12 +131,12 @@ Landlord Dashboard
   </div>
 </div>
 <div id="extra" class="tabcontent">
-  <h4 id="dash">
-    Extras
+  <div class="extra-heading">
+    <h4 id="dash">Extras</h4>
     {% if active_extras %}
     <button onclick="openView(event, 'active-extra')">Deployed Extras</button>
     {% endif %}
-  </h4>
+  </div>
   <p id="more-info">This is all about making work easier by eliminating unecessary tasks that can be simplified. We
     offer various services to support property owners in managing their properties.</p>
   <div class="extras">

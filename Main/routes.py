@@ -94,17 +94,15 @@ def unit_details(unit_id):
     units = Unit.query.all()
     properties = Properties.query.all()
     today_time = datetime.now().strftime("%d/%m/%Y")
-    if unit:
-      property = Properties.query.filter_by(id = unit.Property).first()
-      landlord = Landlord.query.get(property.owner)
-      return render_template("Main/property_details.html", unit=unit, landlord=landlord, property=property, units=units, properties=properties, today_time=today_time, booking=booking)
-    else:
+    if not unit:
       flash(f"Property does not exist", category="danger")
       return redirect(url_for("main.properties"))
-  except:
-    flash(f"Could not find what you're looking for", category="warning")
-
-  return redirect(url_for('main.properties'))
+    unit_property = Properties.query.filter_by(id=unit.properties).first()
+    landlord = Landlord.query.get(unit_property.property_owner)
+    return render_template("Main/property_details.html", unit=unit, landlord=landlord, property=unit_property, units=units, properties=properties, today_time=today_time, booking=booking)
+  except Exception as e:
+    flash(f"{repr(e)}", category="danger")
+    return redirect(url_for('main.properties'))
 
 @main.route("/bookings/<int:unit_id>", methods=["POST", "GET"])
 @fresh_login_required

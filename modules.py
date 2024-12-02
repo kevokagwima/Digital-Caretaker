@@ -90,7 +90,7 @@ def revoke_tenant_access(tenant_id):
     tenant.landlord = None
     tenant.properties = None
     db.session.commit()
-    flash(f"Tenant {tenant.first_name} {tenant.last_name}'s Account Revoked successfully. Tenant no longer part of your tenant list",category="success")
+    flash(f"Tenant removed successfully",category="success")
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
 

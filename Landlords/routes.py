@@ -152,7 +152,7 @@ def assign_unit_now(tenant_id):
     flash(f"{repr(e)}", category="danger")
     return redirect(url_for('landlord.tenant_details', tenant_id=tenant_id))
 
-@landlords.route("/revoke-tenant/<int:tenant_id>", methods=["POST", "GET"])
+@landlords.route("/remove-tenant/<int:tenant_id>", methods=["POST", "GET"])
 @login_required
 @landlord_role_required("Landlord")
 def remove_tenant_now(tenant_id):
@@ -161,14 +161,14 @@ def remove_tenant_now(tenant_id):
     if not tenant:
       flash("Tenant not found", category="danger")
     elif tenant.is_active == False:
-      flash("Tenant's already revoked", category="info")
+      flash("Tenant's already removed", category="info")
     else:
-      tenant_property = tenant.properties
+      tenant_property = Properties.query.get(tenant.properties)
       revoke_tenant_access(tenant_id)
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
 
-  return redirect(url_for("landlord.property_information", property_id=tenant_property))
+  return redirect(url_for("landlord.property_information", property_id=tenant_property.unique_id))
 
 @landlords.route("/property-registration", methods=["POST", "GET"])
 @login_required
