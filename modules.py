@@ -99,8 +99,8 @@ def rent_transaction(**transaction):
     new_transaction = Transactions(
       tenant = transaction["tenant"],
       landlord = transaction["landlord"],
-      properties = transaction["Property"],
-      unit = transaction["Unit"],
+      properties = transaction["properties"],
+      unit = transaction["unit"],
       date = datetime.now(),
       time = datetime.now(),
       next_date = datetime.now() + timedelta(days=30),
@@ -109,6 +109,6 @@ def rent_transaction(**transaction):
     )
     db.session.add(new_transaction)
     db.session.commit()
-  except:
-    flash(f'Payment could not be processed', category="danger")
+  except Exception as e:
+    flash(f'{repr(e)}', category="danger")
     return redirect(url_for('tenant.tenant_dashboard'))

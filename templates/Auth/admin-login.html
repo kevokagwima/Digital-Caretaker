@@ -2,11 +2,12 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/tenant_login.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signin.css') }}">
 {% endblock %}
 
 {% block title %}
-PMS | Admin Login
+Admin Login
 {% endblock %}
 
 {% block body %}
@@ -16,17 +17,19 @@ PMS | Admin Login
     {{ form.csrf_token }}
     <div class="input">
       {{ form.admin_id.label }}
-      {{ form.admin_id(placeholder="Admin ID") }}
+      {{ form.admin_id(placeholder="Eg. johndoe@gmail.com") }}
     </div>
     <div class="input">
       {{ form.password.label }}
-      {{ form.password(placeholder="Password") }} <br>
+      {{ form.password(placeholder="Password") }}
     </div>
     <button class="btn" type="submit">
-      <span class="button--text">SIGN IN</span>
+      <span class="button--text">Login</span>
     </button>
   </form>
 </div>
+{% endblock %}
 
-<script src="{{ url_for('static', filename='js/signin.js') }}"></script>
+{% block script %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

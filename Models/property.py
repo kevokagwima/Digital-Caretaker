@@ -38,7 +38,7 @@ class Properties(BaseModel, db.Model):
   complaint = db.relationship("Complaints", backref="complaintz", lazy=True, cascade="all, delete, delete-orphan")
   transaction = db.relationship("Transactions", backref="property_transaction", lazy=True, cascade="all, delete, delete-orphan")
   extra_service = db.relationship("ExtraService", backref="extras", lazy=True, cascade="all, delete, delete-orphan")
-  unit_types = db.relationship("UnitTypes", backref="unit_types", lazy=True, cascade="all, delete, delete-orphan")
+  unit_type = db.relationship("UnitTypes", backref="unit_types", lazy=True, cascade="all, delete, delete-orphan")
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)

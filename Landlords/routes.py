@@ -8,7 +8,7 @@ from Models.transactions import Transactions
 from Models.complaints import Complaints
 from Models.extras import Extras, ExtraService
 from Models.invoice import Invoice
-from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm
+from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm
 from decorators import landlord_role_required
 from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_access
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
@@ -59,6 +59,7 @@ def landlord_dashboard():
 @landlord_role_required("Landlord")
 def property_information(property_id):
   try:
+    form = UnitTypeForm()
     propertiez = Properties.query.filter_by(unique_id=property_id).first()
     properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
     if propertiez.property_owner != current_user.id:
@@ -74,13 +75,11 @@ def property_information(property_id):
       all_users.append(tenantz)
     for landlord in landlord_users:
       all_users.append(landlord)
-    today_time = datetime.now().strftime("%d/%m/%Y")
-    # session["property"] = propertiez
     tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
     units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
-    
     all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
     check_reservation_expiry(propertiez.id)
+
     context = {
       "propertiez": propertiez,
       "properties": properties,
@@ -88,7 +87,8 @@ def property_information(property_id):
       "units": units,
       "all_complaints": all_complaints,
       "all_users": all_users,
-      "this_month": today
+      "this_month": today,
+      "form": form
     }
 
     return render_template("Landlord/property_dashboard.html", **context)
@@ -264,6 +264,7 @@ def delete_property(property_id):
 def add_unit(property_id):
   form = UnitRegistrationForm()
   current_property = Properties.query.filter_by(unique_id=property_id).first()
+  form.unit_type.choices = [unit_type.name for unit_type in current_property.unit_type]
   try:
     if form.validate_on_submit():
       new_unit = Unit(
@@ -371,6 +372,43 @@ async def upload_file(unit_id, files):
     except Exception as e:
       flash(f"Error: {repr(e)}", category="danger")
   flash("Unit metrics uploaded successfully", category="success")
+
+@landlords.route("/register-unit-type/<int:property_id>", methods=["POST"])
+@login_required
+@landlord_role_required("Landlord")
+def register_unit_type(property_id):
+  try:
+    form = UnitTypeForm()
+    landlord_property = Properties.query.filter_by(unique_id=property_id).first()
+    new_unit_type = UnitTypes(
+      name = form.unit_type.data,
+      properties = landlord_property.id
+    )
+    db.session.add(new_unit_type)
+    db.session.commit()
+    flash(f"{new_unit_type.name} added to {landlord_property.name}", category="success")
+    return redirect(url_for('landlord.property_information', property_id=landlord_property.unique_id))
+  except Exception as e:
+    flash(f"{repr(e)}", category="danger")
+    return redirect(url_for('landlord.landlord_dashboard'))
+
+@landlords.route("/remove-unit-type/<int:unit_type_id>")
+@login_required
+@landlord_role_required("Landlord")
+def remove_unit_type(unit_type_id):
+  try:
+    unit_type = UnitTypes.query.filter_by(unique_id=unit_type_id).first()
+    if not unit_type:
+      flash("Unit Type not found", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    landlord_property = Properties.query.get(unit_type.properties)
+    db.session.delete(unit_type)
+    db.session.commit()
+    flash(f"{unit_type.name} removed", category="success")
+    return redirect(url_for('landlord.property_information', property_id=landlord_property.unique_id))
+  except Exception as e:
+    flash(f"{repr(e)}", category="danger")
+    return redirect(url_for('landlord.landlord_dashboard'))
 
 @landlords.route("/update-property-availability/<int:property_id>", methods=["POST", "GET"])
 @login_required

@@ -85,7 +85,7 @@ Tenant Profile
                 {% for unit in units if unit.tenant == tenant.id %}
                 <tr>
                   <th>Unit ID</th>
-                  <td>{{ unit.unit_id }}</td>
+                  <td>{{ unit.unique_id }}</td>
                 </tr>
                 <tr>
                   <th>Unit Name</th>

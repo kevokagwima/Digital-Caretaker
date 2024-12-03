@@ -23,5 +23,5 @@ class Extra_signup(FlaskForm):
       raise ValidationError("Email Address already exists, Please try another one")
 
 class Admin_login_form(FlaskForm):
-  admin_id = IntegerField(label="Enter Admin ID", validators=[DataRequired()])
-  password = PasswordField(label="Enter password", validators=[DataRequired()])
+  admin_id = StringField(label="Email Address", validators=[DataRequired()])
+  password = PasswordField(label="Password", validators=[DataRequired()])

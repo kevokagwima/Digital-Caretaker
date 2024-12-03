@@ -371,7 +371,41 @@ Property Dashboard | {{ propertiez.name }}
 </div>
 <div id="options" class="tabcontent">
   <h4 id="dash">Options - {{ propertiez.name }}</h4>
-  <div class="options"></div>
+  <p id="more-info">This tab allows you to configure your property</p>
+  <div class="options">
+    <div class="unit-type-box">
+      <h4>Add your unit types</h4>
+      <p id="more-info">Eg. Bedsitter, Studio, 1 Bedroom, 2 Bedroom, 3 Bedroom, 4 Bedroom</p>
+      {% if propertiez.unit_type %}
+      <div class="unit-type-info">
+        <h4>Added unit types</h4>
+        <div class="unit-type-details">
+          {% for unit_type in propertiez.unit_type %}
+          <div class="unit-type">
+            <p>{{ unit_type.name }}</p>
+            <div class="unit-type-img">
+              <a href="{{ url_for('landlord.remove_unit_type', unit_type_id=unit_type.unique_id) }}">
+                <img src="{{ url_for('static', filename='images/delete.png') }}" alt="">
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <hr>
+      <form action="{{ url_for('landlord.register_unit_type', property_id=propertiez.unique_id) }}" method="post">
+        {{ form.csrf_token }}
+        <div class="input">
+          {{ form.unit_type.label }}
+          {{ form.unit_type(class="name") }}
+        </div>
+        <button class="btn" type="submit">
+          <span class="button--text">Add</span>
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
 <div id="reservations" class="tabcontent">
   {% set booking = [] %}
@@ -496,4 +530,5 @@ Property Dashboard | {{ propertiez.name }}
 {% block script %}
 <script src="{{ url_for('static', filename='js/property_dashboard.js') }}"></script>
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

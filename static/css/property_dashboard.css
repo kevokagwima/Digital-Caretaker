@@ -367,6 +367,49 @@ a img {
   gap: 1rem;
 }
 
+.unit-type-box {
+  padding: 1rem;
+  background-color: var(--dark-blue);
+  border-radius: var(--radius);
+}
+
+.unit-type-box hr {
+  margin: 1rem 0;
+  border: none;
+  outline: 1px solid var(--page-header-bgColor);
+  border-radius: var(--radius);
+}
+
+.unit-type-info {
+  margin-top: 1rem;
+}
+
+.unit-type-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.unit-type {
+  background-color: var(--page-header-bgColor);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.unit-type-img img {
+  max-height: 1.2rem;
+}
+
+.unit-type-box > form {
+  display: grid;
+  gap: 1rem;
+}
+
 .reservations {
   margin-top: 1rem;
   border-radius: var(--radius);

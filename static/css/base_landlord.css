@@ -84,12 +84,18 @@ a {
   text-decoration: none;
 }
 
+.input {
+  display: grid;
+  gap: 0.5rem;
+}
+
 input,
 select {
   padding: 1em;
   border: none;
   background-color: var(--page-header-bgColor);
   border-radius: var(--radius);
+  cursor: pointer;
 }
 
 input:focus,

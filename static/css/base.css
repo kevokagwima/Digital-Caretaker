@@ -11,6 +11,7 @@
   --other-dark-blue: #3e2f5b;
   --white: #ffffff;
   --grey: #f5f5f5;
+  --dark-grey: #a8a8a8;
   --black: #212121;
   --blue: #4d6cfa;
   --red: #ec1848;
@@ -102,7 +103,7 @@ textarea:focus {
 }
 
 ::placeholder {
-  color: var(--grey);
+  color: var(--dark-grey);
 }
 
 header {

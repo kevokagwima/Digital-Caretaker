@@ -26,12 +26,12 @@ Unit Registration
       {{ form.floor(placeholder="Enter Unit Floor", class="name") }}
     </div>
     <div class="input">
-      {{ form.rent_amount.label }}
-      {{ form.rent_amount(placeholder="Enter Monthly Rent", class="name")}}
-    </div>
-    <div class="input">
       {{ form.unit_type.label }}
       {{ form.unit_type() }}
+    </div>
+    <div class="input">
+      {{ form.rent_amount.label }}
+      {{ form.rent_amount(placeholder="Enter Monthly Rent", class="name")}}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">Add Unit</span>
