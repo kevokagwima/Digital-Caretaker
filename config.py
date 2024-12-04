@@ -5,4 +5,4 @@ class Config:
   SQLALCHEMY_TRACK_MODIFICATIONS = False
   SESSION_PERMANENT = False
   SESSION_TYPE = "filesystem"
-  SECRET_KEY = os.environ.get("SECRET_KEY")
+  SECRET_KEY = os.environ.get("secret_key")

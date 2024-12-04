@@ -1,6 +1,13 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request, abort
 from flask_login import login_required, current_user
-from Models.models import *
+from Models.base_model import db
+from Models.users import Admin, Users, Landlord, Tenant
+from Models.unit import Unit
+from Models.transactions import Transactions
+from Models.complaints import Complaints
+from Models.invoice import Invoice
+from Models.bookings import Bookings
+from Models.property import Properties
 from .form import *
 from modules import assign_tenant_unit
 import random
@@ -19,7 +26,7 @@ def admin():
   users = Users.query.all()
   landlords = Landlord.query.all()
   reservations = Bookings.query.all()
-  transactions = Transaction.query.all()
+  transactions = Transactions.query.all()
   units = Unit.query.all()
   complaints = Complaints.query.order_by(Complaints.time.desc()).all()
   all_users = []

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base_landlord.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>PMS | {% block title %}{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="side-nav">
+      <div class="profile" onclick="openView(event, 'profile')">
+        <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile-image">
+        <div class="profile-info">
+          <p>Hi, {{ current_user.first_name }} {{ current_user.last_name }}</p>
+          {% if current_user.landlord.name == "Landlord" %}
+          <span>{{ current_user.landlord.name }}</span>
+          {% elif current_user.tenant_role.name == "Tenant" %}
+          <span>{{ current_user.tenant_role.name }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="navigation">
+        <div class="main-navigation">
+          <h4 id="nav-title">Main</h4>
+          {% block nav %}{% endblock %}
+        </div>
+        <div class="secondary-navigation">
+          <h4 id="nav-title">Settings</h4>
+          <button class="tablinks" onclick="openView(event, 'settings')">
+            <img src="{{ url_for('static', filename='Images/setting.png') }}" alt="settings">
+            <span>Settings</span>
+          </button>
+          <button class="tablinks" onclick="openView(event, 'help')">
+            <img src="{{ url_for('static', filename='Images/info.png') }}" alt="help">
+            Help
+          </button>
+        </div>
+        <div class="logout">
+          <button>
+            <a href="{{ url_for('auth.logout') }}">
+              <img src="{{ url_for('static', filename='Images/logout.png') }}" alt="logout">
+              Logout
+            </a>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="content-area">
+      <div class="notification-area">
+        <div class="nav-actions">
+          <div class="burger">
+            <div class="div"></div>
+            <div class="div"></div>
+            <div class="div"></div>
+          </div>
+          <span class="close">&Cross;</span>
+        </div>
+        <img class="not--img" src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell">
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="tops">
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}}">
+          <p id="message">{{ message }}</p>
+          <span id="close">&Cross;</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      {% block body %}{% endblock %}
+      <div id="settings" class="tabcontent">
+        <h4 id="dash">Settings</h4>
+        <div class="settings"></div>
+      </div>
+      <div id="help" class="tabcontent">
+        <h4 id="dash">Help</h4>
+        <div class="extra">
+          <a href="{{ url_for('main.index') }}">Visit Main Website</a>
+        </div>
+      </div>
+      <div id="profile" class="tabcontent">
+        <h4 id="dash">My Profile</h4>
+        <div class="my-profile">
+          <div class="personal-info-details">
+            <table>
+              <tr>
+                <th>User ID</th>
+                <td>{{ current_user.unique_id }}</td>
+              </tr>
+              <tr>
+                <th>First Name</th>
+                <td>{{ current_user.first_name }}</td>
+              </tr>
+              <tr>
+                <th>Last Name</th>
+                <td>{{ current_user.last_name }}</td>
+              </tr>
+              <tr>
+                <th>Email Address</th>
+                <td>{{ current_user.email }}</td>
+              </tr>
+              <tr>
+                <th>Phone Number</th>
+                <td>0{{ current_user.phone }}</td>
+              </tr>
+              <tr>
+                <th>Date Registered</th>
+                <td>{{ current_user.date.strftime('%d %B %Y') }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/base_landlord.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    {% block script %} {% endblock %}
+  </body>
+
+</html>

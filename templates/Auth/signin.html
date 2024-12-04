@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | Signin
+Signin
 {% endblock %}
 
 {% block content %}
@@ -17,24 +17,23 @@ PMS | Signin
 <div class="form">
   <h4>Confirm Your Identity</h4>
   <form method="POST">
-    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
     <div class="input">
       {{ form.email_address.label }}
-      {{ form.email_address(placeholder="Enter Email Address") }} <br>
+      {{ form.email_address(placeholder="Enter Email Address", class="name") }}
     </div>
     <div class="input">
       {{ form.password.label }}
-      {{ form.password(placeholder="Enter Password") }} <br>
+      {{ form.password(placeholder="Enter Password", class="name") }}
     </div>
     <button class="btn" type="submit">
       <span class="button--text">Sign In</span>
     </button>
   </form>
   <div class="box">
-    <p>Don't have an account?</p>
-    <a href="{{ url_for('auth.signup') }}">Sign Up</a>
+    <p>Don't have an account? <a href="{{ url_for('auth.signup') }}">Sign Up</a></p>
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/signin.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

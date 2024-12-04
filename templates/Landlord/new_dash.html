@@ -6,11 +6,11 @@
 {% endblock %}
 
 {% block title %}
-PMS | Landlord Dashboard
+Landlord Dashboard
 {% endblock %}
 
 {% block nav %}
-<button class="tablinks" onclick="openView(event, 'dashboard')" id="defaultOpen">
+<button class="tablinks active" onclick="openView(event, 'dashboard')">
   <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
   Dashboard
 </button>
@@ -23,37 +23,26 @@ PMS | Landlord Dashboard
   {% if properties %}
   {% for property in properties %}
   <a id="{{ property.id }}"
-    href="{{ url_for('landlord.property_information', property_id=property.id) }}">{{ property.name }}</a>
+    href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}">{{ property.name }}</a>
   {% endfor %}
   {% else %}
   <a href="{{ url_for('landlord.add_property') }}" class="tablinks" id="no">No property added</a>
   {% endif %}
 </div>
-<!-- <button class="tablinks" onclick="openView(event, 'tenants')">
-  <img src="{{ url_for('static', filename='Images/group.png') }}" alt="tenants">
-  Tenants
-</button>
-<button class="tablinks" onclick="openView(event, 'units')">
-  <img src="{{ url_for('static', filename='Images/home.png') }}" alt="units">
-  Units
-</button> -->
-<button class="tablinks" onclick="openView(event, 'rent')">
-  <img src="{{ url_for('static', filename='Images/rent.png') }}" alt="rent">
-  Rent Payments
-</button>
 <button class="tablinks" onclick="openView(event, 'extra')">
   <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
   Extras
 </button>
 {% endblock %}
 
-{% block content %}
-<div id="dashboard" class="tabcontent">
-  <h4 id="dash">My Dashboard
+{% block body %}
+<div id="dashboard" class="tabcontent active">
+  <div class="tab-header">
+    <h4 id="dash">My Dashboard</h4>
     <a href="{{ url_for('landlord.add_property') }}">
       <button class="tablinks">Add New Property</button>
     </a>
-  </h4>
+  </div>
   <div class="dash-information">
     <div class="general-stats">
       <div class="stat">
@@ -61,7 +50,7 @@ PMS | Landlord Dashboard
           <img src="../static/Images/apartment.png" alt="">
         </div>
         <div class="stat-info">
-          <h4>My Properties</h4>
+          <h4>Properties</h4>
           <p>{{ properties|count }}</p>
         </div>
       </div>
@@ -70,7 +59,7 @@ PMS | Landlord Dashboard
           <img src="../static/Images/home.png" alt="">
         </div>
         <div class="stat-info">
-          <h4>My Units</h4>
+          <h4>Units</h4>
           <p>{{ units|count }}</p>
         </div>
       </div>
@@ -89,7 +78,7 @@ PMS | Landlord Dashboard
         </div>
         <div class="stat-info">
           <h4>Complaints</h4>
-          <p>---</p>
+          <p>{{ current_user.complaint|count }}</p>
         </div>
       </div>
     </div>
@@ -142,12 +131,12 @@ PMS | Landlord Dashboard
   </div>
 </div>
 <div id="extra" class="tabcontent">
-  <h4 id="dash">
-    Extras
+  <div class="extra-heading">
+    <h4 id="dash">Extras</h4>
     {% if active_extras %}
     <button onclick="openView(event, 'active-extra')">Deployed Extras</button>
     {% endif %}
-  </h4>
+  </div>
   <p id="more-info">This is all about making work easier by eliminating unecessary tasks that can be simplified. We
     offer various services to support property owners in managing their properties.</p>
   <div class="extras">
@@ -303,8 +292,6 @@ PMS | Landlord Dashboard
 </div>
 {% endblock %}
 
-{% block body %}
+{% block script %}
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
 {% endblock %}
-
-</html>

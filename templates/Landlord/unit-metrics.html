@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+{% endblock %}
+
+{% block title %}
+Unit Metrics Registration
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block body %}
+<div class="form">
+  <h4>Upload Unit Metrics</h4>
+  <form method="post" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    <div class="input">
+      {{ form.living_room_space.label }}
+      {{ form.living_room_space(placeholder="Enter Living Room Floor Area", class="name")}}
+    </div>
+    <div class="input">
+      {{ form.balcony_room_space.label }}
+      {{ form.balcony_room_space(placeholder="Enter Balcony Floor Area", class="name")}}
+    </div>
+    <div class="input">
+      {{ form.bedrooms.label }}
+      {{ form.bedrooms(placeholder="Enter number of bedrooms", class="name") }}
+    </div>
+    <div class="input">
+      {{ form.bathrooms.label }}
+      {{ form.bathrooms(placeholder="Enter number of bathrooms", class="name") }}
+    </div>
+    <div class="input extend">
+      {{ form.unit_image.label }}
+      {{ form.unit_image }}
+    </div>
+    <button class="btn" type="submit">
+      <span class="button--text">Upload Metrics</span>
+    </button>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}
