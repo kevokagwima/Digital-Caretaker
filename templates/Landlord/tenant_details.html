@@ -45,25 +45,40 @@ Tenant Profile
     <div class="tenant-profile-img">
       <div class="tenant-profile">
         <img src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
-        <div class="tenant-personal-info">
-          <h4>Tenant Name</h4>
-          <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
-          <h4>Tenant Email Address</h4>
-          <p>{{ tenant.email }}</p>
-          <h4>Tenant Phone number</h4>
-          <p>0{{ tenant.phone }}</p>
-          <h4>Date Registered</h4>
-          <p>{{ tenant.date.strftime('%d/%m/%Y') }}</p>
-        </div>
       </div>
       <div class="tenant-extra">
-        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">Start Chat</a>
-        <button id="modalbtn">Revoke Access</button>
+        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">
+          <button>Chat</button>
+        </a>
+        <button id="modalbtn">Remove Tenant</button>
       </div>
     </div>
     <div class="tenant-details-info">
+      <div class="tenant-personal-info">
+        <button class="accordion actives">Personal Information</button>
+        <div class="panel">
+          <div class="tenant-details-box">
+            <div class="tenant-details">
+              <h4>Full Name:</h4>
+              <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
+            </div>
+            <div class="tenant-details">
+              <h4>Email Address:</h4>
+              <p>{{ tenant.email }}</p>
+            </div>
+            <div class="tenant-details">
+              <h4>Phone Number:</h4>
+              <p>0{{ tenant.phone }}</p>
+            </div>
+            <div class="tenant-details">
+              <h4>Date Joined:</h4>
+              <p>{{ tenant.date.strftime("%d %B %Y") }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="tenant-unit-info">
-        <button class="accordion actives">Unit Information
+        <button class="accordion">Unit Information
           {% if tenant.unit %}
           <span class="status assigned">
             Assigned
@@ -122,11 +137,13 @@ Tenant Profile
             {% if unit_count|count != 0 %}
             <p>Select a unit to assign</p>
             <form action="{{ url_for('landlord.assign_unit_now', tenant_id=tenant.id) }}" method="POST">
-              <select name="unit-assign">
-                {% for unit in property.unit if unit.tenant == None %}
-                <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.unit_type }}</option>
-                {% endfor %}
-              </select>
+              <div class="input">
+                <select name="unit-assign">
+                  {% for unit in property.unit if unit.tenant == None %}
+                  <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.unit_type }}</option>
+                  {% endfor %}
+                </select>
+              </div>
               <button type="submit">Assign</button>
             </form>
             {% else %}
@@ -143,26 +160,23 @@ Tenant Profile
           <div class="info">
             {% for complaint in tenant.complaint|sort(attribute='time', reverse=True) %}
             <div class="complaint">
-              <h1>{{ complaint.title }}</h1>
-              <h4>Category: {{ complaint.category }}</h4>
+              <h4>{{ complaint.title }}</h4>
               <p>{{ complaint.message }}</p>
             </div>
             {% endfor %}
           </div>
           {% else %}
-          <h4 class="else">No Complaints</h4>
+          <p class="else">No Complaints</p>
           {% endif %}
         </div>
       </div>
       <div class="tenant-rent-info">
         <button class="accordion">
           Rent Information
-          {% if tenant_invoices %}
           {% if tenant_invoices and tenant_invoices[-1].status == "Active" %}
           <span id="rent-info">This month not paid</span>
           {% elif tenant_invoices and tenant_invoices[-1].status == "Cleared" %}
           <span id="paid-rent">This month paid &check;</span>
-          {% endif %}
           {% endif %}
         </button>
         <div class="panel">
@@ -189,7 +203,7 @@ Tenant Profile
             {% endfor %}
             {% for invoice in tenant_invoices|sort(attribute="date_created", reverse=true) if invoice.status == 'invalid' %}
             <div class="invoice-details">
-              <h4>Invoice - #{{ invoice.invoice_id }}</h4>
+              <h4>Invoice - #{{ invoice.unique_id }}</h4>
               <p>{{ "Ksh {:,}".format(invoice.amount) }}</p>
               <p>{{ invoice.date_created.strftime("Created on %d %B  %y") }}</p>
               {% if invoice.date_closed %}
@@ -204,7 +218,7 @@ Tenant Profile
             {% endfor %}
           </div>
           {% else %}
-          <div class="else">No rent information to show</div>
+          <p class="else">No rent information to show</p>
           {% endif %}
         </div>
       </div>
@@ -217,8 +231,8 @@ Tenant Profile
       <span class="closemodal">&times;</span>
     </div>
     <div class="modal-body">
-      <p>Are you sure you want to remove tenant <strong>{{ tenant.first_name }} {{ tenant.second_name }}
-          {{ tenant.last_name }}</strong> from your property, this action is irreversible once completed.</p>
+      <p>Are you sure you want to remove tenant <strong>{{ tenant.first_name }} {{ tenant.last_name }}</strong> from
+        your property, this action is irreversible once completed.</p>
       <br>
       <p>Review your actions before proceeding.</p>
       <br>
@@ -226,13 +240,13 @@ Tenant Profile
         <div class="action-info">
           <h4>Your actions will result in the following</h4>
           <ul>
-            <li>Permanent removal of {{ tenant.first_name }} {{ tenant.second_name }} from
+            <li>Permanent removal of {{ tenant.first_name }} {{ tenant.last_name }} from
               {{ tenant_property.name }}.
             </li>
             <li>If there's a unit assigned to {{ tenant.first_name }} {{ tenant.second_name }}, it will become
               vacant.</li>
             <li>Any complaint made by {{ tenant.first_name }} {{ tenant.second_name }} will be deleted.</li>
-            <li>{{ tenant.first_name }} {{ tenant.second_name }} will not be able to log in to their account.</li>
+            <li>{{ tenant.first_name }} {{ tenant.last_name }} will not be able to log in to their account.</li>
             <li>If this process was an accident, contact the admin for assistance.</li>
           </ul>
         </div>
@@ -240,7 +254,7 @@ Tenant Profile
     </div>
     <div class="modal-footer">
       <a href="{{ url_for('landlord.remove_tenant_now', tenant_id=tenant.id) }}">
-        <button>Revoke Access</button>
+        <button>Remove Tenant</button>
       </a>
     </div>
   </div>

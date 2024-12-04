@@ -304,7 +304,7 @@ Tenant Dashboard
           <h4>Choose your payment method</h4>
           <div class="payment-methods">
             {% if invoices %}
-            <a href="{{ url_for('tenant.rent_payment') }}">
+            <a href="{{ url_for('payment.card_payment') }}">
               <div class="payment bank">
                 <div class="payment-info-box">
                   <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">
@@ -313,7 +313,7 @@ Tenant Dashboard
                 <i class="fa fa-angle-right" style="font-size:22px"></i>
               </div>
             </a>
-            <a href="#">
+            <a href="{{ url_for('payment.mpesa_payment') }}">
               <div class="payment mpesa">
                 <div class="payment-info-box">
                   <img src="{{ url_for('static', filename='Images/mpesa.png') }}" alt="Mpesa">

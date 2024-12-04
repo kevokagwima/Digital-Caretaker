@@ -8,16 +8,15 @@ from Models.transactions import Transactions
 from Models.complaints import Complaints
 from Models.invoice import Invoice
 from .form import *
-from modules import generate_invoice, rent_transaction
+from modules import generate_invoice
 from decorators import tenant_role_required
-import os, stripe, datetime, locale
+import datetime, locale
 from datetime import datetime, date
 
 locale.setlocale(locale.LC_ALL, 'en_US')
 'en_US'
 
 tenants = Blueprint("tenant", __name__, url_prefix="/tenant")
-stripe.api_key = os.environ['Stripe_api_key']
 
 @tenants.route("/tenant-dashboard")
 @login_required
@@ -44,78 +43,6 @@ def tenant_dashboard():
 @tenant_role_required("Tenant")
 def send_message(landlord_id):
   pass
-
-@tenants.route("/rent-payment")
-@login_required
-@tenant_role_required("Tenant")
-def rent_payment():
-  invoice = Invoice.query.filter_by(tenant=current_user.id, status="Active").first()
-  unit = Unit.query.filter_by(tenant=current_user.id).first()
-  if unit.rent_amount > 999999:
-    flash(f"Amount is to large to be processed by the system via bank", category="danger")
-  elif invoice:
-    checkout_session = stripe.checkout.Session.create(
-      line_items = [
-        {
-          'price_data': {
-            'currency': 'KES',
-            'product_data': {
-              'name': 'Rent Payment',
-            },
-            'unit_amount': (invoice.amount * 100),
-          },
-          'quantity': 1,
-        }
-      ],
-      payment_method_types=["card"],
-      mode='payment',
-      success_url=request.host_url + 'tenant/payment-complete',
-      cancel_url=request.host_url + '',
-    )
-    return redirect(checkout_session.url)
-  else:
-    flash(f"Could not find an invoice for your payment", category="danger")
-    return redirect(url_for('tenant.tenant_dashboard'))
-  
-  return redirect(url_for('tenant.tenant_dashboard'))
-
-@tenants.route("/payment-complete")
-@login_required
-@tenant_role_required("Tenant")
-def payment_complete():
-  unit = Unit.query.filter_by(tenant=current_user.id).first()
-  landlord = Landlord.query.filter_by(id=current_user.landlord).first()
-  transactions = db.session.query(Transactions).filter(Transactions.tenant == current_user.id).all()
-  invoice = Invoice.query.filter(Invoice.unit == unit.id, Invoice.status == "Active").first()
-  new_transaction = {
-    'tenant': current_user.id,
-    'landlord': landlord.id,
-    'properties': current_user.properties,
-    'unit': unit.id,
-    'invoice': invoice.id,
-    'origin': "Bank"
-  }
-  if transactions:
-    if not invoice:
-      flash(f"You've already paid this month's rent, wait until next charge", category="danger")
-      return redirect(url_for('tenant.tenant_dashboard'))
-    else:
-      rent_transaction(**new_transaction)
-      invoice.date_closed = datetime.now()
-      invoice.month_created = datetime.now()
-      invoice.status = "Cleared"
-      db.session.commit()
-      flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-      return redirect(url_for('tenant.tenant_dashboard'))
-  else:
-    rent_transaction(**new_transaction)
-    invoice.date_closed = datetime.now()
-    invoice.month_created = datetime.now()
-    invoice.status = "Cleared"
-    db.session.commit()
-    flash(f'Payment complete, transaction recorded, invoice cleared', category="success")
-
-  return redirect(url_for('tenant.tenant_dashboard'))
 
 @tenants.route("/send-complaint", methods=["POST", "GET"])
 @login_required

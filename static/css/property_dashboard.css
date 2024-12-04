@@ -305,12 +305,8 @@ a img {
   display: grid;
 }
 
-.modal-footer a button {
-  width: 100%;
-}
-
 .modal-footer button {
-  background-color: var(--green);
+  width: 100%;
 }
 
 .closemodal {
