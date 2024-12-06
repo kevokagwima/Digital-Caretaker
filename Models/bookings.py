@@ -7,7 +7,7 @@ class Bookings(BaseModel, db.Model):
   expiry_date = db.Column(db.DateTime())
   property_id = db.Column(db.Integer(), db.ForeignKey("properties.id"))
   unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
-  status = db.Column(db.String(10), nullable=False)
+  is_active = db.Column(db.Boolean(), default=True)
 
   def __repr__(self):
     return f"{self.user}"

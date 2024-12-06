@@ -22,7 +22,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 0;
+  width: 0.5rem;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -169,9 +170,10 @@ a {
 }
 
 .user a button {
-  font-size: 1.8ch;
   background-color: transparent;
   color: var(--other-dark-blue);
+  font-weight: 400;
+  padding: 0;
 }
 
 .login {
@@ -231,12 +233,14 @@ a {
 }
 
 .footer {
+  /* position: absolute;
+  inset: auto 0 0 0; */
+  padding: 1rem;
   background-color: var(--dark-blue);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
 }
 
 .footer p {
@@ -246,7 +250,7 @@ a {
 .btn {
   margin-top: 1rem;
   position: relative;
-  border-radius: 0.3rem;
+  border-radius: var(--radius-s);
   grid-column: 1/3;
 }
 

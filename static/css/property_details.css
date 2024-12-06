@@ -1,285 +1,109 @@
-@import url("https://fonts.googleapis.com/css2?family=Lexend+Exa:wght@300&display=swap");
-
-body,
-html {
-  margin: 0;
-}
-
-.nav {
-  box-shadow: 0 0 10px -6px black;
-}
-
-.logo {
-  max-height: 3.5rem;
-  margin-top: 0;
-}
-
-.container-1 {
-  height: 16rem;
-  background-color: #efefef;
-  margin-top: 3rem;
-}
-
-.all-info {
-  margin-top: -16rem;
-  padding: 130px 160px 40px;
+.unit-container,
+.form-container {
+  padding: 4rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 80px;
-  row-gap: 105px;
-  background-color: transparent;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: 2rem;
 }
 
-.details {
-  background-color: transparent;
-  width: max-content;
+.unit-details-box {
+  display: grid;
+  gap: 1rem;
+  color: var(--black);
 }
 
-.details > h4 {
-  text-transform: uppercase;
-  font-family: "Quicksand", sans-serif;
-  color: var(--red);
-  letter-spacing: 1px;
-  font-size: 22px;
+.unit--info h1 {
+  font-size: 5ch;
+  color: var(--other-dark-blue);
 }
 
-.details h2 {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  margin-top: 15px;
-  font-size: 45px;
-  color: black;
+.unit-metrics-box {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.details p {
-  font-family: "PT Sans", sans-serif;
-  font-size: 16px;
-  color: #212121;
+.unit-metric {
+  flex-grow: 1;
+  display: flex;
+  gap: 0.5rem;
+  align-items: start;
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: var(--radius-s);
+  box-shadow: var(--box-shadow);
 }
 
-.more-info {
-  margin-top: 30px;
+.unit-metric img {
+  max-height: 2rem;
 }
 
-.more-info p {
-  line-height: 28px;
-  max-width: 32rem;
+.area {
+  color: var(--other-dark-blue);
 }
 
 #rent {
-  margin-top: 40px;
-  font-size: 14px;
-}
-
-#rent span {
-  color: var(--red);
-  font-size: 25px;
-  font-weight: bold;
-}
-
-#reserved {
-  margin-top: 2rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+  font-size: 3ch;
   color: var(--red);
 }
 
-.reserve-btn {
-  margin-top: 20px;
-  border: none;
-  outline: 2px solid var(--red);
-  padding: 15px 20px;
-  background-color: var(--red);
-  color: white;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  border-radius: 10rem;
-  font-size: 16px;
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: 0.3s ease-in-out;
-}
-
-.reserve-btn:hover {
-  background-color: transparent;
-  color: black;
-  transform: scale(1.05);
-  outline: 2px solid var(--red);
-}
-
-.reserve-btn:disabled {
-  background-color: rgb(205, 205, 205);
-  color: black;
-  cursor: default;
-}
-
-#new {
-  color: green;
-  margin-left: 1rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 14px;
-  text-transform: capitalize;
-}
-
-.unit-image {
-  max-width: 35rem;
+.unit-image-box {
+  height: 30rem;
+  border-radius: var(--radius-s);
   overflow: hidden;
-  border-radius: 10px;
-  max-height: 25rem;
-  box-shadow: 0px 1px 10px -5px black;
+  box-shadow: var(--box-shadow);
 }
 
-.unit-image img {
+.unit-image-box img {
+  height: inherit;
   width: 100%;
-  height: 25rem;
+  object-fit: cover;
+  object-position: center;
 }
 
-.property-details h4,
-.unit-info h4 {
-  font-family: "PT Sans", sans-serif;
-  letter-spacing: 1px;
-  font-size: 18px;
-  font-weight: normal;
-  text-transform: uppercase;
-  position: relative;
-  font-weight: bold;
-  color: black;
+.form-container {
+  align-items: start;
+  background-color: var(--dark-blue);
 }
 
-#prop-details::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 60%;
-  height: 5%;
-  background-color: #212121;
-}
-
-table {
-  margin-top: 2rem;
-}
-
-tr img {
-  max-height: 1.5rem;
-}
-
-table th,
-td {
-  text-align: left;
-}
-
-table td {
-  padding: 8px 5px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  letter-spacing: 1px;
-  color: #212121;
-}
-
-table td span {
-  padding: 11px 5px 0;
-  color: var(--red);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-}
-
-.unit-information {
-  margin-top: 2rem;
-}
-
-.form {
+.landlord-details-box {
   display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 25px;
-  row-gap: 25px;
-}
-
-.form input {
-  padding: 10px 10px;
-  border-radius: 3px;
-  width: 100%;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  font-size: 18px;
-  border: 1px solid black;
-  color: black;
-  background-color: whitesmoke;
-}
-
-input::placeholder,
-textarea::placeholder {
-  font-family: "PT Sans", sans-serif;
-  color: grey;
-  font-size: 15px;
-}
-
-.form textarea {
-  padding: 10px 5px;
-  border-radius: 3px;
-  width: 100%;
-  min-width: 17rem;
-  max-width: 36rem;
-  max-height: 10rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  border: 1px solid black;
-  color: black;
-  background-color: whitesmoke;
-}
-
-.input-5 {
-  grid-column: 1/3;
-}
-
-.form button {
-  grid-column: 1/3;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  background-color: var(--red);
-  color: white;
-  font-family: "PT Sans", sans-serif;
-  text-transform: uppercase;
-  font-size: 15px;
-  letter-spacing: 1px;
-  cursor: pointer;
-}
-
-.landlord-info {
-  padding: 3rem 2rem;
-  background-color: white;
-  color: #212121;
-  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-  grid-column: 1/3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 1rem;
-}
-
-.landlord-info h4 {
-  font-size: 1.8rem;
-  letter-spacing: 0.5px;
-  font-family: "PT Sans", sans-serif;
-}
-
-.landlord-info hr {
-  min-width: 30%;
-  border: none;
-  outline: 1px solid var(--red);
-  margin-bottom: 2rem;
 }
 
 .landlord-details {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 1rem;
+  border-radius: var(--radius-s);
+  background-color: var(--other-dark-blue);
+}
+
+#hr {
+  border: none;
+  outline: 1px solid var(--other-dark-blue);
+  margin: 1rem 0;
+}
+
+.unit-enquiry-box {
+  display: grid;
+  gap: 2rem;
+  padding-inline: 4rem;
+}
+
+.unit-enquiry-box form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.landlord-details p {
-  font-size: 1.2rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
+.input input,
+.input textarea {
+  background-color: var(--other-dark-blue);
+  color: var(--grey);
+}
+
+.extend,
+.unit-enquiry-box form button {
+  grid-column: 1/3;
 }

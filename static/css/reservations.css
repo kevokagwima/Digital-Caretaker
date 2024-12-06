@@ -1,76 +1,55 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
-
-body {
-  background-color: white;
+.container {
+  padding: 4rem;
 }
 
-.footer {
-  display: none;
+.reservation-box {
+  display: grid;
+  gap: 1rem;
 }
 
-.login p,
-#reservations p,
-#logout p {
-  text-align: left;
+.reservation-header {
+  outline: 1px solid red;
 }
 
-.nav {
-  box-shadow: 0 0 10px -6px black;
+.reservation-header h1 {
+  color: var(--other-dark-blue);
 }
 
-.logo {
-  max-height: 3.5rem;
-  margin-top: 0;
-}
-
-.container-1 {
-  padding: 5rem 5rem 3rem;
-  background-color: white;
-  position: relative;
-}
-
-.container-1 h4 {
-  font-size: 30px;
-  color: rgb(0, 0, 0);
-  font-family: var(--font-1);
-  letter-spacing: 1px;
-  margin-top: 1rem;
+.reservation-info-box {
+  display: flex;
+  gap: 2rem;
 }
 
 #more-info {
-  color: rgb(170, 170, 170);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
-  margin-top: 10px;
+  color: var(--dark-grey);
   text-align: left;
 }
 
-.box-1 {
-  position: relative;
-  margin: 1rem 0 0;
-  padding: 5px;
-  display: flex;
-  justify-content: left;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  overflow: auto;
-  max-width: 75vw;
+.booking {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  background-color: var(--white);
+  border-radius: var(--radius-s);
+  box-shadow: var(--box-shadow);
+  outline: 1px solid red;
 }
 
-.booking {
-  background-color: whitesmoke;
-  padding-top: 40px;
-  color: black;
-  padding-left: 10px;
-  padding-bottom: 10px;
-  border-radius: 5px;
-  max-width: 35vw;
-  min-width: 35vw;
-  position: relative;
-  box-shadow: 0px 1px 10px -5px black;
-  overflow: hidden;
-  transition: 0.3s;
-  transition-timing-function: ease-in-out;
+.booking-header,
+.booking-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--black);
+  outline: 1px solid red;
+}
+
+#booking-date {
+  color: var(--dark-grey);
+}
+
+.booking-actions img {
+  max-height: 1.5rem;
 }
 
 .delete {
@@ -96,13 +75,9 @@ body {
   background-color: red;
   padding: 0.6em;
   border-radius: 5px;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
 }
 
 .booking p {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   font-size: 18px;
   line-height: 30px;
 }
@@ -144,8 +119,6 @@ body {
 }
 
 .div3 p {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   columns: black;
   font-size: 15px;
   text-align: left;
@@ -153,25 +126,7 @@ body {
 
 .div3 a {
   color: rgb(0, 206, 0);
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   font-size: 15px;
-}
-
-#ID {
-  position: absolute;
-  top: 0;
-  left: 10px;
-  color: var(--blue);
-  font-size: 15px;
-}
-
-#dat {
-  position: absolute;
-  top: 0;
-  right: 10px;
-  font-size: 14px;
-  color: var(--red);
 }
 
 .booking iframe {
@@ -187,7 +142,6 @@ body {
   top: 11.4rem;
   right: 1.5rem;
   border-radius: 5px;
-  font-family: "PT Sans", sans-serif;
   z-index: 1;
   box-shadow: 0 0 10px -6px black;
   color: black;
@@ -209,8 +163,6 @@ body {
 
 .no-reservations h4,
 p {
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
   text-align: center;
 }
 

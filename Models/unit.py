@@ -14,6 +14,7 @@ class Unit(BaseModel, db.Model):
   properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
   tenant = db.Column(db.Integer(), db.ForeignKey("tenant.id"))
   landlord = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
+  is_reserved = db.Column(db.Boolean(), default=False)
   booking = db.relationship("Bookings", backref="unit_booked", lazy=True, cascade="all, delete, delete-orphan")
   transaction = db.relationship("Transactions", backref="unit_transaction", lazy=True, cascade="all, delete, delete-orphan")
   invoice = db.relationship("Invoice", backref="unit_invoice", lazy=True, cascade="all, delete, delete-orphan")
