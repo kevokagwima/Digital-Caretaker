@@ -12,57 +12,63 @@ Reservations
 
 {% block body %}
 <div class="container">
-  {% if booking %}
+  {% if reservations %}
   <div class="reservation-box">
     <div class="reservation-header">
       <h1>My Reservations</h1>
-      <p id="more-info">You have reserved {{ booking|count }} unit(s)</p>
+      <p id="more-info">You have reserved {{ reservations|count }} unit(s)</p>
     </div>
     <div class="reservation-info-box">
-      {% for book in booking|sort(attribute="date", reverse=True) if book.is_active %}
+      {% for reservation in reservations|sort(attribute="date", reverse=True) if reservation.is_active %}
       <div class="booking">
         <div class="booking-header">
-          <h4>#{{ book.unique_id }}</h4>
-          <span id="booking-date">{{ book.expiry_date.strftime("Expires on %d %b %Y at %I:%M %p") }}</span>
+          <h4>#{{ reservation.unique_id }}</h4>
+          <span id="booking-date">{{ reservation.expiry_date.strftime("Expires on %d %b %Y at %I:%M %p") }}</span>
+          <div class="delete-icon">
+            <a href="{{ url_for('main.delete_reservation', reservation_id=reservation.unique_id) }}">
+              <img src="{{ url_for('static', filename='images/delete.png') }}" alt="">
+            </a>
+          </div>
         </div>
-        <div class="booking-actions">
-          <h4>Reservation Details</h4>
-          <a href="#">
-            <img src="{{ url_for('static', filename='images/delete.png') }}" alt="">
-          </a>
+        <hr id="hr">
+        <div class="booking-info">
+          {% for unit in units if unit.id == reservation.unit %}
+          <div class="unit-info">
+            <h4>Unit Name</h4>
+            <p>{{ unit.name }}</p>
+          </div>
+          <div class="unit-info">
+            <h4>Unit Floor</h4>
+            <p>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+              Floor{%elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+              Floor{% elif unit.unit_floor% 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {%endif%}</p>
+          </div>
+          <div class="unit-info">
+            <h4>Unit Type</h4>
+            <p>{{ unit.unit_type }}</p>
+          </div>
+          <div class="unit-info">
+            <h4>Monthly Rent</h4>
+            <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
+          </div>
+          {% endfor %}
         </div>
-        <div class="booking-info"></div>
         <div class="booking-map">
           <iframe loading="lazy"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.9965045098675!2d36.92644401483958!3d-1.1629358991517333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3f766c8d0513%3A0x2a05d75fcdaaff43!2s!5e0!3m2!1sen!2ske!4v1624630934302!5m2!1sen!2ske"
             style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
-        <div class="div3">
-          {% for unit in units if book.unit == unit.id %}
-          <p>Property Name : <a href="{{ url_for('main.unit_details', unit_id=unit.unique_id) }}">
-              {% for property in properties if book.property_id == property.id %}
-              {{ property.name }}
-              {% endfor %}
-            </a>
-          </p>
-          <p>Unit Name : {{ unit.name }}</p>
-          <p>Unit Type : {{ unit.unit_type }}</p>
-          <p>Unit Floor: {{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
-            Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
-            Floor{% elif unit.unit_floor% 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {% endif %}</p>
-          {% endfor %}
-        </div>
       </div>
       {% endfor %}
     </div>
   </div>
+  {% else %}
+  <div class="else">
+    <h4>No active reservations</h4>
+    <p>Visit the <a href="{{ url_for('main.properties') }}">properties page</a> to reserve your unit today.</p>
+  </div>
+  {% endif %}
 </div>
-{% else %}
-<div class="no-reservations">
-  <h4>No active reservations</h4>
-  <p>Visit the <a href="{{ url_for('main.properties') }}">properties page</a> to reserve your unit today.</p>
-</div>
-{% endif %}
 
 <script src="{{ url_for('static', filename='js/reservation.js')}}"></script>
 {% endblock %}

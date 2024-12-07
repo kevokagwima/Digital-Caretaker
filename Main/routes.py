@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, url_for, redirect, request
-from flask_login import login_required, fresh_login_required, current_user
+from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.bookings import Bookings
 from Models.property import Properties, PropertyTypes
@@ -46,7 +46,7 @@ def properties():
   booking = Bookings.query.all()
   properties = Properties.query.all()
   page = request.args.get('page', 1, type=int)
-  query = Unit.query.filter_by(tenant=None).order_by(Unit.id)
+  query = Unit.query.filter_by(tenant=None, is_reserved=False).order_by(Unit.id)
   units = query.paginate(page=page, per_page=8, error_out=False)
   next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
   prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
@@ -62,7 +62,7 @@ def search_property():
   today_time = datetime.now().strftime("%d/%m/%Y")
   if propertiez:
     for prop in propertiez:
-      query = Unit.query.filter_by(properties=prop.id, tenant=None).order_by(Unit.id)
+      query = Unit.query.filter_by(properties=prop.id, tenant=None, is_reserved=False).order_by(Unit.id)
       units = query.paginate(page=1, per_page=8, error_out=False)
       next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
       prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
@@ -72,7 +72,7 @@ def search_property():
       flash(f"Search complete. could not find what you're looking for. Now showing all available units", category="danger")
       return redirect(url_for('main.properties'))
   else:
-    query = Unit.query.filter(or_(Unit.unit_type.like(search), Unit.name.like(search), Unit.rent_amount.like(search)), Unit.tenant == None).order_by(Unit.id)
+    query = Unit.query.filter(or_(Unit.unit_type.like(search), Unit.name.like(search), Unit.rent_amount.like(search)), Unit.tenant == None, Unit.is_reserved == False).order_by(Unit.id)
     properties = Properties.query.all()
     units = query.paginate(page=1, per_page=8, error_out=False)
     next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
@@ -137,7 +137,7 @@ def reserve_unit(unit_id):
       db.session.add(new_booking)
       unit.is_reserved = True
       db.session.commit()
-      flash(f"Reservation made successfully", category="success")
+      flash(f"Unit reserved successfully", category="success")
       return redirect(url_for("main.reservations"))
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
@@ -156,37 +156,41 @@ def unit_enquiry(unit_id):
 @main.route("/reservations")
 @login_required
 def reservations():
-  booking = Bookings.query.filter_by(user=current_user.email, is_active=True).all()
+  reservations = Bookings.query.filter_by(user=current_user.email, is_active=True).all()
   properties = Properties.query.all()
   units = Unit.query.all()
-  expired_reservations = []
-  if booking:
-    for overbook in booking:
-      if overbook.user == current_user.id:
-        reserved_property = Properties.query.filter_by(id=overbook.property_id).first()
-      if overbook.expiry_date < datetime.now()and overbook.is_active == True:
-        expired_reservations.append(overbook)
-        unit = Unit.query.filter_by(id=overbook.unit).first()
-        unit.is_reserved = False
-        overbook.is_active = False
-        db.session.commit()
-    if len(expired_reservations) == 1:
-      flash(f"One of your reservations has expired", category="info")
-    elif len(expired_reservations) > 1:
-      all_expired = len(expired_reservations)
-      flash(f"{all_expired} of your reservations have expired", category="info")
-  else:
-    return render_template("Main/reservations.html")
+  # expired_reservations = []
+  # if booking:
+  #   for overbook in booking:
+  #     if overbook.user == current_user.id:
+  #       reserved_property = Properties.query.filter_by(id=overbook.property_id).first()
+  #     if overbook.expiry_date < datetime.now()and overbook.is_active == True:
+  #       expired_reservations.append(overbook)
+  #       unit = Unit.query.filter_by(id=overbook.unit).first()
+  #       unit.is_reserved = False
+  #       overbook.is_active = False
+  #       db.session.commit()
+  #   if len(expired_reservations) == 1:
+  #     flash(f"One of your reservations has expired", category="info")
+  #   elif len(expired_reservations) > 1:
+  #     all_expired = len(expired_reservations)
+  #     flash(f"{all_expired} of your reservations have expired", category="info")
+  # else:
+  #   return render_template("Main/reservations.html")
   
-  return render_template("Main/reservations.html", booking=booking, units=units, properties=properties)
+  return render_template("Main/reservations.html", reservations=reservations, units=units, properties=properties)
 
 @main.route("/delete-reservation/<int:reservation_id>")
 @login_required
 def delete_reservation(reservation_id):
-  booking = Bookings.query.filter_by(booking_id=reservation_id).first()
-  unit = Unit.query.filter_by(id=booking.unit).first()
-  unit.reserved = "False"
-  db.session.delete(booking)
+  reservation = Bookings.query.filter_by(unique_id=reservation_id).first()
+  if not reservation:
+    flash("No reservation found")
+    return redirect(url_for('main.properties'))
+  unit = Unit.query.filter_by(id=reservation.unit).first()
+  if unit:
+    unit.is_reserved = False
+  db.session.delete(reservation)
   db.session.commit()
   flash(f"Reservation deleted successfully", category="success")
   return redirect(url_for('main.reservations'))

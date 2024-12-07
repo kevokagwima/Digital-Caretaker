@@ -7,16 +7,13 @@
   gap: 1rem;
 }
 
-.reservation-header {
-  outline: 1px solid red;
-}
-
 .reservation-header h1 {
   color: var(--other-dark-blue);
 }
 
 .reservation-info-box {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
 
@@ -32,145 +29,68 @@
   background-color: var(--white);
   border-radius: var(--radius-s);
   box-shadow: var(--box-shadow);
-  outline: 1px solid red;
 }
 
-.booking-header,
-.booking-actions {
+.booking-header {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 1rem;
   color: var(--black);
-  outline: 1px solid red;
 }
 
 #booking-date {
+  flex-grow: 1;
+  text-align: right;
   color: var(--dark-grey);
 }
 
-.booking-actions img {
+.delete-icon img {
   max-height: 1.5rem;
 }
 
-.delete {
-  height: 52.5%;
+#hr {
+  border: none;
+  outline: 1px solid var(--grey);
+}
+
+.booking-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.unit-info {
+  border-radius: var(--radius-s);
+  color: var(--black);
+  padding: 0.5rem;
+  background-color: var(--grey);
+}
+
+.booking-map {
+  display: grid;
+}
+
+.booking-map iframe {
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background-color: rgb(0, 0, 0, 0.8);
+  border-radius: var(--radius-s);
+}
+
+.else {
   display: grid;
-  place-items: center;
-  transform: translateY(11rem);
-  transition: transform 0.2s ease;
-  z-index: 1;
-}
-
-.show-delete {
-  transform: translateY(0);
-}
-
-.delete a {
-  color: white;
-  background-color: red;
-  padding: 0.6em;
-  border-radius: 5px;
-}
-
-.booking p {
-  font-size: 18px;
-  line-height: 30px;
-}
-
-.div2 > p {
-  padding: 2px 0;
-  font-size: 16px;
-  color: rgb(163, 163, 163);
-  text-align: left;
-  position: relative;
-}
-
-.three-dots {
-  position: absolute;
-  top: 2.5rem;
-  right: 1rem;
-  cursor: pointer;
-}
-
-.dot1 {
-  height: 3px;
-  aspect-ratio: 1;
-  background-color: grey;
-  border-radius: 50%;
-  margin: 5px;
-}
-
-.div2 hr {
-  background-color: grey;
-  border: 0.1px solid grey;
-  width: 39vw;
-  margin: 1px 0 5px;
-}
-
-.div3 {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-}
-
-.div3 p {
-  columns: black;
-  font-size: 15px;
-  text-align: left;
-}
-
-.div3 a {
-  color: rgb(0, 206, 0);
-  font-size: 15px;
-}
-
-.booking iframe {
-  width: 98%;
-}
-
-.side-panel {
-  padding: 20px;
-  background-color: #efefef;
-  min-width: 18vw;
-  max-width: 18vw;
-  position: fixed;
-  top: 11.4rem;
-  right: 1.5rem;
-  border-radius: 5px;
-  z-index: 1;
-  box-shadow: 0 0 10px -6px black;
-  color: black;
-}
-
-.side-panel p {
-  text-align: left;
-}
-
-.side-panel p:nth-child(2) {
-  margin: 10px 0;
-}
-
-.no-reservations {
-  background-color: #efefef;
-  padding: 50px;
-  margin-top: 2rem;
-}
-
-.no-reservations h4,
-p {
+  gap: 0.5rem;
   text-align: center;
 }
 
-.no-reservations p {
-  margin-top: 20px;
-  color: #212121;
+.else h4 {
+  font-size: 2.5ch;
+  color: var(--red);
 }
 
-.no-reservations a {
-  color: var(--red);
+.else p {
+  color: var(--black);
+}
+
+.else p a {
+  color: var(--blue);
 }
