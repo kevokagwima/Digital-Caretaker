@@ -33,7 +33,7 @@ Tenant Dashboard
 {% endblock %}
 
 {% block body %}
-<div id="dashboard" class="tabcontent">
+<div id="dashboard" class="tabcontent active">
   <h4 id="dash">My Dashboard</h4>
   <div class="dash-information">
     <div class="unit-information">
@@ -275,7 +275,7 @@ Tenant Dashboard
     {% endif %}
   </div>
 </div>
-<div id="payments" class="tabcontent active">
+<div id="payments" class="tabcontent">
   <h4 id="dash">Payments</h4>
   <p id="more-info">Manage your rent payments from here</p>
   {% if unit %}
@@ -292,7 +292,7 @@ Tenant Dashboard
         <div class="payment-box">
           <h4>Choose your payment method</h4>
           <div class="payment-methods">
-            {% if invoices %}
+            {% if active_invoice %}
             <a href="{{ url_for('payment.card_payment') }}">
               <div class="payment bank">
                 <div class="payment-info-box">
@@ -302,7 +302,7 @@ Tenant Dashboard
                 <i class="fa fa-angle-right" style="font-size:22px"></i>
               </div>
             </a>
-            <a href="{{ url_for('payment.mpesa_payment') }}">
+            <a href="{{ url_for('payment.stk_push', invoice_id=active_invoice.unique_id) }}">
               <div class="payment mpesa">
                 <div class="payment-info-box">
                   <img src="{{ url_for('static', filename='Images/mpesa.png') }}" alt="Mpesa">
@@ -311,7 +311,7 @@ Tenant Dashboard
                 <i class="fa fa-angle-right" style="font-size:22px"></i>
               </div>
             </a>
-            {% elif not invoices %}
+            {% elif not active_invoice %}
             <div class="payment disabled">
               <div class="payment-info-box">
                 <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">

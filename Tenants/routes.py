@@ -27,16 +27,13 @@ def tenant_dashboard():
   unit = db.session.query(Unit).filter(Unit.tenant == current_user.id).first()
   transactions = db.session.query(Transactions).filter(Transactions.tenant == current_user.id).all()
   today_time = date.today()
-  invoices = Invoice.query.filter_by(tenant=current_user.id, status="Active").all()
+  active_invoice = Invoice.query.filter_by(tenant=current_user.id, status="Active").first()
   if unit:
     generate_invoice(unit.id, current_user.id, unit.rent_amount)
-  if invoices:
-    if len(invoices) == 1:
-      flash(f"You have {len(invoices)} active invoice", category="info")
-    else:
-      flash(f"You have {len(invoices)} active invoices", category="info")
+  if active_invoice:
+    flash(f"You have an active invoice", category="info")
   
-  return render_template ("Tenant/new_tenant_dashboard.html",landlord=landlord,unit=unit,properties=properties, transactions=transactions, today_time=today_time, invoices=invoices)
+  return render_template ("Tenant/new_tenant_dashboard.html",landlord=landlord,unit=unit,properties=properties, transactions=transactions, today_time=today_time, active_invoice=active_invoice)
 
 @tenants.route("/send-messages/<int:landlord_id>", methods=["POST","GET"])
 @login_required

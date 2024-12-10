@@ -1,5 +1,18 @@
 from Models.base_model import db, BaseModel
 
+class Payment(BaseModel, db.Model):
+  __tablename__ = "payment"
+  MerchantRequestID = db.Column(db.String(50))
+  CheckoutRequestID = db.Column(db.String(50))
+  MpesaReceiptNumber = db.Column(db.String(20))
+  transactionDate = db.Column(db.DateTime())
+  amount = db.Column(db.Integer())
+  phone_number = db.Column(db.String(20))
+  is_pending = db.Column(db.Boolean(), default=True)
+  is_confirmed = db.Column(db.Boolean(), default=False)
+  is_failed = db.Column(db.Boolean(), default=False)
+  invoice = db.Column(db.Integer, db.ForeignKey("invoice.id"))
+
 class Transactions(BaseModel, db.Model):
   __tablename__ = 'transactions'
   tenant = db.Column(db.Integer(), db.ForeignKey("tenant.id"))

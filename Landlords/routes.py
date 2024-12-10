@@ -36,7 +36,7 @@ today = date.today()
 @landlord_role_required("Landlord")
 def landlord_dashboard():
   properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
-  tenants = db.session.query(Tenant).filter(Tenant.landlord == current_user.id).all()
+  tenants = Tenant.query.filter_by(landlord = current_user.id).all()
   todays_time = datetime.now().strftime("%d/%m/%Y")
   if session.get("this_month"):
     this_month = datetime.strptime(session["this_month"], '%Y-%m-%d').date()
@@ -171,8 +171,10 @@ def remove_tenant_now(tenant_id):
     else:
       tenant_property = Properties.query.get(tenant.properties)
       revoke_tenant_access(tenant_id)
+      return redirect(url_for("landlord.property_information", property_id=tenant_property.unique_id))
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
+    return redirect(url_for("landlord.landlord_dashboard"))
 
   return redirect(url_for("landlord.property_information", property_id=tenant_property.unique_id))
 

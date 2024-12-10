@@ -35,12 +35,6 @@ def generate_invoice(unit_id, unit_tenant, unit_rent):
     else:
       invoice_logic(unit_tenant, unit_id, unit_rent)
 
-def send_sms(message):
-  pass
-
-def send_email(**email):
-  pass
-
 def check_reservation_expiry(property_id):
   reservations = Bookings.query.filter_by(property_id=property_id).all()
   active_reservations = []
@@ -56,9 +50,6 @@ def check_reservation_expiry(property_id):
   elif len(active_reservations) > 1:
     active_reservations_count = len(active_reservations)
     flash(f"You have {active_reservations_count} reservations that have Expired", category="warning")
-
-def send_chat(**message):
-  pass
 
 def assign_tenant_unit(tenant_id, unit_id):
   try:
