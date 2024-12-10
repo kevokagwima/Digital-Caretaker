@@ -172,8 +172,8 @@ def stk_push(invoice_id):
     return redirect(url_for('tenant.tenant_dashboard'))
 
   access_token = getAccessToken()
-  phone_number = 796897011
-  amount = 1
+  phone_number = current_user.phone
+  amount = invoice.amount
   register_response = register_url(access_token)
   response = process_stk_push(access_token, amount, phone_number)
   response_data = response.json()
