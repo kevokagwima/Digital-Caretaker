@@ -33,7 +33,7 @@ Tenant Dashboard
 {% endblock %}
 
 {% block body %}
-<div id="dashboard" class="tabcontent active">
+<div id="dashboard" class="tabcontent">
   <h4 id="dash">My Dashboard</h4>
   <div class="dash-information">
     <div class="unit-information">
@@ -275,20 +275,9 @@ Tenant Dashboard
     {% endif %}
   </div>
 </div>
-<div id="payments" class="tabcontent">
+<div id="payments" class="tabcontent active">
   <h4 id="dash">Payments</h4>
   <p id="more-info">Manage your rent payments from here</p>
-  {% if invoices %}
-  <p id="more-info">
-    You have
-    {{ invoices|count }} pending
-    {% if invoices|count == 1 %}
-    invoice, clear it to avoid penalties.
-    {% else %}
-    invoices, clear them to avoid penalties.
-    {% endif %}
-  </p>
-  {% endif %}
   {% if unit %}
   <div class="payments">
     <div class="payment-info">

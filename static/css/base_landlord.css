@@ -389,19 +389,38 @@ button {
   background-color: var(--red);
 }
 
+.image-box {
+  display: grid;
+  gap: 1rem;
+}
+
 .tenant-card img,
 .unit-card img {
   max-height: 3rem;
+}
+
+.image-box a {
+  margin-inline: auto;
+}
+
+#delete-unit {
+  max-height: 2rem;
+}
+
+.unit-details-box {
+  flex-grow: 1;
 }
 
 .tenant-details,
 .unit-details {
   display: grid;
   gap: 0.5rem;
+  color: var(--grey);
 }
 
 .tenant-details a {
   color: var(--blue);
+  margin-top: 0.5rem;
 }
 
 .else {

@@ -21,7 +21,7 @@ class UnitMetricRegistrationForm(FlaskForm):
   balcony_room_space = IntegerField(label="Balcony Space (SQM)", validators=[DataRequired(message="Balcony Space required")])
   bedrooms = IntegerField(label="No of Bedrooms", validators=[DataRequired(message="Bedrooms required")])
   bathrooms = IntegerField(label="No of Bathrooms", validators=[DataRequired(message="Bathrooms required")])
-  unit_image = MultipleFileField(label="Unit Images", validators=[DataRequired(message="Atleast 1 emage is required")])
+  unit_image = MultipleFileField(label="Unit Images (Upload atleast 1 image)", validators=[DataRequired(message="Atleast 1 image is required")])
 
 class UnitTypeForm(FlaskForm):
   unit_type = SelectField(label="Unit Types", choices=["Bedsitter", "Studio", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4 Bedroom"], validators=[DataRequired(message="Unit type field required")])

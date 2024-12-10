@@ -59,5 +59,5 @@ def add_units():
 
 if __name__ == '__main__':
   with app.app_context():
-    # add_tenants()
-    add_units()
+    add_tenants()
+    # add_units()

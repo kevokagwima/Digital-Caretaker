@@ -18,7 +18,7 @@ locale.setlocale(locale.LC_ALL, 'en_US')
 
 tenants = Blueprint("tenant", __name__, url_prefix="/tenant")
 
-@tenants.route("/tenant-dashboard")
+@tenants.route("/dashboard")
 @login_required
 @tenant_role_required("Tenant")
 def tenant_dashboard():
@@ -42,7 +42,8 @@ def tenant_dashboard():
 @login_required
 @tenant_role_required("Tenant")
 def send_message(landlord_id):
-  pass
+  flash("Feature coming soon", category="info")
+  return redirect(url_for('tenant.tenant_dashboard'))
 
 @tenants.route("/send-complaint", methods=["POST", "GET"])
 @login_required

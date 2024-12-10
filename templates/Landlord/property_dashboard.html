@@ -306,32 +306,49 @@ Property Dashboard | {{ propertiez.name }}
   <p id="more-info">This shows all units from your property and their status</p>
   <div id="unit_details" class="all-units">
     {% for unit in propertiez.unit|sort(attribute="unit_id") %}
-    <a href="{{ url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id) }}">
-      <div id="cards" class="unit-card">
-        {% if unit.tenant %}
-        <div class="occupation unit-occupied">
-          <p>Occupied</p>
-        </div>
-        {% elif unit.reserved == "True" %}
-        <div class="occupation unit-reserved">
-          <p onclick="openView(event, 'reservations')">Reserved</p>
-        </div>
-        {% else %}
-        <div class="occupation unit-vacant">
-          <p>Vacant</p>
-        </div>
-        {% endif %}
-        <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
-        <div class="unit-details">
-          <p>{{ unit.name }}</p>
-          <p>{{ unit.unit_type }}</p>
-          <p>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
-            Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
-            Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {% endif %}</p>
-          <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
-        </div>
+    <div id="cards" class="unit-card">
+      {% if unit.tenant %}
+      <div class="occupation unit-occupied">
+        <p>Occupied</p>
       </div>
-    </a>
+      {% elif unit.is_reserved %}
+      <div class="occupation unit-reserved">
+        <p onclick="openView(event, 'reservations')">Reserved</p>
+      </div>
+      {% else %}
+      <div class="occupation unit-vacant">
+        <p>Vacant</p>
+      </div>
+      {% endif %}
+      <div class="image-box">
+        <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
+        <a href="#">
+          <img id="delete-unit" src="{{ url_for('static', filename='Images/delete.png') }}" alt="unit">
+        </a>
+      </div>
+      <div class="unit-details-box">
+        <a href="{{ url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id) }}">
+          <div class="unit-details">
+            <p>{{ unit.name }}</p>
+            <p>{{ unit.unit_type }}</p>
+            {% set suffix = 'th' %}
+            {% if unit.unit_floor is not none %}
+            {% if unit.unit_floor % 100 in [11, 12, 13] %}
+            {% set suffix = 'th' %}
+            {% elif unit.unit_floor % 10 == 1 %}
+            {% set suffix = 'st' %}
+            {% elif unit.unit_floor % 10 == 2 %}
+            {% set suffix = 'nd' %}
+            {% elif unit.unit_floor % 10 == 3 %}
+            {% set suffix = 'rd' %}
+            {% endif %}
+            <p>{{ unit.unit_floor }}<sup>{{ suffix }}</sup> Floor</p>
+            {% endif %}
+            <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
     {% endfor %}
   </div>
 </div>

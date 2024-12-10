@@ -11,18 +11,24 @@ from Models.invoice import Invoice
 from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm
 from decorators import landlord_role_required
 from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_access
-from botocore.exceptions import NoCredentialsError, PartialCredentialsError
+from .aws_credentials import awsCredentials
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 from datetime import date, datetime
-import random, boto3, asyncio, os
+import random, boto3, asyncio
 
 landlords = Blueprint("landlord", __name__, url_prefix="/landlord")
+client = boto3.client(
+  "s3",
+  aws_access_key_id = awsCredentials.aws_access_key,
+  aws_secret_access_key = awsCredentials.aws_secret_key
+)
 s3 = boto3.resource(
   "s3",
-  aws_access_key_id = "AKIAW3MEB6Z73VXZPZNQ",
-  aws_secret_access_key = "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"
+  aws_access_key_id = awsCredentials.aws_access_key,
+  aws_secret_access_key = awsCredentials.aws_secret_key
 )
-bucket_name = os.environ.get("bucket_name")
-region = os.environ.get("region")
+bucket_name = awsCredentials.bucket_name
+region = awsCredentials.region
 today = date.today()
 
 @landlords.route("/dashboard", methods=["POST", "GET"])
@@ -54,17 +60,17 @@ def landlord_dashboard():
 
   return render_template("Landlord/new_dash.html", **context)
 
-@landlords.route("/property-dashboard/<int:property_id>", methods=["POST","GET"])
+@landlords.route("/property/dashboard/<int:property_id>", methods=["POST","GET"])
 @login_required
 @landlord_role_required("Landlord")
 def property_information(property_id):
   try:
     form = UnitTypeForm()
-    propertiez = Properties.query.filter_by(unique_id=property_id).first()
-    properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
-    if propertiez.property_owner != current_user.id:
-      flash(f"Unknown Property", category="info")
+    propertiez = Properties.query.filter_by(unique_id=property_id, property_owner=current_user.id).first()
+    if not propertiez:
+      flash(f"Property not found", category="info")
       return redirect(url_for("landlord.landlord_dashboard"))
+    properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
     all_users = []
     member_users = Users.query.all()
     tenant_users = Tenant.query.all()
@@ -242,7 +248,7 @@ def delete_property(property_id):
     if not landlord_property:
       flash("Property not found", category="danger")
     elif landlord_property.tenant or landlord_property.unit:
-      flash(f"Cannot remove {landlord_property.name}. Some units are occupied",category="danger")
+      flash(f"Cannot remove property. You have tenants or units registered, remove them first", category="danger")
       return redirect(url_for("landlord.property_information", property_id=landlord_property.unique_id))
     elif landlord_property.property_owner != current_user.id:
       flash(f"No property with the name {landlord_property.name}",category="danger")
@@ -337,9 +343,8 @@ def upload_unit_metrics(unit_id):
     )
     files = request.files.getlist("unit_image")
     db.session.add(new_unit_metrics)
-    db.session.commit()
-    asyncio.run(upload_file(current_unit.unique_id, files))
-    return redirect(url_for('landlord.property_information',property_id=current_property.unique_id))
+    if asyncio.run(upload_file(current_unit.unique_id, files)) is True:
+      return redirect(url_for('landlord.property_information', property_id=current_property.unique_id))
 
   if form.errors != {}:
     for err_msg in form.errors.values():
@@ -356,22 +361,31 @@ async def upload_file(unit_id, files):
   if not unit:
     flash("Unit not found", category="danger")
     return redirect(url_for('landlord.landlord_dashboard'))
-  for file in files:
-    unit_image = UnitImage(
-      name = file.filename,
-      bucket = bucket_name,
-      region = region,
-      unit = unit.id
-    )
-    try:
-      s3.Bucket(bucket_name).upload_fileobj(file, file.filename)
+  try:
+    for file in files:
+      unit_image = UnitImage(
+        name = file.filename,
+        bucket = bucket_name,
+        region = region,
+        unit = unit.id
+      )
+      s3.Object(bucket_name, file.filename).put(Body=file)
       db.session.add(unit_image)
       db.session.commit()
-    except (NoCredentialsError, PartialCredentialsError) as e:
-      flash(f"Credentials error: {repr(e)}", category="danger")
-    except Exception as e:
-      flash(f"Error: {repr(e)}", category="danger")
-  flash("Unit metrics uploaded successfully", category="success")
+      flash("Unit metrics uploaded successfully", category="success")
+      return True
+  except NoCredentialsError:
+    flash("Credentials not available", category="danger")
+    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+  except PartialCredentialsError:
+    flash("Incomplete credentials provided", category="danger")
+    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+  except ClientError as e:
+    flash(f"Client Error: {e.response['Error']['Message']}", category="danger")
+    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+  except Exception as e:
+    flash(f"Error: {repr(e)}", category="danger")
+    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
 
 @landlords.route("/register-unit-type/<int:property_id>", methods=["POST"])
 @login_required
