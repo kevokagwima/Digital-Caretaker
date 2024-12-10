@@ -1,0 +1,75 @@
+.footer {
+  display: none;
+}
+
+body {
+  background-color: var(--grey);
+}
+
+.container {
+  padding: 5rem 1rem;
+}
+
+.confirm-box {
+  text-align: center;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.confirm-box h1,
+.confirm-box p {
+  color: var(--black);
+}
+
+.btn-box {
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.5em 1em;
+  font-size: 1.8ch;
+}
+
+.info {
+  padding: 2rem;
+  border-radius: var(--radius-s);
+  background-color: var(--other-dark-blue);
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 2rem;
+  margin-inline: auto;
+}
+
+.info p {
+  color: var(--grey);
+}
+.info p > a,
+#retry a {
+  color: var(--blue);
+}
+
+#retry {
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 500px) {
+  .container {
+    padding-block: 3rem;
+  }
+
+  .confirm-box h1 {
+    font-size: 2.5ch;
+  }
+
+  .info h4 {
+    font-size: 1.8ch;
+  }
+
+  p {
+    font-size: 1.6ch;
+  }
+
+  button {
+    font-size: 1.5ch;
+  }
+}

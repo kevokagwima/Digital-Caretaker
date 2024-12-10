@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/verify-payment.css') }}">
+{% endblock %}
+
+{% block title %}
+Verify Payment
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="confirm-box">
+    {% if payment.is_confirmed %}
+    <h1>Your payment was successfull</h1>
+    <p>Your order has been confirmed. View your email for the booking details</p>
+    <div class="btn-box">
+      <a href="{{ url_for('tenant.tenant_dashboard') }}">
+        <button>View Dashboard</button>
+      </a>
+    </div>
+    {% elif payment.is_pending %}
+    <h1>Hold on tight, we're confirming your payment</h1>
+    <p>Refresh the page to view status of your payment</p>
+    <div class="btn-box">
+      <a href="{{ url_for('payment.verify_payment', invoice_id=invoice.unique_id) }}">
+        <button>Refresh</button>
+      </a>
+    </div>
+    <div class="info">
+      <h4>Payment page not updated after successfull payment?</h4>
+      <!-- <p>Contact Support at <a target="_blank" href="https://wa.me/+254702879696">0702879696</a></p> -->
+    </div>
+    <p id="retry">Click <a href="{{ url_for('tenant.tenant_dashboard') }}">here</a> to retry payment</p>
+    {% elif payment.is_failed %}
+    <h1>Your payment failed. Please try again!</h1>
+    <p>Something went wrong while processing your payment</p>
+    <div class="btn-box">
+      <a href="{{ url_for('tenant.tenant_dashboard') }}">
+        <button>Retry Payment</button>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
