@@ -6,7 +6,6 @@ from Models.property import Properties, PropertyTypes
 from Models.unit import Unit
 from Models.users import Tenant, Landlord
 from .form import UnitEnquiryForm
-
 from sqlalchemy import or_
 from .form import *
 import random

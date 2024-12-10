@@ -458,7 +458,6 @@ def extra_service(extra_type):
 @login_required
 @landlord_role_required("Landlord")
 def unit_select(property_id):
-  
   units = Unit.query.filter_by(Property=property_id).all()
   unitsArray = []
   for unit in units:
@@ -473,8 +472,7 @@ def unit_select(property_id):
 @landlords.route("/extra-service/<int:extra_id>", methods=["POST", "GET"])
 @login_required
 @landlord_role_required("Landlord")
-def select_extra_service(extra_id):
-  
+def select_extra_service(extra_id): 
   if request.get_data('data'):
     data = json.loads(request.get_data('data'))
   extra = Extras.query.filter_by(id=data.get("extra")).first()
@@ -506,7 +504,6 @@ def select_extra_service(extra_id):
 @login_required
 @landlord_role_required("Landlord")
 def extra_occupancy(extra_id):
-  
   extra = Extras.query.get(extra_id)
   active_extras = ExtraService.query.filter_by(landlord = current_user.id, status="Ongoing", extra=extra.id).all()
   occupied_extras = []
