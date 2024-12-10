@@ -29,23 +29,9 @@
           <i class="fa fa-caret-down"></i>
         </p>
         <div class="dropdown-content">
-          {% if current_user.is_authenticated and current_user.landlord.name == "Landlord" %}
-          <a id="link" href="{{ url_for('landlord.landlord_dashboard') }}">Landlord Portal</a>
-          {% else %}
           <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
-          {% endif %}
-
-          {% if current_user.is_authenticated and current_user.tenant_role == "Tenant" %}
-          <a id="link" href="{{ url_for('tenant.tenant_dashboard') }}">Tenant Portal</a>
-          {% else %}
           <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
-          {% endif %}
-
-          {% if current_user.is_authenticated and current_user.admin == "Admin" %}
-          <a id="link" href="{{ url_for('admin.admin') }}">Admin Portal</a>
-          {% else %}
           <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
-          {% endif %}
         </div>
       </div>
       <a id="link" href="{{ url_for('main.properties') }}">Properties</a>
@@ -96,9 +82,9 @@
   <body id="body">
     {% block body %}
     {% endblock %}
-    <div class="footer">
+    <footer class="footer">
       <p>Copyright &copy; PMS 2024. All Rights Reserved</p>
-    </div>
+    </footer>
   </body>
 
   <script src="{{ url_for('static', filename='js/base.js') }}"></script>

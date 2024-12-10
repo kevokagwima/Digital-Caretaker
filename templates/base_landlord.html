@@ -13,147 +13,119 @@
     <title>PMS | {% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
-  <div class="side-nav">
-    <div class="profile" onclick="openView(event, 'profile')">
-      <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile-image">
-      <div class="profile-info">
-        <p>Hi, {{ current_user.first_name }} {{ current_user.last_name }}</p>
-        <span>{{ current_user.landlord.name }}</span>
-      </div>
-    </div>
-    <div class="navigation">
-      <div class="main-navigation">
-        <h4 id="nav-title">Main</h4>
-        {% block nav %}{% endblock %}
-      </div>
-      <div class="secondary-navigation">
-        <h4 id="nav-title">Settings</h4>
-        <button class="tablinks" onclick="openView(event, 'settings')" id="defaultOpen">
-          <img src="{{ url_for('static', filename='Images/setting.png') }}" alt="settings">
-          <span>Settings</span>
-        </button>
-        <button class="tablinks" onclick="openView(event, 'help')">
-          <img src="{{ url_for('static', filename='Images/info.png') }}" alt="help">
-          Help
-        </button>
-      </div>
-      <div class="logout">
-        <button>
-          <a href="{{ url_for('auth.logout') }}">
-            <img src="{{ url_for('static', filename='Images/logout.png') }}" alt="logout">
-            Logout
-          </a>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="content-area">
-    <div class="notification-area">
-      <div class="burger">
-        <div class="div"></div>
-        <div class="div"></div>
-        <div class="div"></div>
-      </div>
-      <div class="not">
-        <img class="not--img" src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell">
-        {% set verifications = [] %}
-        {% for info in current_user.verification if info.status == "pending" %}
-        {{ verifications.append(info) or "" }}
-        {% endfor %}
-        {% if verifications %}
-        <div class="notification-dot"></div>
-        {% endif %}
-      </div>
-      <div class="notifications">
-        {% if verifications %}
-        {% for info in current_user.verification|sort(attribute='date', reverse=true) if info.status == "pending" %}
-        <div class="notification-info">
-          <p>You have a rent payment that requires your verification from
-            {% for tenant in current_user.tenant if tenant.id == info.tenant %} <span>{{ tenant.first_name }}
-              {{ tenant.second_name }} {% for unit in current_user.unit if unit.tenant == tenant.id %} - Unit
-              {{ unit.name }}
-              {% endfor %}</span> {% endfor %}
-          </p>
-          <p id="info">{{ info.info }}</p>
-          <div class="not-actions">
-            <button class="btn1">
-              <a href="{{ url_for('landlord.approve_verification', verification_id=info.id) }}">Approve</a>
-            </button>
-            <button class="btn2">
-              <a href="{{ url_for('landlord.deny_verification', verification_id=info.id) }}">Deny</a>
-            </button>
-          </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <p id="else-not">No new notifications</p>
-        {% endif %}
-      </div>
-    </div>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="tops">
-      {% for category, message in messages %}
-      <div class="alert alert-{{category}}">
-        <div class="side"></div>
-        <p id="message">{{ message }}</p>
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-    <div id="settings" class="tabcontent">
-      <h4 id="dash">Settings</h4>
-      <div class="settings"></div>
-    </div>
-    <div id="help" class="tabcontent">
-      <h4 id="dash">Help</h4>
-      <div class="extra main">
-        <p>
-          <a href="{{ url_for('main.index') }}">Visit Main Website</a>
-        </p>
-      </div>
-    </div>
-    <div id="profile" class="tabcontent">
-      <h4 id="dash">My Profile</h4>
-      <div class="my-profile">
-        <div class="personal-info-details">
-          <table>
-            <tr>
-              <th>Landlord ID</th>
-              <td>{{ current_user.unique_id }}</td>
-            </tr>
-            <tr>
-              <th>First Name</th>
-              <td>{{ current_user.first_name }}</td>
-            </tr>
-            <tr>
-              <th>Last Name</th>
-              <td>{{ current_user.last_name }}</td>
-            </tr>
-            <tr>
-              <th>Email Address</th>
-              <td>{{ current_user.email }}</td>
-            </tr>
-            <tr>
-              <th>Phone Number</th>
-              <td>0{{ current_user.phone }}</td>
-            </tr>
-            <tr>
-              <th>Date Registered</th>
-              <td>{{ current_user.date.strftime('%d/%m/%Y') }}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <body>
-    {% block body %}{% endblock %}
+    <div class="side-nav">
+      <div class="profile" onclick="openView(event, 'profile')">
+        <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile-image">
+        <div class="profile-info">
+          <p>Hi, {{ current_user.first_name }} {{ current_user.last_name }}</p>
+          {% if current_user.landlord.name == "Landlord" %}
+          <span>{{ current_user.landlord.name }}</span>
+          {% elif current_user.tenant_role.name == "Tenant" %}
+          <span>{{ current_user.tenant_role.name }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="navigation">
+        <div class="main-navigation">
+          <h4 id="nav-title">Main</h4>
+          {% block nav %}{% endblock %}
+        </div>
+        <div class="secondary-navigation">
+          <h4 id="nav-title">Settings</h4>
+          <button class="tablinks" onclick="openView(event, 'settings')">
+            <img src="{{ url_for('static', filename='Images/setting.png') }}" alt="settings">
+            <span>Settings</span>
+          </button>
+          <button class="tablinks" onclick="openView(event, 'help')">
+            <img src="{{ url_for('static', filename='Images/info.png') }}" alt="help">
+            Help
+          </button>
+        </div>
+        <div class="logout">
+          <button>
+            <a href="{{ url_for('auth.logout') }}">
+              <img src="{{ url_for('static', filename='Images/logout.png') }}" alt="logout">
+              Logout
+            </a>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="content-area">
+      <div class="notification-area">
+        <div class="nav-actions">
+          <div class="burger">
+            <div class="div"></div>
+            <div class="div"></div>
+            <div class="div"></div>
+          </div>
+          <span class="close">&Cross;</span>
+        </div>
+        <img class="not--img" src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell">
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="tops">
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}}">
+          <p id="message">{{ message }}</p>
+          <span id="close">&Cross;</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+      {% block body %}{% endblock %}
+      <div id="settings" class="tabcontent">
+        <h4 id="dash">Settings</h4>
+        <div class="settings"></div>
+      </div>
+      <div id="help" class="tabcontent">
+        <h4 id="dash">Help</h4>
+        <div class="extra">
+          <a href="{{ url_for('main.index') }}">Visit Main Website</a>
+        </div>
+      </div>
+      <div id="profile" class="tabcontent">
+        <h4 id="dash">My Profile</h4>
+        <div class="my-profile">
+          <div class="personal-info-details">
+            <table>
+              <tr>
+                <th>User ID</th>
+                <td>{{ current_user.unique_id }}</td>
+              </tr>
+              <tr>
+                <th>First Name</th>
+                <td>{{ current_user.first_name }}</td>
+              </tr>
+              <tr>
+                <th>Last Name</th>
+                <td>{{ current_user.last_name }}</td>
+              </tr>
+              <tr>
+                <th>Email Address</th>
+                <td>{{ current_user.email }}</td>
+              </tr>
+              <tr>
+                <th>Phone Number</th>
+                <td>0{{ current_user.phone }}</td>
+              </tr>
+              <tr>
+                <th>Date Registered</th>
+                <td>{{ current_user.date.strftime('%d %B %Y') }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <script src="{{ url_for('static', filename='js/base_landlord.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    {% block script %} {% endblock %}
   </body>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
 </html>

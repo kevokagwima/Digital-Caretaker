@@ -13,7 +13,6 @@
   --page-header-bgColor-hover: #1d2636;
   --page-content-bgColor: #04101f;
   --page-content-txtColor: #171616;
-  --page-content-blockColor: #fff;
   --white: #fff;
   --black: #212121;
   --blue: #00b9eb;
@@ -21,7 +20,10 @@
   --grey: #f5f5f5;
   --dark-grey: #666666;
   --red: #ec1848;
+  --green: green;
+  --light-green: rgb(6, 187, 6);
   --radius: 0.3rem;
+  --radius-l: 10rem;
   --shadow: 0 0 10px -2px #00000013;
   --font-1: "Outfit", sans-serif;
 }
@@ -48,26 +50,62 @@ html {
 body {
   display: flex;
   background-color: var(--other-dark-blue);
-  font-family: var(--font-1);
 }
 
 h1 {
+  font-family: var(--font-1);
   font-weight: 900;
 }
 
 h2,
 h3,
-h4 {
+h4,
+th {
   font-weight: 700;
+  font-family: var(--font-1);
 }
 
 p,
-span {
+span,
+b,
+input,
+select,
+textarea,
+label,
+a,
+ul,
+li,
+td {
   font-weight: 400;
+  font-family: var(--font-1);
 }
 
 a {
+  font-weight: 500;
   text-decoration: none;
+}
+
+.input {
+  display: grid;
+  gap: 0.5rem;
+}
+
+input,
+select {
+  padding: 1em;
+  border: none;
+  background-color: var(--page-header-bgColor);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+}
+
+::placeholder {
+  color: var(--dark-grey);
 }
 
 button {
@@ -160,14 +198,9 @@ button {
   color: var(--white);
 }
 
-.tablinks.active,
 .tablinks.active:hover {
   background-color: var(--blue);
   color: var(--white);
-}
-
-#nav-title {
-  color: var(--switch-moonColor);
 }
 
 .secondary-navigation {
@@ -185,12 +218,6 @@ button {
   color: var(--red);
 }
 
-#no {
-  color: var(--red);
-  font-size: 15px;
-  margin-left: 40px;
-}
-
 .drop-down-container {
   display: none;
   padding-left: 10px;
@@ -201,181 +228,49 @@ button {
   text-decoration: none;
   display: block;
   color: var(--red);
-  font-size: 15px;
-  padding: 10px 5px;
-  margin-left: 30px;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  margin-left: 2rem;
   cursor: pointer;
 }
 
-.comp {
-  position: relative;
-}
-
-.complaint-count {
-  background-color: var(--red);
-  position: absolute;
-  inset: 0 auto auto 2rem;
-  min-width: 1rem;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.complaint-count span {
-  font-size: 0.8rem;
-}
-
 .content-area {
-  background-color: var(--other-dark-blue);
   min-height: 100svh;
   max-height: 100svh;
+  flex-grow: 1;
   overflow-y: auto;
-  width: 100%;
   padding: 0 1rem;
+  background-color: var(--other-dark-blue);
 }
 
 .notification-area {
   position: sticky;
-  padding-block: 0.4rem;
   top: 0;
   z-index: 1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 0.2rem;
   background-color: var(--other-dark-blue);
 }
 
-.notifications {
-  position: absolute;
-  inset: 2rem 15px auto auto;
-  height: max-content;
-  max-height: 47rem;
-  overflow: auto;
-  min-width: 22rem;
-  max-width: 25rem;
-  border-radius: 3px;
-  background-color: var(--page-header-bgColor-hover);
-  box-shadow: 0 0 5rem -2rem black;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  display: none;
-}
-
-.notification-info {
-  padding: 10px 15px;
-  background-color: var(--page-header-bgColor);
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  border-radius: 5px;
-}
-
-.notifications hr {
-  background-color: grey;
-  border: 0.1px solid grey;
-}
-
-.notification-info p {
-  font-weight: bold;
-}
-
-.notification-info span {
-  color: var(--red);
-}
-
-#info {
-  font-size: 14px;
-}
-
-.not-actions {
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 10px;
-  margin-top: 10px;
-  display: none;
-}
-
-.show-not-actions {
-  display: grid;
-}
-
-.not-actions button {
-  border: none;
-  border-radius: 3px;
-  padding: 5px;
-  cursor: pointer;
-}
-
-.not-actions button a {
-  text-decoration: none;
-  color: white;
-  text-transform: uppercase;
-}
-
-.btn1 {
-  background-color: rgb(6, 187, 6);
-}
-
-.btn2 {
-  background-color: red;
-}
-
-.show-notifications {
-  display: flex;
-}
-
-#else-not {
-  text-align: center;
-  padding: 10px;
-}
-
-.not {
-  cursor: pointer;
-}
-
 .burger {
-  position: absolute;
-  left: 0.2rem;
-  top: 5px;
+  display: grid;
+  gap: 0.25rem;
   cursor: pointer;
   display: none;
 }
 
-.burger > div {
-  height: 2.2px;
-  width: 25px;
-  margin: 5px 0;
-  background-color: white;
-}
-
-.notification-dot {
-  position: absolute;
-  inset: 0 1px auto auto;
-  height: 12px;
-  aspect-ratio: 1/1;
-  border-radius: 50%;
-  background-color: rgb(9, 197, 9);
-  animation: pulse 1.2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-
-  100% {
-    opacity: 1;
-  }
+.burger div {
+  height: 0.1rem;
+  width: 1.3rem;
+  border-radius: var(--radius);
+  background-color: var(--grey);
 }
 
 .not--img {
-  height: 1.5rem;
+  max-height: 1.5rem;
+  cursor: pointer;
 }
 
 .tabcontent {
@@ -387,7 +282,8 @@ button {
   display: block;
 }
 
-.tab-header {
+.tab-header,
+.extra-heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -395,30 +291,10 @@ button {
 
 #dash {
   font-size: 1.4rem;
-  position: relative;
-}
-
-.detailed-rent {
-  position: absolute;
-  right: 1rem;
-  max-height: 1.2rem;
-  cursor: pointer;
 }
 
 #more-info {
-  color: grey;
-  margin-top: 10px;
-}
-
-#add-property {
-  padding: 0.4rem 0.6rem;
-  border: none;
-  border-radius: 0.3rem;
-  color: white;
-  background-color: var(--blue);
-  cursor: pointer;
-  font-size: 1.4ch;
-  font-family: var(--font-1);
+  color: var(--dark-grey);
 }
 
 .dash-information {
@@ -434,22 +310,17 @@ button {
   gap: 0.5rem;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 1.8rem;
+  background-color: var(--other-dark-blue);
+  z-index: 1;
+  padding-bottom: 0.2rem;
 }
 
 #tenant_search,
 #tenant-search {
-  padding: 0.8em;
-  border: none;
-  border-radius: 0.3rem;
-  background-color: var(--page-header-bgColor-hover);
   text-transform: capitalize;
-  font-family: var(--font-1);
-  outline: 2px solid white;
-}
-
-#tenant_search::placeholder,
-#tenant-search::placeholder {
-  color: var(--white);
+  padding-block: 0.5em;
 }
 
 .all-tenants,
@@ -466,7 +337,7 @@ button {
 }
 
 #just-info {
-  color: grey;
+  color: var(--dark-grey);
 }
 
 .tenant-card,
@@ -479,6 +350,7 @@ button {
   overflow: hidden;
   border-radius: 0.3rem;
   background-color: var(--page-header-bgColor-hover);
+  color: var(--grey);
 }
 
 .tenant-unit-assigned,
@@ -488,13 +360,14 @@ button {
   padding: 0.2rem 0.4rem;
   top: 0;
   right: 0;
-  font-size: 1.3ch;
-  color: white;
+  color: var(--white);
   border-bottom-left-radius: 0.3rem;
+  font-size: 1.5ch;
 }
 
-.tenant-unit-assigned {
-  background-color: rgb(6, 187, 6);
+.tenant-unit-assigned,
+.unit-occupied {
+  background-color: var(--green);
 }
 
 .tenant-unit-unassigned {
@@ -508,16 +381,6 @@ button {
   left: 0;
 }
 
-.tenant-unit-assigned a,
-.unit-property-assigned a {
-  text-decoration: none;
-  color: white;
-}
-
-.unit-occupied {
-  background-color: rgb(6, 187, 6);
-}
-
 .unit-reserved {
   background-color: orange;
 }
@@ -526,106 +389,43 @@ button {
   background-color: var(--red);
 }
 
+.image-box {
+  display: grid;
+  gap: 1rem;
+}
+
 .tenant-card img,
 .unit-card img {
-  height: 4rem;
+  max-height: 3rem;
+}
+
+.image-box a {
+  margin-inline: auto;
+}
+
+#delete-unit {
+  max-height: 2rem;
+}
+
+.unit-details-box {
+  flex-grow: 1;
 }
 
 .tenant-details,
 .unit-details {
   display: grid;
   gap: 0.5rem;
-}
-.tenant-details p,
-.unit-details p {
-  font-size: 1.6ch;
-}
-
-.tenant-details hr {
-  outline: 1px solid var(--page-header-headingColor);
-  opacity: 0.3;
-  border: none;
+  color: var(--grey);
 }
 
 .tenant-details a {
   color: var(--blue);
-}
-
-.rent {
-  display: grid;
-  grid-template-columns: 1fr;
-  padding: 0.5rem;
-  margin-top: 1rem;
-}
-
-#rent #dash {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-}
-
-.transactions-details,
-.transaction-details {
-  border-radius: 0.3rem;
-  display: grid;
-  gap: 1rem;
-}
-
-.transaction-details {
-  border-radius: 0;
-}
-
-.transaction-info {
-  padding: 1rem;
-  background-color: var(--page-header-bgColor-hover);
-  border-radius: 0.3rem;
-  position: relative;
-}
-
-#transaction-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem;
-  justify-content: space-between;
-}
-
-.transaction-info #date {
-  color: var(--page-header-headingColor);
-}
-
-.transaction-info > p {
-  color: whitesmoke;
-}
-
-.transaction-info p > span {
-  color: var(--switch-bgLightModeColor);
-}
-
-.transaction-info hr {
-  border: none;
-  outline: 0.1px solid grey;
-  background-color: grey;
-  opacity: 0.3;
-  margin: 0.5rem 0;
-}
-
-.watermark {
-  color: var(--page-header-headingColor);
+  margin-top: 0.5rem;
 }
 
 .else {
   color: var(--red);
   text-align: center;
-}
-
-#extra > #dash {
-  position: relative;
-}
-
-#extra > #dash > button {
-  position: absolute;
-  left: 5rem;
-  max-width: max-content;
 }
 
 .extras {
@@ -792,50 +592,22 @@ button {
 
 .personal-info-details table th,
 td {
-  padding: 10px;
+  padding: 0.8rem;
 }
 
 .personal-info-details table th {
-  color: grey;
+  color: var(--dark-grey);
   text-align: left;
-  width: 35rem;
 }
 
 .extra {
-  margin-top: 10px;
-  padding: 20px;
+  margin-top: 1rem;
   text-align: center;
 }
 
-.main a {
+.extra a {
   text-decoration: none;
   color: var(--red);
-}
-
-.property-registration {
-  background-color: var(--dark-blue);
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 5px;
-}
-
-.property-registration form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
-
-.property-registration form::-webkit-scrollbar {
-  display: none;
-}
-
-.property-registration .btn {
-  background-color: green;
-  color: white;
-  padding: 0.8em;
-  border-radius: 0.3rem;
-  font-size: 2ch;
-  grid-column: 1/3;
 }
 
 .tops {
@@ -860,12 +632,27 @@ td {
 }
 
 .alert {
-  position: relative;
-  gap: 1.5rem;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
-  padding: 0.3rem 0.5rem;
+  padding: 0 0.5rem;
   border-radius: 0.3rem;
+}
+
+#message {
+  flex-grow: 1;
+  text-align: center;
+}
+
+#close,
+.close {
+  color: var(--red);
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.close {
+  display: none;
 }
 
 .alert-success {
@@ -890,98 +677,4 @@ td {
   color: #a94442;
   background-color: #f2dede;
   border-color: #ebccd1;
-}
-
-@media (prefers-color-scheme: light) {
-  .content-area,
-  body,
-  .main-navigation button,
-  .main-navigation button:focus,
-  .secondary-navigation button,
-  .secondary-navigation button:focus,
-  .logout button,
-  .prop-owned-info,
-  .property-registration input,
-  .property-registration select,
-  .notification-area {
-    background-color: whitesmoke;
-  }
-
-  .main-navigation button:hover,
-  .main-navigation button:focus,
-  .secondary-navigation button:hover,
-  .secondary-navigation button:focus {
-    background-color: bisque;
-    color: black;
-  }
-
-  .side-nav,
-  .tenant-search input,
-  .transaction-info,
-  .properties-owned,
-  .personal-info-details,
-  .property-registration,
-  .notification-info,
-  .active-extra,
-  .invoice,
-  .stat,
-  .rent-stats-box,
-  .invoice-box {
-    background-color: white;
-  }
-
-  #nav-title {
-    color: black;
-  }
-
-  .burger > div {
-    background-color: black;
-  }
-
-  .income,
-  .expenses,
-  .profit {
-    background-color: rgba(241, 241, 241, 0.9);
-  }
-
-  .tenant-search input {
-    outline: 2px solid black;
-  }
-
-  .tenant-details a,
-  .unit-property-assigned h4 {
-    color: var(--blue);
-  }
-
-  .tenant-search input::placeholder,
-  .property-registration input::placeholder {
-    color: grey;
-  }
-
-  .transaction-info,
-  .rents-info div {
-    box-shadow: 0 0 10px -8px black;
-  }
-
-  .notifications,
-  .tenant-card,
-  .unit-card,
-  .rent-stat,
-  .extra-services-items {
-    background-color: bisque;
-    color: black;
-  }
-
-  .extra-services-info h4,
-  .extra-services-info p {
-    color: black;
-  }
-
-  .invoice-info {
-    background-color: aliceblue;
-  }
-
-  .side {
-    background-color: black;
-  }
 }

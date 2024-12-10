@@ -3,3 +3,4 @@ downloads.csv
 static/Images
 venv
 .env
+Landlords/aws_credentials.py

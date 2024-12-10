@@ -1,33 +1,40 @@
-.footer {
+.footer,
+header {
   display: none;
 }
 
-.logo {
-  max-height: 3.5rem;
-  margin-top: 0;
+.container {
+  min-height: 100svh;
+  padding: 4rem;
+  display: grid;
+  place-items: center;
 }
 
-main {
-  min-height: 100vh;
-  background-color: var(--red);
-  display: flex;
-  flex-direction: column;
+.error-box {
+  display: grid;
   justify-content: center;
-  align-items: center;
   gap: 2rem;
-  font-family: "Dancing Script", cursive;
-  font-family: "Varela Round", sans-serif;
 }
 
-main > h1 {
-  color: white;
-  font-size: 3.5rem;
+.container div {
+  max-width: max-content;
+  margin-inline: auto;
+}
+
+.error-title h1 {
+  color: var(--dark-blue);
+}
+
+.error-info p {
+  color: var(--black);
+  max-width: 60%;
+  margin-inline: auto;
   text-align: center;
-  max-width: 70vw;
 }
 
-main > p {
-  color: whitesmoke;
-  font-size: 1.2rem;
-  font-family: var(--nav-links-font);
+.error-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
 }

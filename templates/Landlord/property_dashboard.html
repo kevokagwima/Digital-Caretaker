@@ -23,15 +23,15 @@ Property Dashboard | {{ propertiez.name }}
 </button>
 <div class="drop-down-container">
   {% if properties|count > 1 %}
-  {% for property in properties if property.id == propertiez.id %}
-  <a class="tablinks" onclick="openView(event, '{{ propertiez.name}}')" id="defaultOpen">{{ property.name }}</a>
+  {% for property in properties if property.unique_id == propertiez.unique_id %}
+  <a class="tablinks" onclick="openView(event, '{{ propertiez.name}}')">{{ property.name }}</a>
   {% endfor %}
-  {% for property in properties if property.id != propertiez.id %}
-  <a id="other" href="{{ url_for('landlord.property_information', property_id=property.id) }}" class="tablinks"
-    onclick="openView(event, '{{ property.name }}')" id="defaultOpen">{{ property.name }}</a>
+  {% for property in properties if property.unique_id != propertiez.unique_id %}
+  <a id="other" href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}" class="tablinks"
+    onclick="openView(event, '{{ property.name }}')">{{ property.name }}</a>
   {% endfor %}
   {% else %}
-  <a class="tablinks" onclick="openView(event, '{{ propertiez.name }}')" id="defaultOpen">{{ propertiez.name }}</a>
+  <a class="tablinks" onclick="openView(event, '{{ propertiez.name }}')">{{ propertiez.name }}</a>
   {% endif %}
 </div>
 <button class="tablinks" onclick="openView(event, 'tenants')">
@@ -45,15 +45,6 @@ Property Dashboard | {{ propertiez.name }}
 <button class="tablinks comp" onclick="openView(event, 'complaints')">
   <img src="{{ url_for('static', filename='Images/feedback.png') }}" alt="complaints">
   Complaints
-  {% set comp_count = [] %}
-  {% for complaint in propertiez.complaint if complaint.date.strftime('%d/%m/%Y') == today_time %}
-  {{ comp_count.append(complaint) or "" }}
-  {% if comp_count|count != 0 %}
-  <div class="complaint-count">
-    <span>{{ comp_count|count }}</span>
-  </div>
-  {% endif %}
-  {% endfor %}
 </button>
 <button class="tablinks" onclick="openView(event, 'options')">
   <img src="{{ url_for('static', filename='Images/options.png') }}" alt="options">
@@ -61,18 +52,20 @@ Property Dashboard | {{ propertiez.name }}
 </button>
 {% endblock %}
 
-{% block content %}
-<div id="{{ propertiez.name }}" class="tabcontent">
+{% block body %}
+<div id="{{ propertiez.name }}" class="tabcontent active">
   <div id="property-heading">
     <h4 id="dash">
       {{ propertiez.name }}
       <span title="Property ID" id="prop_id">- {{ propertiez.unique_id }}</span>
     </h4>
     <div class="property-actions">
-      <a href="{{ url_for('landlord.edit_property', property_id=propertiez.id) }}">
+      <a href="{{ url_for('landlord.edit_property', property_id=propertiez.unique_id) }}">
         <img src="{{ url_for('static', filename='Images/edit.png') }}" alt="">
       </a>
-      <img id="modalbtn" src="{{ url_for('static', filename='Images/delete.png') }}" alt="">
+      <p id="modalbtn">
+        <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="">
+      </p>
     </div>
     <div class="property-btns">
       <a href="{{ url_for('landlord.add_property') }}">
@@ -175,9 +168,9 @@ Property Dashboard | {{ propertiez.name }}
           {{ occupied_units.append(unit) or "" }}
           {{ expected_rent.append(unit.rent_amount) or "" }}
           {% endfor %}
-          <h4>Rent Expected</h4>
+          <p>Rent Expected</p>
           <div class="rent-stat-info">
-            <p id="expected">{{ "Ksh {:,}".format(expected_rent|sum) }}</p>
+            <h4 id="expected">{{ "Ksh {:,}".format(expected_rent|sum) }}</h4>
             <span>{{ occupied_units|count }} Unit(s)</span>
           </div>
         </div>
@@ -190,44 +183,23 @@ Property Dashboard | {{ propertiez.name }}
           {{ rent_paid.append(invoice.amount) or "" }}
           {% endfor %}
           {% endfor %}
-          <h4>Rent Received</h4>
+          <p>Rent Received</p>
           <div class="rent-stat-info">
-            <p id="received">{{ "Ksh {:,}".format(rent_paid|sum) }}</p>
+            <h4 id="received">{{ "Ksh {:,}".format(rent_paid|sum) }}</h4>
             <span>{{ tenants_paid|count }} Tenant(s)</span>
           </div>
         </div>
         <div class="rent-stat remaining">
           {% set rent_remaining = expected_rent|sum - rent_paid|sum %}
-          <h4>Rent Remaining</h4>
+          <p>Rent Remaining</p>
           <div class="rent-stat-info">
-            <p id="remaining">{{ "Ksh {:,}".format(rent_remaining) }}</p>
+            <h4 id="remaining">{{ "Ksh {:,}".format(rent_remaining) }}</h4>
             <span>{{ occupied_units|count - tenants_paid|count }} Tenant(s)</span>
           </div>
         </div>
       </div>
     </div>
     <div class="payments-box">
-      <div class="transaction-box">
-        <h4>Recent Transactions</h4>
-        <div class="transactions">
-          {% if propertiez.transact %}
-          {% for transaction in propertiez.transact|sort(attribute="time", reverse=true) %}
-          <div class="invoicez">
-            <h4>#{{ transaction.transaction_id }}</h4>
-            {% for tenant in tenants if tenant.id == transaction.tenant %}
-            <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
-            {% endfor %}
-            <p id="invoice-date" title="Date Created">
-              {{ transaction.time.strftime("Completed on: %d/%m/%Y at %I:%M %p") }}
-            </p>
-            <span id="origin">{{ transaction.origin }}</span>
-          </div>
-          {% endfor %}
-          {% else %}
-          <p class="else">No Transactions</p>
-          {% endif %}
-        </div>
-      </div>
       <div class="invoice-box">
         <h4>Invoice History</h4>
         <div class="invoices">
@@ -240,7 +212,7 @@ Property Dashboard | {{ propertiez.name }}
           {% if recent_invoices %}
           {% for invoice in recent_invoices|sort(attribute="date_created", reverse=true) %}
           <div class="invoicez">
-            <h4>#{{ invoice.invoice_id }}</h4>
+            <h4>#{{ invoice.unique_id }}</h4>
             {% for tenant in tenants if tenant.id == invoice.tenant %}
             <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
             {% endfor %}
@@ -269,6 +241,27 @@ Property Dashboard | {{ propertiez.name }}
           {% endif %}
         </div>
       </div>
+      <div class="transaction-box">
+        <h4>Recent Transactions</h4>
+        <div class="transactions">
+          {% if propertiez.transaction %}
+          {% for transaction in propertiez.transaction|sort(attribute="time", reverse=true) %}
+          <div class="invoicez">
+            <h4>#{{ transaction.unique_id }}</h4>
+            {% for tenant in tenants if tenant.id == transaction.tenant %}
+            <p>{{ tenant.first_name }} {{ tenant.last_name }}</p>
+            {% endfor %}
+            <p id="invoice-date" title="Date Created">
+              {{ transaction.time.strftime("Completed on: %d/%m/%Y at %I:%M %p") }}
+            </p>
+            <span id="origin">{{ transaction.origin }}</span>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p class="else">No Transactions</p>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -276,7 +269,7 @@ Property Dashboard | {{ propertiez.name }}
   <div id="tenant-heading">
     <h4 id="dash">Tenants - {{ propertiez.name }} ({{ propertiez.tenant|count }})
     </h4>
-    <input spellcheck="false" required type="text" id="tenant_search" placeholder="Search for any Tenant">
+    <input spellcheck="false" required type="text" id="tenant_search" placeholder="Find tenant">
   </div>
   <p id="more-info">This shows all tenants from your property and their respective assigned units</p>
   <div id="tenant_details" class="all-tenants">
@@ -285,7 +278,7 @@ Property Dashboard | {{ propertiez.name }}
       {% if tenant.unit %}
       <div class="tenant-unit-assigned">
         {% for unit in tenant.unit %}
-        <h4>{{ unit.name }}, {{ unit.Type }}</h4>
+        <p>{{ unit.name }}, {{ unit.unit_type }}</p>
         {% endfor %}
       </div>
       {% else %}
@@ -298,7 +291,6 @@ Property Dashboard | {{ propertiez.name }}
         <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
         <p>{{ tenant.email }}</p>
         <p>0{{ tenant.phone }}</p>
-        <hr>
         <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">Tenant Profile</a>
       </div>
     </div>
@@ -309,38 +301,54 @@ Property Dashboard | {{ propertiez.name }}
   <div id="tenant-heading">
     <h4 id="dash">Units - {{ propertiez.name }} ({{ propertiez.unit|count }})
     </h4>
-    <input spellcheck="false" required type="text" id="tenant-search" placeholder="Search for any Unit">
+    <input spellcheck="false" required type="text" id="tenant-search" placeholder="Find Unit">
   </div>
   <p id="more-info">This shows all units from your property and their status</p>
   <div id="unit_details" class="all-units">
     {% for unit in propertiez.unit|sort(attribute="unit_id") %}
-    <a href="{{ url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id) }}">
-      <div id="cards" class="unit-card">
-        {% if unit.tenant %}
-        <div class="occupation unit-occupied">
-          <h4>Occupied</h4>
-        </div>
-        {% elif unit.reserved == "True" %}
-        <div class="occupation unit-reserved">
-          <h4 onclick="openView(event, 'reservations')">Reserved</h4>
-        </div>
-        {% else %}
-        <div class="occupation unit-vacant">
-          <h4>Vacant</h4>
-        </div>
-        {% endif %}
-        <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
-        <div class="unit-details">
-          <p>{{ unit.name }}</p>
-          <p>{{ unit.unit_type }}</p>
-          <p>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup> Floor{%
-                  elif unit.unit_floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.unit_floor
-                  % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor {%
-                  endif%}</p>
-          <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
-        </div>
+    <div id="cards" class="unit-card">
+      {% if unit.tenant %}
+      <div class="occupation unit-occupied">
+        <p>Occupied</p>
       </div>
-    </a>
+      {% elif unit.is_reserved %}
+      <div class="occupation unit-reserved">
+        <p onclick="openView(event, 'reservations')">Reserved</p>
+      </div>
+      {% else %}
+      <div class="occupation unit-vacant">
+        <p>Vacant</p>
+      </div>
+      {% endif %}
+      <div class="image-box">
+        <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
+        <a href="#">
+          <img id="delete-unit" src="{{ url_for('static', filename='Images/delete.png') }}" alt="unit">
+        </a>
+      </div>
+      <div class="unit-details-box">
+        <a href="{{ url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id) }}">
+          <div class="unit-details">
+            <p>{{ unit.name }}</p>
+            <p>{{ unit.unit_type }}</p>
+            {% set suffix = 'th' %}
+            {% if unit.unit_floor is not none %}
+            {% if unit.unit_floor % 100 in [11, 12, 13] %}
+            {% set suffix = 'th' %}
+            {% elif unit.unit_floor % 10 == 1 %}
+            {% set suffix = 'st' %}
+            {% elif unit.unit_floor % 10 == 2 %}
+            {% set suffix = 'nd' %}
+            {% elif unit.unit_floor % 10 == 3 %}
+            {% set suffix = 'rd' %}
+            {% endif %}
+            <p>{{ unit.unit_floor }}<sup>{{ suffix }}</sup> Floor</p>
+            {% endif %}
+            <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
     {% endfor %}
   </div>
 </div>
@@ -352,20 +360,24 @@ Property Dashboard | {{ propertiez.name }}
     {% if propertiez.complaint %}
     {% for complaint in all_complaints %}
     <div class="complaint-details">
-      <p id="tenant">{{ complaint.time.strftime('%d-%m-%Y at %I:%M %p') }}</p>
+      <p id="tenant">{{ complaint.time.strftime('%d %B %Y at %I:%M %p') }}</p>
       <div class="complaint-info">
-        <h4>{{ complaint.title }}</h4>
-        <p id="tenant-names">
-          {% for tenant in propertiez.tenant if tenant.id == complaint.tenant %}
-          <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">
-            {{ tenant.first_name }} {{ tenant.second_name }},
-          </a>
-          {% for unit in tenant.unit %}
-          {{ unit.name }}
-          {% endfor %}
-          {% endfor %}
-        </p>
-        <p>{{ complaint.body }}</p>
+        <div class="complaints-info">
+          <h4>Title: {{ complaint.title }}</h4>
+          <p>Message: {{ complaint.message }}</p>
+        </div>
+        <div class="tenant-name">
+          <p id="tenant-names">
+            {% for tenant in propertiez.tenant if tenant.id == complaint.tenant %}
+            <a href="{{ url_for('landlord.tenant_details', tenant_id=tenant.id) }}">
+              {{ tenant.first_name }} {{ tenant.last_name }},
+            </a>
+            {% for unit in tenant.unit %}
+            {{ unit.name }} - {{ unit.unit_type }}
+            {% endfor %}
+            {% endfor %}
+          </p>
+        </div>
       </div>
     </div>
     {% endfor %}
@@ -376,7 +388,41 @@ Property Dashboard | {{ propertiez.name }}
 </div>
 <div id="options" class="tabcontent">
   <h4 id="dash">Options - {{ propertiez.name }}</h4>
-  <div class="options"></div>
+  <p id="more-info">This tab allows you to configure your property</p>
+  <div class="options">
+    <div class="unit-type-box">
+      <h4>Add your unit types</h4>
+      <p id="more-info">Eg. Bedsitter, Studio, 1 Bedroom, 2 Bedroom, 3 Bedroom, 4 Bedroom</p>
+      {% if propertiez.unit_type %}
+      <div class="unit-type-info">
+        <h4>Added unit types</h4>
+        <div class="unit-type-details">
+          {% for unit_type in propertiez.unit_type %}
+          <div class="unit-type">
+            <p>{{ unit_type.name }}</p>
+            <div class="unit-type-img">
+              <a href="{{ url_for('landlord.remove_unit_type', unit_type_id=unit_type.unique_id) }}">
+                <img src="{{ url_for('static', filename='images/delete.png') }}" alt="">
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <hr>
+      <form action="{{ url_for('landlord.register_unit_type', property_id=propertiez.unique_id) }}" method="post">
+        {{ form.csrf_token }}
+        <div class="input">
+          {{ form.unit_type.label }}
+          {{ form.unit_type(class="name") }}
+        </div>
+        <button class="btn" type="submit">
+          <span class="button--text">Add</span>
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
 <div id="reservations" class="tabcontent">
   {% set booking = [] %}
@@ -457,12 +503,9 @@ Property Dashboard | {{ propertiez.name }}
     {% endif %}
   </div>
   {% else %}
-  <h4 class="no else">No units have been reserved</h4>
+  <h4 class="else">No units have been reserved</h4>
   {% endif %}
 </div>
-{% endblock %}
-
-{% block body %}
 <div id="myModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -477,12 +520,11 @@ Property Dashboard | {{ propertiez.name }}
           <h4>Your actions will result in the following</h4>
           <ul>
             <li>Permanent removal of the selected property.</li>
-            <li>All {{ propertiez.units|count }} units will be removed.</li>
+            <li>All {{ propertiez.unit|count }} units will be removed.</li>
             <li>No new tenants can be added to the property.</li>
             <li>All reservations will be removed.</li>
           </ul>
         </div>
-        <img src="{{ url_for('static', filename='Images/3d apartment.png') }}" alt="apartment">
       </div>
       <div class="suggestions">
         <img src="{{ url_for('static', filename='Images/information.png') }}" alt="help">
@@ -491,7 +533,7 @@ Property Dashboard | {{ propertiez.name }}
       </div>
     </div>
     <div class="modal-footer">
-      <a href="{{ url_for('landlord.delete_property', property_id=propertiez.id) }}">
+      <a href="{{ url_for('landlord.delete_property', property_id=propertiez.unique_id) }}">
         <button>Remove</button>
       </a>
     </div>
@@ -500,9 +542,10 @@ Property Dashboard | {{ propertiez.name }}
 <div class="shifting">
   <img src="{{ url_for('static',filename='Images/refresh.png') }}" alt="switching properties">
 </div>
-
-<script src="{{ url_for('static', filename='js/property_dashboard.js') }}"></script>
-<script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
 {% endblock %}
 
-</html>
+{% block script %}
+<script src="{{ url_for('static', filename='js/property_dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

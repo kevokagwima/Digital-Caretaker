@@ -50,7 +50,7 @@ def create_app():
       print(f"Error loading user: {repr(e)}", category="danger")
       abort(500)
 
-  @app.before_request
+  # @app.before_request
   def invoice():
     units = Unit.query.filter(Unit.tenant != None).all()
     if units:

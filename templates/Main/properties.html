@@ -10,99 +10,96 @@ Properties
 {% endblock %}
 
 {% block body %}
-<div loading="lazy" class="container-3" id="properties">
-  <div class="box">
-    <h4>Find Your Dream Home</h4>
+<div class="container" id="properties">
+  <div class="search-box">
+    <div class="search-title">
+      <h1>Find Your Dream Home</h1>
+    </div>
     <div class="form">
-      <form id="form1" action="{{ url_for('main.search_property') }}" method="post">
-        <input id="search-property" required type="text" name="search" spellcheck="false"
-          placeholder="Search for any property by type, location, price">
-        <button type="submit">Search</button>
-      </form>
-      <span id="live">Live search</span>
-      <span id="lives">Normal search</span>
-      <form id="form2">
-        <input id="property-search" type="text" name="search" required spellcheck="false"
-          placeholder="Live Search for any property by type, location, price">
-      </form>
+      <div class="search-form">
+        <form action="{{ url_for('main.search_property') }}" method="post">
+          <input id="search-input" required type="text" name="search" spellcheck="false"
+            placeholder="Search for any property by type, location, price">
+          <button type="submit">Find Property</button>
+        </form>
+      </div>
+      <div class="live-search-form">
+        <form id="search-form">
+          <input id="search-input" type="text" required spellcheck="false"
+            placeholder="Live Search for any property by type, location, price">
+        </form>
+        <span class="search-text">Live Search</span>
+      </div>
     </div>
   </div>
-  {% if  units %}
+  {% if units %}
   <div id="all-units" class="all-units">
-    {% for unit in units %}
+    {% for unit in units|sort(attribute="date_added", reverse=true) %}
     <div id="units" class="units">
-      {% if unit.date_added.strftime("%d/%m/%Y") == today_time %}
-      <span id="new">New to market</span>
-      {% endif %}
-      {% for property in properties or propertiez if property.id == unit.properties %}
-      {% if property.property_type == "Apartment" %}
-      <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
-      {% endif %}
-      {% endfor %}
+      <div class="unit-image-box">
+        <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
+      </div>
       <div id="unit-info" class="unit-info">
-        <h4>
-          {% for property in properties or propertiez if property.id == unit.properties %}
-          {% if property.property_type == "Office" %}
-          {{ unit.unit_type }}
-          {% else %}
-          {{ unit.unit_type }} {{ property.property_type }}
-          {% endif %}
+        <div class="unit-header-box">
+          <div class="unit-header">
+            <h4>
+              {% for property in properties if property.id == unit.properties %}
+              {% if property.property_type == "Office" %}
+              {{ unit.unit_type }}
+              {% else %}
+              {{ unit.unit_type }}
+              {% endif %}
+              {% endfor %}
+            </h4>
+            <p id="address">
+              {% for property in properties if property.id == unit.properties %}
+              {{ property.county }}, {{ property.city }}
+              {% endfor %}
+            </p>
+          </div>
+          <div class="unit-price">
+            <h4 id="rent">{{ "Ksh {:,}".format(unit.rent_amount) }}</h4>
+          </div>
+        </div>
+        <hr id="hr">
+        <div class="unit-metrics-box">
+          {% for unit_metric in unit.unit_metrics %}
+          <div class="unit-metric">
+            <img src="{{ url_for('static', filename='images/area.png') }}" alt="">
+            <div class="area">
+              <h4>Living Space</h4>
+              <p>{{ unit_metric.living_space }} SQM</p>
+            </div>
+          </div>
+          <div class="unit-metric">
+            <img src="{{ url_for('static', filename='images/area.png') }}" alt="">
+            <div class="area">
+              <h4>Balcony Space</h4>
+              <p>{{ unit_metric.balcony_space }} SQM</p>
+            </div>
+          </div>
+          <div class="unit-metric">
+            <img src="{{ url_for('static', filename='images/beds.png') }}" alt="">
+            <div class="area">
+              <h4>Bedrooms</h4>
+              <p>{{ unit_metric.bedrooms }} Bedroom(s)</p>
+            </div>
+          </div>
+          <div class="unit-metric">
+            <img src="{{ url_for('static', filename='images/bathtub.png') }}" alt="">
+            <div class="area">
+              <h4>Bathrooms</h4>
+              <p>{{ unit_metric.bathrooms }} Bathroom(s)</p>
+            </div>
+          </div>
           {% endfor %}
-          {{ unit.name }}
-        </h4>
-        <span id="address">
-          {% for property in properties or propertiez if property.id == unit.properties %}
-          {{ property.county }}, {{ property.city }}
-          {% endfor %}
-        </span>
-        <table id="table">
-          <tr>
-            <th>
-              <img src="{{ url_for('static', filename='Images/area.png') }}" alt="square meters">
-            </th>
-            <td>{{ unit.living_space }} SQM</td>
-          </tr>
-          <tr>
-            <th>
-              <img src="{{ url_for('static', filename='Images/beds.png') }}" alt="bedrooms">
-            </th>
-            {% for property in properties or propertiez if property.id == unit.properties %}
-            {% if property.property_type == "Apartment" and unit.unit_type != "Bedsitter" %}
-            <td>{{ unit.bedrooms }} Bedrooms</td>
-            {% elif unit.unit_type == "Bedsitter" %}
-            <td>1 Room</td>
-            {% elif property.property_type == "Office" %}
-            <td>Furniture Available</td>
-            {% endif %}
-            {% endfor %}
-          </tr>
-          <tr>
-            <th>
-              <img src="{{ url_for('static', filename='Images/bathtub.png') }}" alt="bathrooms">
-            </th>
-            {% for property in properties or propertiez if property.id == unit.properties %}
-            {% if property.property_type == "Apartment" %}
-            <td>{{ unit.bathrooms }} Bathrooms</td>
-            {% elif property.property_type == "Office" %}
-            <td>Amenities Available</td>
-            {% endif %}
-            {% endfor %}
-          </tr>
-        </table>
-        <hr>
-        <div class="rent">
-          <p><span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span>
-            {% for property in properties or propertiez if unit.properties == property.id %}
-            {% if property.status == "Rent" %}
-            / Month
-            {% endif %}
-            {% endfor %}
-          </p>
         </div>
       </div>
-      <a href="{{ url_for('main.unit_details', unit_id=unit.id) }}">
-        <button>View Property</button>
-      </a>
+      <div class="unit-btn">
+        <a href="{{ url_for('main.unit_details', unit_id=unit.unique_id) }}">
+          <button>View Property</button>
+        </a>
+      </div>
     </div>
     {% endfor %}
   </div>
@@ -135,8 +132,8 @@ Properties
     </div>
   </div>
   {% else %}
-  <div class="no-units">
-    <h4>No vacant properties at the moment. We're working on adding more properties. <br> Please come by later</h4>
+  <div class="else">
+    <h4>No vacant properties at the moment. We're working on adding more properties. Please come by later</h4>
   </div>
   {% endif %}
 </div>

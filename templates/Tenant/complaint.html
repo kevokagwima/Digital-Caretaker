@@ -7,29 +7,34 @@
 {% endblock %}
 
 {% block title %}
-Admin Login
+Complaint
+{% endblock %}
+
+{% block content %}
 {% endblock %}
 
 {% block body %}
 <div class="form">
-  <h4>Admin Login</h4>
+  <h4>Complaint Form</h4>
   <form method="POST">
     {{ form.csrf_token }}
     <div class="input">
-      {{ form.admin_id.label }}
-      {{ form.admin_id(placeholder="Eg. johndoe@gmail.com") }}
+      {{ form.title.label }}
+      {{ form.title(placeholder="Eg. No lights, Water not working...", class="name") }}
     </div>
     <div class="input">
-      {{ form.password.label }}
-      {{ form.password(placeholder="Password") }}
+      {{ form.category.label }}
+      {{ form.category(class="name") }}
+    </div>
+    <div class="input">
+      {{ form.message.label }}
+      {{ form.message(placeholder="Write your full complaint", class="name") }}
     </div>
     <button class="btn" type="submit">
-      <span class="button--text">Login</span>
+      <span class="button--text">Send Complaint</span>
     </button>
   </form>
 </div>
-{% endblock %}
 
-{% block script %}
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 {% endblock %}

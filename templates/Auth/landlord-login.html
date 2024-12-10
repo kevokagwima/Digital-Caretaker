@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block title %}
-PMS | Landlord Login
+Landlord Login
 {% endblock %}
 
 {% block body %}
@@ -17,7 +17,7 @@ PMS | Landlord Login
     {{ form.csrf_token}}
     <div class="input">
       {{ form.email_address.label }}
-      {{ form.email_address(placeholder="Email Address") }}
+      {{ form.email_address(placeholder="Eg. johndoe@gmail.com") }}
     </div>
     <div class="input">
       {{ form.password.label }}

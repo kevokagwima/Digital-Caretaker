@@ -7,11 +7,9 @@ from Models.bookings import Bookings
 from Models.unit import Unit
 from Models.transactions import Transactions
 from datetime import datetime, date, timedelta
-import random
 
 def invoice_logic(tenant, unit_id, rent):
   new_invoice = Invoice(
-    invoice_id = random.randint(100000,999999),
     tenant = tenant,
     unit = unit_id,
     amount = rent,
@@ -23,7 +21,7 @@ def invoice_logic(tenant, unit_id, rent):
   db.session.commit()
 
 def generate_invoice(unit_id, unit_tenant, unit_rent):
-  unit_transactions = Transactions.query.filter_by(Unit=unit_id).all()
+  unit_transactions = Transactions.query.filter_by(unit=unit_id).all()
   if unit_transactions:
     if unit_transactions[-1].next_date <= date.today():
       invoice = Invoice.query.filter_by(unit=unit_id, status="Active").first()
@@ -68,7 +66,7 @@ def assign_tenant_unit(tenant_id, unit_id):
     unit = Unit.query.filter_by(id=unit_id).first()
     unit.tenant = tenant.id
     db.session.commit()
-    flash(f"Unit {unit.name} - {unit.Type} assigned to {tenant.first_name} {tenant.last_name} successfully", category="success")
+    flash(f"Unit {unit.name} - {unit.unit_type} assigned to {tenant.first_name} {tenant.last_name} successfully", category="success")
     generate_invoice(unit.id, unit.tenant, unit.rent_amount)
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
@@ -92,7 +90,7 @@ def revoke_tenant_access(tenant_id):
     tenant.landlord = None
     tenant.properties = None
     db.session.commit()
-    flash(f"Tenant {tenant.first_name} {tenant.last_name}'s Account Revoked successfully. Tenant no longer part of your tenant list",category="success")
+    flash(f"Tenant removed successfully",category="success")
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
 
@@ -101,17 +99,16 @@ def rent_transaction(**transaction):
     new_transaction = Transactions(
       tenant = transaction["tenant"],
       landlord = transaction["landlord"],
-      Property = transaction["Property"],
-      Unit = transaction["Unit"],
+      properties = transaction["properties"],
+      unit = transaction["unit"],
       date = datetime.now(),
       time = datetime.now(),
       next_date = datetime.now() + timedelta(days=30),
-      transaction_id = random.randint(100000, 999999),
       invoice = transaction["invoice"],
       origin = transaction["origin"]
     )
     db.session.add(new_transaction)
     db.session.commit()
-  except:
-    flash(f'Payment could not be processed', category="danger")
+  except Exception as e:
+    flash(f'{repr(e)}', category="danger")
     return redirect(url_for('tenant.tenant_dashboard'))
