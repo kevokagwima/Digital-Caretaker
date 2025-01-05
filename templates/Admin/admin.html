@@ -139,7 +139,7 @@
                 <div class="featured">
                   <div class="featured-data">
                     <h4>{{ property.name }}</h4>
-                    <span>{{ property.Type }}</span>
+                    <span>{{ property.property_type }}</span>
                   </div>
                   <div id="featured">
                     <p>
@@ -319,7 +319,7 @@
                       {% for property in properties if property.owner == landlord.id %}
                       <div class="prop">
                         <p>Name - <span>{{ property.name }}</span></p>
-                        <p>Type - <span>{{ property.Type }}</span></p>
+                        <p>Type - <span>{{ property.property_type }}</span></p>
                         <p>Floors - <span>{{ property.floors }} Floors</span></p>
                         <p>Tenants Assigned - <span>{{ property.tenants|count }} Tenants</span></p>
                         <p>Units Assigned - <span>{{ property.unit|count }} Units</span></p>
@@ -368,8 +368,8 @@
                 {% endfor %}
               </td>
               <td>{{ property.floors }}</td>
-              <td>{{ property.Type }}</td>
-              <td>{{ property.date.strftime("%d/%m/%Y") }}</td>
+              <td>{{ property.property_type }}</td>
+              <td>{{ property.date_added.strftime("%d/%m/%Y") }}</td>
               <td>{{ property.tenants|count }}</td>
               <td>{{ property.unit|count }}</td>
             </tr>
@@ -496,7 +496,7 @@
                         <span>{{ property.address }}</span>
                       </p>
                       <p> Type -
-                        <span>{{ property.Type }}</span>
+                        <span>{{ property.property_type }}</span>
                       </p>
                       <p>Floors -
                         <span>{{ property.floors }} Floors</span>
@@ -537,10 +537,10 @@
                       {% if tenant.unit %}
                       {% for unit in units if unit.tenant == tenant.id %}
                       <p>Name - <span>{{ unit.name }}</span></p>
-                      <p>Type - <span>{{ unit.Type }}</span></p>
-                      <p>Floor - <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-                          Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup>
-                          Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup>
+                      <p>Type - <span>{{ unit.unit_type }}</span></p>
+                      <p>Floor - <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+                          Floor{%elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+                          Floor{% elif unit.unit_floor% 10 == 3 %}<sup>rd</sup>
                           Floor{% else %}<sup>th</sup> Floor {%endif%}</span></p>
                       <p>Rent - <span>{{ "Ksh {:,}".format(unit.rent_amount) }}</span></p>
                       {% endfor %}
@@ -560,7 +560,7 @@
                           method="POST">
                           <select name="assign-unit" id="">
                             {% for unit in units if unit.tenant == None and unit.reserved == "False" and unit.Property == tenant.properties %}
-                            <option value="{{ unit.unit_id }}">{{ unit.name }} - {{ unit.Type }}
+                            <option value="{{ unit.unit_id }}">{{ unit.name }} - {{ unit.unit_type }}
                             </option>
                             {% endfor %}
                           </select>
@@ -631,7 +631,7 @@
               <td>0{{ unit.id }}</td>
               <td>{{ unit.unit_id }}</td>
               <td>{{ unit.name }}</td>
-              <td>{{ unit.Type }}</td>
+              <td>{{ unit.unit_type }}</td>
               <td>
                 {% for property in properties if property.id == unit.Property %}
                 {{ property.name }}
@@ -643,8 +643,9 @@
                 {% endfor %}
               </td>
               <td>
-                {{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-                Floor{%elif unit.floor % 10 == 2 %}<sup>nd</sup> Floor{% elif unit.floor% 10 == 3 %}<sup>rd</sup>
+                {{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+                Floor{%elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+                Floor{% elif unit.unit_floor% 10 == 3 %}<sup>rd</sup>
                 Floor{% else %}<sup>th</sup> Floor {%endif%}
               </td>
               <td>
@@ -662,7 +663,7 @@
               <td colspan="9">
                 <div class="actions">
                   <h4>Unit Control Center</h4>
-                  <span>{{ unit.name }} - {{ unit.Type }} | {{ unit.date.strftime("%d/%m/%Y") }}</span>
+                  <span>{{ unit.name }} - {{ unit.unit_type }} | {{ unit.date_added.strftime("%d/%m/%Y") }}</span>
                   <hr>
                   <div class="unit-controls">
                     <div class="accordions">
@@ -672,10 +673,10 @@
                       <p>Living Area - <span>{{ unit.living_space }} SQM</span></p>
                       <p>Balcony / Veranda - <span>{{ unit.balcony_space }} SQM</span></p>
                       {% for property in properties if property.id == unit.Property %}
-                      {% if property.Type == "Apartment" %}
+                      {% if property.property_type == "Apartment" %}
                       <p>Bedrooms -
                         <span>
-                          {% if unit.Type != "Bedsitter" %}
+                          {% if unit.unit_type != "Bedsitter" %}
                           {{ unit.bedrooms}}
                           {% else %}
                           1 Room
@@ -683,7 +684,7 @@
                         </span>
                       </p>
                       <p>Bathrooms - <span>{{ unit.bathrooms }}</span></p>
-                      {% elif property.Type == "Office" %}
+                      {% elif property.property_type == "Office" %}
                       <p>Furniture - <span>{{ unit.amenities }}</span></p>
                       {% endif %}
                       {% endfor %}
@@ -711,7 +712,7 @@
                       {% for property in properties if property.id == unit.Property %}
                       <p>Name - <span>{{ property.name }}</span></p>
                       <p>Address - <span>{{ property.address }}</span></p>
-                      <p>Type - <span>{{ property.Type }}</span></p>
+                      <p>Type - <span>{{ property.property_type }}</span></p>
                       <p>Floors - <span>{{ property.floors }} Floors</span></p>
                       {% endfor %}
                       {% else %}
@@ -751,7 +752,7 @@
                 {% for tenant in tenants if tenant.id == complaint.tenant %}
                 {{ tenant.first_name }},
                 {% for unit in tenant.unit %}
-                {{ unit.name }} - {{ unit.Type }}
+                {{ unit.name }} - {{ unit.unit_type }}
                 {% endfor %}
                 {% endfor %}
               </p>
@@ -798,10 +799,10 @@
               <p>Reserved Unit</p>
               <ul id="unit-info">
                 <li>Unit Name: <span>{{ unit.name }}</span></li>
-                <li>Unit Type: <span>{{ unit.Type }}</span></li>
-                <li>Unit Floor: <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-                    Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
-                    Floor{% elif unit.floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+                <li>Unit Type: <span>{{ unit.unit_type }}</span></li>
+                <li>Unit Floor: <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+                    Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+                    Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
                     {% endif %}</span></li>
               </ul>
               {% endfor %}
@@ -829,10 +830,10 @@
             <p>Reserved Unit</p>
             <ul id="unit-info">
               <li>Unit Name: <span>{{ unit.name }}</span></li>
-              <li>Unit Type: <span>{{ unit.Type }}</span></li>
-              <li>Unit Floor: <span>{{ unit.floor }}{% if unit.floor % 10 == 1 %}<sup>st</sup>
-                  Floor{% elif unit.floor % 10 == 2 %}<sup>nd</sup>
-                  Floor{% elif unit.floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+              <li>Unit Type: <span>{{ unit.unit_type }}</span></li>
+              <li>Unit Floor: <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+                  Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+                  Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
                   {% endif %}</span></li>
             </ul>
             {% endfor %}
@@ -878,8 +879,8 @@
                   {{ form.email_address(placeholder="Email Address") }}
                 </div>
                 <div class="input">
-                  {{ form.title.label }}
-                  {{ form.title(placeholder="Title / Position") }}
+                  {{ form.roles.label }}
+                  {{ form.roles(placeholder="Title / Position") }}
                 </div>
                 <div class="input">
                   {{ form.cost.label }}
@@ -915,7 +916,7 @@
               <p>{{ extra.first_name }} {{ extra.last_name }}</p>
               <p>{{ extra.email }}</p>
               <p>{{ extra.phone }}</p>
-              <p>{{ "Ksh {:,}".format(extra.cost) }}/hr</p>
+              <p>{{ "Ksh {:,}".format(extra.rate) }}/hr</p>
             </div>
           </div>
           {% endfor %}

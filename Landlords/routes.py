@@ -6,7 +6,7 @@ from Models.unit import Unit, UnitImage, UnitMetrics
 from Models.property import Properties, PropertyTypes, UnitTypes
 from Models.transactions import Transactions
 from Models.complaints import Complaints
-from Models.extras import Extras, ExtraService
+from Models.extras import Extras, ExtraService, ExtraRoles
 from Models.invoice import Invoice
 from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm
 from decorators import landlord_role_required
@@ -60,48 +60,45 @@ def landlord_dashboard():
 
   return render_template("Landlord/new_dash.html", **context)
 
-@landlords.route("/property/dashboard/<int:property_id>", methods=["POST","GET"])
+@landlords.route("/property-dashboard/<int:property_id>", methods=["POST","GET"])
 @login_required
 @landlord_role_required("Landlord")
 def property_information(property_id):
-  try:
-    form = UnitTypeForm()
-    propertiez = Properties.query.filter_by(unique_id=property_id, property_owner=current_user.id).first()
-    if not propertiez:
-      flash(f"Property not found", category="info")
-      return redirect(url_for("landlord.landlord_dashboard"))
-    properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
-    all_users = []
-    member_users = Users.query.all()
-    tenant_users = Tenant.query.all()
-    landlord_users = Landlord.query.all()
-    for members in member_users:
-      all_users.append(members)
-    for tenantz in tenant_users:
-      all_users.append(tenantz)
-    for landlord in landlord_users:
-      all_users.append(landlord)
-    tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
-    units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
-    all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
-    check_reservation_expiry(propertiez.id)
-
-    context = {
-      "propertiez": propertiez,
-      "properties": properties,
-      "tenants": tenants,
-      "units": units,
-      "all_complaints": all_complaints,
-      "all_users": all_users,
-      "this_month": today,
-      "form": form
-    }
-
-    return render_template("Landlord/property_dashboard.html", **context)
-
-  except Exception as e:
-    flash(f"{repr(e)}", category="warning")
+  form = UnitTypeForm()
+  propertiez = Properties.query.filter_by(unique_id=property_id, property_owner=current_user.id).first()
+  if not propertiez:
+    flash(f"Property not found", category="info")
     return redirect(url_for("landlord.landlord_dashboard"))
+  properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
+  all_users = []
+  member_users = Users.query.all()
+  tenant_users = Tenant.query.all()
+  landlord_users = Landlord.query.all()
+  for members in member_users:
+    all_users.append(members)
+  for tenantz in tenant_users:
+    all_users.append(tenantz)
+  for landlord in landlord_users:
+    all_users.append(landlord)
+  tenants = db.session.query(Tenant).filter(Tenant.properties == propertiez.id).all()
+  units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
+  all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
+  extras_roles = ExtraRoles.query.all()
+  check_reservation_expiry(propertiez.id)
+
+  context = {
+    "propertiez": propertiez,
+    "properties": properties,
+    "tenants": tenants,
+    "units": units,
+    "all_complaints": all_complaints,
+    "all_users": all_users,
+    "this_month": today,
+    "available_roles": extras_roles,
+    "form": form
+  }
+
+  return render_template("Landlord/property_dashboard.html", **context)
 
 @landlords.route("/tenant-profile/<int:tenant_id>", methods=["GET", "POST"])
 @login_required
@@ -446,15 +443,20 @@ def update_property_availability(property_id):
 
   return redirect(url_for("landlord.property_information", property_id=this_property.id))
 
-@landlords.route("/extra-service/<string:extra_type>", methods=["POST", "GET"])
+@landlords.route("/maintenance/<string:extra_role>/<int:property_id>", methods=["POST", "GET"])
 @login_required
 @landlord_role_required("Landlord")
-def extra_service(extra_type):
-  extras = Extras.query.filter_by(title=extra_type).all()
-  properties = Properties.query.filter(Properties.property_owner == current_user.id).all()
-  units = Unit.query.filter(Unit.landlord == current_user.id).all()
+def extra_service(property_id, extra_role):
+  extras = Extras.query.filter_by(role=extra_role).all()
+  if not extras:
+    flash("No available extras at the moment", category="danger")
+    try:
+      return redirect(request.referrer)
+    except:
+      return redirect(url_for('landlord.landlord_dashboard'))
+  current_property = Properties.query.filter_by(unique_id=property_id).first()
 
-  return render_template("Landlord/extra_services.html", extras=extras, extra_type=extra_type, properties=properties, units=units)
+  return render_template("Landlord/extra_services.html", extras=extras, current_property=current_property, extra_role=extra_role)
 
 @landlords.route("/extra-services/<int:property_id>", methods=["POST", "GET"])
 @login_required

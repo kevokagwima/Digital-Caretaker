@@ -6,7 +6,7 @@ from Models.transactions import Transactions
 from Models.extras import ExtraService
 from Models.complaints import Complaints
 from Models.invoice import Invoice
-from Models.property import Properties 
+from Models.property import Properties
 
 bcrypt = Bcrypt()
 

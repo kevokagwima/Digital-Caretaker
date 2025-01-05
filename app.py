@@ -32,10 +32,10 @@ def create_app():
   app.register_blueprint(errors)
 
   login_manager.blueprint_login_views = {
-    'landlord': '/auth/landlord-login',
-    'tenant': '/auth/tenant-login',
-    'main': '/auth/signin',
-    'admin': '/auth/admin-login'
+    'landlord': '/auth/landlord/login',
+    'tenant': '/auth/tenant/login',
+    'admin': '/auth/admin/login',
+    'main': '/auth/signin'
   }
   login_manager.login_message_category = "danger"
   login_manager.refresh_view = 'auth.signin'

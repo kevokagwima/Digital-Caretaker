@@ -50,6 +50,10 @@ Property Dashboard | {{ propertiez.name }}
   <img src="{{ url_for('static', filename='Images/options.png') }}" alt="options">
   Options
 </button>
+<button class="tablinks" onclick="openView(event, 'extra')">
+  <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
+  Maintenance
+</button>
 {% endblock %}
 
 {% block body %}
@@ -123,20 +127,16 @@ Property Dashboard | {{ propertiez.name }}
         </div>
         <div class="prop-units">
           <div class="extra-info">
-            {% set occupied_tenant = [] %}
-            {% for num in propertiez.unit if num.tenant != None %}
-            {{ occupied_tenant.append(num) or ""}}
-            {% endfor %}
-            <p><span>{{ occupied_tenant|count }}</span> Occupied</p>
-            {% set diff = [] %}
-            {% for num in propertiez.unit if num.tenant == None %}
-            {{ diff.append(num) or ""}}
-            {% endfor %}
-            <p><span>{{ diff|count }}</span> Vacant</p>
+            {% set occupied_units = [] %}
             {% set reserved_unit = [] %}
-            {% for x in propertiez.unit if x.reserved == 'True' %}
-            {{ reserved_unit.append(x) or ""}}
+            {% for unit in propertiez.unit if unit.tenant != None %}
+            {{ occupied_units.append(num) or ""}}
             {% endfor %}
+            <p><span>{{ occupied_units|count }}</span> Occupied</p>
+            {% for unit in propertiez.unit if unit.is_reserved %}
+            {{ reserved_unit.append(unit) or ""}}
+            {% endfor %}
+            <p><span>{{ propertiez.unit|count- occupied_units|count - reserved_unit|count }}</span> Vacant</p>
             <p id="extra-reserved" onclick="openView(event, 'reservations')">
               <span>{{reserved_unit|count }}</span>
               Reserved
@@ -427,84 +427,203 @@ Property Dashboard | {{ propertiez.name }}
 <div id="reservations" class="tabcontent">
   {% set booking = [] %}
   {% set expired_reservations = [] %}
-  {% for bookings in propertiez.booking if bookings.status == "Active" %}
+  {% for bookings in propertiez.booking if bookings.is_active == True %}
   {{ booking.append(bookings) or "" }}
   {% endfor %}
-  {% for booking in propertiez.booking if booking.status == "Expired" %}
+  {% for booking in propertiez.booking if booking.is_active == false %}
   {{ expired_reservations.append(booking) or "" }}
   {% endfor %}
   <h4 id="dash">Reservations ({{ booking|count }})</h4>
   <p id="more-info">All reservations will be shown here. The latest will be at the top</p>
-  {% if propertiez.booking %}
+  {% if booking %}
   <div class="reservations">
-    <h4 id="reservation-status">Active Reservations</h4>
-    {% if booking %}
-    {% for reserves in propertiez.booking|sort(attribute='date', reverse=true) if reserves.status == "Active" %}
-    <div class="reservation-details">
-      <div class="reservation-info">
-        <h4>Reservation ID <span id="reserve-id">{{ reserves.booking_id }}</span></h4>
-        <span id="status">{{ reserves.status }}</span>
-        <hr>
-        <p>Reserved By</p>
-        {% for user in all_users if user.username == reserves.user %}
-        <ul id="user-info">
-          <li>Name: <span>{{ user.first_name }} {{ user.second_name }}</span></li>
-          <li>Phone Number: <span>0{{ user.phone }}</span></li>
-        </ul>
+    <div class="active-reservations">
+      <h4 id="reservation-status">Active Reservations</h4>
+      {% if booking %}
+      <div class="reservation-box">
+        {% for reserves in booking|sort(attribute='date', reverse=true) %}
+        <div class="reservation-details">
+          <div class="reservation-header">
+            <h4>Reservation ID <span id="reserve-id">#{{ reserves.unique_id }}</span></h4>
+            <p>Expires on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y at %I:%M %p') }}</span></p>
+          </div>
+          <div class="reservation-info">
+            <div class="user-reservation">
+              <h4>
+                Reserved By:
+                {% for user in all_users if user.email == reserves.user %}
+                <span>{{ user.first_name }} {{ user.last_name }} (0{{ user.phone }})</span>
+                {% endfor %}
+              </h4>
+            </div>
+            <div class="unit-reservations">
+              <h4>
+                Reserved Unit:
+                {% for unit in units if unit.id == reserves.unit %}
+                <span>
+                  {{ unit.name }} -
+                  {{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+                  Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+                  Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+                  {% endif %}
+                  ({{ unit.unit_type }})
+                </span>
+                {% endfor %}
+              </h4>
+            </div>
+          </div>
+        </div>
         {% endfor %}
-        {% for unit in units if unit.id == reserves.unit %}
-        <p>Reserved Unit</p>
-        <ul id="unit-info">
-          <li>Unit Name: <span>{{ unit.name }}</span></li>
-          <li>Unit Type: <span>{{ unit.Type }}</span></li>
-          <li>Unit Floor: <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
-              Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
-              Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
-              {% endif %}</span></li>
-        </ul>
-        {% endfor %}
-        <hr>
-        <p>Expires on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y') }}</span> at <span
-            id="expire">{{ reserves.expiry_date.strftime('%I:%M %p') }}</span></p>
       </div>
+      {% else %}
+      <h4 class="else">No Active Reservations</h4>
+      {% endif %}
     </div>
-    {% endfor %}
-    {% else %}
-    <h4 class="else">No Active Reservations</h4>
-    {% endif %}
     {% if expired_reservations %}
     <hr id="divider">
-    {% else %}
     {% endif %}
-    {% if expired_reservations %}
-    <h4 id="reservation-status">Expired Reservations</h4>
-    {% for reserves in propertiez.booking|sort(attribute='expiry_date', reverse=true) if reserves.status == "Expired" %}
-    <div class="expired reservation-info">
-      <h4>Reservation ID <span id="reserve-id">{{ reserves.booking_id }}</span></h4>
-      <span id="status-expired">{{ reserves.status }}</span>
-      <hr>
-      {% for unit in units if unit.id == reserves.unit %}
-      <p>Reserved Unit</p>
-      <ul id="unit-info">
-        <li>Unit Name: <span>{{ unit.name }}</span></li>
-        <li>Unit Type: <span>{{ unit.Type }}</span></li>
-        <li>Unit Floor: <span>{{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
-            Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
-            Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
-            {% endif %}</span></li>
-      </ul>
-      {% endfor %}
-      <hr>
-      <p>Expired on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y') }}</span> at <span
-          id="expire">{{ reserves.expiry_date.strftime('%I:%M %p') }}</span></p>
+    <div class="expired-reservations">
+      {% if expired_reservations %}
+      <h4 id="reservation-status">Expired Reservations</h4>
+      <div class="reservation-box">
+        {% for reserves in booking|sort(attribute='date', reverse=true) %}
+        <div class="expired reservation-details">
+          <div class="reservation-header">
+            <h4>Reservation ID <span id="reserve-id">#{{ reserves.unique_id }}</span></h4>
+            <p>Expires on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y at %I:%M %p') }}</span></p>
+          </div>
+          <div class="reservation-info">
+            <div class="user-reservation">
+              <h4>
+                Reserved By:
+                {% for user in all_users if user.email == reserves.user %}
+                <span>{{ user.first_name }} {{ user.last_name }} (0{{ user.phone }})</span>
+                {% endfor %}
+              </h4>
+            </div>
+            <div class="unit-reservations">
+              <h4>
+                Reserved Unit:
+                {% for unit in units if unit.id == reserves.unit %}
+                <span>
+                  {{ unit.name }} -
+                  {{ unit.unit_floor }}{% if unit.unit_floor % 10 == 1 %}<sup>st</sup>
+                  Floor{% elif unit.unit_floor % 10 == 2 %}<sup>nd</sup>
+                  Floor{% elif unit.unit_floor % 10 == 3 %}<sup>rd</sup> Floor{% else %}<sup>th</sup> Floor
+                  {% endif %}
+                  ({{ unit.unit_type }})
+                </span>
+                {% endfor %}
+              </h4>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
-    {% endfor %}
-    {% else %}
-    {% endif %}
   </div>
   {% else %}
   <h4 class="else">No units have been reserved</h4>
   {% endif %}
+</div>
+<div id="extra" class="tabcontent">
+  <div class="extra-heading">
+    <h4 id="dash">Maintenance - {{ propertiez.name }}</h4>
+    {% if active_extras %}
+    <button onclick="openView(event, 'active-extra')">Deployed Extras</button>
+    {% endif %}
+  </div>
+  <p id="more-info">This is all about making work easier by eliminating unecessary tasks that can be simplified. We
+    offer various services to support property owners in managing their properties.</p>
+  <div class="maintenance-box">
+    <h4>Choose your required service</h4>
+    <div class="maintenance-services-box">
+      {% for extra_role in available_roles %}
+      <a href="{{ url_for('landlord.extra_service', property_id=propertiez.unique_id, extra_role=extra_role.name) }}">
+        <div class="maintenance-service">
+          <img src="{{ url_for('static', filename='Images/electrician.png') }}" alt="interior design">
+          <div class="maintenance-service-info">
+            <h1>{{ extra_role.name }}</h1>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div id="active-extra" class="tabcontent">
+  <h4 id="dash">Ongoing Maintenance</h4>
+  <p id="more-info">This shows all the active extras that have been deployed to your properties</p>
+  <p id="more-info">You have {{ active_extras|count }} maintenance currently ongoing</p>
+  <div class="active-extra">
+    {% for active_extra in active_extras|sort(attribute="date_opened", reverse=True) %}
+    <div class="active-extra-details">
+      <span id="unit-deployed">
+        {% for unit in current_user.unit if unit.id == active_extra.unit %}
+        Deployed to {{ unit.name }} - {{ unit.Type }}
+        {% endfor %}
+      </span>
+      <h4>Maintenance ID: <span>{{ active_extra.extra_service_id }}</span></h4>
+      <div class="active-extra-info">
+        <div class="timeline">
+          <p>Started:
+            {% if todays_time == active_extra.date_opened.strftime("%d/%m/%Y") %}
+            {{ active_extra.date_opened.strftime("Today at %I:%M %p") }}
+            {% else %}
+            {{ active_extra.date_opened.strftime("%d/%m/%Y at %I:%M %p") }}
+            {% endif %}
+          </p>
+          <p>
+            {% if active_extra.status == "Ongoing" %}
+            In progress...
+            {% else %}
+            Ended: {{ active_extra.date_closed.strftime("%d/%m/%Y at %I:%M %p") }}
+            {% endif %}
+          </p>
+        </div>
+        <div class="timeline-info">
+          <div class="extra-deployed">
+            <button class="accordion">Extra Deployed</button>
+            <div class="panel">
+              <div class="panel-info">
+                {% for extra in extras if extra.id == active_extra.extra %}
+                <p>Full Name: <span>{{ extra.first_name }} {{ extra.last_name }}</span></p>
+                <p>Phone number: <span>{{ extra.phone }}</span></p>
+                <p>Email address: <span>{{ extra.email }}</span></p>
+                <p>Title: {{ extra.title }}</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="property-deployed">
+            <button class="accordion">Property Deployed</button>
+            <div class="panel">
+              <div class="panel-info">
+                {% for property in current_user.Property if property.id == active_extra.Property %}
+                <p>Property Name: <span>{{ property.name }}</span></p>
+                <p>Property Address: <span>{{ property.address }}, {{ property.address2 }}</span></p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          {% if active_extra.status == "Ongoing" %}
+          <a href="{{ url_for('landlord.complete_extra_service', extra_service_id=active_extra.id) }}">
+            <button class="complete">Mark as complete</button>
+          </a>
+          <a href="{{ url_for('landlord.delete_extra_service', extra_service_id=active_extra.id) }}">
+            <button class="delete">Delete</button>
+          </a>
+          {% else %}
+          <p class="else">Completed &check;&check;</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 <div id="myModal" class="modal">
   <div class="modal-content">

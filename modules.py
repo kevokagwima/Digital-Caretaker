@@ -39,11 +39,11 @@ def check_reservation_expiry(property_id):
   reservations = Bookings.query.filter_by(property_id=property_id).all()
   active_reservations = []
   for reservation in reservations:
-    if reservation.expiry_date < datetime.now() and reservation.status == "Active":
+    if reservation.expiry_date < datetime.now() and reservation.is_active:
       active_reservations.append(reservation)
       unit = Unit.query.filter_by(id=reservation.unit).first()
-      unit.reserved = "False"
-      reservation.status = "Expired"
+      unit.is_reserved = False
+      reservation.is_active = False
       db.session.commit()
   if len(active_reservations) == 1:
     flash(f"You have one reservation that has expired", category="warning")

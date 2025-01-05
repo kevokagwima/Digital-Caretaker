@@ -428,120 +428,6 @@ button {
   text-align: center;
 }
 
-.extras {
-  margin-top: 1rem;
-}
-
-.extras > p {
-  font-size: 2ch;
-  color: grey;
-}
-
-.extras h4 {
-  font-size: 1.8ch;
-}
-
-.extra-services {
-  margin-top: 1rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-.extra-services a {
-  text-decoration: none;
-  color: whitesmoke;
-}
-
-.extra-services-items {
-  display: grid;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 0.3rem;
-  position: relative;
-  background-color: var(--page-header-bgColor);
-}
-
-.extra-services-info {
-  display: grid;
-  gap: 0.5rem;
-  color: var(--page-header-txtColor);
-}
-
-.extra-services-info h4 {
-  font-size: 2.5ch;
-  color: white;
-}
-
-.extra-services-items img {
-  height: 3rem;
-}
-
-.active-extra {
-  margin-top: 1rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  max-height: 39rem;
-  overflow: auto;
-  padding-right: 0.5rem;
-}
-
-.active-extra-details {
-  background-color: var(--dark-blue);
-  padding: 1.2rem 1rem;
-  border-radius: 10px;
-  min-width: 25.5rem;
-  position: relative;
-  overflow: hidden;
-  height: max-content;
-}
-
-#unit-deployed {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 3px 5px;
-  background-color: #00b9eb;
-  font-size: 0.7rem;
-}
-
-.active-extra-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin-top: 1.2rem;
-}
-
-.timeline {
-  min-height: 3.5rem;
-  max-width: 5px;
-  border-radius: 10rem;
-  background-image: linear-gradient(5deg, greenyellow, aqua);
-  position: relative;
-}
-
-.timeline p {
-  position: absolute;
-  min-width: max-content;
-  left: 0.9rem;
-  font-size: 0.9rem;
-  color: grey;
-}
-
-.timeline p:last-child {
-  bottom: 0;
-}
-
-.timeline-info {
-  margin-top: 1rem;
-  color: whitesmoke;
-  letter-spacing: 1px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
 .accordion {
   border: none;
   min-width: 100%;
@@ -598,16 +484,6 @@ td {
 .personal-info-details table th {
   color: var(--dark-grey);
   text-align: left;
-}
-
-.extra {
-  margin-top: 1rem;
-  text-align: center;
-}
-
-.extra a {
-  text-decoration: none;
-  color: var(--red);
 }
 
 .tops {

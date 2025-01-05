@@ -1,83 +1,63 @@
-{% extends 'base.html' %}
+{% extends 'base_landlord.html' %}
 
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/extra_service.css') }}">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% endblock %}
 
 {% block title %}
-PMS | Extra Service
+Maintenance
 {% endblock %}
 
-{% block logo %}
-<a id="logos" href="{{ url_for('landlord.landlord_dashboard') }}">
-  <img class="logo" src="{{ url_for('static', filename='Images/logo.png') }}" alt="logo">
-  {% if current_user.is_authenticated %}
-  <span id="account">{{ current_user.account_type }}</span>
-  {% endif %}
+{% block nav %}
+<button class="tablinks active" onclick="openView(event, 'maintenance')">
+  <img src="{{ url_for('static', filename='Images/man.png') }}" alt="dashboard">
+  Maintenance
+</button>
+{% if current_property %}
+<a id="{{ current_property.id }}"
+  href="{{ url_for('landlord.property_information', property_id=current_property.unique_id) }}">
+  <button class="current_property">
+    <img src="{{ url_for('static', filename='Images/building.png') }}" alt="property">
+    <span id="current-property">{{ current_property.name }}</span>
+  </button>
 </a>
+{% endif %}
 {% endblock %}
 
 {% block body %}
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <div class="modal-head">
-      <span id="close-modal">&times</span>
-    </div>
-    <div class="modal-body">
-      <div class="form">
-        <h4>Select a property and a unit to assign the Extra</h4>
-        <select id="properties" name="property" required>
-          <option selected disabled value="">- - - -</option>
-          {% for property in properties %}
-          <option value="{{ property.id }}">{{ property.name }}</option>
+<div id="maintenance" class="tabcontent active">
+  <div class="tab-heading">
+    <h4 id="dash">Maintenance - {{ extra_role }}</h4>
+  </div>
+  <div class="maintenance-box">
+    <div class="units-box">
+      <p id="more-info">Select the unit that requires maintenance</p>
+      <form id="unit-form" action="#">
+        <select name="unit" id="">
+          {% for unit in current_property.unit %}
+          <option value="{{ unit.unique_id }}">{{ unit.name }} - {{ unit.unit_type }}</option>
           {% endfor %}
         </select>
-        <select id="units" name="unit" required>
-          <option selected disabled value="">- - - -</option>
-          {% for unit in units %}
-          <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.Type }}</option>
+      </form>
+    </div>
+    <div class="electrician-box">
+      <p id="more-info">Select one of the available {{ extra_role }}'s</p>
+      <form id="unit-form" action="#">
+        <select name="unit" id="">
+          {% for extra in extras %}
+          <option value="{{ extra.unique_id }}">{{ extra.first_name }} {{ extra.last_name }} |
+            {{ "Ksh {:,}".format(extra.rate) }}/hr
+          </option>
           {% endfor %}
         </select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button onclick="selectProperty()">Select</button>
+      </form>
     </div>
   </div>
 </div>
-<div class="container-1">
-  <h1>Welcome to <b>Extra Service</b></h1>
-  <p>This is all about making work easier by eliminating unecessary tasks that can be simplified. We
-    offer various services to support property owners in managing their properties.</p>
-</div>
-<div class="container-2">
-  {% set available_extra = [] %}
-  {% for extra in extras %}
-  {{ available_extra.append(extra) or "" }}
-  {% endfor %}
-  {% if available_extra %}
-  <h4>Select any {{ extra_type }} ({{ available_extra|count }})</h4>
-  <div class="all-cards">
-    {% for extra in available_extra %}
-    <div data-extra="{{ extra.id }}" class="card">
-      <img src="{{ url_for('static', filename='Images/man.png') }}" alt="">
-      <div class="card-info">
-        <p>{{ extra.first_name }} {{ extra.last_name }}</p>
-        <p>{{ extra.phone }}</p>
-        <p>{{ extra.email }}</p>
-        <p>{{ "Ksh {:,}".format(extra.cost) }}<span>/ hr</span></p>
-        <p>{{ extra.rating }} <span>/ 5</span></p>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p class="else">No available Extras</p>
-  {% endif %}
-</div>
+{% endblock %}
 
+{% block script %}
 <script src="{{ url_for('static', filename='js/extra_service.js') }}"></script>
 <script>
   let property = document.getElementById("properties")

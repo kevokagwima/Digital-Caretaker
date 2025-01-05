@@ -2,7 +2,7 @@ import csv, random
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from Models.base_model import db
-from Models.users import Tenant
+from Models.users import Tenant, Admin, Role
 from Models.unit import Unit
 from config import Config
 
@@ -57,7 +57,20 @@ def add_units():
     db.session.commit()
   print("Units added")
 
+def add_admin():
+  new_admin = Admin(
+    first_name = "Admin",
+    last_name = "Admin",
+    email = "admin@gmail.com",
+    phone = 796897011,
+    passwords = "12345",
+    account_type = Role.query.filter_by(name="Admin").first().id
+  )
+  db.session.add(new_admin)
+  db.session.commit()
+
 if __name__ == '__main__':
   with app.app_context():
-    add_tenants()
+    # add_tenants()
     # add_units()
+    add_admin()

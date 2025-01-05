@@ -408,62 +408,39 @@ a img {
 
 .reservations {
   margin-top: 1rem;
-  border-radius: var(--radius);
-}
-
-#reservation-date {
-  color: var(--red);
-}
-
-.reservation-info {
-  padding: 20px;
-  margin-top: 10px;
-  border-radius: 5px;
-  position: relative;
-}
-
-.expired {
-  opacity: 0.5;
-}
-
-#divider {
-  margin: 1rem 0;
-  border: 0.1px solid var(--blue);
+  display: grid;
+  gap: 1rem;
 }
 
 #reservation-status {
-  color: rgb(7, 226, 7);
-  font-size: 18px;
+  color: var(--grey);
 }
 
-#status,
-#status-expired {
-  position: absolute;
-  right: 1.2rem;
-  top: 20px;
-  color: rgb(7, 226, 7);
+#divider {
+  border: none;
+  outline: 1px solid var(--dark-grey);
+  border-radius: var(--radius-l);
 }
 
-#status-expired {
-  color: var(--red);
+.reservation-box {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
 }
 
-.reservation-info h4:first-child {
-  color: grey;
+.reservation-details {
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: grid;
+  gap: 0.5rem;
+  background-color: var(--page-header-bgColor);
 }
 
-#reserve-id {
-  color: orange;
-}
-
-.reservation-info hr {
-  margin: 0.8rem 0;
-  border: 0.1px solid grey;
-}
-
-.reservation-info p {
-  margin: 5px 0;
-  color: yellow;
+.reservation-header,
+.extra-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .expired p::selection,
@@ -473,27 +450,36 @@ a img {
   background-color: transparent;
 }
 
-#user-info,
-#unit-info {
-  list-style-type: none;
+.maintenance-box {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
 }
 
-#user-info li,
-#unit-info li {
-  margin-top: 5px;
-  margin-left: 10px;
+.maintenance-services-box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
 }
 
-.reservation-info span {
-  color: var(--blue);
+.maintenance-service {
+  display: grid;
+  gap: 0.6rem;
+  border-radius: var(--radius);
+  padding: 1rem;
+  background-color: var(--page-header-bgColor);
 }
 
-#expire {
-  color: var(--red);
+.maintenance-service img {
+  max-height: 3rem;
 }
 
-.reservations > .else {
-  font-size: 14px;
+.maintenance-service-info {
+  color: var(--white);
+}
+
+.maintenance-service-info h1 {
+  font-size: 2ch;
 }
 
 .shifting {

@@ -48,6 +48,33 @@ def add_roles():
   db.session.commit()
   print(f"Added role {new_role.name}")
 
+def add_extra_roles():
+  new_role = ExtraRoles(
+    name = "Electrician"
+  )
+  db.session.add(new_role)
+  db.session.commit()
+  print(f"Added role {new_role.name}")
+  new_role = ExtraRoles(
+    name = "Plumber"
+  )
+  db.session.add(new_role)
+  db.session.commit()
+  print(f"Added role {new_role.name}")
+  new_role = ExtraRoles(
+    name = "Mansory"
+  )
+  db.session.add(new_role)
+  db.session.commit()
+  print(f"Added role {new_role.name}")
+  new_role = ExtraRoles(
+    name = "Interior Design"
+  )
+  db.session.add(new_role)
+  db.session.commit()
+  print(f"Added role {new_role.name}")
+
+
 def add_property_types():
   new_property_type = PropertyTypes(
     name = "Apartment"
@@ -60,5 +87,6 @@ if __name__ == "__main__":
   with app.app_context():
     # drop_tables()
     create_tables()
+    # add_extra_roles()
     # add_roles()
     # add_property_types()

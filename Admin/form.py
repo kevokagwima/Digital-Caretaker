@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField
+from wtforms import StringField, IntegerField, PasswordField, SelectField
 from wtforms.validators import Length, Email, DataRequired, ValidationError
 from Models.extras import Extras
 
@@ -9,7 +9,7 @@ class Extra_signup(FlaskForm):
   phone_number = StringField(label="Enter Phone Number", validators=[DataRequired(Length(min=10, max=10, message="Invalid Phone Number"))])
   email_address = StringField(label="Email Address", validators=[Email(), DataRequired()])
   age = IntegerField(label="Enter Age", validators=[DataRequired()])
-  title = StringField(label="Enter Title", validators=[DataRequired(Length(min=6, max=15, message="Invalid Title"))])
+  roles = SelectField(label="Enter Title", choices=[], validators=[DataRequired(message="Invalid Title")])
   cost = IntegerField(label="Enter Cost", validators=[DataRequired()])
 
   def validate_phone_number(self, phone_number_to_validate):

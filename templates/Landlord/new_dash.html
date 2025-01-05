@@ -29,10 +29,10 @@ Landlord Dashboard
   <a href="{{ url_for('landlord.add_property') }}" class="tablinks" id="no">No property added</a>
   {% endif %}
 </div>
-<button class="tablinks" onclick="openView(event, 'extra')">
+<!-- <button class="tablinks" onclick="openView(event, 'extra')">
   <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
   Extras
-</button>
+</button> -->
 {% endblock %}
 
 {% block body %}
@@ -128,122 +128,6 @@ Landlord Dashboard
     {% else %}
     <h4 class="else">No recent transactions</h4>
     {% endif %}
-  </div>
-</div>
-<div id="extra" class="tabcontent">
-  <div class="extra-heading">
-    <h4 id="dash">Extras</h4>
-    {% if active_extras %}
-    <button onclick="openView(event, 'active-extra')">Deployed Extras</button>
-    {% endif %}
-  </div>
-  <p id="more-info">This is all about making work easier by eliminating unecessary tasks that can be simplified. We
-    offer various services to support property owners in managing their properties.</p>
-  <div class="extras">
-    <h4>Click on which extra you're looking for</h4>
-    <div class="extra-services">
-      <a href="{{ url_for('landlord.extra_service', extra_type='electrician') }}">
-        <div class="extra-services-items">
-          <img src="{{ url_for('static', filename='Images/electrician.png') }}" alt="interior design">
-          <div class="extra-services-info">
-            <h4>Electrician</h4>
-            <p>Expert electricians provide reliable, professional services. Contact us for all your electrical needs.
-            </p>
-          </div>
-        </div>
-      </a>
-      <a href="{{ url_for('landlord.extra_service', extra_type='plumber') }}">
-        <div class="extra-services-items">
-          <img src="{{ url_for('static', filename='Images/plumber.png') }}" alt="capentry">
-          <div class="extra-services-info">
-            <h4>Plumber</h4>
-            <p>Expert Plumbers for Homes & Businesses. Contact us for all your plumbing needs.</p>
-          </div>
-        </div>
-      </a>
-      <a href="{{ url_for('landlord.extra_service', extra_type='mansory') }}">
-        <div class="extra-services-items">
-          <img src="{{ url_for('static', filename='Images/brickwall.png') }}" alt="brick wall">
-          <div class="extra-services-info">
-            <h4>Mansory</h4>
-            <p>Quality Brick, Stone & Concrete Work. Contact us for all your mansory needs.</p>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
-<div id="active-extra" class="tabcontent">
-  <h4 id="dash">Ongoing Maintenance</h4>
-  <p id="more-info">This shows all the active extras that have been deployed to your properties</p>
-  <p id="more-info">You have {{ active_extras|count }} maintenance currently ongoing</p>
-  <div class="active-extra">
-    {% for active_extra in active_extras|sort(attribute="date_opened", reverse=True) %}
-    <div class="active-extra-details">
-      <span id="unit-deployed">
-        {% for unit in current_user.unit if unit.id == active_extra.unit %}
-        Deployed to {{ unit.name }} - {{ unit.Type }}
-        {% endfor %}
-      </span>
-      <h4>Maintenance ID: <span>{{ active_extra.extra_service_id }}</span></h4>
-      <div class="active-extra-info">
-        <div class="timeline">
-          <p>Started:
-            {% if todays_time == active_extra.date_opened.strftime("%d/%m/%Y") %}
-            {{ active_extra.date_opened.strftime("Today at %I:%M %p") }}
-            {% else %}
-            {{ active_extra.date_opened.strftime("%d/%m/%Y at %I:%M %p") }}
-            {% endif %}
-          </p>
-          <p>
-            {% if active_extra.status == "Ongoing" %}
-            In progress...
-            {% else %}
-            Ended: {{ active_extra.date_closed.strftime("%d/%m/%Y at %I:%M %p") }}
-            {% endif %}
-          </p>
-        </div>
-        <div class="timeline-info">
-          <div class="extra-deployed">
-            <button class="accordion">Extra Deployed</button>
-            <div class="panel">
-              <div class="panel-info">
-                {% for extra in extras if extra.id == active_extra.extra %}
-                <p>Full Name: <span>{{ extra.first_name }} {{ extra.last_name }}</span></p>
-                <p>Phone number: <span>{{ extra.phone }}</span></p>
-                <p>Email address: <span>{{ extra.email }}</span></p>
-                <p>Title: {{ extra.title }}</p>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-          <div class="property-deployed">
-            <button class="accordion">Property Deployed</button>
-            <div class="panel">
-              <div class="panel-info">
-                {% for property in current_user.Property if property.id == active_extra.Property %}
-                <p>Property Name: <span>{{ property.name }}</span></p>
-                <p>Property Address: <span>{{ property.address }}, {{ property.address2 }}</span></p>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          {% if active_extra.status == "Ongoing" %}
-          <a href="{{ url_for('landlord.complete_extra_service', extra_service_id=active_extra.id) }}">
-            <button class="complete">Mark as complete</button>
-          </a>
-          <a href="{{ url_for('landlord.delete_extra_service', extra_service_id=active_extra.id) }}">
-            <button class="delete">Delete</button>
-          </a>
-          {% else %}
-          <p class="else">Completed &check;&check;</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    {% endfor %}
   </div>
 </div>
 <div id="detailed-rent" class="tabcontent">

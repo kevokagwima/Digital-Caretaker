@@ -2,11 +2,12 @@ from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_user, login_required, logout_user
 from Models.base_model import db
 from Models.users import Admin, Users, Landlord, Tenant, Role
+from flask_bcrypt import generate_password_hash
 from .form import *
 
 auth = Blueprint("auth", __name__, url_prefix="/auth")
 
-@auth.route("/landlord-signup", methods=["POST", "GET"])
+@auth.route("/landlord/signup", methods=["POST", "GET"])
 def landlord_signup():
   form = LandlordRegistrationForm()
   if form.validate_on_submit():
@@ -29,7 +30,7 @@ def landlord_signup():
 
   return render_template("Auth/landlord-signup.html", form=form)
 
-@auth.route("/landlord-login", methods=["POST", "GET"])
+@auth.route("/landlord/login", methods=["POST", "GET"])
 def landlord_login():
   form = LandlordLoginForm()
   if form.validate_on_submit():
@@ -48,7 +49,7 @@ def landlord_login():
 
   return render_template("Auth/landlord-login.html", form=form)
 
-@auth.route("/tenant-signup", methods=["POST", "GET"])
+@auth.route("/tenant/signup", methods=["POST", "GET"])
 def tenant_signup():
   form = TenantRegistrationForm()
   if form.validate_on_submit():
@@ -73,7 +74,7 @@ def tenant_signup():
 
   return render_template("Auth/tenant-signup.html", form=form)
 
-@auth.route("/tenant-login", methods=["POST", "GET"])
+@auth.route("/tenant/login", methods=["POST", "GET"])
 def tenant_login():
   form = TenantLoginForm()
   if form.validate_on_submit():
@@ -143,23 +144,49 @@ def signin():
 
   return render_template("Auth/signin.html", form=form)
 
-@auth.route("/admin-login", methods=["POST", "GET"])
+@auth.route("/admin/login", methods=["POST", "GET"])
 def admin_login():
   form = AdminLoginForm()
   if form.validate_on_submit():
-    admin = Admin.query.filter_by(unique_id=form.admin_id.data).first()
+    admin = Admin.query.filter_by(email=form.email_address.data).first()
     if not admin:
-      flash("No admin with that ID", category="danger")
+      flash("No admin with that email address", category="danger")
       return redirect(url_for('auth.admin_login'))
     elif admin and admin.check_password_correction(attempted_password=form.password.data):
       login_user(admin, remember=True)
       flash("Login successfull", category="success")
-      return redirect(url_for('admin.admin'))
+      return redirect(url_for('admin.home'))
     else:
       flash("Invalid credentials", category="danger")
       return redirect(url_for('auth.admin_login'))
 
   return render_template("Auth/admin-login.html", form=form)
+
+@auth.route("/reset-password", methods=["POST", "GET"])
+def reset_password():
+  form = ResetPasswordForm()
+  if form.validate_on_submit():
+    user = (
+      Users.query.filter_by(email=form.email_address.data).first() or Landlord.query.filter_by(email=form.email_address.data).first() or Tenant.query.filter_by(email=form.email_address.data).first() or Admin.query.filter_by(email=form.email_address.data).first()
+    )
+    if user:
+      if user.check_password_correction(attempted_password=form.password.data):
+        flash("New password cannot be same as old", category="danger")
+      else:
+        user.password = generate_password_hash(form.password.data).decode("utf-8")
+        db.session.commit()
+        flash("Your password has been reset successfully", category="success")
+        return redirect(url_for("auth.signin"))
+    else:
+      flash("No user with that email", category="danger")
+      return redirect(url_for('auth.reset_password'))
+
+  if form.errors != {}:
+    for err_msg in form.errors.values():
+      flash(f"{err_msg}", category="danger")
+      return redirect(url_for('auth.reset_password'))
+
+  return render_template("Auth/reset-password.html", form=form)
 
 @auth.route("/logout")
 @login_required

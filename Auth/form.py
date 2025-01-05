@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField
+from wtforms import StringField, IntegerField, PasswordField, EmailField
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError
 from Models.users import Users, Landlord, Tenant, Admin
 from Models.property import Properties
@@ -102,5 +102,10 @@ class UserLoginForm(FlaskForm):
   password = PasswordField(label="Password", validators=[DataRequired()])
 
 class AdminLoginForm(FlaskForm):
-  admin_id = IntegerField(label="Admin ID", validators=[DataRequired()])
+  email_address = StringField(label="Email Address", validators=[DataRequired()])
   password = PasswordField(label="password", validators=[DataRequired()])
+
+class ResetPasswordForm(FlaskForm):
+  email_address = EmailField(label="Email Address", validators=[DataRequired(message="Email Address field is required")])
+  password = PasswordField(label="Password", validators=[DataRequired(message="Password field is required")])
+  password1 = PasswordField(label="Confirm Password", validators=[EqualTo("password", message="Passwords do not match"), DataRequired(message="Confirm password field is required")])
