@@ -37,12 +37,11 @@ class ExtraService(BaseModel, db.Model):
   extra = db.Column(db.Integer(), db.ForeignKey("extras.id"))
   rate = db.Column(db.Integer(), nullable=False, default=0)
   date_opened = db.Column(db.DateTime(), nullable=False)
-  date_cancelled = db.Column(db.DateTime(), nullable=False)
-  date_completed = db.Column(db.DateTime(), nullable=False)
-  date_closed = db.Column(db.DateTime())
+  date_cancelled = db.Column(db.DateTime())
+  date_completed = db.Column(db.DateTime())
   is_active = db.Column(db.Boolean(), default=True)
   is_cancelled = db.Column(db.Boolean(), default=False)
   is_completed = db.Column(db.Boolean(), default=False)
 
   def __repr__(self):
-    return f"{self.extra} - {self.cost}"
+    return f"{self.extra} - {self.rate}"

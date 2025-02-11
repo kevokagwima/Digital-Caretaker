@@ -4,7 +4,8 @@ errors = Blueprint("errors", __name__)
 
 @errors.app_errorhandler(401)
 def error_401(error):
-  return render_template("Errors/401.html", error=error), 401
+  message = "Error. Unauthorized request"
+  return render_template("Errors/401.html", error=error, message=message), 401
 
 @errors.app_errorhandler(403)
 def error_403(error):
@@ -18,8 +19,10 @@ def error_404(error):
 
 @errors.app_errorhandler(405)
 def error_405(error):
-  return render_template("Errors/405.html", error=error), 405
+  message = "Error. Method not allowed"
+  return render_template("Errors/405.html", error=error, message=message), 405
 
 @errors.app_errorhandler(500)
 def error_500(error):
-  return render_template("Errors/500.html", error=error), 500
+  message = "Error. Server is down"
+  return render_template("Errors/500.html", error=error, message=message), 500

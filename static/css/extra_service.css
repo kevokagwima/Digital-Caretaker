@@ -12,16 +12,13 @@
   gap: 1rem;
 }
 
-.units-box,
-.electrician-box {
+.maintenance-form-box form {
+  display: grid;
+  gap: 1rem;
+}
+
+.maintenance-form-box form .input {
   padding: 1rem;
   background-color: var(--dark-blue);
   border-radius: var(--radius);
-  display: grid;
-  gap: 0.6rem;
-}
-
-#unit-form select {
-  background-color: var(--page-header-bgColor);
-  min-width: 100%;
 }

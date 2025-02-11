@@ -31,26 +31,29 @@ Maintenance
     <h4 id="dash">Maintenance - {{ extra_role }}</h4>
   </div>
   <div class="maintenance-box">
-    <div class="units-box">
-      <p id="more-info">Select the unit that requires maintenance</p>
-      <form id="unit-form" action="#">
-        <select name="unit" id="">
-          {% for unit in current_property.unit %}
-          <option value="{{ unit.unique_id }}">{{ unit.name }} - {{ unit.unit_type }}</option>
-          {% endfor %}
-        </select>
-      </form>
-    </div>
-    <div class="electrician-box">
-      <p id="more-info">Select one of the available {{ extra_role }}'s</p>
-      <form id="unit-form" action="#">
-        <select name="unit" id="">
-          {% for extra in extras %}
-          <option value="{{ extra.unique_id }}">{{ extra.first_name }} {{ extra.last_name }} |
-            {{ "Ksh {:,}".format(extra.rate) }}/hr
-          </option>
-          {% endfor %}
-        </select>
+    <div class="maintenance-form-box">
+      <form action="{{ url_for('landlord.deploy_extra', property_id=current_property.unique_id) }}" method="post">
+        <div class="input">
+          <p id="more-info">Select the unit that requires maintenance</p>
+          <select name="unit" id="">
+            {% for unit in current_property.unit %}
+            <option value="{{ unit.id }}">{{ unit.name }} - {{ unit.unit_type }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="input">
+          <p id="more-info">Select one of the available {{ extra_role }}'s</p>
+          <select name="extra" id="">
+            {% for extra in extras %}
+            <option value="{{ extra.id }}">{{ extra.first_name }} {{ extra.last_name }} |
+              {{ "Ksh {:,}".format(extra.rate) }}/hr
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <button class="btn" type="submit">
+          <span class="button--text">Submit</span>
+        </button>
       </form>
     </div>
   </div>

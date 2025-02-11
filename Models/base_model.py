@@ -30,4 +30,7 @@ class UserBaseModel(db.Model):
     self.date = datetime.now()
 
   def __repr__(self):
-    return f"{self.first_name} {self.first_name}"
+    return f"{self.first_name} {self.last_name}"
+  
+  def get_id(self):
+    return self.unique_id

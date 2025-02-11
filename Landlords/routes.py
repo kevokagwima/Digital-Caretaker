@@ -72,6 +72,7 @@ def property_information(property_id):
   properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
   all_users = []
   member_users = Users.query.all()
+  all_extras = Extras.query.all()
   tenant_users = Tenant.query.all()
   landlord_users = Landlord.query.all()
   for members in member_users:
@@ -84,6 +85,7 @@ def property_information(property_id):
   units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
   all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
   extras_roles = ExtraRoles.query.all()
+  all_maintenance = ExtraService.query.filter_by(landlord=current_user.id).all()
   check_reservation_expiry(propertiez.id)
 
   context = {
@@ -93,8 +95,10 @@ def property_information(property_id):
     "units": units,
     "all_complaints": all_complaints,
     "all_users": all_users,
+    "all_extras": all_extras,
     "this_month": today,
     "available_roles": extras_roles,
+    "all_maintenance": all_maintenance,
     "form": form
   }
 
@@ -458,68 +462,40 @@ def extra_service(property_id, extra_role):
 
   return render_template("Landlord/extra_services.html", extras=extras, current_property=current_property, extra_role=extra_role)
 
-@landlords.route("/extra-services/<int:property_id>", methods=["POST", "GET"])
+# @landlords.route("/extra-services/<int:property_id>", methods=["POST", "GET"])
+# @login_required
+# @landlord_role_required("Landlord")
+# def unit_select(property_id):
+#   units = Unit.query.filter_by(Property=property_id).all()
+#   unitsArray = []
+#   for unit in units:
+#     unitObj = {}
+#     unitObj["id"] = unit.id  
+#     unitObj["name"] = unit.name  
+#     unitObj["type"] = unit.Type
+#     unitsArray.append(unitObj)
+
+#   return jsonify({'units': unitsArray})
+
+@landlords.route("/deploy-extra/<int:property_id>", methods=["POST"])
 @login_required
 @landlord_role_required("Landlord")
-def unit_select(property_id):
-  units = Unit.query.filter_by(Property=property_id).all()
-  unitsArray = []
-  for unit in units:
-    unitObj = {}
-    unitObj["id"] = unit.id  
-    unitObj["name"] = unit.name  
-    unitObj["type"] = unit.Type
-    unitsArray.append(unitObj)
-
-  return jsonify({'units': unitsArray})
-
-@landlords.route("/extra-service/<int:extra_id>", methods=["POST", "GET"])
-@login_required
-@landlord_role_required("Landlord")
-def select_extra_service(extra_id): 
-  if request.get_data('data'):
-    data = json.loads(request.get_data('data'))
-  extra = Extras.query.filter_by(id=data.get("extra")).first()
-  active_extras = ExtraService.query.filter(ExtraService.landlord == current_user.id, ExtraService.status == "Ongoing", ExtraService.extra == extra_id).all()
-  if active_extras:
-    extra_occupancy(extra_id)
-  else:
-    try:
-      new_service = ExtraService(
-        extra_service_id = random.randint(100000, 999999),
-        landlord = current_user.id,
-        Property = data.get("property"),
-        unit = data.get("unit"),
-        extra = data.get("extra"),
-        date_opened = datetime.now(),
-        cost = extra.cost * 5,
-        status = "Ongoing"
-      )
-      db.session.add(new_service)
-      db.session.commit()
-      extra_occupancy(extra.id)
-    except:
-      flash(f"Could not dispatch the extra to your property", category="danger")
-      return redirect(url_for("landlord.extra_service", extra_type=extra.title))
-
-  return redirect(url_for("landlord.landlord_dashboard"))
-
-@landlords.route("/extra-occupancy/<int:extra_id>", methods=["POST", "GET"])
-@login_required
-@landlord_role_required("Landlord")
-def extra_occupancy(extra_id):
-  extra = Extras.query.get(extra_id)
-  active_extras = ExtraService.query.filter_by(landlord = current_user.id, status="Ongoing", extra=extra.id).all()
-  occupied_extras = []
-  for extras in active_extras:
-    occupied_extras.append(extras.extra)
-  occupyInfo = {}
-  occupyInfo["fname"] = extra.first_name 
-  occupyInfo["lname"] = extra.last_name
-  if extra.id in occupied_extras:
-    return jsonify({'message': occupyInfo})
-  else:
-    return jsonify({'messages': occupyInfo})
+def deploy_extra(property_id):
+  current_property = Properties.query.filter_by(unique_id=property_id).first()
+  if not current_property:
+    flash("Could not load property", category="danger")
+    return redirect(request.referrer)
+  new_extra_service = ExtraService(
+    landlord = current_property.property_owner,
+    properties = current_property.id,
+    unit = request.form.get("unit"),
+    extra = request.form.get("extra"),
+    date_opened = datetime.now()
+  )
+  db.session.add(new_extra_service)
+  db.session.commit()
+  flash("Maintenance requested successfully", category="success")
+  return redirect(url_for('landlord.property_information', property_id=current_property.unique_id))
 
 @landlords.route("/delete-extra-service/<int:extra_service_id>")
 @login_required

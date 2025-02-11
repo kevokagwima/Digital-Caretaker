@@ -450,7 +450,8 @@ a img {
   background-color: transparent;
 }
 
-.maintenance-box {
+.maintenance-box,
+.active-maintenance-box {
   margin-top: 1rem;
   display: grid;
   gap: 1rem;
@@ -480,6 +481,18 @@ a img {
 
 .maintenance-service-info h1 {
   font-size: 2ch;
+}
+
+.active-maintenance-box {
+  display: flex;
+}
+
+.maintenance-info {
+  display: grid;
+  gap: 1rem;
+  background-color: var(--page-header-bgColor);
+  padding: 1rem;
+  border-radius: var(--radius);
 }
 
 .shifting {

@@ -121,7 +121,7 @@ def register_url(access_token):
   payload = {
     "ShortCode": "174379",
     "ResponseType": "Completed",
-    "ConfirmationURL": "https://990d-41-80-119-29.ngrok-free.app/payment/confirm-payment/",
+    "ConfirmationURL": "https://0226-41-80-117-73.ngrok-free.app/payment/confirm-payment/",
     "ValidationURL": "https://mydomain.com/validation"
   }
 
@@ -144,12 +144,12 @@ def process_stk_push(access_token, amount, phone_number):
     "Password": LipanaMpesaPpassword.online_password,
     "Timestamp": LipanaMpesaPpassword.lipa_time,
     "TransactionType": "CustomerPayBillOnline",
-    "Amount": amount,
-    "PartyA": f"254{phone_number}",
+    "Amount": 1,
+    "PartyA": f"254796897011",
     "PartyB": "174379",
-    "PhoneNumber": f"254{phone_number}",
+    "PhoneNumber": f"254796897011",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-    "CallBackURL": "https://990d-41-80-119-29.ngrok-free.app/payment/confirm-payment/",
+    "CallBackURL": "https://0226-41-80-117-73.ngrok-free.app/payment/confirm-payment/",
     "AccountReference": "PMS",
     "TransactionDesc": "Rent Payment"
   }
@@ -243,21 +243,21 @@ def confirm_payment():
     return jsonify({"ResultDesc": "Error processing payment"}), 400
 
 def payment_complete(payment_id, mpesa_receipt_number, transaction_date):
+  payment = Payment.query.get(payment_id)
+  invoice = Invoice.query.get(payment.invoice)
+  tenant = Tenant.query.get(invoice.tenant)
+  payment.MpesaReceiptNumber = mpesa_receipt_number
+  payment.is_pending = False
+  payment.is_confirmed = True
+  payment.transactionDate = datetime.strptime(str(transaction_date), "%Y%m%d%H%M%S")
+  invoice.date_closed = datetime.strptime(str(transaction_date), "%Y%m%d%H%M%S")
+  invoice.status = "Cleared"
   try:
-    payment = Payment.query.get(payment_id)
-    invoice = Invoice.query.get(payment.invoice)
-    tenant = Tenant.query.get(invoice.tenant)
-    payment.MpesaReceiptNumber = mpesa_receipt_number
-    payment.is_pending = False
-    payment.is_confirmed = True
-    payment.transactionDate = datetime.strptime(str(transaction_date), "%Y%m%d%H%M%S")
-    invoice.date_closed = datetime.strptime(str(transaction_date), "%Y%m%d%H%M%S")
-    invoice.status = "Cleared"
     new_transaction = {
       'tenant': tenant.id,
       'landlord': tenant.landlord,
       'properties': tenant.properties,
-      'unit': tenant.unit,
+      'unit': invoice.unit,
       'invoice': invoice.id,
       'origin': "Mpesa"
     }
@@ -266,6 +266,7 @@ def payment_complete(payment_id, mpesa_receipt_number, transaction_date):
     print("Payment Complete")
     return jsonify("Success processing payment"), 200
   except Exception as e:
+    db.session.rollback()
     print(f"{repr(e)}")
     return None
 

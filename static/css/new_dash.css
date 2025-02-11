@@ -118,6 +118,19 @@
   gap: 0.6rem;
 }
 
+.test-box {
+  margin-top: 1rem;
+  background-color: var(--page-header-bgColor);
+  border-radius: var(--radius);
+  padding: 1rem;
+  max-height: 30rem;
+}
+
+#myChart {
+  outline: 1px solid red;
+  height: 100%;
+}
+
 @media (prefers-color-scheme: light) {
   .content-area,
   body,

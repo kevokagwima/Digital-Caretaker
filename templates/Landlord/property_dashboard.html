@@ -178,7 +178,7 @@ Property Dashboard | {{ propertiez.name }}
           {% set tenants_paid = [] %}
           {% set rent_paid = [] %}
           {% for tenant in tenants if tenant.invoice %}
-          {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.month_created.strftime("%m") == this_month.strftime("%m") %}
+          {% for invoice in tenant.invoice if invoice.status == "Cleared" and invoice.date_closed.strftime("%m") == this_month.strftime("%m") %}
           {{ tenants_paid.append(tenant) or "" }}
           {{ rent_paid.append(invoice.amount) or "" }}
           {% endfor %}
@@ -490,7 +490,7 @@ Property Dashboard | {{ propertiez.name }}
         <div class="expired reservation-details">
           <div class="reservation-header">
             <h4>Reservation ID <span id="reserve-id">#{{ reserves.unique_id }}</span></h4>
-            <p>Expires on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y at %I:%M %p') }}</span></p>
+            <p>Expired on <span id="expire">{{ reserves.expiry_date.strftime('%d/%m/%Y at %I:%M %p') }}</span></p>
           </div>
           <div class="reservation-info">
             <div class="user-reservation">
@@ -553,73 +553,36 @@ Property Dashboard | {{ propertiez.name }}
   </div>
 </div>
 <div id="active-extra" class="tabcontent">
-  <h4 id="dash">Ongoing Maintenance</h4>
+  <h4 id="dash">Ongoing Maintenance ({{ all_maintenance|count }})</h4>
   <p id="more-info">This shows all the active extras that have been deployed to your properties</p>
-  <p id="more-info">You have {{ active_extras|count }} maintenance currently ongoing</p>
-  <div class="active-extra">
-    {% for active_extra in active_extras|sort(attribute="date_opened", reverse=True) %}
-    <div class="active-extra-details">
-      <span id="unit-deployed">
-        {% for unit in current_user.unit if unit.id == active_extra.unit %}
-        Deployed to {{ unit.name }} - {{ unit.Type }}
+  <div class="active-maintenance-box">
+    {% for maintenance in all_maintenance %}
+    <div class="maintenance-info">
+      <div class="maintenance-unit">
+        <h4>Deployed To</h4>
+        {% for unit in propertiez.unit if unit.id == maintenance.unit %}
+        <p>{{ unit.name }} - {{ unit.unit_type }}</p>
+        {% set suffix = 'th' %}
+        {% if unit.unit_floor is not none %}
+        {% if unit.unit_floor % 100 in [11, 12, 13] %}
+        {% set suffix = 'th' %}
+        {% elif unit.unit_floor % 10 == 1 %}
+        {% set suffix = 'st' %}
+        {% elif unit.unit_floor % 10 == 2 %}
+        {% set suffix = 'nd' %}
+        {% elif unit.unit_floor % 10 == 3 %}
+        {% set suffix = 'rd' %}
+        {% endif %}
+        <p>{{ unit.unit_floor }}<sup>{{ suffix }}</sup> Floor</p>
+        {% endif %}
         {% endfor %}
-      </span>
-      <h4>Maintenance ID: <span>{{ active_extra.extra_service_id }}</span></h4>
-      <div class="active-extra-info">
-        <div class="timeline">
-          <p>Started:
-            {% if todays_time == active_extra.date_opened.strftime("%d/%m/%Y") %}
-            {{ active_extra.date_opened.strftime("Today at %I:%M %p") }}
-            {% else %}
-            {{ active_extra.date_opened.strftime("%d/%m/%Y at %I:%M %p") }}
-            {% endif %}
-          </p>
-          <p>
-            {% if active_extra.status == "Ongoing" %}
-            In progress...
-            {% else %}
-            Ended: {{ active_extra.date_closed.strftime("%d/%m/%Y at %I:%M %p") }}
-            {% endif %}
-          </p>
-        </div>
-        <div class="timeline-info">
-          <div class="extra-deployed">
-            <button class="accordion">Extra Deployed</button>
-            <div class="panel">
-              <div class="panel-info">
-                {% for extra in extras if extra.id == active_extra.extra %}
-                <p>Full Name: <span>{{ extra.first_name }} {{ extra.last_name }}</span></p>
-                <p>Phone number: <span>{{ extra.phone }}</span></p>
-                <p>Email address: <span>{{ extra.email }}</span></p>
-                <p>Title: {{ extra.title }}</p>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-          <div class="property-deployed">
-            <button class="accordion">Property Deployed</button>
-            <div class="panel">
-              <div class="panel-info">
-                {% for property in current_user.Property if property.id == active_extra.Property %}
-                <p>Property Name: <span>{{ property.name }}</span></p>
-                <p>Property Address: <span>{{ property.address }}, {{ property.address2 }}</span></p>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          {% if active_extra.status == "Ongoing" %}
-          <a href="{{ url_for('landlord.complete_extra_service', extra_service_id=active_extra.id) }}">
-            <button class="complete">Mark as complete</button>
-          </a>
-          <a href="{{ url_for('landlord.delete_extra_service', extra_service_id=active_extra.id) }}">
-            <button class="delete">Delete</button>
-          </a>
-          {% else %}
-          <p class="else">Completed &check;&check;</p>
-          {% endif %}
-        </div>
+      </div>
+      <div class="maintenance-person">
+        <h4>Extra Deployed</h4>
+        {% for extra in all_extras if extra.id == maintenance.extra %}
+        <p>{{ extra.first_name }} - {{ extra.last_name }}</p>
+        <p>0{{ extra.phone }}</p>
+        {% endfor %}
       </div>
     </div>
     {% endfor %}
