@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 import os, stripe, pytz, requests, base64
 
 payments = Blueprint("payment", __name__, url_prefix="/payment")
-stripe.api_key = os.environ['Stripe_api_key']
+stripe.api_key = ""
 utc_timezone = pytz.utc
 utc_now = datetime.now(utc_timezone) + timedelta(hours=3)
 

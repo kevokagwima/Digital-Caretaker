@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
 class awsCredentials:
-  aws_access_key = "AKIAW3MEB6Z73SXKQOUO"
-  aws_secret_key = "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"
-  bucket_name = "property-management-system-1"
-  region = "eu-north-1"
+  aws_access_key = os.environ.get("aws_access_key")
+  aws_secret_key = os.environ.get("aws_secret_key")
+  bucket_name = os.environ.get("bucket_name")
+  region = os.environ.get("region")

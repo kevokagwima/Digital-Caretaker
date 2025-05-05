@@ -3,7 +3,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from Models.base_model import db
 from Models.users import Tenant, Admin, Role
-from Models.unit import Unit
+from Models.unit import Unit, UnitMetrics
 from config import Config
 
 app = Flask(__name__)
@@ -35,25 +35,26 @@ def add_units():
   print("Adding units...")
   f = open("downloads.csv")
   reader = csv.reader(f)
-  for name, floor, Type, Property, landlord, living_space, balcony_space, air_conditioning, amenities, reserved, date, rent_amount in reader:
+  for name, floor, Type, Property, landlord, living_space, balcony_space, date, rent_amount in reader:
     unit = Unit(
       name=name,
-      floor=floor,
-      Type=Type,
+      unit_floor=floor,
+      unit_type=Type,
       landlord=landlord,
-      Property=Property,
+      properties=Property,
+      date_added=date,
+      rent_amount=rent_amount
+    )
+    db.session.add(unit)
+    db.session.commit()
+    unit_metric = UnitMetrics(
       living_space=living_space,
       balcony_space=balcony_space,
       bedrooms=3,
       bathrooms=3,
-      air_conditioning=air_conditioning,
-      amenities=amenities,
-      reserved=reserved,
-      date=date,
-      unit_id=random.randint(100000,999999),
-      rent_amount=rent_amount
+      unit = unit.id
     )
-    db.session.add(unit)
+    db.session.add(unit_metric)
     db.session.commit()
   print("Units added")
 
@@ -72,5 +73,5 @@ def add_admin():
 if __name__ == '__main__':
   with app.app_context():
     # add_tenants()
-    # add_units()
-    add_admin()
+    add_units()
+    # add_admin()

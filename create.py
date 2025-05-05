@@ -74,7 +74,6 @@ def add_extra_roles():
   db.session.commit()
   print(f"Added role {new_role.name}")
 
-
 def add_property_types():
   new_property_type = PropertyTypes(
     name = "Apartment"
@@ -87,6 +86,6 @@ if __name__ == "__main__":
   with app.app_context():
     # drop_tables()
     create_tables()
-    # add_extra_roles()
-    # add_roles()
-    # add_property_types()
+    add_roles()
+    add_extra_roles()
+    add_property_types()
