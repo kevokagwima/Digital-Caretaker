@@ -1,7 +1,7 @@
-from Models.base_model import db, BaseModel
+from Models.base_model import db, BaseModel, get_local_time
 from Models.unit import Unit
 from Models.bookings import Bookings
-from Models.extras import ExtraService
+from Models.extras import Maintenance
 from Models.transactions import Transactions
 from Models.complaints import Complaints
 from datetime import datetime
@@ -37,12 +37,12 @@ class Properties(BaseModel, db.Model):
   booking = db.relationship("Bookings", backref="property_booked", lazy=True, cascade="all, delete, delete-orphan")
   complaint = db.relationship("Complaints", backref="complaintz", lazy=True, cascade="all, delete, delete-orphan")
   transaction = db.relationship("Transactions", backref="property_transaction", lazy=True, cascade="all, delete, delete-orphan")
-  extra_service = db.relationship("ExtraService", backref="extras", lazy=True, cascade="all, delete, delete-orphan")
+  maintenance = db.relationship("Maintenance", backref="property_maintenance", lazy=True, cascade="all, delete, delete-orphan")
   unit_type = db.relationship("UnitTypes", backref="unit_types", lazy=True, cascade="all, delete, delete-orphan")
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.date_added = datetime.now()
+    self.date_added = get_local_time()
   
   def __repr__(self):
     return f"{self.name}"

@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from flask_bcrypt import Bcrypt
 from Models.unit import Unit
 from Models.transactions import Transactions
-from Models.extras import ExtraService
+from Models.extras import Maintenance
 from Models.complaints import Complaints
 from Models.invoice import Invoice
 from Models.property import Properties
@@ -63,7 +63,7 @@ class Landlord(BaseModel, UserBaseModel, UserMixin, db.Model):
   tenant = db.relationship("Tenant", backref="tenant", lazy=True, cascade="all, delete, delete-orphan")
   unit = db.relationship("Unit", backref="all_units", lazy=True, cascade="all, delete, delete-orphan")
   transaction = db.relationship("Transactions", backref="landlord_transaction", lazy=True, cascade="all, delete, delete-orphan")
-  extra_service = db.relationship("ExtraService", backref="extra_service", lazy=True, cascade="all, delete, delete-orphan")
+  maintenance = db.relationship("Maintenance", backref="landlord_maintenance", lazy=True, cascade="all, delete, delete-orphan")
   properties = db.relationship("Properties", backref="property", lazy=True, cascade="all, delete, delete-orphan")
   complaint = db.relationship("Complaints", backref="complaint", lazy=True, cascade="all, delete, delete-orphan")
 
@@ -102,3 +102,6 @@ class Tenant(BaseModel, UserBaseModel, UserMixin, db.Model):
 
   def check_password_correction(self, attempted_password):
     return bcrypt.check_password_hash(self.password, attempted_password)
+  
+  def __repr__(self):
+    return f"{self.first_name} {self.last_name}"

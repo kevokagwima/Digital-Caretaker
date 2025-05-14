@@ -20,7 +20,8 @@
   display: grid;
   gap: 1rem;
   border-radius: var(--radius);
-  background-color: var(--dark-blue);
+  background-color: var(--white);
+  box-shadow: var(--shadow);
 }
 
 .tenant-extra {
@@ -65,7 +66,7 @@
 }
 
 .assigned {
-  color: var(--light-green);
+  color: var(--green);
 }
 
 .not-assigned {
@@ -73,16 +74,17 @@
 }
 
 .accordion {
-  background-color: var(--page-header-bgColor);
+  background-color: var(--white);
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
   padding: 1rem;
-  color: var(--white);
+  color: var(--black-1);
   position: relative;
+  box-shadow: var(--shadow);
 }
 
 .panel {
-  background-color: var(--page-header-bgColor-hover);
+  background-color: var(--white);
   border-bottom-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
   padding: 0 1rem;
@@ -117,7 +119,7 @@ table {
 
 td,
 th {
-  color: var(--grey);
+  color: var(--black-1);
   text-align: left;
 }
 
@@ -128,7 +130,7 @@ th {
 }
 
 .unit-assign p {
-  color: var(--dark-grey);
+  color: var(--black-1);
 }
 
 .unit-assign form {
@@ -151,18 +153,18 @@ th {
 
 .complaint {
   padding: 1rem;
-  background-color: var(--page-header-bgColor);
+  background-color: var(--light-grey-1);
   border-radius: var(--radius);
   position: relative;
 }
 
 .complaint p {
-  color: var(--grey);
+  color: var(--black);
 }
 
 .tenant-rent-info .accordion span {
   background-color: var(--red);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius);
   padding: 0.2rem 0.5rem;
   position: absolute;
   top: 0.8rem;
@@ -171,7 +173,7 @@ th {
 }
 
 #paid-rent {
-  background-color: var(--light-green);
+  background-color: var(--green);
 }
 
 #rent-info {
@@ -179,9 +181,10 @@ th {
 }
 
 .invoice-status {
-  border-radius: var(--radius-l);
+  border-radius: var(--radius);
   padding: 0.2rem 0.5rem;
   font-size: 1.5ch;
+  color: var(--white);
 }
 
 .active-invc {
@@ -204,7 +207,7 @@ th {
 
 .invoice-details {
   padding: 0.8rem;
-  background-color: var(--other-dark-blue);
+  background-color: var(--light-grey-1);
   border-radius: var(--radius);
   display: flex;
   justify-content: space-between;
@@ -221,7 +224,7 @@ th {
 }
 
 .modal-content {
-  background-color: var(--other-dark-blue);
+  background-color: var(--white);
   max-width: 50%;
   width: 50%;
   border-radius: var(--radius);
@@ -231,7 +234,7 @@ th {
 .modal-header {
   padding: 0.2rem 1rem;
   text-align: right;
-  background-color: var(--page-content-bgColor);
+  background-color: var(--light-grey);
 }
 
 .closemodal {
@@ -242,7 +245,6 @@ th {
 
 .modal-body {
   padding: 2rem;
-  color: var(--white);
 }
 
 .modal-body strong {
@@ -250,7 +252,7 @@ th {
 }
 
 .actions {
-  background-color: var(--dark-blue);
+  background-color: var(--light-grey);
   padding: 1rem;
   border-radius: var(--radius);
 }
@@ -264,7 +266,8 @@ th {
 
 .modal-footer {
   display: grid;
-  background-color: var(--page-content-bgColor);
+  background-color: var(--white);
+  padding: 1rem;
 }
 
 .modal-footer a {
@@ -273,34 +276,4 @@ th {
 
 .modal-footer button {
   width: 100%;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --dark-blue: #fff;
-    --other-dark-blue: whitesmoke;
-    --page-header-bgColor: #e5e5e5;
-    --page-header-bgColor-hover: #e0e0e0;
-    --page-content-bgColor: #f9f9f9;
-    --page-content-txtColor: #212121;
-    --white: #212121;
-    --black: #000;
-    --light-blue: #00b8eb;
-    --grey: #686767;
-    --dark-grey: #444444;
-    --shadow: 0 0 10px -2px rgba(0, 0, 0, 0.1);
-  }
-
-  button,
-  .tenant-unit-assigned,
-  .tenant-unit-unassigned,
-  .occupation {
-    color: var(--dark-blue);
-  }
-
-  .tablinks,
-  #dashboards button,
-  .dropdown-btn {
-    color: var(--black);
-  }
 }

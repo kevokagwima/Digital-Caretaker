@@ -7,24 +7,20 @@
 }
 
 :root {
-  --dark-blue: #01011d;
-  --other-dark-blue: #001431;
-  --page-header-bgColor: #242e42;
-  --page-header-bgColor-hover: #1d2636;
-  --page-content-bgColor: #04101f;
-  --page-content-txtColor: #171616;
   --white: #fff;
-  --black: #212121;
-  --blue: #00b9eb;
-  --light-blue: #00b8eb52;
-  --grey: #f5f5f5;
-  --dark-grey: #666666;
-  --red: #ec1848;
+  --light-grey: whitesmoke;
+  --light-grey-1: #e5e5e5;
+  --light-grey-1-hover: #e0e0e0;
+  --black: #000;
+  --black-1: #212121;
+  --blue: #008deb;
+  --light-blue: #00b8eb;
+  --grey: grey;
   --green: green;
-  --light-green: rgb(6, 187, 6);
-  --radius: 0.3rem;
-  --radius-l: 10rem;
-  --shadow: 0 0 10px -2px #00000013;
+  --red: red;
+  --dark-grey: #444444;
+  --shadow: 0 0 10px -8px rgba(0, 0, 0, 0.1);
+  --radius: 0.5rem;
   --font-1: "Outfit", sans-serif;
 }
 
@@ -49,7 +45,7 @@ html {
 
 body {
   display: flex;
-  background-color: var(--other-dark-blue);
+  background-color: var(--light-grey);
 }
 
 h1 {
@@ -94,7 +90,7 @@ input,
 select {
   padding: 1em;
   border: none;
-  background-color: var(--page-header-bgColor);
+  background-color: var(--light-grey-1);
   border-radius: var(--radius);
   cursor: pointer;
 }
@@ -115,6 +111,7 @@ button {
   background-color: var(--blue);
   font-family: var(--font-1);
   cursor: pointer;
+  color: var(--white);
 }
 
 .side-nav {
@@ -122,11 +119,12 @@ button {
   min-width: 14rem;
   max-width: 14rem;
   height: 100svh;
-  background-color: var(--dark-blue);
+  background-color: var(--white);
   overflow-y: auto;
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow);
 }
 
 .profile {
@@ -140,12 +138,17 @@ button {
   max-height: 2.5rem;
 }
 
+.profile-info {
+  display: grid;
+  gap: 0;
+}
+
 .profile-info p {
-  color: var(--grey);
+  color: var(--black);
 }
 
 .profile-info span {
-  color: var(--dark-grey);
+  color: var(--grey);
   font-size: 1.4ch;
 }
 
@@ -173,6 +176,7 @@ button {
   gap: 1rem;
   align-items: center;
   cursor: pointer;
+  color: var(--black-1);
 }
 
 .dropdown-btn i {
@@ -189,16 +193,11 @@ button {
 
 .main-navigation button:hover,
 .secondary-navigation button:hover {
-  background-color: var(--light-blue);
-  color: var(--white);
+  background-color: var(--light-grey-1);
+  color: var(--black-1);
 }
 
 .tablinks.active {
-  background-color: var(--blue);
-  color: var(--white);
-}
-
-.tablinks.active:hover {
   background-color: var(--blue);
   color: var(--white);
 }
@@ -240,7 +239,7 @@ button {
   flex-grow: 1;
   overflow-y: auto;
   padding: 0 1rem;
-  background-color: var(--other-dark-blue);
+  background-color: var(--light-grey);
 }
 
 .notification-area {
@@ -251,7 +250,7 @@ button {
   justify-content: space-between;
   align-items: center;
   padding-block: 0.2rem;
-  background-color: var(--other-dark-blue);
+  background-color: var(--light-grey);
 }
 
 .burger {
@@ -265,7 +264,7 @@ button {
   height: 0.1rem;
   width: 1.3rem;
   border-radius: var(--radius);
-  background-color: var(--grey);
+  background-color: var(--black);
 }
 
 .not--img {
@@ -312,7 +311,7 @@ button {
   align-items: center;
   position: sticky;
   top: 1.8rem;
-  background-color: var(--other-dark-blue);
+  background-color: var(--light-grey);
   z-index: 1;
   padding-bottom: 0.2rem;
 }
@@ -337,7 +336,7 @@ button {
 }
 
 #just-info {
-  color: var(--dark-grey);
+  color: var(--light-grey-1);
 }
 
 .tenant-card,
@@ -349,8 +348,8 @@ button {
   position: relative;
   overflow: hidden;
   border-radius: 0.3rem;
-  background-color: var(--page-header-bgColor-hover);
-  color: var(--grey);
+  background-color: var(--white);
+  color: var(--black-1);
 }
 
 .tenant-unit-assigned,
@@ -435,11 +434,11 @@ button {
   text-align: left;
   cursor: pointer;
   border-radius: 5px 5px 0 0;
-  background-color: var(--page-header-bgColor-hover);
+  background-color: var(--grey);
 }
 
 .panel {
-  background-color: var(--other-dark-blue);
+  background-color: var(--dark-grey);
   border-radius: 0 0 5px 5px;
   padding: 0;
   max-height: 0;
@@ -468,7 +467,7 @@ button {
   margin-top: 1rem;
   overflow: auto;
   border-radius: 0.3rem;
-  background-color: var(--dark-blue);
+  background-color: var(--white);
   padding: 2rem;
 }
 
@@ -482,7 +481,7 @@ td {
 }
 
 .personal-info-details table th {
-  color: var(--dark-grey);
+  color: var(--black-1);
   text-align: left;
 }
 

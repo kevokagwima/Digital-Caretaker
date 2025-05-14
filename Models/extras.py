@@ -1,4 +1,4 @@
-from Models.base_model import db, BaseModel, UserBaseModel
+from Models.base_model import db, BaseModel, UserBaseModel, get_local_time
 from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
@@ -13,7 +13,7 @@ class Extras(BaseModel, UserBaseModel, db.Model):
   role = db.Column(db.String(15), nullable=False)
   rate = db.Column(db.Integer(), nullable=False)
   rating = db.Column(db.Integer(), nullable=False, default=0)
-  extra_service = db.relationship("ExtraService", backref="extra services", lazy=True, cascade="all, delete, delete-orphan")
+  maintenance = db.relationship("Maintenance", backref="extra_maintenance", lazy=True, cascade="all, delete, delete-orphan")
 
   @property
   def passwords(self):
@@ -29,14 +29,14 @@ class Extras(BaseModel, UserBaseModel, db.Model):
   def __repr__(self):
     return f"{self.first_name} {self.last_name} - {self.role}"
 
-class ExtraService(BaseModel, db.Model):
-  __tablename__ = 'extra_service'
+class Maintenance(BaseModel, db.Model):
+  __tablename__ = 'maintenance'
   landlord = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
   properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
   unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
   extra = db.Column(db.Integer(), db.ForeignKey("extras.id"))
   rate = db.Column(db.Integer(), nullable=False, default=0)
-  date_opened = db.Column(db.DateTime(), nullable=False)
+  date_opened = db.Column(db.DateTime(), nullable=False, default=get_local_time())
   date_cancelled = db.Column(db.DateTime())
   date_completed = db.Column(db.DateTime())
   is_active = db.Column(db.Boolean(), default=True)

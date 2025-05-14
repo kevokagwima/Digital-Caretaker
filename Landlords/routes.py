@@ -6,7 +6,7 @@ from Models.unit import Unit, UnitImage, UnitMetrics
 from Models.property import Properties, PropertyTypes, UnitTypes
 from Models.transactions import Transactions
 from Models.complaints import Complaints
-from Models.extras import Extras, ExtraService, ExtraRoles
+from Models.extras import Extras, Maintenance, ExtraRoles
 from Models.invoice import Invoice
 from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm
 from decorators import landlord_role_required
@@ -14,7 +14,7 @@ from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_
 from .aws_credentials import awsCredentials
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 from datetime import date, datetime
-import random, boto3, asyncio
+import boto3, asyncio, pytz
 
 landlords = Blueprint("landlord", __name__, url_prefix="/landlord")
 client = boto3.client(
@@ -31,19 +31,24 @@ bucket_name = awsCredentials.bucket_name
 region = awsCredentials.region
 today = date.today()
 
+def get_local_time():
+  utc_timezone = datetime.now(pytz.utc)
+  local_tz = pytz.timezone('Africa/Nairobi')
+  return utc_timezone.astimezone(local_tz)
+
 @landlords.route("/dashboard", methods=["POST", "GET"])
 @login_required
 @landlord_role_required("Landlord")
 def landlord_dashboard():
   properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
   tenants = Tenant.query.filter_by(landlord = current_user.id).all()
-  todays_time = datetime.now().strftime("%d/%m/%Y")
+  todays_time = get_local_time().strftime("%d/%m/%Y")
   if session.get("this_month"):
     this_month = datetime.strptime(session["this_month"], '%Y-%m-%d').date()
   else:
     this_month = today
   extras = Extras.query.all()
-  active_extras = ExtraService.query.filter(ExtraService.landlord == current_user.id).all()
+  active_extras = Maintenance.query.filter(Maintenance.landlord == current_user.id).all()
   units = Unit.query.filter(Unit.landlord == current_user.id).all()
   invoices = Invoice.query.filter_by(status="Cleared").order_by(Invoice.date_closed.desc()).all()
 
@@ -85,7 +90,7 @@ def property_information(property_id):
   units = db.session.query(Unit).filter(Unit.properties == propertiez.id).all()
   all_complaints = Complaints.query.filter_by(properties=propertiez.id).order_by(Complaints.date.desc()).all()
   extras_roles = ExtraRoles.query.all()
-  all_maintenance = ExtraService.query.filter_by(landlord=current_user.id).all()
+  all_maintenance = Maintenance.query.filter_by(landlord=current_user.id, properties=propertiez.id).all()
   check_reservation_expiry(propertiez.id)
 
   context = {
@@ -109,7 +114,7 @@ def property_information(property_id):
 @landlord_role_required("Landlord")
 def tenant_details(tenant_id):
   try:
-    today_time = datetime.now().strftime("%d/%m/%Y")
+    today_time = get_local_time().strftime("%d/%m/%Y")
     tenant = Tenant.query.get(tenant_id)
     tenant_property = Properties.query.filter_by(id=tenant.properties).first()
     if tenant.landlord != current_user.id:
@@ -192,7 +197,7 @@ def add_property():
       property_floors = form.floors.data,
       rooms = form.total_units.data,
       property_type = PropertyTypes.query.filter_by(name=form.property_type.data).first().id,
-      date_added = datetime.now(),
+      date_added = get_local_time(),
       property_owner = current_user.id,
     )
     existing_property = Properties.query.filter_by(name=new_property.name, property_owner=current_user.id).first()
@@ -280,7 +285,7 @@ def add_unit(property_id):
         name = form.name.data,
         unit_floor = form.floor.data,
         unit_type = form.unit_type.data,
-        date_added = datetime.now(),
+        date_added = get_local_time(),
         rent_amount = form.rent_amount.data,
         properties = current_property.id,
         landlord = current_user.id
@@ -462,21 +467,6 @@ def extra_service(property_id, extra_role):
 
   return render_template("Landlord/extra_services.html", extras=extras, current_property=current_property, extra_role=extra_role)
 
-# @landlords.route("/extra-services/<int:property_id>", methods=["POST", "GET"])
-# @login_required
-# @landlord_role_required("Landlord")
-# def unit_select(property_id):
-#   units = Unit.query.filter_by(Property=property_id).all()
-#   unitsArray = []
-#   for unit in units:
-#     unitObj = {}
-#     unitObj["id"] = unit.id  
-#     unitObj["name"] = unit.name  
-#     unitObj["type"] = unit.Type
-#     unitsArray.append(unitObj)
-
-#   return jsonify({'units': unitsArray})
-
 @landlords.route("/deploy-extra/<int:property_id>", methods=["POST"])
 @login_required
 @landlord_role_required("Landlord")
@@ -485,23 +475,39 @@ def deploy_extra(property_id):
   if not current_property:
     flash("Could not load property", category="danger")
     return redirect(request.referrer)
-  new_extra_service = ExtraService(
-    landlord = current_property.property_owner,
-    properties = current_property.id,
-    unit = request.form.get("unit"),
-    extra = request.form.get("extra"),
-    date_opened = datetime.now()
-  )
-  db.session.add(new_extra_service)
-  db.session.commit()
-  flash("Maintenance requested successfully", category="success")
+  if check_existing_maintenance(int(request.form.get("unit"))):
+    new_maintennace = Maintenance(
+      landlord = current_property.property_owner,
+      properties = current_property.id,
+      unit = int(request.form.get("unit")),
+      extra = int(request.form.get("extra")),
+      date_opened = get_local_time()
+    )
+    db.session.add(new_maintennace)
+    db.session.commit()
+    flash("Maintenance requested successfully", category="success")
   return redirect(url_for('landlord.property_information', property_id=current_property.unique_id))
+
+def check_existing_maintenance(unit_id):
+  # Retrieve ongoing maintenance units
+  ongoing_unit_maintenance = [maintenance.unit for maintenance in Maintenance.query.filter_by(is_active=True).all()]
+  
+  # Print ongoing maintenance for debugging
+  print("Ongoing Maintenance Units:", ongoing_unit_maintenance)
+  print("Unit ID to Check:", unit_id)
+  
+  # Check if the unit_id exists in ongoing_unit_maintenance
+  if unit_id in ongoing_unit_maintenance:
+    flash("Unit is currently undergoing maintenance", category="info")
+    return False
+  else:
+    return True
 
 @landlords.route("/delete-extra-service/<int:extra_service_id>")
 @login_required
 @landlord_role_required("Landlord")
 def delete_extra_service(extra_service_id):
-  maintenance = ExtraService.query.get(extra_service_id)
+  maintenance = Maintenance.query.get(extra_service_id)
   if maintenance:
     db.session.delete(maintenance)
     db.session.commit()
@@ -515,9 +521,9 @@ def delete_extra_service(extra_service_id):
 @login_required
 @landlord_role_required("Landlord")
 def complete_extra_service(extra_service_id):
-  maintenance = ExtraService.query.get(extra_service_id)
+  maintenance = Maintenance.query.get(extra_service_id)
   if maintenance:
-    maintenance.date_closed = datetime.now()
+    maintenance.date_closed = get_local_time()
     maintenance.status = "Closed"
     db.session.commit()
     flash(f"Maintenance #{maintenance.extra_service_id} marked as complete", category="success")

@@ -72,6 +72,6 @@ def add_admin():
 
 if __name__ == '__main__':
   with app.app_context():
-    # add_tenants()
+    add_tenants()
     add_units()
-    # add_admin()
+    add_admin()

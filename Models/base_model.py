@@ -1,8 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import random
+import random, pytz
 
 db = SQLAlchemy()
+
+def get_local_time():
+  utc_timezone = datetime.now(pytz.utc)
+  local_tz = pytz.timezone('Africa/Nairobi')
+  return utc_timezone.astimezone(local_tz)
 
 class BaseModel(db.Model):
   __abstract__ = True
@@ -27,7 +32,7 @@ class UserBaseModel(db.Model):
 
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.date = datetime.now()
+    self.date = get_local_time()
 
   def __repr__(self):
     return f"{self.first_name} {self.last_name}"

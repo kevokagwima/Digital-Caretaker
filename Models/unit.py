@@ -1,14 +1,14 @@
-from Models.base_model import db, BaseModel
+from Models.base_model import db, BaseModel, get_local_time
 from Models.bookings import Bookings
 from Models.transactions import Transactions
 from Models.invoice import Invoice
-from Models.extras import ExtraService
+from Models.extras import Maintenance
 
 class Unit(BaseModel, db.Model):
   __tablename__ = "unit"
   name = db.Column(db.String(50), nullable=False)
   unit_floor = db.Column(db.Integer(), nullable=False)
-  date_added = db.Column(db.DateTime())
+  date_added = db.Column(db.DateTime(), default=get_local_time())
   unit_type = db.Column(db.String(50), nullable=False)
   rent_amount = db.Column(db.Integer(), nullable=False)
   properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
@@ -18,7 +18,7 @@ class Unit(BaseModel, db.Model):
   booking = db.relationship("Bookings", backref="unit_booked", lazy=True, cascade="all, delete, delete-orphan")
   transaction = db.relationship("Transactions", backref="unit_transaction", lazy=True, cascade="all, delete, delete-orphan")
   invoice = db.relationship("Invoice", backref="unit_invoice", lazy=True, cascade="all, delete, delete-orphan")
-  extra_service = db.relationship("ExtraService", backref="extras-units", lazy=True, cascade="all, delete, delete-orphan")
+  maintenace = db.relationship("Maintenance", backref="unit_maintenance", lazy=True, cascade="all, delete, delete-orphan")
   unit_image = db.relationship("UnitImage", backref="unit_image", lazy=True, cascade="all, delete, delete-orphan")
   unit_metrics = db.relationship("UnitMetrics", backref="unit_metrics", lazy=True, cascade="all, delete, delete-orphan")
 

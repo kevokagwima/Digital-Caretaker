@@ -13,6 +13,9 @@ class Payment(BaseModel, db.Model):
   is_failed = db.Column(db.Boolean(), default=False)
   invoice = db.Column(db.Integer, db.ForeignKey("invoice.id"))
 
+  def __repr__(self):
+    return f"Payment(MerchantRequestID={self.MerchantRequestID}, CheckoutRequestID={self.CheckoutRequestID}, amount={self.amount}, invoice={self.invoice})"
+
 class Transactions(BaseModel, db.Model):
   __tablename__ = 'transactions'
   tenant = db.Column(db.Integer(), db.ForeignKey("tenant.id"))

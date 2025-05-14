@@ -22,16 +22,18 @@
     </a>
     {% block logo %} {% endblock %}
     <div class="links">
-      <a id="link" href="#">About Us</a>
-      <a id="link" href="#">Services</a>
+      <!-- <a id="link" href="#">About Us</a>
+      <a id="link" href="#">Services</a> -->
       <div class="dropdown">
         <p id="link">Client Portals
           <i class="fa fa-caret-down"></i>
         </p>
-        <div class="dropdown-content">
-          <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
-          <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
-          <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
+        <div class="dropdown-content-box">
+          <div class="dropdown-content">
+            <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
+            <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
+            <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
+          </div>
         </div>
       </div>
       <a id="link" href="{{ url_for('main.properties') }}">Properties</a>

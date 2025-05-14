@@ -13,8 +13,11 @@ import os, stripe, pytz, requests, base64
 
 payments = Blueprint("payment", __name__, url_prefix="/payment")
 stripe.api_key = ""
-utc_timezone = pytz.utc
-utc_now = datetime.now(utc_timezone) + timedelta(hours=3)
+
+def get_local_time():
+  utc_timezone = datetime.now(pytz.utc)
+  local_tz = pytz.timezone('Africa/Nairobi')
+  return utc_timezone.astimezone(local_tz)
 
 @payments.route("/card")
 @login_required
@@ -121,7 +124,7 @@ def register_url(access_token):
   payload = {
     "ShortCode": "174379",
     "ResponseType": "Completed",
-    "ConfirmationURL": "https://0226-41-80-117-73.ngrok-free.app/payment/confirm-payment/",
+    "ConfirmationURL": "https://7bb2-41-80-114-177.ngrok-free.app/payment/confirm-payment/",
     "ValidationURL": "https://mydomain.com/validation"
   }
 
@@ -149,7 +152,7 @@ def process_stk_push(access_token, amount, phone_number):
     "PartyB": "174379",
     "PhoneNumber": f"254796897011",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-    "CallBackURL": "https://0226-41-80-117-73.ngrok-free.app/payment/confirm-payment/",
+    "CallBackURL": "https://7bb2-41-80-114-177.ngrok-free.app/payment/confirm-payment/",
     "AccountReference": "PMS",
     "TransactionDesc": "Rent Payment"
   }
@@ -273,7 +276,7 @@ def payment_complete(payment_id, mpesa_receipt_number, transaction_date):
 def payment_failed(payment_id):
   try:
     payment = Payment.query.get(payment_id)
-    payment.transactionDate = utc_now
+    payment.transactionDate = get_local_time()
     payment.is_pending = False
     payment.is_failed = True
     db.session.commit()
