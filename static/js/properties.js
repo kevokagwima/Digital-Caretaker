@@ -1,37 +1,60 @@
-$(document).ready(function () {
-  $("#property-search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
-    $(".all-units #units").filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize all carousels
+  document.querySelectorAll(".carousel-container").forEach((container) => {
+    const carousel = container.querySelector(".carousel");
+    const prevBtn = container.querySelector(".prev");
+    const nextBtn = container.querySelector(".next");
+    const indicators = container.querySelectorAll(".indicator");
+    let currentIndex = 0;
+    const items = carousel.querySelectorAll("img").length || 1;
+
+    // Hide buttons if only one image
+    if (items <= 1) {
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      if (container.querySelector(".carousel-indicators")) {
+        container.querySelector(".carousel-indicators").style.display = "none";
+      }
+      return;
+    }
+
+    function updateCarousel() {
+      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+      // Update indicators
+      indicators.forEach((indicator, index) => {
+        if (index === currentIndex) {
+          indicator.classList.add("active");
+        } else {
+          indicator.classList.remove("active");
+        }
+      });
+    }
+
+    // Next button click
+    nextBtn.addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % items;
+      updateCarousel();
     });
+
+    // Previous button click
+    prevBtn.addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + items) % items;
+      updateCarousel();
+    });
+
+    // Indicator clicks
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener("click", () => {
+        currentIndex = index;
+        updateCarousel();
+      });
+    });
+
+    // Auto-rotate (optional)
+    // setInterval(() => {
+    //     currentIndex = (currentIndex + 1) % items;
+    //     updateCarousel();
+    // }, 5000);
   });
-});
-
-const normal_search = document.getElementById("form1");
-const live_search = document.getElementById("form2");
-const live = document.querySelector("#live");
-const lives = document.querySelector("#lives");
-
-live.addEventListener("click", () => {
-  normal_search.style.display = "None";
-  live_search.style.display = "Block";
-  live.style.display = "None";
-  lives.style.display = "block";
-});
-
-lives.addEventListener("click", () => {
-  normal_search.style.display = "Block";
-  live_search.style.display = "None";
-  live.style.display = "Block";
-  lives.style.display = "None";
-});
-
-const profile = document.querySelector(".profile");
-const user = document.querySelector(".login");
-
-window.addEventListener("scroll", () => {
-  profile.classList.remove("show-profile");
-});
-user.addEventListener("click", () => {
-  profile.classList.toggle("show-profile");
 });

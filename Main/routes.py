@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.bookings import Bookings
 from Models.property import Properties, PropertyTypes
-from Models.unit import Unit
+from Models.unit import Unit, UnitImage, UnitMetrics
 from Models.users import Tenant, Landlord
 from .form import UnitEnquiryForm
 from sqlalchemy import or_
@@ -46,12 +46,24 @@ def properties():
   properties = Properties.query.all()
   page = request.args.get('page', 1, type=int)
   query = Unit.query.filter_by(tenant=None, is_reserved=False).order_by(Unit.id)
-  units = query.paginate(page=page, per_page=8, error_out=False)
+  units = query.paginate(page=page, per_page=15, error_out=False)
   next_url = url_for('main.properties', page=units.next_num) if units.has_next else None
   prev_url = url_for('main.properties', page=units.prev_num) if units.has_prev else None
   today_time = datetime.now().strftime("%d/%m/%Y")
 
-  return render_template("Main/properties.html", properties=properties, units=units.items, today_time=today_time, booking=booking, next_url=next_url, prev_url=prev_url, next_page_number = units.next_num, prev_page_number = units.prev_num)
+  context = {
+    "properties": properties,
+    "units": units.items,
+    "today_time": today_time,
+    "booking": booking,
+    "next_url": next_url,
+    "prev_url": prev_url,
+    "next_page_number": units.next_num, "prev_page_number": units.prev_num,
+    "unit_metrics": UnitMetrics.query.all(),
+    "unit_images": UnitImage.query.all()
+  }
+
+  return render_template("Main/properties.html", **context)
 
 @main.route("/search", methods=["POST", "GET"])
 def search_property():
@@ -86,10 +98,10 @@ def search_property():
 
   return render_template("Main/properties.html", units=units, today_time=today_time, propertiez=propertiez, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
 
-@main.route("/property-details/<int:unit_id>", methods=["GET"])
+@main.route("/property-details/<string:unit_id>", methods=["GET"])
 def unit_details(unit_id):
   try:
-    unit = Unit.query.filter_by(unique_id=unit_id).first()
+    unit = Unit.query.filter_by(alias=unit_id).first()
     if not unit:
       flash(f"Property does not exist", category="danger")
       return redirect(url_for("main.properties"))
@@ -101,7 +113,18 @@ def unit_details(unit_id):
     unit_property = Properties.query.filter_by(id=unit.properties).first()
     landlord = Landlord.query.get(unit_property.property_owner)
 
-    return render_template("Main/property_details.html", unit=unit, landlord=landlord, property=unit_property, properties=current_property, property_types=property_types, today_time=today_time, booking=booking, form=form)
+    context = {
+      "unit": unit,
+      "landlord": landlord, 
+      "property": unit_property, 
+      "properties": current_property, 
+      "property_types": property_types, 
+      "today_time": today_time, 
+      "booking": booking,
+      "form": form
+    }
+
+    return render_template("Main/property_details.html", **context)
   except Exception as e:
     flash(f"{repr(e)}", category="danger")
     return redirect(url_for('main.properties'))

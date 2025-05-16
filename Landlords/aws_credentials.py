@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv(override=True)
 
 class awsCredentials:
   aws_access_key = os.environ.get("aws_access_key")

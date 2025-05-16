@@ -23,6 +23,7 @@
 .hero-info h1 {
   font-size: 4ch;
   max-width: 60%;
+  color: var(--white);
 }
 
 .hero-info h4 {
@@ -34,6 +35,7 @@
   max-width: 50%;
   font-size: 2.4ch;
   font-weight: 200;
+  color: var(--white);
 }
 
 .hero-btns {

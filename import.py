@@ -38,6 +38,7 @@ def add_units():
   for name, floor, Type, Property, landlord, living_space, balcony_space, date, rent_amount in reader:
     unit = Unit(
       name=name,
+      alias=name.replace(" ", "-").replace("/", "-").replace(".", "-").replace(",", "-").replace("_", "-"),
       unit_floor=floor,
       unit_type=Type,
       landlord=landlord,

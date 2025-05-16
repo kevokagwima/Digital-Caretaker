@@ -3,6 +3,8 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/properties.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
 {% endblock %}
 
 {% block title %}
@@ -10,134 +12,71 @@ Properties
 {% endblock %}
 
 {% block body %}
-<div class="container" id="properties">
-  <div class="search-box">
-    <div class="search-title">
-      <h1>Find Your Dream Home</h1>
-    </div>
-    <div class="form">
-      <div class="search-form">
-        <form action="{{ url_for('main.search_property') }}" method="post">
-          <input id="search-input" required type="text" name="search" spellcheck="false"
-            placeholder="Search for any property by type, location, price">
-          <button type="submit">Find Property</button>
-        </form>
-      </div>
-      <div class="live-search-form">
-        <form id="search-form">
-          <input id="search-input" type="text" required spellcheck="false"
-            placeholder="Live Search for any property by type, location, price">
-        </form>
-        <span class="search-text">Live Search</span>
-      </div>
-    </div>
+<main class="container">
+  <div class="container-header">
+    <h1>Prime Properties</h1>
+    <p class="subtitle">Discover your perfect rental home</p>
   </div>
-  {% if units %}
-  <div id="all-units" class="all-units">
-    {% for unit in units|sort(attribute="date_added", reverse=true) %}
-    <div id="units" class="units">
-      <div class="unit-image-box">
-        <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment">
-      </div>
-      <div id="unit-info" class="unit-info">
-        <div class="unit-header-box">
-          <div class="unit-header">
-            <h4>
-              {% for property in properties if property.id == unit.properties %}
-              {% if property.property_type == "Office" %}
-              {{ unit.unit_type }}
-              {% else %}
-              {{ unit.unit_type }}
-              {% endif %}
-              {% endfor %}
-            </h4>
-            <p id="address">
-              {% for property in properties if property.id == unit.properties %}
-              {{ property.county }}, {{ property.city }}
-              {% endfor %}
-            </p>
+  <div class="properties-grid">
+    {% for unit in units %}
+    <div class="property-card">
+      <div class="carousel-container">
+        <div class="carousel">
+          {% if not unit.unit_image %}
+          <div class="no-image">
+            <i class="fas fa-image"></i>
           </div>
-          <div class="unit-price">
-            <h4 id="rent">{{ "Ksh {:,}".format(unit.rent_amount) }}</h4>
-          </div>
+          {% else %}
+          {% for unit_image in unit_images if unit_image.unit == unit.id %}
+          <img loading="lazy"
+            src="https://{{ unit_image.bucket }}.s3.{{ unit_image.region }}.amazonaws.com/{{ unit_image.name }}"
+            alt="Luxury Villa">
+          {% endfor %}
+          {% endif %}
         </div>
-        <hr id="hr">
-        <div class="unit-metrics-box">
-          {% for unit_metric in unit.unit_metrics %}
-          <div class="unit-metric">
-            <img src="{{ url_for('static', filename='images/area.png') }}" alt="">
-            <div class="area">
-              <h4>Living Space</h4>
-              <p>{{ unit_metric.living_space }} SQM</p>
-            </div>
-          </div>
-          <div class="unit-metric">
-            <img src="{{ url_for('static', filename='images/area.png') }}" alt="">
-            <div class="area">
-              <h4>Balcony Space</h4>
-              <p>{{ unit_metric.balcony_space }} SQM</p>
-            </div>
-          </div>
-          <div class="unit-metric">
-            <img src="{{ url_for('static', filename='images/beds.png') }}" alt="">
-            <div class="area">
-              <h4>Bedrooms</h4>
-              <p>{{ unit_metric.bedrooms }} Bedroom(s)</p>
-            </div>
-          </div>
-          <div class="unit-metric">
-            <img src="{{ url_for('static', filename='images/bathtub.png') }}" alt="">
-            <div class="area">
-              <h4>Bathrooms</h4>
-              <p>{{ unit_metric.bathrooms }} Bathroom(s)</p>
-            </div>
-          </div>
+        <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-indicators">
+          {% for unit_image in unit_images if unit_image.unit == unit.id %}
+          <div class="indicator active"></div>
           {% endfor %}
         </div>
       </div>
-      <div class="unit-btn">
-        <a href="{{ url_for('main.unit_details', unit_id=unit.unique_id) }}">
-          <button>View Property</button>
-        </a>
+      <div class="property-details">
+        <span>{{ unit.units.name }}</span>
+        <h3 class="property-title">{{ unit.unit_type }}</h3>
+        <div class="property-location">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>{{ unit.units.county }}, {{ unit.units.city }}</span>
+        </div>
+        {% for unit_metric in unit_metrics if unit_metric.unit == unit.id %}
+        <div class="property-features">
+          <div class="feature">
+            <i class="fas fa-bed"></i>
+            <span>{{ unit_metric.bedrooms }} Beds</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-bath"></i>
+            <span>{{ unit_metric.bathrooms }} Baths</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-vector-square"></i>
+            <span>{{ "{:,}".format(unit_metric.living_space) }} sqft</span>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="price">
+          {{ "Ksh {:,}".format(unit.rent_amount) }} <span>/month</span>
+        </div>
+        <a href="{{ url_for('main.unit_details', unit_id=unit.alias) }}" class="cta-btn">View Details</a>
       </div>
     </div>
     {% endfor %}
-  </div>
-  <div class="navigation-btns">
-    <div class="pagination">
-      {% if prev_url %}
-      <a href="{{ prev_url }}">Previous Page</a>
-      {% endif %}
-      <div class="page-number">
-        {% if prev_page_number %}
-        <a href="{{ url_for('main.properties', page=prev_page_number) }}"
-          class="page-number active">{{ prev_page_number }}</a>
-        {% endif %}
-        {% if not next_page_number and not prev_page_number %}
-        {% elif not next_page_number %}
-        <a id="current" href="{{ url_for('main.properties', page=prev_page_number+1) }}"
-          class="page-number active">{{ prev_page_number + 1 }}</a>
-        {% else %}
-        <a id="current" href="{{ url_for('main.properties', page=next_page_number-1) }}"
-          class="page-number active">{{ next_page_number - 1 }}</a>
-        {% endif %}
-        {% if next_page_number %}
-        <a href="{{ url_for('main.properties', page=next_page_number) }}"
-          class="page-number active">{{ next_page_number }}</a>
-        {% endif %}
-      </div>
-      {% if next_url %}
-      <a href="{{ next_url }}">Next Page</a>
-      {% endif %}
-    </div>
-  </div>
-  {% else %}
-  <div class="else">
-    <h4>No vacant properties at the moment. We're working on adding more properties. Please come by later</h4>
-  </div>
-  {% endif %}
-</div>
 
+  </div>
+</main>
+{% endblock %}
+
+{% block script %}
 <script src="{{ url_for('static', filename='js/properties.js')}}"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 {% endblock %}

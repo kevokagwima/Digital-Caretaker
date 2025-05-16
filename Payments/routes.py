@@ -8,7 +8,7 @@ from Models.transactions import Transactions, Payment
 from Models.invoice import Invoice
 from Models.unit import Unit
 from .mpesa import LipanaMpesaPpassword
-from datetime import datetime, timedelta
+from datetime import datetime
 import os, stripe, pytz, requests, base64
 
 payments = Blueprint("payment", __name__, url_prefix="/payment")

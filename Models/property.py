@@ -24,7 +24,8 @@ class UnitTypes(BaseModel, db.Model):
 
 class Properties(BaseModel, db.Model):
   __tablename__ = "properties"
-  name = db.Column(db.String(50), nullable=False)
+  name = db.Column(db.String(100), nullable=False)
+  alias = db.Column(db.String(100), nullable=False)
   county = db.Column(db.String(50), nullable=False)
   city = db.Column(db.String(50), nullable=False)
   property_floors = db.Column(db.Integer(), nullable=False)

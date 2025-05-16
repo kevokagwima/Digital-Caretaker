@@ -6,7 +6,9 @@ from Models.extras import Maintenance
 
 class Unit(BaseModel, db.Model):
   __tablename__ = "unit"
-  name = db.Column(db.String(50), nullable=False)
+  name = db.Column(db.String(100), nullable=False)
+  alias = db.Column(db.String(100), nullable=False, default=name)
+  description = db.Column(db.Text())
   unit_floor = db.Column(db.Integer(), nullable=False)
   date_added = db.Column(db.DateTime(), default=get_local_time())
   unit_type = db.Column(db.String(50), nullable=False)

@@ -13,7 +13,7 @@
   --light-grey-1-hover: #e0e0e0;
   --black: #000;
   --black-1: #212121;
-  --blue: #008deb;
+  --blue: #017cf9;
   --light-blue: #00b8eb;
   --grey: grey;
   --green: green;
@@ -93,6 +93,7 @@ select {
   background-color: var(--light-grey-1);
   border-radius: var(--radius);
   cursor: pointer;
+  color: var(--black-1);
 }
 
 input:focus,

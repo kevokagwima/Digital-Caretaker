@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request, session, jsonify, json
+from flask import Blueprint, render_template, flash, url_for, redirect, request, session
 from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.users import Landlord, Tenant, Users
@@ -17,11 +17,6 @@ from datetime import date, datetime
 import boto3, asyncio, pytz
 
 landlords = Blueprint("landlord", __name__, url_prefix="/landlord")
-client = boto3.client(
-  "s3",
-  aws_access_key_id = awsCredentials.aws_access_key,
-  aws_secret_access_key = awsCredentials.aws_secret_key
-)
 s3 = boto3.resource(
   "s3",
   aws_access_key_id = awsCredentials.aws_access_key,
@@ -192,6 +187,7 @@ def add_property():
   if form.validate_on_submit():
     new_property = Properties(
       name = form.name.data,
+      alias = form.name.data.replace(" ", "-").replace("/", "-").replace(".", "-").replace(",", "-").replace("_", "-"),
       county = form.county.data,
       city = form.city.data,
       property_floors = form.floors.data,
@@ -283,6 +279,7 @@ def add_unit(property_id):
     if form.validate_on_submit():
       new_unit = Unit(
         name = form.name.data,
+        alias = form.name.data.replace(" ", "-").replace("/", "-").replace(".", "-").replace(",", "-").replace("_", "-"),
         unit_floor = form.floor.data,
         unit_type = form.unit_type.data,
         date_added = get_local_time(),
@@ -334,54 +331,55 @@ def check_if_property_is_full(property_id):
 @login_required
 @landlord_role_required("Landlord")
 def upload_unit_metrics(unit_id):
-  # try:
-  form = UnitMetricRegistrationForm()
-  current_unit = Unit.query.filter_by(unique_id=unit_id).first()
-  if not current_unit:
-    flash("Unit not found", category="danger")
-    return redirect(url_for('landlord.landlord_dashboard'))
-  current_property = Properties.query.filter_by(id=current_unit.properties).first()
-  if form.validate_on_submit():
-    new_unit_metrics = UnitMetrics(
-      living_space = form.living_room_space.data,
-      balcony_space = form.balcony_room_space.data,
-      bedrooms = form.bedrooms.data,
-      bathrooms = form.bathrooms.data,
-      unit = current_unit.id
-    )
-    files = request.files.getlist("unit_image")
-    db.session.add(new_unit_metrics)
-    if asyncio.run(upload_file(current_unit.unique_id, files)) is True:
-      return redirect(url_for('landlord.property_information', property_id=current_property.unique_id))
+  try:
+    form = UnitMetricRegistrationForm()
+    current_unit = Unit.query.filter_by(unique_id=unit_id).first()
+    if not current_unit:
+      flash("Unit not found", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    current_property = Properties.query.filter_by(id=current_unit.properties).first()
+    if form.validate_on_submit():
+      new_unit_metrics = UnitMetrics(
+        living_space = form.living_room_space.data,
+        balcony_space = form.balcony_room_space.data,
+        bedrooms = form.bedrooms.data,
+        bathrooms = form.bathrooms.data,
+        unit = current_unit.id
+      )
+      files = request.files.getlist("unit_image")
+      db.session.add(new_unit_metrics)
+      if asyncio.run(upload_file(current_unit.unique_id, files, current_property.unique_id)) is True:
+        return redirect(url_for('landlord.property_information', property_id=current_property.unique_id))
+      else:
+        return redirect(url_for('landlord.upload_unit_metrics', unit_id=current_unit.unique_id))
 
-  if form.errors != {}:
-    for err_msg in form.errors.values():
-      flash(f"{err_msg}", category="danger")
-    return redirect(url_for('landlord.upload_unit_metrics', unit_id=current_unit.unique_id))
+    if form.errors != {}:
+      for err_msg in form.errors.values():
+        flash(f"{err_msg}", category="danger")
+      return redirect(url_for('landlord.upload_unit_metrics', unit_id=current_unit.unique_id))
 
-  return render_template("Landlord/unit-metrics.html", form=form)
-  # except Exception as e:
-  #   flash(f"{repr(e)}. Try again later", category="danger")
-  #   return redirect(url_for("landlord.property_information", property_id=current_property.id))
+    return render_template("Landlord/unit-metrics.html", form=form)
+  except Exception as e:
+    flash(f"{repr(e)}. Try again later", category="danger")
+    return redirect(url_for("landlord.property_information", property_id=current_property.id))
 
-async def upload_file(unit_id, files):
+async def upload_file(unit_id, files, property_id):
   unit = Unit.query.filter_by(unique_id=unit_id).first()
-  if not unit:
-    flash("Unit not found", category="danger")
-    return redirect(url_for('landlord.landlord_dashboard'))
+  unit_property = Properties.query.filter_by(unique_id=property_id).first()
   try:
     for file in files:
+      filename = f"{unit_property.alias}/{unit.alias}/{file.filename}"
       unit_image = UnitImage(
-        name = file.filename,
+        name = filename,
         bucket = bucket_name,
         region = region,
         unit = unit.id
       )
-      s3.Object(bucket_name, file.filename).put(Body=file)
+      s3.Bucket(bucket_name).upload_fileobj(file, filename)
       db.session.add(unit_image)
       db.session.commit()
-      flash("Unit metrics uploaded successfully", category="success")
-      return True
+    flash("Unit metrics uploaded successfully", category="success")
+    return True
   except NoCredentialsError:
     flash("Credentials not available", category="danger")
     return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))

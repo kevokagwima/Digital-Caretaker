@@ -3,123 +3,170 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/property_details.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% endblock %}
 
 {% block title %}
-{{ unit.unit_type }}
-{% for property_type in property_types if property.id == property.property_type %}
-{{ property_type.name }} | {{ property.county }} {{ property.city }}
-{% endfor %}
+{{ unit.unit_type }} | {{ unit.units.name }}
 {% endblock %}
 
 {% block body %}
-<div class="unit-container">
-  <div class="unit-details-box">
-    <div class="unit--info">
-      <h1>{{ unit.unit_type }}</h1>
-      <p>Modern {{ unit.unit_type }} with Basic Furniture in {{ property.county }},
-        {{ property.city }}
-      </p>
-    </div>
-    <div class="more-info">
-      <p>This spacious {{ unit.unit_type }} from comes fully furnished with {{ unit.unit_type }}s, 1 shared bathroom, a
-        kitchen with storage and a balcony. Water, electricity and Wi-fi is included.</p>
-    </div>
-    <div class="unit-metrics-box">
-      {% for unit_metric in unit.unit_metrics %}
-      <div class="unit-metric">
-        <img src="{{ url_for('static', filename='images/area.png') }}" alt="">
-        <div class="area">
-          <h4>Living Space</h4>
-          <p>{{ unit_metric.living_space }} SQM</p>
-        </div>
-      </div>
-      <div class="unit-metric">
-        <img src="{{ url_for('static', filename='images/area.png') }}" alt="">
-        <div class="area">
-          <h4>Balcony Space</h4>
-          <p>{{ unit_metric.balcony_space }} SQM</p>
-        </div>
-      </div>
-      <div class="unit-metric">
-        <img src="{{ url_for('static', filename='images/beds.png') }}" alt="">
-        <div class="area">
-          <h4>Bedrooms</h4>
-          <p>{{ unit_metric.bedrooms }} Bedroom(s)</p>
-        </div>
-      </div>
-      <div class="unit-metric">
-        <img src="{{ url_for('static', filename='images/bathtub.png') }}" alt="">
-        <div class="area">
-          <h4>Bathrooms</h4>
-          <p>{{ unit_metric.bathrooms }} Bathroom(s)</p>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    <div class="unit-rent">
-      <p><span id="rent">{{ "Ksh {:,}".format(unit.rent_amount) }}</span>/Month</p>
-    </div>
-    <div class="unit-status">
-      {% if unit.is_reserved == False %}
-      <a href="{{ url_for('main.reserve_unit', unit_id=unit.unique_id) }}">
-        <button class="reserve-btn">Reserve Unit</button>
-      </a>
-      {% endif %}
-    </div>
+<div class="container">
+  <div class="container-header">
+    <a href="{{ url_for('main.properties') }}" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Listings</a>
   </div>
-  <div class="unit-image-box">
-    <img loading="lazy" src="{{ url_for('static', filename='Images/inside_apartment.jpg') }}" alt="apartment" />
-  </div>
+
+  <main class="container-content">
+    <div class="property-header">
+      <div class="property-content">
+        <h2 class="property-title">{{ unit.unit_type }}</h2>
+        <div class="property-meta">
+          <span class="property-type">{{ unit.units.properties.name }}</span>
+          <span class="property-location"><i class="fas fa-map-marker-alt"></i> {{ unit.units.county }},
+            {{ unit.units.city }}</span>
+        </div>
+        <div class="price">{{ "Ksh {:,}".format(unit.rent_amount) }} <span>/month</span></div>
+        <div class="property-description">
+          <h3>Description</h3>
+          {% if unit.description %}
+          <p>{{ unit.description }}</p>
+          {% else %}
+          <p>A {{ unit.unit_type }} {{ unit.units.properties.name }} located in {{ unit.units.county }}
+            {{ unit.units.city }}. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia consequuntur minima
+            recusandae dicta dolor quidem ab eaque facere doloremque odio atque nesciunt excepturi dolorem, iusto
+            laudantium ut explicabo consequatur odit vitae aspernatur natus sapiente! Porro eius in magni commodi,
+            voluptates harum quasi, similique ipsa rerum amet corrupti fugiat, corporis voluptate omnis tenetur
+            molestiae! Soluta aut, consectetur libero animi laboriosam dolor fugit sunt minima reiciendis. Recusandae
+            repellat eligendi, reprehenderit vero provident earum illum nobis! Placeat, sed soluta perferendis corporis
+            est tenetur!
+          </p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="property-gallery">
+        <div class="main-carousel">
+          <div class="carousel-container">
+            <div class="carousel">
+              {% if not unit.unit_image %}
+              <div class="no-image">
+                <i class="fas fa-image"></i>
+              </div>
+              {% else %}
+              {% for unit_image in unit.unit_image %}
+              <img loading="lazy"
+                src="https://{{ unit_image.bucket }}.s3.{{ unit_image.region }}.amazonaws.com/{{ unit_image.name }}"
+                alt="Luxury Villa">
+              {% endfor %}
+              {% endif %}
+            </div>
+            <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-indicators">
+              <div class="indicator active"></div>
+              <div class="indicator"></div>
+              <div class="indicator"></div>
+              <div class="indicator"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="property-features">
+      <h3>Features</h3>
+      <div class="features-grid">
+        <div class="feature">
+          <i class="fas fa-bed"></i>
+          <span>4 Bedrooms</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-bath"></i>
+          <span>3 Bathrooms</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-ruler-combined"></i>
+          <span>2,800 sqft</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-car"></i>
+          <span>2 Garage spaces</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-swimming-pool"></i>
+          <span>Swimming pool</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-utensils"></i>
+          <span>Gourmet kitchen</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-wifi"></i>
+          <span>High-speed internet</span>
+        </div>
+        <div class="feature">
+          <i class="fas fa-snowflake"></i>
+          <span>Central A/C</span>
+        </div>
+      </div>
+    </section>
+    <div class="property-details-grid">
+      <div class="property-info">
+        <section class="property-map">
+          <h3>Location</h3>
+          <div class="map-container">
+            <!-- Embedded map placeholder -->
+            <img
+              src="https://maps.googleapis.com/maps/api/staticmap?center=Beverly+Hills,CA&zoom=14&size=600x300&maptype=roadmap&markers=color:red%7CBeverly+Hills,CA&key=YOUR_API_KEY"
+              alt="Property location map">
+          </div>
+          <p class="address"><i class="fas fa-map-marker-alt"></i> 123 Luxury Lane, Beverly Hills, CA 90210</p>
+        </section>
+        <div class="agent-info">
+          <h3>Contact Landlord</h3>
+          <div class="agent-card">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Johnson" class="agent-photo">
+            <div class="agent-details">
+              <h4>{{ unit.all_units.first_name }} {{ unit.all_units.last_name }}</h4>
+              <div class="agent-contact">
+                <p><i class="fas fa-phone"></i> +254 {{ unit.all_units.phone }}</p>
+                <p><i class="fas fa-envelope"></i> {{ unit.all_units.email }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="property-sidebar">
+        <div class="enquiry-form-container">
+          <h3>Schedule a Viewing</h3>
+          <form id="enquiryForm" class="enquiry-form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+              <label for="date">Preferred Viewing Date</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group extend">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Enquiry</button>
+          </form>
+        </div>
+      </div>
+  </main>
 </div>
-<div class="form-container">
-  <div class="landlord-info">
-    <h1>Landlord Information</h1>
-    <hr id="hr">
-    <div class="landlord-details-box">
-      <div class="landlord-details">
-        <p>Name</p>
-        <h4>{{ landlord.first_name }} {{ landlord.last_name }}</h4>
-      </div>
-      <div class="landlord-details">
-        <p>Email</p>
-        <h4>{{ landlord.email }}</h4>
-      </div>
-      <div class="landlord-details">
-        <p>Phone Number</p>
-        <h4>0{{ landlord.phone }}</h4>
-      </div>
-    </div>
-  </div>
-  <div class="unit-enquiry-box">
-    <h1 id="prop-details">Unit Enquiry</h1>
-    <form action="#" method="post">
-      {{ form.csrf_token }}
-      <div class="input">
-        {{ form.first_name.label }}
-        {{ form.first_name(placeholder="Eg. John", class="name") }}
-      </div>
-      <div class="input">
-        {{ form.last_name.label }}
-        {{ form.last_name(placeholder="Eg. Doe", class="name") }}
-      </div>
-      <div class="input">
-        {{ form.email_address.label }}
-        {{ form.email_address(placeholder="Eg. johndoe@gmail.com", class="name") }}
-      </div>
-      <div class="input">
-        {{ form.phone_number.label }}
-        {{ form.phone_number(placeholder="Eg. 07xx xxx xxx", class="name") }}
-      </div>
-      <div class="input extend">
-        {{ form.message.label }}
-        {{ form.message(placeholder="Enter your message", class="name") }}
-      </div>
-      <button class="btn" type="submit">
-        <span class="button--text">Send</span>
-      </button>
-    </form>
-  </div>
-</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/property_details.js')}}"></script>
 {% endblock %}
