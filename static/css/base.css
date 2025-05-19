@@ -109,6 +109,17 @@ textarea:focus {
   color: var(--dark-grey);
 }
 
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#google_translate_element select {
+  background-color: var(--dark-grey);
+  padding: 0;
+}
+
 header {
   position: sticky;
   top: 0;

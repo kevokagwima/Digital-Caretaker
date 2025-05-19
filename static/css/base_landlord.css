@@ -296,6 +296,11 @@ i {
   background-color: var(--black);
 }
 
+#google_translate_element select {
+  background-color: var(--light-grey-1);
+  padding: 0;
+}
+
 .not--img {
   max-height: 1.5rem;
   cursor: pointer;

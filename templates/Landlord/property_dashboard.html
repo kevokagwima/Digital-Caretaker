@@ -170,7 +170,7 @@ Property Dashboard | {{ propertiez.name }}
           {% endfor %}
           <p>Rent Expected</p>
           <div class="rent-stat-info">
-            <h4 id="expected">{{ "Ksh {:,}".format(expected_rent|sum) }}</h4>
+            <h4 id="expected">{{ "Tsh {:,}".format(expected_rent|sum) }}</h4>
             <span>{{ occupied_units|count }} Unit(s)</span>
           </div>
         </div>
@@ -185,7 +185,7 @@ Property Dashboard | {{ propertiez.name }}
           {% endfor %}
           <p>Rent Received</p>
           <div class="rent-stat-info">
-            <h4 id="received">{{ "Ksh {:,}".format(rent_paid|sum) }}</h4>
+            <h4 id="received">{{ "Tsh {:,}".format(rent_paid|sum) }}</h4>
             <span>{{ tenants_paid|count }} Tenant(s)</span>
           </div>
         </div>
@@ -193,7 +193,7 @@ Property Dashboard | {{ propertiez.name }}
           {% set rent_remaining = expected_rent|sum - rent_paid|sum %}
           <p>Rent Remaining</p>
           <div class="rent-stat-info">
-            <h4 id="remaining">{{ "Ksh {:,}".format(rent_remaining) }}</h4>
+            <h4 id="remaining">{{ "Tsh {:,}".format(rent_remaining) }}</h4>
             <span>{{ occupied_units|count - tenants_paid|count }} Tenant(s)</span>
           </div>
         </div>
@@ -341,7 +341,7 @@ Property Dashboard | {{ propertiez.name }}
             {% endif %}
             <p>{{ unit.unit_floor }}<sup>{{ suffix }}</sup> Floor</p>
             {% endif %}
-            <p>{{ "Ksh {:,}".format(unit.rent_amount) }}</p>
+            <p>{{ "Tsh {:,}".format(unit.rent_amount) }}</p>
           </div>
         </a>
       </div>
