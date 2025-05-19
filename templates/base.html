@@ -17,6 +17,17 @@
     <title>D-DALALI | {% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
+  <div class="header top-header">
+    <div class="language-switcher">
+      {% for language in config['LANGUAGES'] %}
+      <a href="{{ url_for('set_lang', lang=language) }}"
+        class="{% if session['language'] == language %}active{% endif %}">
+        {{ config['LANGUAGES'][language] }}
+      </a>
+      {% endfor %}
+    </div>
+    <div id="google_translate_element"></div>
+  </div>
   <header class="nav">
     <a href="{{ url_for('main.index') }}">
       <img id="logo" src="{{ url_for('static', filename='Images/full-logo.webp') }}" alt="">
@@ -91,6 +102,14 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
       AOS.init();
+    </script>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          { pageLanguage: 'sw' },
+          "google_translate_element"
+        )
+      }
     </script>
     {% block script %}{% endblock %}
 

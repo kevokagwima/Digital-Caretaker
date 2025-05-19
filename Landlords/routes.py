@@ -8,7 +8,7 @@ from Models.transactions import Transactions
 from Models.complaints import Complaints
 from Models.extras import Extras, Maintenance, ExtraRoles
 from Models.invoice import Invoice
-from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm
+from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm, UnitImageForm
 from decorators import landlord_role_required
 from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_access
 from .aws_credentials import awsCredentials
@@ -327,43 +327,115 @@ def check_if_property_is_full(property_id):
     flash(f"Maximum units allowed of this property has been reached", category="warning")
     return False
 
-@landlords.route("/upload-unit-metrics/<int:unit_id>", methods=["POST", "GET"])
+@landlords.route("/unit-details/<int:unit_id>")
 @login_required
 @landlord_role_required("Landlord")
-def upload_unit_metrics(unit_id):
+def unit_details(unit_id):
   try:
-    form = UnitMetricRegistrationForm()
     current_unit = Unit.query.filter_by(unique_id=unit_id).first()
     if not current_unit:
       flash("Unit not found", category="danger")
       return redirect(url_for('landlord.landlord_dashboard'))
+    unit_metrics = UnitMetrics.query.filter_by(unit=current_unit.id).first()
+    unit_images = UnitImage.query.filter_by(unit=current_unit.id).all()
+    unit_form = UnitRegistrationForm(obj=current_unit)
     current_property = Properties.query.filter_by(id=current_unit.properties).first()
+   
+    context = {
+      "unit_form": unit_form,
+      "metric_form": UnitMetricRegistrationForm(obj=unit_metrics),
+      "unit_image_form": UnitImageForm(),
+      "property": current_property,
+      "unit": current_unit,
+      "unit_images": unit_images,
+    }
+
+  except Exception as e:
+    flash(f"{repr(e)}. Try again later", category="danger")
+    return redirect(url_for("landlord.property_information", property_id=current_property.unique_id))
+
+  return render_template("Landlord/edit-unit.html", **context)
+
+@landlords.route("/edit-unit/<int:unit_id>", methods=["POST"])
+@login_required
+@landlord_role_required("Landlord")
+def edit_unit_details(unit_id):
+  try:
+    current_unit = Unit.query.filter_by(unique_id=unit_id).first()
+    if not current_unit:
+      flash("Unit not found", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    form = UnitRegistrationForm(obj=current_unit)
     if form.validate_on_submit():
-      new_unit_metrics = UnitMetrics(
-        living_space = form.living_room_space.data,
-        balcony_space = form.balcony_room_space.data,
-        bedrooms = form.bedrooms.data,
-        bathrooms = form.bathrooms.data,
-        unit = current_unit.id
-      )
-      files = request.files.getlist("unit_image")
-      db.session.add(new_unit_metrics)
-      if asyncio.run(upload_file(current_unit.unique_id, files, current_property.unique_id)) is True:
-        return redirect(url_for('landlord.property_information', property_id=current_property.unique_id))
-      else:
-        return redirect(url_for('landlord.upload_unit_metrics', unit_id=current_unit.unique_id))
+      form.populate_obj(current_unit)
+      db.session.commit()
+      flash("Unit updated successfully", category="success")
+      return redirect(url_for('landlord.unit_details', unit_id=current_unit.unique_id))
 
     if form.errors != {}:
       for err_msg in form.errors.values():
         flash(f"{err_msg}", category="danger")
-      return redirect(url_for('landlord.upload_unit_metrics', unit_id=current_unit.unique_id))
+        return redirect(url_for('landlord.unit_details', unit_id=current_unit.unique_id))
 
-    return render_template("Landlord/unit-metrics.html", form=form)
   except Exception as e:
     flash(f"{repr(e)}. Try again later", category="danger")
-    return redirect(url_for("landlord.property_information", property_id=current_property.id))
+    return redirect(url_for("landlord.unit_details", unit_id=current_unit.unique_id))
 
-async def upload_file(unit_id, files, property_id):
+@landlords.route("/edit-unit-metrics/<int:unit_id>", methods=["POST"])
+@login_required
+@landlord_role_required("Landlord")
+def edit_unit_metrics(unit_id):
+  try:
+    current_unit = Unit.query.filter_by(unique_id=unit_id).first()
+    if not current_unit:
+      flash("Unit not found", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    unit_metrics = UnitMetrics.query.filter_by(unit=current_unit.id).first()
+    form = UnitMetricRegistrationForm()
+    if form.validate_on_submit():
+      form.populate_obj(unit_metrics)
+      db.session.commit()
+      flash("Unit metrics updated successfully", category="success")
+      return redirect(url_for('landlord.unit_details', unit_id=current_unit.unique_id))
+
+    if form.errors != {}:
+      for err_msg in form.errors.values():
+        flash(f"{err_msg}", category="danger")
+        return redirect(url_for('landlord.unit_details', unit_id=current_unit.unique_id))
+
+  except Exception as e:
+    flash(f"{repr(e)}. Try again later", category="danger")
+    return redirect(url_for("landlord.unit_details", unit_id=current_unit.unique_id))
+
+@landlords.route("/upload-unit-image/<int:unit_id>", methods=["POST"])
+@login_required
+@landlord_role_required("Landlord")
+def upload_unit_image(unit_id):
+  try:
+    current_unit = Unit.query.filter_by(unique_id=unit_id).first()
+    if not current_unit:
+      flash("Unit not found", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    unit_property = Properties.query.filter_by(id=current_unit.properties).first()
+    form = UnitImageForm()
+    if form.validate_on_submit():
+      files = request.files.getlist("unit_image")
+      if upload_file(current_unit.unique_id, files, unit_property.unique_id):
+        flash("Unit images uploaded successfully", category="success")
+      else:
+        flash("Failed to upload unit images uploaded. Try again", category="failed")
+      return redirect(url_for("landlord.unit_details", unit_id=current_unit.unique_id))
+
+    if form.errors != {}:
+      for err_msg in form.errors.values():
+        flash(f"{err_msg}", category="danger")
+        return redirect(url_for('landlord.unit_details', unit_id=current_unit.unique_id))
+
+  except Exception as e:
+    flash(f"{repr(e)}. Try again later", category="danger")
+    return redirect(url_for("landlord.unit_details", unit_id=current_unit.unique_id))
+
+def upload_file(unit_id, files, property_id):
   unit = Unit.query.filter_by(unique_id=unit_id).first()
   unit_property = Properties.query.filter_by(unique_id=property_id).first()
   try:
@@ -378,20 +450,43 @@ async def upload_file(unit_id, files, property_id):
       s3.Bucket(bucket_name).upload_fileobj(file, filename)
       db.session.add(unit_image)
       db.session.commit()
-    flash("Unit metrics uploaded successfully", category="success")
     return True
   except NoCredentialsError:
+    db.session.rollback()
     flash("Credentials not available", category="danger")
-    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+    return redirect(url_for('landlord.unit_details', unit_id=unit.unique_id))
   except PartialCredentialsError:
+    db.session.rollback()
     flash("Incomplete credentials provided", category="danger")
-    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+    return redirect(url_for('landlord.unit_details', unit_id=unit.unique_id))
   except ClientError as e:
+    db.session.rollback()
     flash(f"Client Error: {e.response['Error']['Message']}", category="danger")
-    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+    return redirect(url_for('landlord.unit_details', unit_id=unit.unique_id))
   except Exception as e:
+    db.session.rollback()
     flash(f"Error: {repr(e)}", category="danger")
-    return redirect(url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id))
+    return redirect(url_for('landlord.unit_details', unit_id=unit.unique_id))
+
+@landlords.route("/remove-unit-image/<int:unit_image_id>")
+@login_required
+@landlord_role_required("Landlord")
+def remove_unit_image(unit_image_id):
+  try:
+    unit_image = UnitImage.query.filter_by(unique_id=unit_image_id).first()
+    if not unit_image:
+      flash("Unit not found", category="danger")
+      return redirect(url_for('landlord.landlord_dashboard'))
+    current_unit = Unit.query.filter_by(id=unit_image.unit).first()
+    db.session.delete(unit_image)
+    s3.Bucket(bucket_name).Object(unit_image.name).delete()
+    db.session.commit()
+    flash("Image removed successfully", category="success")
+    return redirect(url_for("landlord.unit_details", unit_id=current_unit.unique_id))
+
+  except Exception as e:
+    flash(f"{repr(e)}. Try again later", category="danger")
+    return redirect(url_for("landlord.unit_details", unit_id=current_unit.unique_id))
 
 @landlords.route("/register-unit-type/<int:property_id>", methods=["POST"])
 @login_required

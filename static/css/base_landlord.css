@@ -8,13 +8,14 @@
 
 :root {
   --white: #fff;
-  --light-grey: whitesmoke;
+  --whitesmoke: whitesmoke;
+  --light-grey: rgb(236, 240, 244);
   --light-grey-1: #e5e5e5;
   --light-grey-1-hover: #e0e0e0;
   --black: #000;
   --black-1: #212121;
   --blue: #017cf9;
-  --light-blue: #00b8eb;
+  --light-blue: #6bb1f7;
   --grey: grey;
   --green: green;
   --red: red;
@@ -135,8 +136,9 @@ button {
   cursor: pointer;
 }
 
-.profile img {
-  max-height: 2.5rem;
+i {
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .profile-info {
@@ -173,23 +175,37 @@ button {
 .logout button,
 .secondary-navigation button {
   background-color: transparent;
-  display: flex;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.5rem;
   align-items: center;
   cursor: pointer;
-  color: var(--black-1);
+  padding-inline: 0.1rem;
 }
 
-.dropdown-btn i {
+.dropdown-btn .fa-angle-down {
   position: absolute;
   right: 2rem;
   font-size: 2ch;
+  color: var(--blue);
 }
 
-.main-navigation button img,
-.logout button img,
-.secondary-navigation img {
-  max-height: 1.5rem;
+.main-navigation button span,
+.logout button span,
+.secondary-navigation span {
+  color: var(--black-1);
+  text-align: left;
+}
+
+.main-navigation button i,
+.logout button i,
+.secondary-navigation i {
+  color: var(--black);
+  font-size: 1.5rem;
+}
+
+.logout button i {
+  color: var(--red);
 }
 
 .main-navigation button:hover,
@@ -200,6 +216,18 @@ button {
 
 .tablinks.active {
   background-color: var(--blue);
+  color: var(--white);
+  padding-inline: 0.5rem;
+}
+
+.tablinks.active:hover {
+  background-color: var(--blue);
+  color: var(--white);
+  padding-inline: 0.5rem;
+}
+
+.tablinks.active i,
+.tablinks.active span {
   color: var(--white);
 }
 
@@ -415,12 +443,13 @@ button {
 .unit-details {
   display: grid;
   gap: 0.5rem;
-  color: var(--grey);
+  color: var(--black);
 }
 
 .tenant-details a {
   color: var(--blue);
   margin-top: 0.5rem;
+  max-width: max-content;
 }
 
 .else {

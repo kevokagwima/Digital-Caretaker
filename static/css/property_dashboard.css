@@ -19,9 +19,16 @@ a img {
   gap: 1.5rem;
 }
 
-.property-actions img {
-  max-height: 1.5rem;
-  cursor: pointer;
+.property-actions i {
+  font-size: 1.5rem;
+}
+
+.fa-edit {
+  color: var(--blue);
+}
+
+.fa-trash {
+  color: var(--red);
 }
 
 .property-btns {
@@ -309,6 +316,7 @@ a img {
 
 .modal-footer {
   display: grid;
+  padding: 1rem;
 }
 
 .modal-footer button {

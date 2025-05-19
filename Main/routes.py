@@ -1,15 +1,15 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request
+from flask import Blueprint, render_template, flash, url_for, redirect, request, session
 from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.bookings import Bookings
 from Models.property import Properties, PropertyTypes
 from Models.unit import Unit, UnitImage, UnitMetrics
+from flask_babel import _
 from Models.users import Tenant, Landlord
-from .form import UnitEnquiryForm
-from sqlalchemy import or_
 from .form import *
-import random
+from sqlalchemy import or_
 from datetime import datetime, timedelta
+import random
 
 main = Blueprint("main", __name__)
 
@@ -23,8 +23,17 @@ def index():
     units = Unit.query.all()
     tenants = Tenant.query.all()
     landlords = Landlord.query.all()
+
+    context = {
+      "properties": properties,
+      "property_choice": property_choice,
+      "units": units, 
+      "tenants": tenants,
+      "landlords": landlords,
+      "booking": booking,
+    }
     
-    return render_template("Main/index.html", properties=properties,property_choice=property_choice, units=units, tenants=tenants, landlords=landlords, booking=booking)
+    return render_template("Main/index.html", **context)
   
   return render_template("Main/index.html")
 

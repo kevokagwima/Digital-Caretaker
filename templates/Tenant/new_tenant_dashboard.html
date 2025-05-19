@@ -11,24 +11,24 @@ Tenant Dashboard
 
 {% block nav %}
 <button class="tablinks active" onclick="openView(event, 'dashboard')">
-  <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
-  Dashboard
+  <i class="fas fa-home"></i>
+  <span>Dashboard</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'landlord')">
-  <img src="{{ url_for('static', filename='Images/man.png') }}" alt="Landlord">
-  My Landlord
+  <i class="fas fa-user"></i>
+  <span>My Landlord</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'unit')">
-  <img src="{{ url_for('static', filename='Images/home.png') }}" alt="Unit">
-  My Unit
+  <i class="fas fa-building"></i>
+  <span>My Unit</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'complaints')">
-  <img src="{{ url_for('static', filename='Images/feedback.png') }}" alt="complaints">
-  Complaints
+  <i class="fas fa-message"></i>
+  <span>Complaints</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'payments')">
-  <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="Payments">
-  Payments
+  <i class="fas fa-message"></i>
+  <span>Payments</span>
 </button>
 {% endblock %}
 
@@ -112,7 +112,7 @@ Tenant Dashboard
   <div class="landlord">
     <div class="landlord-profile-img">
       <div class="img-box">
-        <img src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
+        <img loading="lazy" src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
       </div>
       <div class="chat-btn">
         <a href="{{ url_for('tenant.send_message', landlord_id=landlord.id) }}">
@@ -294,7 +294,7 @@ Tenant Dashboard
           <div class="payment-methods">
             {% if active_invoice %}
             <a href="{{ url_for('payment.card_payment') }}">
-              <div class="payment bank">
+              <div class="disabled">
                 <div class="payment-info-box">
                   <img src="{{ url_for('static', filename='Images/credit-card.png') }}" alt="cedit card">
                   <h4>Pay with Card</h4>

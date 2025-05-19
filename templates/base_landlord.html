@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='Images/favicon_io/favicon-32x32.png') }}"
       type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base_landlord.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>D-DALALI | {% block title %}{% endblock %}</title>
     {% endblock %}
@@ -18,7 +18,7 @@
   <body>
     <div class="side-nav">
       <div class="profile" onclick="openView(event, 'profile')">
-        <img src="{{ url_for('static', filename='Images/profile.png') }}" alt="profile-image">
+        <i class="fa-regular fa-user"></i>
         <div class="profile-info">
           <p>Hi, {{ current_user.first_name }} {{ current_user.last_name }}</p>
           {% if current_user.landlord.name == "Landlord" %}
@@ -36,18 +36,18 @@
         <div class="secondary-navigation">
           <h4 id="nav-title">Settings</h4>
           <button class="tablinks" onclick="openView(event, 'settings')">
-            <img src="{{ url_for('static', filename='Images/setting.png') }}" alt="settings">
+            <i class="fas fa-gear"></i>
             <span>Settings</span>
           </button>
           <button class="tablinks" onclick="openView(event, 'help')">
-            <img src="{{ url_for('static', filename='Images/info.png') }}" alt="help">
-            Help
+            <i class="fas fa-circle-info"></i>
+            <span>Info</span>
           </button>
         </div>
         <div class="logout">
           <button>
             <a href="{{ url_for('auth.logout') }}">
-              <img src="{{ url_for('static', filename='Images/logout.png') }}" alt="logout">
+              <i class="fas fa-right-from-bracket"></i>
               Logout
             </a>
           </button>

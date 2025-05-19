@@ -1,0 +1,143 @@
+{% extends 'base_landlord.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit-unit.css') }}">
+{% endblock %}
+
+{% block title %}
+Edit Unit | {{ unit.name }} - {{ unit.unit_type }}
+{% endblock %}
+
+{% block nav %}
+<a id="dashboard" href="{{ url_for('landlord.landlord_dashboard') }}">
+  <button>
+    <i class="fas fa-home"></i>
+    <span>Dashboard</span>
+  </button>
+</a>
+<button class="dropdown-btn">
+  <i class="fas fa-building"></i>
+  <span>My Properties</span>
+  <i class='fa fa-angle-down'></i>
+</button>
+<div class="drop-down-container">
+  {% if current_user.properties %}
+  {% for property in current_user.properties %}
+  <a id="{{ property.id }}"
+    href="{{ url_for('landlord.property_information', property_id=property.unique_id) }}">{{ property.name }}</a>
+  {% endfor %}
+  {% else %}
+  <a href="#" class="tablinks">No property added</a>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="container-header">
+    <h1>Unit Information</h1>
+  </div>
+  <div class="unit-details-section card">
+    <form action="{{ url_for('landlord.edit_unit_details', unit_id=unit.unique_id) }}" class="details-grid"
+      method="post">
+      {{ unit_form.csrf_token }}
+      <div class="input">
+        {{ unit_form.name.label }}
+        {{ unit_form.name(class="editable") }}
+      </div>
+      <div class="input">
+        {{ unit_form.unit_floor.label }}
+        {{ unit_form.unit_floor(class="editable") }}
+      </div>
+      <div class="input">
+        {{ unit_form.unit_type.label }}
+        {{ unit_form.unit_type(class="editable") }}
+      </div>
+      <div class="input">
+        {{ unit_form.rent_amount.label }}
+        {{ unit_form.rent_amount(class="editable") }}
+      </div>
+      <div class="input extend">
+        {{ unit_form.description.label }}
+        {{ unit_form.description(class="form-textarea") }}
+      </div>
+      <button type="submit">Update</button>
+    </form>
+    <div class="detail-item">
+      <label>Date Added</label>
+      <p>{{ unit.date_added.strftime("%d %b %Y") }}</p>
+    </div>
+  </div>
+  <div class="amenities-section card">
+    <h2>Metrics</h2>
+    <form action="{{ url_for('landlord.edit_unit_metrics', unit_id=unit.unique_id) }}" class="details-grid"
+      method="post">
+      {{ metric_form.csrf_token }}
+      <div class="input">
+        {{ metric_form.living_space.label }}
+        {{ metric_form.living_space(class="editable") }}
+      </div>
+      <div class="input">
+        {{ metric_form.balcony_space.label }}
+        {{ metric_form.balcony_space(class="editable") }}
+      </div>
+      <div class="input">
+        {{ metric_form.bedrooms.label }}
+        {{ metric_form.bedrooms(class="editable") }}
+      </div>
+      <div class="input">
+        {{ metric_form.bathrooms.label }}
+        {{ metric_form.bathrooms(class="editable") }}
+      </div>
+      <button type="submit">Update</button>
+    </form>
+  </div>
+  <div class="amenities-section card">
+    <h2>Amenities</h2>
+    <div class="amenities-grid">
+
+    </div>
+    <div class="add-amenity">
+      <input type="text" placeholder="Add custom amenity" class="form-input">
+      <button class="btn btn-secondary"><i class="fas fa-plus"></i> Add</button>
+    </div>
+  </div>
+  <div class="images-section card">
+    <h2><i class="fas fa-images"></i> Unit Images</h2>
+    <div class="image-upload-container">
+      <form action="{{ url_for('landlord.upload_unit_image', unit_id=unit.unique_id) }}" method="post"
+        enctype="multipart/form-data">
+        {{ unit_image_form.csrf_token }}
+        <div class="input">
+          {{ unit_image_form.unit_image.label}}
+          <div class="upload-area">
+            <i class="fas fa-cloud-upload-alt"></i>
+            {{ unit_image_form.unit_image() }}
+          </div>
+        </div>
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+    {% if unit_images %}
+    <div class="image-gallery">
+      {% for unit_image in unit_images %}
+      <div class="image-thumbnail">
+        <img src="https://{{ unit_image.bucket }}.s3.{{ unit_image.region }}.amazonaws.com/{{ unit_image.name }}"
+          alt="Unit image">
+        <button class="btn-delete-image">
+          <a href="{{ url_for('landlord.remove_unit_image', unit_image_id=unit_image.unique_id) }}">
+            <i class="fas fa-trash"></i>
+          </a>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

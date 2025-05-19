@@ -118,7 +118,9 @@
               src="https://maps.googleapis.com/maps/api/staticmap?center=Beverly+Hills,CA&zoom=14&size=600x300&maptype=roadmap&markers=color:red%7CBeverly+Hills,CA&key=YOUR_API_KEY"
               alt="Property location map">
           </div>
-          <p class="address"><i class="fas fa-map-marker-alt"></i> 123 Luxury Lane, Beverly Hills, CA 90210</p>
+          <p class="address"><i class="fas fa-map-marker-alt"></i> {{ unit.units.county }},
+            {{ unit.units.city }}
+          </p>
         </section>
         <div class="agent-info">
           <h3>Contact Landlord</h3>

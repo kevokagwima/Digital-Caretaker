@@ -12,13 +12,13 @@ Property Dashboard | {{ propertiez.name }}
 {% block nav %}
 <a id="dashboard" href="{{ url_for('landlord.landlord_dashboard') }}">
   <button>
-    <img src="{{ url_for('static', filename='Images/dashboard.png') }}" alt="dashboard">
-    Dashboard
+    <i class="fas fa-home"></i>
+    <span>Dashboard</span>
   </button>
 </a>
 <button class="dropdown-btn">
-  <img src="{{ url_for('static', filename='Images/building.png') }}" alt="property">
-  My Properties
+  <i class="fas fa-building"></i>
+  <span>My Properties</span>
   <i class='fa fa-angle-down'></i>
 </button>
 <div class="drop-down-container">
@@ -35,24 +35,24 @@ Property Dashboard | {{ propertiez.name }}
   {% endif %}
 </div>
 <button class="tablinks" onclick="openView(event, 'tenants')">
-  <img src="{{ url_for('static', filename='Images/group.png') }}" alt="tenants">
-  Tenants
+  <i class="fas fa-users"></i>
+  <span>Tenants</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'units')">
-  <img src="{{ url_for('static', filename='Images/home.png') }}" alt="units">
-  Units
+  <i class="fas fa-building-user"></i>
+  <span>Units</span>
 </button>
 <button class="tablinks comp" onclick="openView(event, 'complaints')">
-  <img src="{{ url_for('static', filename='Images/feedback.png') }}" alt="complaints">
-  Complaints
+  <i class="fas fa-message"></i>
+  <span>Complaints</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'options')">
-  <img src="{{ url_for('static', filename='Images/options.png') }}" alt="options">
-  Options
+  <i class="fas fa-list"></i>
+  <span>Options</span>
 </button>
 <button class="tablinks" onclick="openView(event, 'extra')">
-  <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
-  Maintenance
+  <i class="fas fa-toolbox"></i>
+  <span>Maintenance</span>
 </button>
 {% endblock %}
 
@@ -61,14 +61,14 @@ Property Dashboard | {{ propertiez.name }}
   <div id="property-heading">
     <h4 id="dash">
       {{ propertiez.name }}
-      <span title="Property ID" id="prop_id">- {{ propertiez.unique_id }}</span>
+      <span title="Property ID" id="prop_id">- #{{ propertiez.unique_id }}</span>
     </h4>
     <div class="property-actions">
       <a href="{{ url_for('landlord.edit_property', property_id=propertiez.unique_id) }}">
-        <img src="{{ url_for('static', filename='Images/edit.png') }}" alt="">
+        <i class="fas fa-edit"></i>
       </a>
       <p id="modalbtn">
-        <img src="{{ url_for('static', filename='Images/delete.png') }}" alt="">
+        <i class="fas fa-trash"></i>
       </p>
     </div>
     <div class="property-btns">
@@ -286,7 +286,7 @@ Property Dashboard | {{ propertiez.name }}
         <p>No Unit Assigned</p>
       </div>
       {% endif %}
-      <img src="{{ url_for('static', filename='Images/man.png') }}" alt="tenant">
+      <i class="fas fa-user"></i>
       <div class="tenant-details">
         <p>{{ tenant.first_name }} {{ tenant.second_name }} {{ tenant.last_name }}</p>
         <p>{{ tenant.email }}</p>
@@ -321,13 +321,10 @@ Property Dashboard | {{ propertiez.name }}
       </div>
       {% endif %}
       <div class="image-box">
-        <img src="{{ url_for('static', filename='Images/home.png') }}" alt="unit">
-        <a href="#">
-          <img id="delete-unit" src="{{ url_for('static', filename='Images/delete.png') }}" alt="unit">
-        </a>
+        <i class="fas fa-building-user"></i>
       </div>
       <div class="unit-details-box">
-        <a href="{{ url_for('landlord.upload_unit_metrics', unit_id=unit.unique_id) }}">
+        <a href="{{ url_for('landlord.unit_details', unit_id=unit.unique_id) }}">
           <div class="unit-details">
             <p>{{ unit.name }}</p>
             <p>{{ unit.unit_type }}</p>
@@ -542,7 +539,7 @@ Property Dashboard | {{ propertiez.name }}
       {% for extra_role in available_roles %}
       <a href="{{ url_for('landlord.extra_service', property_id=propertiez.unique_id, extra_role=extra_role.name) }}">
         <div class="maintenance-service">
-          <img src="{{ url_for('static', filename='Images/electrician.png') }}" alt="interior design">
+          <i class="fas fa-hammer"></i>
           <div class="maintenance-service-info">
             <h1>{{ extra_role.name }}</h1>
           </div>

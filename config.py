@@ -6,3 +6,8 @@ class Config:
   SESSION_PERMANENT = False
   SESSION_TYPE = "filesystem"
   SECRET_KEY = os.environ.get("secret_key")
+  BABEL_DEFAULT_LOCALE = 'en'
+  LANGUAGES = {
+    'en': 'English',
+    'sw': 'Kiswahili',
+  }

@@ -21,8 +21,8 @@ class Unit(BaseModel, db.Model):
   transaction = db.relationship("Transactions", backref="unit_transaction", lazy=True, cascade="all, delete, delete-orphan")
   invoice = db.relationship("Invoice", backref="unit_invoice", lazy=True, cascade="all, delete, delete-orphan")
   maintenace = db.relationship("Maintenance", backref="unit_maintenance", lazy=True, cascade="all, delete, delete-orphan")
-  unit_image = db.relationship("UnitImage", backref="unit_image", lazy=True, cascade="all, delete, delete-orphan")
-  unit_metrics = db.relationship("UnitMetrics", backref="unit_metrics", lazy=True, cascade="all, delete, delete-orphan")
+  unit_image = db.relationship("UnitImage", backref="image", lazy=True, cascade="all, delete, delete-orphan")
+  unit_metrics = db.relationship("UnitMetrics", backref="metrics", lazy=True, cascade="all, delete, delete-orphan")
 
   def __repr__(self):
     return f"{self.name} - {self.unit_floor}"
@@ -36,11 +36,11 @@ class UnitMetrics(BaseModel, db.Model):
   unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
 
   def __repr__(self):
-    return f"{self.unit} - [{self.living_space}, {self.balcony_space}, {self.bedrooms}, {self.bathrooms}]"
+    return f"{self.living_space}, {self.balcony_space}, {self.bedrooms}, {self.bathrooms}"
 
 class UnitImage(BaseModel, db.Model):
   __tablename__ = "unit_image"
-  name = db.Column(db.String(50), nullable=False)
+  name = db.Column(db.String(200), nullable=False)
   bucket = db.Column(db.String(50), nullable=False)
   region = db.Column(db.String(20), nullable=False)
   unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
