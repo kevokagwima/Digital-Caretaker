@@ -17,7 +17,7 @@
     <title>D-DALALI | {% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
-  <div class="header top-header">
+  <!-- <div class="header top-header">
     <div class="language-switcher">
       {% for language in config['LANGUAGES'] %}
       <a href="{{ url_for('set_lang', lang=language) }}"
@@ -27,7 +27,7 @@
       {% endfor %}
     </div>
     <div id="google_translate_element"></div>
-  </div>
+  </div> -->
   <header class="nav">
     <a href="{{ url_for('main.index') }}">
       <img id="logo" src="{{ url_for('static', filename='Images/full-logo.webp') }}" alt="">

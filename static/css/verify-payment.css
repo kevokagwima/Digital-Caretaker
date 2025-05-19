@@ -33,16 +33,14 @@ button {
 .info {
   padding: 2rem;
   border-radius: var(--radius-s);
-  background-color: var(--other-dark-blue);
+  background-color: var(--light-blue);
   display: grid;
   gap: 0.2rem;
   margin-top: 2rem;
   margin-inline: auto;
+  color: var(--white);
 }
 
-.info p {
-  color: var(--grey);
-}
 .info p > a,
 #retry a {
   color: var(--blue);

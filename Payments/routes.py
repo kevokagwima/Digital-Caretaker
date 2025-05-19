@@ -124,7 +124,7 @@ def register_url(access_token):
   payload = {
     "ShortCode": "174379",
     "ResponseType": "Completed",
-    "ConfirmationURL": "https://7bb2-41-80-114-177.ngrok-free.app/payment/confirm-payment/",
+    "ConfirmationURL": "https://8e73-41-206-42-66.ngrok-free.app/payment/confirm-payment/",
     "ValidationURL": "https://mydomain.com/validation"
   }
 
@@ -152,7 +152,7 @@ def process_stk_push(access_token, amount, phone_number):
     "PartyB": "174379",
     "PhoneNumber": f"254796897011",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-    "CallBackURL": "https://7bb2-41-80-114-177.ngrok-free.app/payment/confirm-payment/",
+    "CallBackURL": "https://8e73-41-206-42-66.ngrok-free.app/payment/confirm-payment/",
     "AccountReference": "PMS",
     "TransactionDesc": "Rent Payment"
   }
