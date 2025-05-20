@@ -224,4 +224,10 @@ section {
   .client-info {
     flex-direction: column;
   }
+
+  .features-grid,
+  .testimonial-grid,
+  .reasons-grid {
+    grid-template-columns: 1fr;
+  }
 }
