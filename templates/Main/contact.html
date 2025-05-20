@@ -3,16 +3,157 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
 {% block title %}
-PMS | Contact Us
-{% endblock %}
-
-{% block content %}
+Contact Us
 {% endblock %}
 
 {% block body %}
-<h4>Coming Soon</h4>
+<!-- Contact Section -->
+<section class="contact-section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Contact Information</h2>
+        <p>Fill out the form or reach out to us directly through one of the channels below.</p>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div>
+            <h3>Our Office</h3>
+            <p>123 Property Lane, Suite 400<br>San Francisco, CA 94107</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          <div>
+            <h3>Phone</h3>
+            <p>+1 (800) 123-4567<br>Mon-Fri, 9am-5pm PST</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div>
+            <h3>Email</h3>
+            <p>hello@rentease.com<br>support@rentease.com</p>
+          </div>
+        </div>
+
+        <!-- <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div> -->
+      </div>
+
+      <div class="contact-form">
+        <h2>Send Us a Message</h2>
+        <form>
+          <div class="input">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+
+          <div class="input">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+
+          <div class="input">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+
+          <div class="input">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" required>
+              <option value="" disabled selected>Select a subject</option>
+              <option value="sales">Sales Inquiry</option>
+              <option value="support">Technical Support</option>
+              <option value="partnership">Partnership</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="input extend">
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <p class="section-description">Find quick answers to common questions about RentEase</p>
+
+    <div class="faq-grid">
+      <div class="faq-card">
+        <h3>How do I get started with RentEase?</h3>
+        <p>Getting started is easy! Sign up for a free trial on our website and you'll be guided through the setup
+          process. Our onboarding team is also available to help you get everything configured.</p>
+      </div>
+
+      <div class="faq-card">
+        <h3>What types of properties does RentEase support?</h3>
+        <p>RentEase works with all types of rental properties including single-family homes, multi-unit apartments,
+          vacation rentals, student housing, and commercial properties.</p>
+      </div>
+
+      <div class="faq-card">
+        <h3>Is my data secure with RentEase?</h3>
+        <p>Absolutely. We use bank-level encryption and follow industry best practices to ensure your data is always
+          protected. We're also GDPR compliant and never share your data with third parties.</p>
+      </div>
+
+      <div class="faq-card">
+        <h3>Can I integrate RentEase with other software?</h3>
+        <p>Yes! RentEase integrates with popular accounting software, payment processors, and other property
+          management tools. Check our integrations page for the full list.</p>
+      </div>
+
+      <div class="faq-card">
+        <h3>What support options are available?</h3>
+        <p>We offer 24/7 email support, live chat during business hours, and phone support for premium customers.
+          Our extensive knowledge base also contains helpful articles and video tutorials.</p>
+      </div>
+
+      <div class="faq-card">
+        <h3>Do you offer training for new users?</h3>
+        <p>Yes, we provide comprehensive onboarding sessions, weekly webinars, and personalized training for teams.
+          All customers also get access to our video tutorial library.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="contact-cta">
+  <div class="container">
+    <h2>Ready to see RentEase in action?</h2>
+    <p>Schedule a personalized demo with one of our product specialists.</p>
+    <a href="#" class="btn btn-primary">
+      <button>
+        Book a Demo
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </a>
+  </div>
+</section>
 {% endblock %}

@@ -62,10 +62,10 @@
 
 .landlord,
 .my-unit {
-  margin: 1rem 0 0;
-  padding: 2rem;
+  margin-top: 1rem;
   display: flex;
-  gap: 4rem;
+  flex-wrap: wrap;
+  gap: 2rem;
   border-radius: var(--radius);
 }
 
@@ -80,6 +80,8 @@
   flex-direction: column;
   gap: 2rem;
   max-height: max-content;
+  background-color: var(--white);
+  padding: 1rem;
 }
 
 .img-box img,
@@ -94,9 +96,6 @@
 
 .landlord-info,
 .unit-details {
-  max-height: 33rem;
-  padding-right: 0.3rem;
-  overflow: auto;
   flex-grow: 1;
 }
 
@@ -156,7 +155,7 @@ table th {
 
 .unit-metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: 1rem;
   align-items: center;
   margin-block: 1rem;
@@ -223,14 +222,15 @@ table th {
 }
 
 .rent-to-pay {
-  border-radius: var(--radius);
   padding: 2rem;
   display: grid;
   gap: 2rem;
+  width: 100%;
 }
 
 .rent-amount {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 1rem;
@@ -260,7 +260,7 @@ table th {
 
 .payment-methods {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   align-items: center;
   gap: 2rem;
 }
@@ -320,9 +320,6 @@ table th {
 
 .transaction-details {
   margin-top: 1rem;
-  padding-right: 0.2rem;
-  max-height: 30rem;
-  overflow: auto;
   display: grid;
   gap: 0.8rem;
 }
@@ -348,4 +345,58 @@ table th {
 
 .transaction-stat p {
   color: var(--grey);
+}
+
+@media screen and (max-width: 1000px) {
+  .unit-info {
+    padding-inline: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .property-info {
+    grid-row: 1/1;
+    grid-column: 1/-1;
+    text-align: left;
+  }
+
+  .property-info img {
+    max-height: 4rem;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .unit-info {
+    grid-template-columns: 1fr;
+  }
+
+  .unit-information {
+    padding-inline: 1rem;
+  }
+
+  .main-info,
+  .property-details {
+    padding-inline: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .rent-to-pay {
+    padding-inline: 1rem;
+  }
+
+  .payment-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .rent-amount {
+    justify-content: start;
+  }
+
+  .rent-amount img {
+    max-height: 4rem;
+  }
+
+  .rent-amount h4 {
+    font-size: 2.5ch;
+  }
 }

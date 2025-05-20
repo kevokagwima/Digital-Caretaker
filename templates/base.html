@@ -11,14 +11,14 @@
       type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <title>D-DALALI | {% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
   <div class="header top-header">
-    <div id="google_translate_element"></div>
+    <!-- <div id="google_translate_element"></div> -->
   </div>
   <header class="nav">
     <a href="{{ url_for('main.index') }}">
@@ -26,6 +26,7 @@
     </a>
     {% block logo %} {% endblock %}
     <div class="links">
+      <a id="link" href="{{ url_for('main.index') }}">Home</a>
       <div class="dropdown">
         <p id="link">Client Portals
           <i class="fa fa-caret-down"></i>
@@ -39,7 +40,7 @@
         </div>
       </div>
       <a id="link" href="{{ url_for('main.properties') }}">Properties</a>
-      <a id="link" href="#">Contact</a>
+      <a id="link" href="{{ url_for('main.contact') }}">Contact</a>
       {% block content %}{% endblock %}
     </div>
     {% if current_user.is_authenticated %}
@@ -87,7 +88,59 @@
     {% block body %}
     {% endblock %}
     <footer class="footer">
-      <p>Copyright &copy; PMS 2024. All Rights Reserved</p>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-about">
+            <h3>RentEase</h3>
+            <p>The modern property management platform that helps you save time and grow your rental business.</p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-links">
+            <h4>Product</h4>
+            <ul>
+              <li><a href="#">Features</a></li>
+              <li><a href="#">Pricing</a></li>
+              <li><a href="#">Integrations</a></li>
+              <li><a href="#">Updates</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-links">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Guides</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">API Docs</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-links">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Partners</a></li>
+              <li><a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2023 RentEase. All rights reserved.</p>
+          <div class="legal-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
     </footer>
 
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>

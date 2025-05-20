@@ -70,12 +70,8 @@ Tenant Dashboard
           </div>
         </div>
         <div class="property-info">
-          {% if properties.properties.name == "Office" %}
-          <img src="{{ url_for('static', filename='Images/office building.png') }}" alt="apartment">
-          {% elif properties.properties.name == "Apartment" %}
+          {% if properties.properties.name == "Apartment" %}
           <img src="{{ url_for('static', filename='Images/3d apartment.png') }}" alt="apartment">
-          {% else %}
-          <img src="{{ url_for('static', filename='Images/residential.png') }}" alt="apartment">
           {% endif %}
         </div>
         <div class="property-details">
@@ -286,7 +282,7 @@ Tenant Dashboard
           <img src="{{ url_for('static', filename='Images/cashless-payment.png') }}" alt="">
           <div class="rent-info-box">
             <p>Monthly Rent</p>
-            <h4>{{ "Ksh {:,}".format(unit.rent_amount) }}</h4>
+            <h4>{{ "Tsh {:,}".format(unit.rent_amount) }}</h4>
           </div>
         </div>
         <div class="payment-box">

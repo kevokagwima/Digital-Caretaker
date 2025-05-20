@@ -37,16 +37,12 @@ def index():
   
   return render_template("Main/index.html")
 
-@main.route("/about_us")
-def about_us():
+@main.route("/about")
+def about():
   return render_template("Main/about.html")
 
-@main.route("/services")
-def services():
-  return render_template("Main/services.html")
-
-@main.route("/contact_us")
-def contact_us():
+@main.route("/contact")
+def contact():
   return render_template("Main/contact.html")
 
 @main.route("/properties")

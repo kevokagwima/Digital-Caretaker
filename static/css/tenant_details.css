@@ -47,6 +47,7 @@
   display: grid;
   gap: 1rem;
   flex-grow: 1;
+  width: 100%;
 }
 
 .tenant-details-box {
@@ -101,6 +102,7 @@
 .card {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 2rem;
   padding: 1rem;
 }
@@ -212,6 +214,8 @@ th {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .modal {
@@ -276,4 +280,10 @@ th {
 
 .modal-footer button {
   width: 100%;
+}
+
+@media screen and (max-width: 900px) {
+  .tenant-info {
+    flex-direction: column;
+  }
 }

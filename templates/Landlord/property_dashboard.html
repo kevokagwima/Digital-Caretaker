@@ -221,12 +221,13 @@ Property Dashboard | {{ propertiez.name }}
               {{ invoice.date_closed.strftime("Closed: %d/%m/%Y at %I:%M %p") }}
             </p>
             {% else %}
-            <p id="invoice-date" title="Date Created">
-              {{ invoice.date_created.strftime("Created: %d/%m/%Y at %I:%M %p") }}
+            <p id="invoice-date"
+              title="Created on {{ invoice.date_created.strftime('Created: %d/%m/%Y at %I:%M %p') }}">
+              {{ invoice.date_created.strftime("Created: %d/%m/%Y at %I:%M %p")|truncate(20) }}
             </p>
             {% endif %}
             {% if invoice.status == "Active" %}
-            <span class="invoice-status pending">
+            <span class=" invoice-status pending">
               Pending
             </span>
             {% elif invoice.status == "Cleared" %}
