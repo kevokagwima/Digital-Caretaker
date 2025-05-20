@@ -624,6 +624,10 @@ tbody tr:hover {
   .payments-box {
     grid-template-columns: 1fr;
   }
+
+  .modal-content {
+    width: 90%;
+  }
 }
 
 @media screen and (max-width: 700px) {

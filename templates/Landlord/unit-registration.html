@@ -14,6 +14,10 @@ Unit Registration
 
 {% block body %}
 <div class="form">
+  <a id="home-btn" href="{{ url_for('landlord.landlord_dashboard') }}">
+    <i class="fas fa-arrow-left"></i>
+    Home
+  </a>
   <h4>Add Unit</h4>
   <form method="post" enctype="multipart/form-data">
     {{ form.csrf_token }}
@@ -22,8 +26,8 @@ Unit Registration
       {{ form.name(placeholder="Enter Unit Name", class="name") }}
     </div>
     <div class="input">
-      {{ form.floor.label }}
-      {{ form.floor(placeholder="Enter Unit Floor", class="name") }}
+      {{ form.unit_floor.label }}
+      {{ form.unit_floor(placeholder="Enter Unit Floor", class="name") }}
     </div>
     <div class="input">
       {{ form.unit_type.label }}

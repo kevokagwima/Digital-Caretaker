@@ -8,16 +8,14 @@ alertMessages.forEach((alertMessage) => {
 
 const burger = document.querySelector(".burger");
 const sidenav = document.querySelector(".side-nav");
-const close = document.querySelector(".close");
+const close = document.querySelector("#close");
 
 burger.addEventListener("click", () => {
   sidenav.classList.add("show-side-nav");
-  close.classList.add("show-close");
 });
 
 close.addEventListener("click", () => {
   sidenav.classList.remove("show-side-nav");
-  close.classList.remove("show-close");
 });
 
 window.addEventListener("DOMContentLoaded", () => {

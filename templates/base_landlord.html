@@ -17,6 +17,9 @@
 
   <body>
     <div class="side-nav">
+      <div class="close-side-nav">
+        <span id="close"><i class="fas fa-x"></i></span>
+      </div>
       <div class="profile" onclick="openView(event, 'profile')">
         <i class="fa-regular fa-user"></i>
         <div class="profile-info">
@@ -35,10 +38,10 @@
         </div>
         <div class="secondary-navigation">
           <h4 id="nav-title">Settings</h4>
-          <button class="tablinks" onclick="openView(event, 'settings')">
+          <!-- <button class="tablinks" onclick="openView(event, 'settings')">
             <i class="fas fa-gear"></i>
             <span>Settings</span>
-          </button>
+          </button> -->
           <button class="tablinks" onclick="openView(event, 'help')">
             <i class="fas fa-circle-info"></i>
             <span>Info</span>
@@ -89,7 +92,7 @@
       <div id="help" class="tabcontent">
         <h4 id="dash">Help</h4>
         <div class="extra">
-          <a href="{{ url_for('main.index') }}">Visit Main Website</a>
+          <a href="{{ url_for('main.contact') }}">Contact</a>
         </div>
       </div>
       <div id="profile" class="tabcontent">

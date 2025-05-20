@@ -35,7 +35,7 @@
           <div class="dropdown-content">
             <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
             <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
-            <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
+            <!-- <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a> -->
           </div>
         </div>
       </div>
@@ -93,47 +93,47 @@
           <div class="footer-about">
             <h3>RentEase</h3>
             <p>The modern property management platform that helps you save time and grow your rental business.</p>
-            <div class="social-links">
+            <!-- <div class="social-links">
               <a href="#"><i class="fab fa-facebook-f"></i></a>
               <a href="#"><i class="fab fa-twitter"></i></a>
               <a href="#"><i class="fab fa-linkedin-in"></i></a>
               <a href="#"><i class="fab fa-instagram"></i></a>
-            </div>
+            </div> -->
           </div>
 
           <div class="footer-links">
             <h4>Product</h4>
             <ul>
-              <li><a href="#">Features</a></li>
-              <li><a href="#">Pricing</a></li>
-              <li><a href="#">Integrations</a></li>
-              <li><a href="#">Updates</a></li>
+              <li><a href="{{ url_for('main.index') }}">Home</a></li>
+              <li><a href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a></li>
+              <li><a href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a></li>
             </ul>
           </div>
 
           <div class="footer-links">
             <h4>Resources</h4>
             <ul>
-              <li><a href="#">Blog</a></li>
+              <li><a href="{{ url_for('main.properties') }}">Properties</a></li>
+              <!-- <li><a href="#">Blog</a></li>
               <li><a href="#">Guides</a></li>
               <li><a href="#">Help Center</a></li>
-              <li><a href="#">API Docs</a></li>
+              <li><a href="#">API Docs</a></li> -->
             </ul>
           </div>
 
           <div class="footer-links">
             <h4>Company</h4>
             <ul>
-              <li><a href="#">About Us</a></li>
+              <!-- <li><a href="#">About Us</a></li>
               <li><a href="#">Careers</a></li>
-              <li><a href="#">Partners</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="#">Partners</a></li> -->
+              <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
             </ul>
           </div>
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; 2023 RentEase. All rights reserved.</p>
+          <p>&copy; 2025 D-DALALI. All rights reserved.</p>
           <div class="legal-links">
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Service</a>

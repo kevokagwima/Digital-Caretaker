@@ -130,6 +130,26 @@ button {
   box-shadow: var(--shadow);
 }
 
+.close-side-nav {
+  justify-content: end;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.close-side-nav span {
+  padding: 0.3rem;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 1px solid var(--red);
+}
+
+.close-side-nav i {
+  color: var(--red);
+  font-size: 1.2ch;
+}
+
 .profile {
   display: flex;
   gap: 1rem;
@@ -588,7 +608,20 @@ td {
 
 @media screen and (max-width: 1000px) {
   .side-nav {
-    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    transform: translateX(-100%);
+    transition: 250ms ease-in-out;
+    outline: 1px solid var(--light-grey);
+  }
+
+  .close-side-nav {
+    display: flex;
+  }
+
+  .show-side-nav {
+    transform: translateX(0);
   }
 
   .burger {

@@ -29,10 +29,7 @@ Landlord Dashboard
   <a href="{{ url_for('landlord.add_property') }}" class="tablinks" id="no">No property added</a>
   {% endif %}
 </div>
-<!-- <button class="tablinks" onclick="openView(event, 'extra')">
-  <img src="{{ url_for('static', filename='Images/extra.png') }}" alt="extra">
-  Extras
-</button> -->
+
 {% endblock %}
 
 {% block body %}
@@ -80,12 +77,6 @@ Landlord Dashboard
           <h4>Complaints</h4>
           <p>{{ current_user.complaint|count }}</p>
         </div>
-      </div>
-    </div>
-    <div class="test">
-      <h4>Chart</h4>
-      <div class="test-box">
-        <!-- <canvas id="myChart"></canvas> -->
       </div>
     </div>
   </div>
@@ -184,27 +175,5 @@ Landlord Dashboard
 
 {% block script %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const ctx = document.getElementById('myChart')
-
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-</script>
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
 {% endblock %}

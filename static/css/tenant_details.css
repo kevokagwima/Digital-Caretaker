@@ -229,7 +229,6 @@ th {
 
 .modal-content {
   background-color: var(--white);
-  max-width: 50%;
   width: 50%;
   border-radius: var(--radius);
   overflow: hidden;
@@ -285,5 +284,9 @@ th {
 @media screen and (max-width: 900px) {
   .tenant-info {
     flex-direction: column;
+  }
+
+  .modal-content {
+    width: 90%;
   }
 }

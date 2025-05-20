@@ -16,7 +16,7 @@ class UnitRegistrationForm(FlaskForm):
   description = TextAreaField(label="Description", validators=[Optional()])
   unit_floor = IntegerField(label="Unit Floor", validators=[DataRequired(message="Unit Floor required")])
   rent_amount = IntegerField(label="Unit Rent", validators=[DataRequired(message="Unit Rent required")])
-  unit_type = StringField(label="Unit Type", validators=[DataRequired(message="Unit type required")])
+  unit_type = SelectField(label="Unit Type", choices=[], validators=[DataRequired(message="Unit type required")])
 
 class UnitMetricRegistrationForm(FlaskForm):
   living_space = IntegerField(label="Living Room Space (SQM)", validators=[DataRequired(message="Living Room Space required")])

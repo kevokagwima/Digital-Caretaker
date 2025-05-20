@@ -31,10 +31,14 @@ Edit Unit | {{ unit.name }} - {{ unit.unit_type }}
   <a href="#" class="tablinks">No property added</a>
   {% endif %}
 </div>
+<button class="tablinks active" onclick="openView(event, 'unit-dashboard')">
+  <i class="fas fa-user"></i>
+  <span>Unit Profile</span>
+</button>
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div id="unit-dashboard" class="tabcontent active">
   <div class="container-header">
     <h1>Unit Information</h1>
   </div>
@@ -130,4 +134,5 @@ Edit Unit | {{ unit.name }} - {{ unit.unit_type }}
 
 {% block script %}
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>
 {% endblock %}

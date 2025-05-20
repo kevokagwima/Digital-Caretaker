@@ -1,4 +1,13 @@
-.container {
+#settings,
+.secondary-navigation {
+  display: none;
+}
+
+.main-navigation {
+  flex-grow: 1;
+}
+
+#unit-dashboard {
   margin-top: 2rem;
   display: grid;
   gap: 1rem;

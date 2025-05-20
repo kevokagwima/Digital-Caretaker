@@ -280,7 +280,7 @@ def add_unit(property_id):
       new_unit = Unit(
         name = form.name.data,
         alias = form.name.data.replace(" ", "-").replace("/", "-").replace(".", "-").replace(",", "-").replace("_", "-"),
-        unit_floor = form.floor.data,
+        unit_floor = form.unit_floor.data,
         unit_type = form.unit_type.data,
         date_added = get_local_time(),
         rent_amount = form.rent_amount.data,
@@ -296,7 +296,7 @@ def add_unit(property_id):
       db.session.add(new_unit)
       db.session.commit()
       flash(f"Unit {new_unit.name} - {new_unit.unit_type} Added successfully",category="success")
-      return redirect(url_for('landlord.upload_unit_metrics',unit_id=new_unit.unique_id))
+      return redirect(url_for('landlord.unit_details',unit_id=new_unit.unique_id))
 
     if form.errors != {}:
       for err_msg in form.errors.values():
@@ -393,7 +393,17 @@ def edit_unit_metrics(unit_id):
     unit_metrics = UnitMetrics.query.filter_by(unit=current_unit.id).first()
     form = UnitMetricRegistrationForm()
     if form.validate_on_submit():
-      form.populate_obj(unit_metrics)
+      if unit_metrics:
+        form.populate_obj(unit_metrics)
+      else:
+        new_unit_metrics = UnitMetrics(
+          living_space = form.living_space.data,
+          balcony_space = form.balcony_space.data,
+          bedrooms = form.bedrooms.data,
+          bathrooms = form.bathrooms.data,
+          unit = current_unit.id
+        )
+        db.session.add(new_unit_metrics)
       db.session.commit()
       flash("Unit metrics updated successfully", category="success")
       return redirect(url_for('landlord.unit_details', unit_id=current_unit.unique_id))
