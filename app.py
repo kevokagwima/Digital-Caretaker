@@ -4,10 +4,10 @@ from Models.base_model import db
 from Models.users import Admin, Landlord, Tenant, Users
 from Models.unit import Unit
 from flask_migrate import Migrate
-from flask_babel import Babel, _, lazy_gettext
+from flask_babel import Babel, _
 from config import Config
 from Auth.routes import auth
-from Landlords.routes import landlords
+from Landlords.routes import landlords, cache
 from Tenants.routes import tenants
 from Main.routes import main
 from Admin.routes import admins
@@ -24,6 +24,7 @@ def create_app():
   login_manager = LoginManager()
   login_manager.init_app(app)
   babel = Babel(app)
+  cache.init_app(app)
 
   app.register_blueprint(auth)
   app.register_blueprint(landlords)

@@ -31,10 +31,10 @@ class Extras(BaseModel, UserBaseModel, db.Model):
 
 class Maintenance(BaseModel, db.Model):
   __tablename__ = 'maintenance'
-  landlord = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
-  properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
-  unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
-  extra = db.Column(db.Integer(), db.ForeignKey("extras.id"))
+  landlord_id = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
+  property_id = db.Column(db.Integer(), db.ForeignKey("properties.id"))
+  unit_id = db.Column(db.Integer(), db.ForeignKey("unit.id"))
+  extra_id = db.Column(db.Integer(), db.ForeignKey("extras.id"))
   rate = db.Column(db.Integer(), nullable=False, default=0)
   date_opened = db.Column(db.DateTime(), nullable=False, default=get_local_time())
   date_cancelled = db.Column(db.DateTime())

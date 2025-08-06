@@ -1,17 +1,3 @@
-const tops = document.querySelector(".nav");
-const logo = document.querySelector(".logo");
-
-window.addEventListener("scroll", () => {
-  const scroll_height = window.pageYOffset;
-  if (scroll_height > 10) {
-    tops.classList.add("nav-active");
-    logo.classList.add("logo-fixed");
-  } else {
-    tops.classList.remove("nav-active");
-    logo.classList.remove("logo-fixed");
-  }
-});
-
 const closes = document.querySelectorAll("#close");
 
 closes.forEach((p) => {
@@ -20,35 +6,14 @@ closes.forEach((p) => {
   });
 });
 
-var date = new Date();
-document.getElementById("date").innerHTML = date.getFullYear();
+const side_nav = document.querySelector(".side-nav");
+const close_side_nav = document.querySelector("#close-side-nav");
+const burger = document.querySelector(".burger");
 
-const profile = document.querySelector(".profile");
-const user = document.querySelector(".login");
-
-window.addEventListener("scroll", () => {
-  profile.classList.remove("show-profile");
+burger.addEventListener("click", () => {
+  side_nav.classList.add("show-side-nav");
 });
 
-user.addEventListener("click", () => {
-  profile.classList.toggle("show-profile");
+close_side_nav.addEventListener("click", () => {
+  side_nav.classList.remove("show-side-nav");
 });
-
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
-window.onclick = function (event) {
-  if (!event.target.matches(".dropbtn")) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("show")) {
-        openDropdown.classList.remove("show");
-      }
-    }
-  }
-};
-
-$(".texts").scrollTop($(".texts")[0].scrollHeight);

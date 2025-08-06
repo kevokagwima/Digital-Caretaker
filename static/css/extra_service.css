@@ -10,6 +10,9 @@
   margin-top: 1rem;
   display: grid;
   gap: 1rem;
+  background-color: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius);
 }
 
 .maintenance-form-box form {
@@ -18,7 +21,10 @@
 }
 
 .maintenance-form-box form .input {
-  padding: 1rem;
   background-color: var(--dark-blue);
   border-radius: var(--radius);
+}
+
+form button {
+  margin-top: 1rem;
 }

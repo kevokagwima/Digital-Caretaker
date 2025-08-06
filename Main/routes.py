@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request, session
+from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.bookings import Bookings
@@ -103,10 +103,10 @@ def search_property():
 
   return render_template("Main/properties.html", units=units, today_time=today_time, propertiez=propertiez, next_page_number = units.next_num, prev_page_number = units.prev_num, next_url=next_url, prev_url=prev_url)
 
-@main.route("/property-details/<string:unit_id>", methods=["GET"])
-def unit_details(unit_id):
+@main.route("/property-details/<int:unit_id>/<string:unit_alias>", methods=["GET"])
+def unit_details(unit_id, unit_alias):
   try:
-    unit = Unit.query.filter_by(alias=unit_id).first()
+    unit = Unit.query.filter_by(alias=unit_alias, unique_id=unit_id).first()
     if not unit:
       flash(f"Property does not exist", category="danger")
       return redirect(url_for("main.properties"))

@@ -18,15 +18,13 @@ class Payment(BaseModel, db.Model):
 
 class Transactions(BaseModel, db.Model):
   __tablename__ = 'transactions'
-  tenant = db.Column(db.Integer(), db.ForeignKey("tenant.id"))
-  landlord = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
-  properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
-  unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
-  invoice = db.Column(db.Integer(),db. ForeignKey('invoice.id'))
-  date = db.Column(db.Date(), nullable=False)
-  time = db.Column(db.DateTime(), nullable=False)
+  tenant_id = db.Column(db.Integer(), db.ForeignKey("tenant.id"))
+  landlord_id = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
+  property_id = db.Column(db.Integer(), db.ForeignKey("properties.id"))
+  unit_id = db.Column(db.Integer(), db.ForeignKey("unit.id"))
+  invoice_id = db.Column(db.Integer(),db. ForeignKey('invoice.id'))
+  payment_method = db.Column(db.String(10), nullable=False)
   next_date = db.Column(db.Date(), nullable=False)
-  origin = db.Column(db.String(10), nullable=False)
 
   def __repr__(self):
-    return f"Transaction(tenant={self.tenant}, landlord={self.landlord}, date={self.date}, origin={self.origin})"
+    return f"Transaction(tenant={self.tenant}, landlord={self.landlord}, date={self.date_created}, origin={self.payment_method})"

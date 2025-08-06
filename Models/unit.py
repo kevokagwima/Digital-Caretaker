@@ -1,8 +1,16 @@
-from Models.base_model import db, BaseModel, get_local_time
+from Models.base_model import db, BaseModel
 from Models.bookings import Bookings
 from Models.transactions import Transactions
 from Models.invoice import Invoice
 from Models.extras import Maintenance
+
+class UnitTypes(BaseModel, db.Model):
+  __tablename__ = 'unit_types'
+  name = db.Column(db.String(30), nullable=False)
+  property_id = db.Column(db.Integer(), db.ForeignKey("properties.id"))
+
+  def __repr__(self):
+    return f"{self.name}"
 
 class Unit(BaseModel, db.Model):
   __tablename__ = "unit"
@@ -10,12 +18,11 @@ class Unit(BaseModel, db.Model):
   alias = db.Column(db.String(100), nullable=False, default=name)
   description = db.Column(db.Text())
   unit_floor = db.Column(db.Integer(), nullable=False)
-  date_added = db.Column(db.DateTime(), default=get_local_time())
   unit_type = db.Column(db.String(50), nullable=False)
   rent_amount = db.Column(db.Integer(), nullable=False)
-  properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
-  tenant = db.Column(db.Integer(), db.ForeignKey("tenant.id"))
-  landlord = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
+  property_id = db.Column(db.Integer(), db.ForeignKey("properties.id"))
+  tenant_id = db.Column(db.Integer(), db.ForeignKey("tenant.id"))
+  landlord_id = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
   is_reserved = db.Column(db.Boolean(), default=False)
   booking = db.relationship("Bookings", backref="unit_booked", lazy=True, cascade="all, delete, delete-orphan")
   transaction = db.relationship("Transactions", backref="unit_transaction", lazy=True, cascade="all, delete, delete-orphan")
@@ -33,7 +40,7 @@ class UnitMetrics(BaseModel, db.Model):
   balcony_space = db.Column(db.Integer(), nullable=False, default=0)
   bedrooms = db.Column(db.Integer(), nullable=False, default=0)
   bathrooms = db.Column(db.Integer(), nullable=False, default=0)
-  unit = db.Column(db.Integer(), db.ForeignKey("unit.id"))
+  unit_id = db.Column(db.Integer(), db.ForeignKey("unit.id"))
 
   def __repr__(self):
     return f"{self.living_space}, {self.balcony_space}, {self.bedrooms}, {self.bathrooms}"

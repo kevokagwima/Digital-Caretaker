@@ -195,6 +195,61 @@ h1 {
   background: var(--white);
 }
 
+.pagination-box {
+  margin-top: 2rem;
+}
+
+.pagination {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-url {
+  background-color: var(--blue);
+  padding: 0.5rem;
+  border-radius: var(--radius-s);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-url a {
+  color: var(--white);
+}
+
+.pagination-url i {
+  color: var(--white);
+  font-weight: 900;
+}
+
+.page-number-box {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-s);
+}
+
+.page-number-box a {
+  color: var(--black);
+}
+
+.active {
+  background-color: red;
+}
+
+#searched-data {
+  color: var(--green);
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding-inline: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   h1 {
     font-size: 2rem;

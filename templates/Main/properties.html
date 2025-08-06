@@ -66,13 +66,74 @@ Properties
         </div>
         {% endfor %}
         <div class="price">
-          {{ "Ksh {:,}".format(unit.rent_amount) }} <span>/month</span>
+          {{ "Tsh {:,}".format(unit.rent_amount) }} <span>/month</span>
         </div>
-        <a href="{{ url_for('main.unit_details', unit_id=unit.alias) }}" class="cta-btn">View Details</a>
+        <a href="{{ url_for('main.unit_details', unit_id=unit.unique_id, unit_alias=unit.alias) }}" class="cta-btn">View
+          Details</a>
       </div>
     </div>
     {% endfor %}
-
+  </div>
+  <div class="pagination-box">
+    <div class="pagination">
+      {% if prev_url %}
+      <div class="prev-url pagination-url">
+        <i class="fa fa-angle-left"></i>
+        <a href="{{ prev_url }}">Previous Page</a>
+      </div>
+      {% endif %}
+      {% if searched_data %}
+      <div class="page-number-box">
+        {% if prev_page_number %}
+        <a href="{{ url_for('main.properties', page=prev_page_number) }}" class="page-number">
+          {{ prev_page_number }}
+        </a>
+        {% endif %}
+        {% if not next_page_number and not prev_page_number %}
+        {% elif not next_page_number %}
+        <a id="current" href="{{ url_for('main.properties', page=prev_page_number + 1) }}" class="page-number">
+          {{ prev_page_number + 1 }}
+        </a>
+        {% else %}
+        <a id="current" href="{{ url_for('main.properties', page=next_page_number-1) }}" class="page-number">
+          {{ next_page_number - 1 }}
+        </a>
+        {% endif %}
+        {% if next_page_number %}
+        <a href="{{ url_for('main.properties', page=next_page_number) }}" class="page-number">{{
+              next_page_number }}</a>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="page-number-box">
+        {% if prev_page_number %}
+        <a href="{{ url_for('main.properties', page=prev_page_number) }}" class="page-number">
+          {{ prev_page_number }}
+        </a>
+        {% endif %}
+        {% if not next_page_number and not prev_page_number %}
+        {% elif not next_page_number %}
+        <a id="current" href="{{ url_for('main.properties', page=prev_page_number + 1) }}" class="page-number">
+          {{ prev_page_number + 1 }}
+        </a>
+        {% else %}
+        <a id="current" href="{{ url_for('main.properties', page=next_page_number-1) }}" class="page-number">
+          {{ next_page_number - 1 }}
+        </a>
+        {% endif %}
+        {% if next_page_number %}
+        <a href="{{ url_for('main.properties', page=next_page_number) }}" class="page-number">{{
+              next_page_number }}</a>
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if next_url %}
+      <div class="next-url pagination-url">
+        <a href="{{ next_url }}">Next Page</a>
+        <i class="fa fa-angle-right"></i>
+      </div>
+      {% endif %}
+    </div>
   </div>
 </main>
 {% endblock %}

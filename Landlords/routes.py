@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, url_for, redirect, request, session
+from flask import Blueprint, render_template, flash, url_for, redirect, request, session, make_response
 from flask_login import login_required, current_user
 from Models.base_model import db
 from Models.users import Landlord, Tenant, Users
@@ -8,13 +8,15 @@ from Models.transactions import Transactions
 from Models.complaints import Complaints
 from Models.extras import Extras, Maintenance, ExtraRoles
 from Models.invoice import Invoice
-from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm, UnitImageForm
+from .form import PropertyRegistrationForm, UnitRegistrationForm, UnitMetricRegistrationForm, UnitTypeForm, UnitImageForm, UnitEditForm
 from decorators import landlord_role_required
 from modules import check_reservation_expiry, assign_tenant_unit, revoke_tenant_access
 from .aws_credentials import awsCredentials
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 from datetime import date, datetime
-import boto3, asyncio, pytz
+from flask_caching import Cache, CachedResponse
+from slugify import slugify
+import boto3, pytz
 
 landlords = Blueprint("landlord", __name__, url_prefix="/landlord")
 s3 = boto3.resource(
@@ -25,37 +27,21 @@ s3 = boto3.resource(
 bucket_name = awsCredentials.bucket_name
 region = awsCredentials.region
 today = date.today()
+cache = Cache()
 
 def get_local_time():
   utc_timezone = datetime.now(pytz.utc)
   local_tz = pytz.timezone('Africa/Nairobi')
   return utc_timezone.astimezone(local_tz)
 
-@landlords.route("/dashboard", methods=["POST", "GET"])
+@landlords.route("/dashboard")
 @login_required
 @landlord_role_required("Landlord")
 def landlord_dashboard():
-  properties = db.session.query(Properties).filter(current_user.id == Properties.property_owner).all()
-  tenants = Tenant.query.filter_by(landlord = current_user.id).all()
-  todays_time = get_local_time().strftime("%d/%m/%Y")
-  if session.get("this_month"):
-    this_month = datetime.strptime(session["this_month"], '%Y-%m-%d').date()
-  else:
-    this_month = today
-  extras = Extras.query.all()
-  active_extras = Maintenance.query.filter(Maintenance.landlord == current_user.id).all()
-  units = Unit.query.filter(Unit.landlord == current_user.id).all()
-  invoices = Invoice.query.filter_by(status="Cleared").order_by(Invoice.date_closed.desc()).all()
+  properties = Properties.query.filter_by(property_owner=current_user.id).all()
 
   context = {
     "properties": properties,
-    "tenants": tenants,
-    "todays_time": todays_time,
-    "active_extras": active_extras,
-    "units": units,
-    "invoices": invoices,
-    "extras": extras,
-    "this_month": this_month
   }
 
   return render_template("Landlord/new_dash.html", **context)
@@ -187,7 +173,7 @@ def add_property():
   if form.validate_on_submit():
     new_property = Properties(
       name = form.name.data,
-      alias = form.name.data.replace(" ", "-").replace("/", "-").replace(".", "-").replace(",", "-").replace("_", "-"),
+      alias = slugify(form.name.data),
       county = form.county.data,
       city = form.city.data,
       property_floors = form.floors.data,
@@ -338,7 +324,7 @@ def unit_details(unit_id):
       return redirect(url_for('landlord.landlord_dashboard'))
     unit_metrics = UnitMetrics.query.filter_by(unit=current_unit.id).first()
     unit_images = UnitImage.query.filter_by(unit=current_unit.id).all()
-    unit_form = UnitRegistrationForm(obj=current_unit)
+    unit_form = UnitEditForm(obj=current_unit)
     current_property = Properties.query.filter_by(id=current_unit.properties).first()
    
     context = {
@@ -365,7 +351,7 @@ def edit_unit_details(unit_id):
     if not current_unit:
       flash("Unit not found", category="danger")
       return redirect(url_for('landlord.landlord_dashboard'))
-    form = UnitRegistrationForm(obj=current_unit)
+    form = UnitEditForm(obj=current_unit)
     if form.validate_on_submit():
       form.populate_obj(current_unit)
       db.session.commit()

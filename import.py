@@ -38,21 +38,22 @@ def add_units():
   for name, floor, Type, Property, landlord, living_space, balcony_space, date, rent_amount in reader:
     unit = Unit(
       name=name,
+      description="Discover your ideal living space in this charming 2-bedroom apartment located in the heart of Tanzania. This well-designed unit features a spacious living room that seamlessly connects to a modern kitchen, perfect for entertaining guests. Each bedroom is bright and airy, offering ample storage and comfort. Enjoy the convenience of nearby amenities, including shops, restaurants, and public transport. The apartment also boasts beautiful views of the surrounding landscape, providing a peaceful retreat after a busy day. Experience the vibrant culture of Tanzania while enjoying the comforts of home!",
       alias=name.replace(" ", "-").replace("/", "-").replace(".", "-").replace(",", "-").replace("_", "-"),
       unit_floor=floor,
       unit_type=Type,
       landlord=landlord,
       properties=Property,
       date_added=date,
-      rent_amount=rent_amount
+      rent_amount=rent_amount,
     )
     db.session.add(unit)
     db.session.commit()
     unit_metric = UnitMetrics(
       living_space=living_space,
       balcony_space=balcony_space,
-      bedrooms=3,
-      bathrooms=3,
+      bedrooms=2,
+      bathrooms=1,
       unit = unit.id
     )
     db.session.add(unit_metric)

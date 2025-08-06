@@ -14,14 +14,6 @@ class PropertyTypes(BaseModel, db.Model):
   def __repr__(self):
     return f"{self.name}"
 
-class UnitTypes(BaseModel, db.Model):
-  __tablename__ = 'unit_types'
-  name = db.Column(db.String(30), nullable=False)
-  properties = db.Column(db.Integer(), db.ForeignKey("properties.id"))
-
-  def __repr__(self):
-    return f"{self.name}"
-
 class Properties(BaseModel, db.Model):
   __tablename__ = "properties"
   name = db.Column(db.String(100), nullable=False)
@@ -30,9 +22,8 @@ class Properties(BaseModel, db.Model):
   city = db.Column(db.String(50), nullable=False)
   property_floors = db.Column(db.Integer(), nullable=False)
   rooms = db.Column(db.Integer(), nullable=False)
-  date_added = db.Column(db.DateTime())
   property_type = db.Column(db.Integer(), db.ForeignKey("property_types.id"))
-  property_owner = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
+  landlord_id = db.Column(db.Integer(), db.ForeignKey("landlord.id"))
   unit = db.relationship("Unit", backref="units", lazy=True, cascade="all, delete, delete-orphan")
   tenant = db.relationship("Tenant", backref="tenants", lazy=True, cascade="all, delete, delete-orphan")
   booking = db.relationship("Bookings", backref="property_booked", lazy=True, cascade="all, delete, delete-orphan")

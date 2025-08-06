@@ -47,9 +47,9 @@ Tenant Profile
         <img src="{{ url_for('static', filename='Images/man.png') }}" alt="profile image">
       </div>
       <div class="tenant-extra">
-        <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">
+        <!-- <a id="chat" href="{{ url_for('landlord.send_message', tenant_id=tenant.id) }}">
           <button>Chat</button>
-        </a>
+        </a> -->
         <button id="modalbtn">Remove Tenant</button>
       </div>
     </div>
@@ -260,7 +260,6 @@ Tenant Profile
   </div>
 </div>
 {% endblock %}
-
 
 {% block script %}
 <script src="{{ url_for('static', filename='js/new_dash.js') }}"></script>

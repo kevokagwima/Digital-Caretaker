@@ -223,7 +223,7 @@ Property Dashboard | {{ propertiez.name }}
             {% else %}
             <p id="invoice-date"
               title="Created on {{ invoice.date_created.strftime('Created: %d/%m/%Y at %I:%M %p') }}">
-              {{ invoice.date_created.strftime("Created: %d/%m/%Y at %I:%M %p")|truncate(20) }}
+              {{ invoice.date_created.strftime("Created: %d/%m/%Y at %I:%M %p") }}
             </p>
             {% endif %}
             {% if invoice.status == "Active" %}

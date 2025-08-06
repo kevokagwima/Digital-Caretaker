@@ -11,14 +11,14 @@ Maintenance
 
 {% block nav %}
 <button class="tablinks active" onclick="openView(event, 'maintenance')">
-  <img src="{{ url_for('static', filename='Images/man.png') }}" alt="dashboard">
+  <i class="fas fa-toolbox"></i>
   Maintenance
 </button>
 {% if current_property %}
 <a id="{{ current_property.id }}"
   href="{{ url_for('landlord.property_information', property_id=current_property.unique_id) }}">
   <button class="current_property">
-    <img src="{{ url_for('static', filename='Images/building.png') }}" alt="property">
+    <i class="fas fa-building"></i>
     <span id="current-property">{{ current_property.name }}</span>
   </button>
 </a>

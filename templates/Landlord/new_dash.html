@@ -40,48 +40,8 @@ Landlord Dashboard
       <button class="tablinks">Add New Property</button>
     </a>
   </div>
-  <div class="dash-information">
-    <div class="general-stats">
-      <div class="stat">
-        <div class="stat-img">
-          <img src="../static/Images/apartment.png" alt="">
-        </div>
-        <div class="stat-info">
-          <h4>Properties</h4>
-          <p>{{ properties|count }}</p>
-        </div>
-      </div>
-      <div class="stat">
-        <div class="stat-img">
-          <img src="../static/Images/home.png" alt="">
-        </div>
-        <div class="stat-info">
-          <h4>Units</h4>
-          <p>{{ units|count }}</p>
-        </div>
-      </div>
-      <div class="stat">
-        <div class="stat-img">
-          <img src="../static/Images/group.png" alt="">
-        </div>
-        <div class="stat-info">
-          <h4>Tenants</h4>
-          <p>{{ tenants|count }}</p>
-        </div>
-      </div>
-      <div class="stat">
-        <div class="stat-img">
-          <img src="../static/Images/feedback.png" alt="">
-        </div>
-        <div class="stat-info">
-          <h4>Complaints</h4>
-          <p>{{ current_user.complaint|count }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
-<div id="rent" class="tabcontent">
+<!-- <div id="rent" class="tabcontent">
   <h4 id="dash">Rent Transactions</h4>
   <img class="detailed-rent" src="{{ url_for('static', filename='Images/globe.png') }}" alt="explore"
     onclick="openView(event, 'detailed-rent')">
@@ -170,7 +130,7 @@ Landlord Dashboard
     {% endfor %}
     {% endfor %}
   </div>
-</div>
+</div> -->
 {% endblock %}
 
 {% block script %}

@@ -17,14 +17,14 @@
     <title>D-DALALI | {% block title %}{% endblock %}</title>
     {% endblock %}
   </head>
-  <div class="header top-header">
-    <!-- <div id="google_translate_element"></div> -->
-  </div>
+  <!-- <div class="header top-header">
+    <div id="google_translate_element"></div>
+  </div> -->
   <header class="nav">
     <a href="{{ url_for('main.index') }}">
       <img id="logo" src="{{ url_for('static', filename='Images/full-logo.webp') }}" alt="">
     </a>
-    {% block logo %} {% endblock %}
+    {% block logo %}{% endblock %}
     <div class="links">
       <a id="link" href="{{ url_for('main.index') }}">Home</a>
       <div class="dropdown">
@@ -35,7 +35,7 @@
           <div class="dropdown-content">
             <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
             <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
-            <!-- <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a> -->
+            <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
           </div>
         </div>
       </div>
@@ -72,6 +72,41 @@
       <div class="line3"></div>
     </div>
   </header>
+  <div class="side-nav">
+    <div class="close-side-nav">
+      <span id="close-side-nav">
+        <i class="fas fa-x"></i>
+      </span>
+    </div>
+    <div class="user-area">
+      {% if current_user.is_authenticated %}
+      <div class="login">
+        <p id="login">Welcome, <b>{{ current_user.first_name }} {{ current_user.last_name }}</b></p>
+        <a id="logout" href="{{ url_for('auth.logout') }}">
+          <p>Logout</p>
+        </a>
+      </div>
+      {% else %}
+      <div class="user">
+        <a href="{{ url_for('auth.signup') }}">
+          <button>Sign Up</button>
+        </a>
+        <a href="{{ url_for('auth.signin') }}">
+          <button>Sign In</button>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    <div class="links-area">
+      <div class="links">
+        <a id="link" href="{{ url_for('main.index') }}">Home</a>
+        <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
+        <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
+        <a id="link" href="{{ url_for('main.properties') }}">Properties</a>
+        <a id="link" href="{{ url_for('main.contact') }}">Contact</a>
+      </div>
+    </div>
+  </div>
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
   <div class="tops">
@@ -91,7 +126,7 @@
       <div class="container">
         <div class="footer-grid">
           <div class="footer-about">
-            <h3>RentEase</h3>
+            <h3>D-DALALI</h3>
             <p>The modern property management platform that helps you save time and grow your rental business.</p>
             <!-- <div class="social-links">
               <a href="#"><i class="fab fa-facebook-f"></i></a>

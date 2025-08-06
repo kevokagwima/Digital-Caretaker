@@ -8,7 +8,7 @@ alertMessages.forEach((alertMessage) => {
 
 const burger = document.querySelector(".burger");
 const sidenav = document.querySelector(".side-nav");
-const close = document.querySelector("#close");
+const close = document.querySelector("#close-side-nav");
 
 burger.addEventListener("click", () => {
   sidenav.classList.add("show-side-nav");

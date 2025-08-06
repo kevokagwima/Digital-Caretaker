@@ -18,7 +18,7 @@
   <body>
     <div class="side-nav">
       <div class="close-side-nav">
-        <span id="close"><i class="fas fa-x"></i></span>
+        <span id="close-side-nav"><i class="fas fa-x"></i></span>
       </div>
       <div class="profile" onclick="openView(event, 'profile')">
         <i class="fa-regular fa-user"></i>
@@ -67,9 +67,9 @@
           </div>
           <span class="close">&Cross;</span>
         </div>
-        <div class="header top-header">
-          <!-- <div id="google_translate_element"></div> -->
-        </div>
+        <!-- <div class="header top-header">
+          <div id="google_translate_element"></div>
+        </div> -->
         <img class="not--img" src="{{ url_for('static', filename='Images/bell.png') }}" alt="notification bell">
       </div>
       {% with messages = get_flashed_messages(with_categories=true) %}

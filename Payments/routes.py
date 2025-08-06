@@ -124,7 +124,7 @@ def register_url(access_token):
   payload = {
     "ShortCode": "174379",
     "ResponseType": "Completed",
-    "ConfirmationURL": "https://8e73-41-206-42-66.ngrok-free.app/payment/confirm-payment/",
+    "ConfirmationURL": "https://1f17-41-206-42-66.ngrok-free.app/payment/confirm-payment/",
     "ValidationURL": "https://mydomain.com/validation"
   }
 
@@ -147,12 +147,12 @@ def process_stk_push(access_token, amount, phone_number):
     "Password": LipanaMpesaPpassword.online_password,
     "Timestamp": LipanaMpesaPpassword.lipa_time,
     "TransactionType": "CustomerPayBillOnline",
-    "Amount": 1,
-    "PartyA": f"254796897011",
+    "Amount": amount,
+    "PartyA": f"254{phone_number}",
     "PartyB": "174379",
-    "PhoneNumber": f"254796897011",
+    "PhoneNumber": f"254{phone_number}",
     "checkout_url": "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-    "CallBackURL": "https://8e73-41-206-42-66.ngrok-free.app/payment/confirm-payment/",
+    "CallBackURL": "https://1f17-41-206-42-66.ngrok-free.app/payment/confirm-payment/",
     "AccountReference": "PMS",
     "TransactionDesc": "Rent Payment"
   }
@@ -221,7 +221,6 @@ def verify_payment(invoice_id):
 def confirm_payment():
   try:
     json_data = request.json
-    print(json_data)
     stk_callback = json_data['Body']['stkCallback']
     merchant_request_id = stk_callback['MerchantRequestID']
     checkout_request_id = stk_callback['CheckoutRequestID']
@@ -238,7 +237,6 @@ def confirm_payment():
         transation_date = next(item['Value'] for item in stk_callback['CallbackMetadata']['Item'] if item['Name'] == 'TransactionDate')
         payment_complete(payment.id, mpesa_receipt_number, transation_date)
         return jsonify({"ResultCode": result_code, "ResultDesc": "Success processing payment"}), 200
-        
     else:
       print("No payment record")
   except Exception as e:

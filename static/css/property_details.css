@@ -228,7 +228,7 @@
   box-shadow: var(--box-shadow);
 }
 
-.map-container img {
+.map-container iframe {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -354,12 +354,19 @@
 }
 
 @media (max-width: 1024px) {
-  .property-details-grid {
+  .property-details-grid,
+  .property-header {
     grid-template-columns: 1fr;
   }
 
   .carousel-container {
     height: 400px;
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding-inline: 1rem;
   }
 }
 
