@@ -12,7 +12,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <title>D-DALALI | {% block title %}{% endblock %}</title>
     {% endblock %}
@@ -22,24 +21,11 @@
   </div> -->
   <header class="nav">
     <a href="{{ url_for('main.index') }}">
-      <img id="logo" src="{{ url_for('static', filename='Images/full-logo.webp') }}" alt="">
+      <img id="logo" src="{{ url_for('static', filename='Images/Logo/full-logo.webp') }}" alt="">
     </a>
     {% block logo %}{% endblock %}
     <div class="links">
       <a id="link" href="{{ url_for('main.index') }}">Home</a>
-      <div class="dropdown">
-        <p id="link">Client Portals
-          <i class="fa fa-caret-down"></i>
-        </p>
-        <div class="dropdown-content-box">
-          <div class="dropdown-content">
-            <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
-            <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
-            <a id="link" href="{{ url_for('auth.admin_login') }}">Admin Portal</a>
-          </div>
-        </div>
-      </div>
-      <a id="link" href="{{ url_for('main.properties') }}">Properties</a>
       <a id="link" href="{{ url_for('main.contact') }}">Contact</a>
       {% block content %}{% endblock %}
     </div>
@@ -48,9 +34,6 @@
       <p id="login">Welcome, <b>{{ current_user.first_name }} {{ current_user.last_name }}</b></p>
       <div class="profile">
         <p>My Profile</p>
-        <a id="reservations" href="{{ url_for('main.reservations') }}">
-          <p>Reservations</p>
-        </a>
         <a id="logout" href="{{ url_for('auth.logout') }}">
           <p>Logout</p>
         </a>
@@ -100,9 +83,6 @@
     <div class="links-area">
       <div class="links">
         <a id="link" href="{{ url_for('main.index') }}">Home</a>
-        <a id="link" href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a>
-        <a id="link" href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a>
-        <a id="link" href="{{ url_for('main.properties') }}">Properties</a>
         <a id="link" href="{{ url_for('main.contact') }}">Contact</a>
       </div>
     </div>
@@ -140,15 +120,12 @@
             <h4>Product</h4>
             <ul>
               <li><a href="{{ url_for('main.index') }}">Home</a></li>
-              <li><a href="{{ url_for('auth.landlord_login') }}">Landlord Portal</a></li>
-              <li><a href="{{ url_for('auth.tenant_login') }}">Tenant Portal</a></li>
             </ul>
           </div>
 
           <div class="footer-links">
             <h4>Resources</h4>
             <ul>
-              <li><a href="{{ url_for('main.properties') }}">Properties</a></li>
               <!-- <li><a href="#">Blog</a></li>
               <li><a href="#">Guides</a></li>
               <li><a href="#">Help Center</a></li>
@@ -196,6 +173,5 @@
     {% block script %}{% endblock %}
 
   </body>
-
 
 </html>

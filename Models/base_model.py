@@ -23,14 +23,13 @@ class BaseModel(db.Model):
   def __repr__(self):
     return f"{self.id} - {self.unique_id}"
 
-class UserBaseModel(BaseModel, db.Model):
+class UserBaseModel(db.Model):
   __abstract__ = True
   first_name = db.Column(db.String(50), nullable=False)
   last_name = db.Column(db.String(50), nullable=False)
   email = db.Column(db.String(100), nullable=False, unique=True)
   phone = db.Column(db.Integer(), nullable=False, unique=True)
   password = db.Column(db.String(80), nullable=False)
-  date = db.Column(db.DateTime())
 
   def __repr__(self):
     return f"{self.first_name} {self.last_name}"

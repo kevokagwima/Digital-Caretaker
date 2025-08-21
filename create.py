@@ -1,14 +1,9 @@
 from app import create_app
 from Models.base_model import db
-from Models.bookings import *
-from Models.complaints import *
-from Models.extras import *
-from Models.invoice import *
-from Models.property import *
+from Models.properties import *
 from Models.transactions import *
-from Models.unit import *
 from Models.users import Role
-from Models.property import PropertyTypes
+from Models.properties import PropertyTypes
 
 app = create_app()
 
@@ -23,69 +18,28 @@ def create_tables():
   print("Tables Created")
 
 def add_roles():
-  new_role = Role(
-    name = "Admin"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-  new_role = Role(
-    name = "Member"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-  new_role = Role(
-    name = "Landlord"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-  new_role = Role(
-    name = "Tenant"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-
-def add_extra_roles():
-  new_role = ExtraRoles(
-    name = "Electrician"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-  new_role = ExtraRoles(
-    name = "Plumber"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-  new_role = ExtraRoles(
-    name = "Mansory"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
-  new_role = ExtraRoles(
-    name = "Interior Design"
-  )
-  db.session.add(new_role)
-  db.session.commit()
-  print(f"Added role {new_role.name}")
+  roles = ["Admin", "Dalali", "Client"]
+  for role in roles:
+    new_role = Role(
+      name = role
+    )
+    db.session.add(new_role)
+    db.session.commit()
+    print(f"Added role {new_role.name}")
 
 def add_property_types():
-  new_property_type = PropertyTypes(
-    name = "Apartment"
-  )
-  db.session.add(new_property_type)
-  db.session.commit()
-  print(f"Added property type: {new_property_type.name}")
+  property_types = ["Apartment"]
+  for property_type in property_types:
+    new_property_type = PropertyTypes(
+      name = property_type
+    )
+    db.session.add(new_property_type)
+    db.session.commit()
+    print(f"Added property type: {new_property_type.name}")
 
 if __name__ == "__main__":
   with app.app_context():
     drop_tables()
     create_tables()
     add_roles()
-    add_extra_roles()
     add_property_types()

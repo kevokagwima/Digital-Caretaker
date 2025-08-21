@@ -1,14 +1,23 @@
-const closes = document.querySelectorAll("#close");
-
-closes.forEach((p) => {
-  p.addEventListener("click", () => {
-    p.parentElement.style.display = "none";
+document.addEventListener("DOMContentLoaded", function () {
+  // Add interactivity to cards and buttons
+  const cardActions = document.querySelectorAll(".card-action");
+  cardActions.forEach((action) => {
+    action.addEventListener("click", function () {
+      const cardTitle =
+        this.closest(".card").querySelector(".card-title").textContent;
+      alert(`Viewing all ${cardTitle}`);
+    });
   });
-});
 
-const other = document.getElementById("other");
-const shifting = document.querySelector(".shifting");
-
-other.addEventListener("click", () => {
-  shifting.style.display = "flex";
+  // Add button functionality
+  const buttons = document.querySelectorAll(".btn");
+  buttons.forEach((button) => {
+    button.addEventListener("click", function () {
+      if (this.classList.contains("btn-primary")) {
+        alert("Opening Add Unit form...");
+      } else if (this.classList.contains("btn-outline")) {
+        alert("Opening Edit Property form...");
+      }
+    });
+  });
 });
