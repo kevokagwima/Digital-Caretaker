@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, flash, url_for, redirect, request,
 from flask_login import login_required, current_user
 from Models.base_model import db, get_local_time
 from Models.properties import Property, PropertyTypes, PropertyLocation
+from .form import PropertyDetailsForm, ImagesForm, AmenitiesForm
 from .aws_credentials import awsCredentials
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
-from datetime import date
 from flask_caching import Cache, CachedResponse
 from slugify import slugify
 import boto3
@@ -18,3 +18,53 @@ s3 = boto3.resource(
 bucket_name = awsCredentials.bucket_name
 region = awsCredentials.region
 cache = Cache()
+
+@dalali.route("/dashboard")
+def dashboard():
+  context = {}
+
+  return CachedResponse(
+    response = make_response(
+      render_template("Dalali/dashboard.html", **context)
+    ),
+    timeout=600
+  )
+
+@dalali.route("/upload/property")
+def upload_property():
+  context = {
+    "form": PropertyDetailsForm()
+  }
+
+  return CachedResponse(
+    response = make_response(
+      render_template("Dalali/upload-property-details.html", **context)
+    ),
+    timeout=600
+  )
+
+@dalali.route("/upload/property/amenities/<string:property_id>")
+def upload_property_amenities(property_id):
+  context = {
+    "form": AmenitiesForm()
+  }
+
+  return CachedResponse(
+    response = make_response(
+      render_template("Dalali/upload-property-amenities.html", **context)
+    ),
+    timeout=600
+  )
+
+@dalali.route("/upload/property/images/<string:property_id>")
+def upload_property_images(property_id):
+  context = {
+    "form": ImagesForm()
+  }
+
+  return CachedResponse(
+    response = make_response(
+      render_template("Dalali/upload-property-images.html", **context)
+    ),
+    timeout=600
+  )

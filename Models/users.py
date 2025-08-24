@@ -15,9 +15,9 @@ class Role(BaseModel, db.Model):
 class Users(BaseModel, UserBaseModel, UserMixin, db.Model):
   __tablename__ = "users"
   role_id = db.Column(db.Integer(), db.ForeignKey("role.id"))
+  property_owned = db.relationship("Property", backref="user_properties", lazy=True, cascade="all, delete, delete-orphan", passive_deletes=True)
   subscription = db.relationship("Subscription", backref="user_subscription", lazy=True, cascade="all, delete, delete-orphan", passive_deletes=True)
   payment = db.relationship("Payment", backref="user_payment", lazy=True, cascade="all, delete, delete-orphan", passive_deletes=True)
-
 
   @property
   def passwords(self):

@@ -1,0 +1,50 @@
+{% extends "Dalali/base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Dalali/upload-property.css') }}">
+{% endblock %}
+
+{% block title %}
+Upload Property Images
+{% endblock %}
+
+{% block nav %}
+<a href="#" class="menu-item active">
+  <i class="fas fa-th-large"></i>
+  <span>Back</span>
+</a>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <form>
+    <div class="form-header">
+      <h2 class=" form-title">Property Images</h2>
+      <p class="form-description">Upload Images of your property</p>
+    </div>
+    <div class="form-container">
+      <div class="image-upload-container" id="upload-area">
+        <div class="upload-icon">
+          <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <p class="upload-text">Drag & drop images here or click to browse</p>
+        <div class="upload-button">Select Images</div>
+        <input type="file" id="image-upload" multiple accept="image/*" style="display: none;">
+      </div>
+      <div class="image-preview" id="image-preview">
+      </div>
+    </div>
+    <div class="form-navigation">
+      <button type="button" class="btn btn-next">
+        Complete
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}

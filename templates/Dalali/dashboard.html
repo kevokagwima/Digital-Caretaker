@@ -1,0 +1,194 @@
+{% extends "Dalali/base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Dalali/dashboard.css') }}">
+{% endblock %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block nav %}
+<a href="#" class="menu-item active">
+  <i class="fas fa-th-large"></i>
+  <span>Dashboard</span>
+</a>
+<a href="#" class="menu-item">
+  <i class="fas fa-building"></i>
+  <span>Properties</span>
+</a>
+<a href="#" class="menu-item">
+  <i class="fas fa-users"></i>
+  <span>Tenants</span>
+</a>
+<a href="#" class="menu-item">
+  <i class="fas fa-file-invoice-dollar"></i>
+  <span>Payments</span>
+</a>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <h2>Welcome back, John!</h2>
+      <p>Here's what's happening with your properties today.</p>
+    </div>
+    <div class="welcome-action">
+      <a href="#" class="btn">List a New Property</a>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon properties">
+        <i class="fas fa-building"></i>
+      </div>
+      <div class="stat-info">
+        <h3>12</h3>
+        <p>Total Properties</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon tenants">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <h3>28</h3>
+        <p>Active Tenants</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon income">
+        <i class="fas fa-dollar-sign"></i>
+      </div>
+      <div class="stat-info">
+        <h3>$24,500</h3>
+        <p>Monthly Income</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon vacant">
+        <i class="fas fa-home"></i>
+      </div>
+      <div class="stat-info">
+        <h3>4</h3>
+        <p>Vacant Units</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Grid -->
+  <div class="dashboard-grid">
+    <!-- Properties Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Recent Properties</h3>
+        <a href="#" class="card-action">View All</a>
+      </div>
+
+      <ul class="property-list">
+        <li class="property-item">
+          <div class="property-image">
+            <img
+              src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+              alt="Luxury Apartment">
+          </div>
+          <div class="property-info">
+            <h4>Luxury Apartment Complex</h4>
+            <p>Nairobi, Kenya • 24 units</p>
+          </div>
+          <span class="property-status status-occupied">92% occupied</span>
+        </li>
+
+        <li class="property-item">
+          <div class="property-image">
+            <img
+              src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+              alt="Green Valley Homes">
+          </div>
+          <div class="property-info">
+            <h4>Green Valley Homes</h4>
+            <p>Mombasa, Kenya • 12 units</p>
+          </div>
+          <span class="property-status status-occupied">83% occupied</span>
+        </li>
+
+        <li class="property-item">
+          <div class="property-image">
+            <img
+              src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80"
+              alt="Riverside Apartments">
+          </div>
+          <div class="property-info">
+            <h4>Riverside Apartments</h4>
+            <p>Kisumu, Kenya • 16 units</p>
+          </div>
+          <span class="property-status status-vacant">25% vacant</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Recent Activity Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Recent Activity</h3>
+        <a href="#" class="card-action">View All</a>
+      </div>
+
+      <ul class="activity-list">
+        <li class="activity-item">
+          <div class="activity-icon payment">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="activity-content">
+            <h4>Rent Payment Received</h4>
+            <p>From Jane Smith for Unit 2A</p>
+          </div>
+          <div class="activity-time">2h ago</div>
+        </li>
+
+        <li class="activity-item">
+          <div class="activity-icon maintenance">
+            <i class="fas fa-wrench"></i>
+          </div>
+          <div class="activity-content">
+            <h4>Maintenance Request</h4>
+            <p>Plumbing issue reported in Unit 3B</p>
+          </div>
+          <div class="activity-time">5h ago</div>
+        </li>
+
+        <li class="activity-item">
+          <div class="activity-icon tenant">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div class="activity-content">
+            <h4>New Tenant Added</h4>
+            <p>Robert Johnson moved into Unit 4C</p>
+          </div>
+          <div class="activity-time">1d ago</div>
+        </li>
+
+        <li class="activity-item">
+          <div class="activity-icon payment">
+            <i class="fas fa-file-invoice"></i>
+          </div>
+          <div class="activity-content">
+            <h4>Invoice Sent</h4>
+            <p>Monthly rent invoice for Unit 1D</p>
+          </div>
+          <div class="activity-time">2d ago</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

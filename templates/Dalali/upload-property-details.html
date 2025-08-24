@@ -1,0 +1,73 @@
+{% extends "Dalali/base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Dalali/upload-property.css') }}">
+{% endblock %}
+
+{% block title %}
+Upload Property
+{% endblock %}
+
+{% block nav %}
+<a href="#" class="menu-item active">
+  <i class="fas fa-th-large"></i>
+  <span>Back</span>
+</a>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <form>
+    <div class="form-header">
+      <h2 class=" form-title">Property Details</h2>
+      <p class="form-description">Enter the basic information about your property</p>
+    </div>
+    <div class="form-container">
+      <div class="form-group extend">
+        {{ form.property_name.label}}
+        {{ form.property_name(placeholder="Enter Property Name") }}
+        {% for error in form.property_name.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        {{ form.region.label}}
+        {{ form.region(placeholder="Enter Property Region") }}
+        {% for error in form.region.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        {{ form.district.label}}
+        {{ form.district(placeholder="Enter Property District") }}
+        {% for error in form.district.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        {{ form.town.label}}
+        {{ form.town(placeholder="Enter Property Town") }}
+        {% for error in form.town.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <div class="form-group">
+        {{ form.house_number.label}}
+        {{ form.house_number(placeholder="Enter Exact Location") }}
+        {% for error in form.house_number.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="form-navigation">
+      <button type="button" class="btn btn-next">
+        Next
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}{% endblock %}

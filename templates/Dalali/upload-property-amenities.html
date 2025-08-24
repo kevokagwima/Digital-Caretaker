@@ -1,0 +1,54 @@
+{% extends "Dalali/base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/Dalali/upload-property.css') }}">
+{% endblock %}
+
+{% block title %}
+Upload Property Amenities
+{% endblock %}
+
+{% block nav %}
+<a href="#" class="menu-item active">
+  <i class="fas fa-th-large"></i>
+  <span>Back</span>
+</a>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <form>
+    <div class="form-header">
+      <h2 class=" form-title">Property Amenities</h2>
+      <p class="form-description">Enter all amenities available for your property</p>
+    </div>
+    <div class="amenities-grid">
+      <div class="amenity-item">
+        <h4>Swimming Pool</h4>
+        <a href="#">
+          <i class="fas fa-x"></i>
+        </a>
+      </div>
+    </div>
+    <div class="form-container">
+      <div class="form-group extend">
+        {{ form.name.label}}
+        {{ form.name(placeholder="Enter Amenity") }}
+        {% for error in form.name.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="form-navigation">
+      <button type="button" class="btn btn-next">
+        Next
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
